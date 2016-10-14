@@ -11,26 +11,26 @@ using System.Web.Http;
 
 namespace API.Controllers
 {
-    [RoutePrefix("api/users")]
-    public class UsersController : ApiController
+    [RoutePrefix("api/employees")]
+    public class EmployeeController : ApiController
     {
-        private IUserRepository _userRepository;
-        public UsersController()
+        private IEmployeeRepository _employeeRepository;
+        public EmployeeController()
         {
-            _userRepository = new UserRepository(); 
+            _employeeRepository = new EmployeeRepository(); 
         }
 
         // POST api/users
         [HttpPost, AdminFilter]
-        public IHttpActionResult Register(RegisterDTO userDto)
+        public IHttpActionResult Register(RegisterDTO employeeDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = _userRepository.Create(userDto);
-            if(user != null)
+            var employee = _employeeRepository.Create(employeeDto);
+            if(employee != null)
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
             }

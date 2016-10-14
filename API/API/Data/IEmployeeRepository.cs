@@ -7,12 +7,12 @@ using System.Web;
 
 namespace API.Data
 {
-    public interface IUserRepository
+    public interface IEmployeeRepository
     {
-        User Create(RegisterDTO user);
-        List<User> Read();
-        User Read(int id);
-        int Update(User user);
+        Employee Create(RegisterDTO employee);
+        List<Employee> Read();
+        Employee Read(int id);
+        int Update(Employee employee);
         void Delete(int id);
     }
 }

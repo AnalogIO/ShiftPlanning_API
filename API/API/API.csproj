@@ -161,19 +161,21 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Data\IShiftPlannerDataContext.cs" />
-    <Compile Include="Data\IUserRepository.cs" />
+    <Compile Include="Data\IEmployeeRepository.cs" />
     <Compile Include="Data\ShiftPlannerDataContext.cs" />
-    <Compile Include="Data\UserRepository.cs" />
+    <Compile Include="Data\EmployeeRepository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Logic\AdminFilter.cs" />
     <Compile Include="Logic\AuthManager.cs" />
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\CheckIn.cs" />
     <Compile Include="Models\DTO\RegisterDTO.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\Shift.cs" />
+    <Compile Include="Models\Employee.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

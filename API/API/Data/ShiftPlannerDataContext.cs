@@ -9,10 +9,10 @@ namespace API.Data
         public ShiftPlannerDataContext(): base("name=ShiftPlannerDataContext") {
 
         }
-        public DbSet<User> Users { get; set; }
-        public void MarkAsModified(User user)
+        public DbSet<Employee> Employees { get; set; }
+        public void MarkAsModified(Employee employee)
         {
-            Entry(user).State = EntityState.Modified;
+            Entry(employee).State = EntityState.Modified;
         }
     }
 }
