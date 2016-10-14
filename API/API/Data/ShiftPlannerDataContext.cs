@@ -10,5 +10,9 @@ namespace API.Data
 
         }
         public DbSet<User> Users { get; set; }
+        public void MarkAsModified(User user)
+        {
+            Entry(user).State = EntityState.Modified;
+        }
     }
 }

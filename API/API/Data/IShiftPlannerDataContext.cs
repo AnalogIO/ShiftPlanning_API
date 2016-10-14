@@ -7,5 +7,7 @@ namespace API.Data
     public interface IShiftPlannerDataContext : IDisposable
     {
         DbSet<User> Users { get; set; }
+        int SaveChanges();
+        void MarkAsModified(User user);
     }
 }
