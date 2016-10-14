@@ -11,6 +11,6 @@ The project requires a configuration file `connections.config` and `appSettings.
 ```
 ```xml
 <appSettings>
-  <add key="APIKEY" value="1618849b911d4b53bb2f714b0b41e721d70373184872dc5d0b78100acb29cac1"/>
+  <add key="APIKEY" value="<APIKEY>"/>
 </appSettings>
 ```
