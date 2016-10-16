@@ -1,7 +1,7 @@
 # Requirements
 
 It should be possible to:
-- create, edit, delete employees.
+- create, edit and delete employees.
 - define a schedule (2-week schedule) that can be roled out from one date to another.
 - update a defined schedule.
 - check-in as an employee.
