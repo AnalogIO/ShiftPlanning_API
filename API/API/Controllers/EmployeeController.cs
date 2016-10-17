@@ -1,5 +1,6 @@
 ﻿using API.Data;
 using API.Logic;
+using API.Models;
 using API.Models.DTO;
 using System;
 using System.Collections.Generic;
@@ -18,12 +19,16 @@ namespace API.Controllers
     public class EmployeeController : ApiController
     {
         private IEmployeeRepository _employeeRepository;
+        private IEmployeeTitleRepository _employeeTitleRepository;
+        
         /// <summary>
         /// The controller constructor.
         /// </summary>
         public EmployeeController()
         {
-            _employeeRepository = new EmployeeRepository(); 
+            var context = new ShiftPlannerDataContext();
+            _employeeRepository = new EmployeeRepository(context);
+            _employeeTitleRepository = new EmployeeTitleRepository(context);
         }
 
         // POST api/employees
@@ -35,14 +40,17 @@ namespace API.Controllers
         /// If an employee already exist with the given email, the controller will return BadRequest (400).
         /// </returns>
         [HttpPost, AdminFilter, Route("")]
-        public IHttpActionResult Register(RegisterDTO employeeDto)
+        public IHttpActionResult Register(CreateEmployeeDTO employeeDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var employee = _employeeRepository.Create(employeeDto);
+            var employee = new Employee { Email = employeeDto.Email, FirstName = employeeDto.FirstName, LastName = employeeDto.LastName };
+            var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId);
+            if (title != null) employee.EmployeeTitle = title;
+            employee = _employeeRepository.Create(employee);
             if(employee != null)
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
@@ -112,7 +120,10 @@ namespace API.Controllers
             var employee = _employeeRepository.Read(id);
             if(employee != null)
             {
-                if(_employeeRepository.Update(EmployeeManager.UpdateEmployeeFromEmployeeDTO(employee, employeeDto)) > 0)
+                employee = EmployeeManager.UpdateEmployeeFromEmployeeDTO(employee, employeeDto);
+                var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId);
+                if (title != null) employee.EmployeeTitle = title;
+                if (_employeeRepository.Update(employee) > 0)
                 {
                     return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
                 }

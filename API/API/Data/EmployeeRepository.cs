@@ -16,12 +16,17 @@ namespace API.Data
         {
             _context = new ShiftPlannerDataContext();
         }
-        public Employee Create(RegisterDTO employeeDto)
+
+        public EmployeeRepository(ShiftPlannerDataContext context)
         {
-            var existingUser = _context.Employees.Where(x => x.Email == employeeDto.Email).FirstOrDefault();
+            _context = context;
+        }
+
+        public Employee Create(Employee employee)
+        {
+            var existingUser = _context.Employees.Where(x => x.Email == employee.Email).FirstOrDefault();
             if (existingUser == null)
             {
-                var employee = new Employee { Email = employeeDto.Email, FirstName = employeeDto.FirstName, LastName = employeeDto.LastName, Title = employeeDto.Title };
                 _context.Employees.Add(employee);
                 _context.SaveChanges();
                 return employee;

@@ -491,7 +491,7 @@
             The controller constructor.
             </summary>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Register(API.Models.DTO.RegisterDTO)">
+        <member name="M:API.Controllers.EmployeeController.Register(API.Models.DTO.CreateEmployeeDTO)">
             <summary>
             Creates the employee from the content in the body.
             </summary>
@@ -542,24 +542,24 @@
             </summary>
             <param name="actionContext"></param>
         </member>
-        <member name="P:API.Models.DTO.RegisterDTO.Email">
+        <member name="P:API.Models.DTO.CreateEmployeeDTO.Email">
             <summary>
             The email of the employee to be created
             </summary>
         </member>
-        <member name="P:API.Models.DTO.RegisterDTO.FirstName">
+        <member name="P:API.Models.DTO.CreateEmployeeDTO.FirstName">
             <summary>
             The first name of the employee
             </summary>
         </member>
-        <member name="P:API.Models.DTO.RegisterDTO.LastName">
+        <member name="P:API.Models.DTO.CreateEmployeeDTO.LastName">
             <summary>
             The last name of the employee
             </summary>
         </member>
-        <member name="P:API.Models.DTO.RegisterDTO.Title">
+        <member name="P:API.Models.DTO.CreateEmployeeDTO.EmployeeTitleId">
             <summary>
-            The title of the employee like - barista, storage manager, chairman etc.
+            The title id of the employee.
             </summary>
         </member>
         <member name="P:API.Models.DTO.UpdateEmployeeDTO.Email">
@@ -569,17 +569,17 @@
         </member>
         <member name="P:API.Models.DTO.UpdateEmployeeDTO.FirstName">
             <summary>
-            The first name of the employee. Leave empty string if the email should not be updated.
+            The first name of the employee. Leave empty string if the first name should not be updated.
             </summary>
         </member>
         <member name="P:API.Models.DTO.UpdateEmployeeDTO.LastName">
             <summary>
-            The last name of the employee. Leave empty string if the email should not be updated.
+            The last name of the employee. Leave empty string if the last name should not be updated.
             </summary>
         </member>
-        <member name="P:API.Models.DTO.UpdateEmployeeDTO.Title">
+        <member name="P:API.Models.DTO.UpdateEmployeeDTO.EmployeeTitleId">
             <summary>
-            The title of the employee like - barista, storage manager, chairman etc. Leave empty string if the email should not be updated.
+            The title id of the employee. Leave as 0 if the title should not be updated.
             </summary>
         </member>
     </members>

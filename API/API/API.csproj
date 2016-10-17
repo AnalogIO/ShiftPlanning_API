@@ -163,8 +163,10 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Data\EmployeeTitleRepository.cs" />
     <Compile Include="Data\IShiftPlannerDataContext.cs" />
     <Compile Include="Data\IEmployeeRepository.cs" />
+    <Compile Include="Data\IEmployeeTitleRepository.cs" />
     <Compile Include="Data\ShiftPlannerDataContext.cs" />
     <Compile Include="Data\EmployeeRepository.cs" />
     <Compile Include="Global.asax.cs">
@@ -175,8 +177,10 @@
     <Compile Include="Logic\EmployeeManager.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CheckIn.cs" />
-    <Compile Include="Models\DTO\RegisterDTO.cs" />
+    <Compile Include="Models\DTO\CreateEmployeeTitleDTO.cs" />
+    <Compile Include="Models\DTO\CreateEmployeeDTO.cs" />
     <Compile Include="Models\DTO\UpdateEmployeeDTO.cs" />
+    <Compile Include="Models\EmployeeTitle.cs" />
     <Compile Include="Models\Schedule.cs" />
     <Compile Include="Models\ScheduledShift.cs" />
     <Compile Include="Models\Shift.cs" />

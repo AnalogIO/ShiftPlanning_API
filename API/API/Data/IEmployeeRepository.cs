@@ -9,7 +9,7 @@ namespace API.Data
 {
     public interface IEmployeeRepository
     {
-        Employee Create(RegisterDTO employee);
+        Employee Create(Employee employee);
         List<Employee> Read();
         Employee Read(int id);
         int Update(Employee employee);

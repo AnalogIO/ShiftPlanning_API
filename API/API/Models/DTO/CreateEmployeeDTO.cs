@@ -6,7 +6,7 @@ using System.Web;
 
 namespace API.Models.DTO
 {
-    public class RegisterDTO
+    public class CreateEmployeeDTO
     {
         /// <summary>
         /// The email of the employee to be created
@@ -27,8 +27,8 @@ namespace API.Models.DTO
         public string LastName { get; set; }
 
         /// <summary>
-        /// The title of the employee like - barista, storage manager, chairman etc.
+        /// The title id of the employee.
         /// </summary>
-        public string Title { get; set; }
+        public int EmployeeTitleId { get; set; }
     }
 }
