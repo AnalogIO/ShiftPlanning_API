@@ -30,6 +30,10 @@ namespace API.Controllers
         /// <summary>
         /// Creates the employee from the content in the body.
         /// </summary>
+        /// <returns>
+        /// Returns 'Created' (201) if the employee gets created.
+        /// If an employee already exist with the given email, the controller will return BadRequest (400).
+        /// </returns>
         [HttpPost, AdminFilter, Route("")]
         public IHttpActionResult Register(RegisterDTO employeeDto)
         {
@@ -48,8 +52,11 @@ namespace API.Controllers
 
         // GET api/employees
         /// <summary>
-        /// Gets an array of all the employees.
+        /// Gets all the employees.
         /// </summary>
+        /// <returns>
+        /// Returns an array of employees.
+        /// </returns>
         [HttpGet, AdminFilter, Route("")]
         public IHttpActionResult Get()
         {
@@ -59,8 +66,13 @@ namespace API.Controllers
 
         // GET api/employees/{id}
         /// <summary>
-        /// Gets the employee with the given id
+        /// Gets the employee with the given id.
         /// </summary>
+        /// <param name="id">The id of the employee.</param>
+        /// <returns>
+        /// Returns the employee with the given id. 
+        /// If no employee is found with the corresponding id, the controller will return NotFound (404)
+        /// </returns>
         [HttpGet, AdminFilter, Route("{id}")]
         public IHttpActionResult Get(int id)
         {
@@ -70,13 +82,25 @@ namespace API.Controllers
             }
 
             var employee = _employeeRepository.Read(id);
-            return Ok(employee);
+            if(employee != null)
+            {
+                return Ok(employee);
+            } else
+            {
+                return NotFound();
+            }
+            
         }
 
         // PUT api/employees/5
         /// <summary>
         /// Updates the employee with the specified id.
         /// </summary>
+        /// <param name="id">The id of the employee.</param>
+        /// <returns>
+        /// Returns 'No Content' (204) if the employee gets updated.
+        /// If no employee is found with the given id, the controller will return NotFound (404)
+        /// </returns>
         [HttpPut, AdminFilter, Route("{id}")]
         public IHttpActionResult Put(int id, UpdateEmployeeDTO employeeDto)
         {
@@ -97,13 +121,15 @@ namespace API.Controllers
                     return BadRequest("Could not update employee");
                 }
             }
-            return BadRequest();
+            return NotFound();
         }
 
         // DELETE /api/employees/{id}
         /// <summary>
         /// Deletes the employee with the specified id.
         /// </summary>
+        /// <param name="id">The id of the employee.</param>
+        /// <returns>Returns 'No Content' (204) if the employee gets deleted.</returns>
         [HttpDelete, AdminFilter, Route("{id}")]
         public IHttpActionResult Delete(int id)
         {

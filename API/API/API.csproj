@@ -177,6 +177,8 @@
     <Compile Include="Models\CheckIn.cs" />
     <Compile Include="Models\DTO\RegisterDTO.cs" />
     <Compile Include="Models\DTO\UpdateEmployeeDTO.cs" />
+    <Compile Include="Models\Schedule.cs" />
+    <Compile Include="Models\ScheduledShift.cs" />
     <Compile Include="Models\Shift.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

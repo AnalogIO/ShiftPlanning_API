@@ -13,5 +13,7 @@ namespace API.Models
         public string LastName { get; set; }
         public string Title { get; set; }
         public virtual ICollection<Shift> Shifts { get; set; }
+        public virtual ICollection<CheckIn> CheckIns { get; set; }
+        public virtual ICollection<ScheduledShift> ScheduledShifts { get; set; }
     }
 }

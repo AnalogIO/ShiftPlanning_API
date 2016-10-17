@@ -495,26 +495,45 @@
             <summary>
             Creates the employee from the content in the body.
             </summary>
+            <returns>
+            Returns 'Created' (201) if the employee gets created.
+            If an employee already exist with the given email, the controller will return BadRequest (400).
+            </returns>
         </member>
         <member name="M:API.Controllers.EmployeeController.Get">
             <summary>
-            Gets an array of all the employees.
+            Gets all the employees.
             </summary>
+            <returns>
+            Returns an array of employees.
+            </returns>
         </member>
         <member name="M:API.Controllers.EmployeeController.Get(System.Int32)">
             <summary>
-            Gets the employee with the given id
+            Gets the employee with the given id.
             </summary>
+            <param name="id">The id of the employee.</param>
+            <returns>
+            Returns the employee with the given id. 
+            If no employee is found with the corresponding id, the controller will return NotFound (404)
+            </returns>
         </member>
         <member name="M:API.Controllers.EmployeeController.Put(System.Int32,API.Models.DTO.UpdateEmployeeDTO)">
             <summary>
             Updates the employee with the specified id.
             </summary>
+            <param name="id">The id of the employee.</param>
+            <returns>
+            Returns 'No Content' (204) if the employee gets updated.
+            If no employee is found with the given id, the controller will return NotFound (404)
+            </returns>
         </member>
         <member name="M:API.Controllers.EmployeeController.Delete(System.Int32)">
             <summary>
             Deletes the employee with the specified id.
             </summary>
+            <param name="id">The id of the employee.</param>
+            <returns>Returns 'No Content' (204) if the employee gets deleted.</returns>
         </member>
         <member name="M:API.Logic.AdminFilter.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
             <summary>
@@ -522,6 +541,46 @@
             Checks if the user is authorized.
             </summary>
             <param name="actionContext"></param>
+        </member>
+        <member name="P:API.Models.DTO.RegisterDTO.Email">
+            <summary>
+            The email of the employee to be created
+            </summary>
+        </member>
+        <member name="P:API.Models.DTO.RegisterDTO.FirstName">
+            <summary>
+            The first name of the employee
+            </summary>
+        </member>
+        <member name="P:API.Models.DTO.RegisterDTO.LastName">
+            <summary>
+            The last name of the employee
+            </summary>
+        </member>
+        <member name="P:API.Models.DTO.RegisterDTO.Title">
+            <summary>
+            The title of the employee like - barista, storage manager, chairman etc.
+            </summary>
+        </member>
+        <member name="P:API.Models.DTO.UpdateEmployeeDTO.Email">
+            <summary>
+            The email of the employee. Leave empty string if the email should not be updated.
+            </summary>
+        </member>
+        <member name="P:API.Models.DTO.UpdateEmployeeDTO.FirstName">
+            <summary>
+            The first name of the employee. Leave empty string if the email should not be updated.
+            </summary>
+        </member>
+        <member name="P:API.Models.DTO.UpdateEmployeeDTO.LastName">
+            <summary>
+            The last name of the employee. Leave empty string if the email should not be updated.
+            </summary>
+        </member>
+        <member name="P:API.Models.DTO.UpdateEmployeeDTO.Title">
+            <summary>
+            The title of the employee like - barista, storage manager, chairman etc. Leave empty string if the email should not be updated.
+            </summary>
         </member>
     </members>
 </doc>

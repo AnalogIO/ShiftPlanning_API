@@ -10,6 +10,7 @@ namespace API.Data
 
         }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
         public void MarkAsModified(Employee employee)
         {
             Entry(employee).State = EntityState.Modified;
