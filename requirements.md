@@ -7,5 +7,5 @@ It should be possible to:
 - check-in as an employee.
 - check-out as an employee.
 - check-in although outside of the planned schedule (for the next x hours).
-- opening hours API (shifts, openings hours and open/closed endpoints).
 - delete existing shifts.
+- opening hours API (shifts, openings hours and open/closed endpoints).
