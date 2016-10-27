@@ -9,7 +9,7 @@ namespace API.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(API.Data.ShiftPlannerDataContext context)

@@ -20,5 +20,12 @@ namespace API.Data
         {
             Entry(employeeTitle).State = EntityState.Modified;
         }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            // PostgreSQL uses the public schema by default - not dbo. 
+            modelBuilder.HasDefaultSchema("public");
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
