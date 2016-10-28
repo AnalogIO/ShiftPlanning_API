@@ -24,8 +24,8 @@ namespace API.Data
 
         public Employee Create(Employee employee)
         {
-            var existingUser = _context.Employees.Where(x => x.Email == employee.Email).FirstOrDefault();
-            if (existingUser == null)
+            var existingEmployee = _context.Employees.Where(x => x.Email == employee.Email).FirstOrDefault();
+            if (existingEmployee == null)
             {
                 _context.Employees.Add(employee);
                 _context.SaveChanges();

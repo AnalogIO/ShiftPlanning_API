@@ -9,8 +9,12 @@ namespace API.Data
         DbSet<Employee> Employees { get; set; }
         DbSet<EmployeeTitle> EmployeeTitles { get; set; }
         DbSet<Schedule> Schedules { get; set; }
+        DbSet<Institution> Institutions { get; set; }
+        DbSet<Manager> Managers { get; set; }
         int SaveChanges();
         void MarkAsModified(Employee employee);
         void MarkAsModified(EmployeeTitle employeeTitle);
+        void MarkAsModified(Institution institution);
+        void MarkAsModified(Manager manager);
     }
 }
