@@ -11,6 +11,7 @@ The project requires a configuration file `connections.config` and `appSettings.
 ```
 ```xml
 <appSettings>
-  <add key="APIKEY" value="<APIKEY>"/>
+  <add key="ApiKey" value="<ApiKey>"/>
+  <add key="TokenKey" value="<SymmetricKey>"/>
 </appSettings>
 ```
