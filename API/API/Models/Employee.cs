@@ -15,5 +15,6 @@ namespace API.Models
         public virtual ICollection<Shift> Shifts { get; set; }
         public virtual ICollection<CheckIn> CheckIns { get; set; }
         public virtual ICollection<ScheduledShift> ScheduledShifts { get; set; }
+        public virtual Institution Institution { get; set; }
     }
 }

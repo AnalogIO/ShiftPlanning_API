@@ -10,7 +10,7 @@ namespace API.Logic
     {
         public static bool AuthenticateToken(string apikey)
         {
-            return apikey.Equals(ConfigurationManager.AppSettings["APIKEY"]);
+            return apikey.Equals(ConfigurationManager.AppSettings["ApiKey"]);
         }
     }
 }

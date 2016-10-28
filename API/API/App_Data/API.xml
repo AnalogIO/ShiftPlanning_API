@@ -585,10 +585,21 @@
         </member>
         <member name="M:API.Logic.AdminFilter.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
             <summary>
-            OnAuthorization is called whenever a method has the data annotation "[AdminFilter]".
+            OnAuthorization is called whenever a method has the data annotation "[AuthFilter]".
             Checks if the user is authorized.
             </summary>
             <param name="actionContext"></param>
+        </member>
+        <member name="M:API.Logic.TokenManager.GenerateToken">
+            <summary>
+            Generates and return a JWT token.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:API.Models.DTO.CreateEmployeeTitleDTO.Title">
+            <summary>
+            The employee title.
+            </summary>
         </member>
         <member name="P:API.Models.DTO.CreateEmployeeDTO.Email">
             <summary>

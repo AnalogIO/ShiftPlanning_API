@@ -5,12 +5,13 @@ using System.Web;
 
 namespace API.Models
 {
-    public class Schedule
+    public class Manager
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public int NumberOfWeeks { get; set; }
-        public virtual ICollection<ScheduledShift> Shifts { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string Salt { get; set; }
         public virtual Institution Institution { get; set; }
+        public virtual ICollection<Token> Tokens { get; set; }
     }
 }
