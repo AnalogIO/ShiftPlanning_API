@@ -5,11 +5,12 @@ using System.Web;
 
 namespace API.Models.DTO
 {
-    public class CreateEmployeeTitleDTO
+    public class UpdateEmployeeTitleDTO
     {
         /// <summary>
         /// The employee title.
         /// </summary>
         public string Title { get; set; }
+
     }
 }

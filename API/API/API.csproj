@@ -192,6 +192,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\EmployeeTitleController.cs" />
     <Compile Include="Data\EmployeeTitleRepository.cs" />
     <Compile Include="Data\IShiftPlannerDataContext.cs" />
     <Compile Include="Data\IEmployeeRepository.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Models\CheckIn.cs" />
     <Compile Include="Models\DTO\CreateEmployeeTitleDTO.cs" />
     <Compile Include="Models\DTO\CreateEmployeeDTO.cs" />
+    <Compile Include="Models\DTO\UpdateEmployeeTitleDTO.cs" />
     <Compile Include="Models\DTO\UpdateEmployeeDTO.cs" />
     <Compile Include="Models\EmployeeTitle.cs" />
     <Compile Include="Models\Schedule.cs" />
