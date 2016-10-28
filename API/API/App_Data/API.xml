@@ -583,12 +583,38 @@
             <param name="id">The id of the employee title.</param>
             <returns>Returns 'No Content' (204) if the employee title gets deleted.</returns>
         </member>
+        <member name="T:API.Controllers.ManagerController">
+            <summary>
+            Controller to validate authority (login etc.)
+            </summary>
+        </member>
+        <member name="M:API.Controllers.ManagerController.#ctor">
+            <summary>
+            The controller constructor.
+            </summary>
+        </member>
+        <member name="M:API.Controllers.ManagerController.Login(API.Models.DTO.ManagerLoginDTO)">
+            <summary>
+            Tries to login the manager with the given credentials in the body
+            </summary>
+            <returns>
+            Returns 'Ok' (200) with a valid token if the provided username and password matches.
+            If the provided credentials are wrong then the controller will return Unauthorized (401).
+            </returns>
+        </member>
         <member name="M:API.Logic.AdminFilter.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
             <summary>
             OnAuthorization is called whenever a method has the data annotation "[AuthFilter]".
             Checks if the user is authorized.
             </summary>
             <param name="actionContext"></param>
+        </member>
+        <member name="M:API.Logic.HashManager.Hash(System.String)">
+            <summary>
+            Hashes a given password (SHA256 Hashing Algorithm)
+            </summary>
+            <param name="password"></param>
+            <returns></returns>
         </member>
         <member name="M:API.Logic.TokenManager.GenerateToken">
             <summary>

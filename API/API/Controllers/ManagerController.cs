@@ -31,7 +31,7 @@ namespace API.Controllers
 
         // POST api/manager/login
         /// <summary>
-        /// Tries to login the manager with the given credentials in the body
+        /// Login as the manager with the given credentials in the body
         /// </summary>
         /// <returns>
         /// Returns 'Ok' (200) with a valid token if the provided username and password matches.
