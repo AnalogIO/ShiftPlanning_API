@@ -22,17 +22,15 @@ namespace API.Data
             _context = context;
         }
 
-        public EmployeeTitle Create(CreateEmployeeTitleDTO employeeTitleDto)
+        public EmployeeTitle Create(EmployeeTitle employeeTitle)
         {
-            var employeeTitle = new EmployeeTitle { Title = employeeTitleDto.Title };
             _context.EmployeeTitles.Add(employeeTitle);
-            _context.SaveChanges();
-            return employeeTitle;
+            return _context.SaveChanges() > 0 ? employeeTitle : null;
         }
 
-        public void Delete(int id)
+        public void Delete(int id, int institutionId)
         {
-            var employeeTitle = _context.EmployeeTitles.Where(x => x.Id == id).FirstOrDefault();
+            var employeeTitle = _context.EmployeeTitles.Where(x => x.Id == id && x.Institution.Id == institutionId).FirstOrDefault();
             if (employeeTitle != null)
             {
                 _context.EmployeeTitles.Remove(employeeTitle);
@@ -40,14 +38,14 @@ namespace API.Data
             }
         }
 
-        public List<EmployeeTitle> Read()
+        public List<EmployeeTitle> ReadFromInstitution(int institutionId)
         {
-            return _context.EmployeeTitles.ToList();
+            return _context.EmployeeTitles.Where(x => x.Institution.Id == institutionId).ToList();
         }
 
-        public EmployeeTitle Read(int id)
+        public EmployeeTitle Read(int id, int institutionId)
         {
-            return _context.EmployeeTitles.Where(x => x.Id == id).FirstOrDefault();
+            return _context.EmployeeTitles.Where(x => x.Id == id && x.Institution.Id == institutionId).FirstOrDefault();
         }
 
         public int Update(EmployeeTitle employeeTitle)

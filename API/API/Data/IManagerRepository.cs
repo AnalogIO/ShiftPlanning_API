@@ -12,6 +12,7 @@ namespace API.Data
         Manager Create(Manager manager);
         List<Manager> Read();
         Manager Read(int id);
+        Manager Read(string token);
         Manager Login(string username, string password);
         int Update(Manager manager);
         void Delete(int id);

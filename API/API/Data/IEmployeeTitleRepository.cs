@@ -10,10 +10,10 @@ namespace API.Data
 {
     public interface IEmployeeTitleRepository
     {
-        EmployeeTitle Create(CreateEmployeeTitleDTO employeeTitle);
-        List<EmployeeTitle> Read();
-        EmployeeTitle Read(int id);
+        EmployeeTitle Create(EmployeeTitle employeeTitle);
+        List<EmployeeTitle> ReadFromInstitution(int institutionId);
+        EmployeeTitle Read(int id, int institutionId);
         int Update(EmployeeTitle employeeTitle);
-        void Delete(int id);
+        void Delete(int id, int institutionId);
     }
 }

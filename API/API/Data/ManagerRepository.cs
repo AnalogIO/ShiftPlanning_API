@@ -58,6 +58,11 @@ namespace API.Data
             return _context.Managers.Where(x => x.Id == id).FirstOrDefault();
         }
 
+        public Manager Read(string token)
+        {
+            return _context.Managers.Where(m => m.Tokens.Where(t => t.TokenHash == token).Count() > 0).FirstOrDefault(); // finds the manager with the corresponding token
+        }
+
         public int Update(Manager manager)
         {
             _context.Managers.Attach(manager);

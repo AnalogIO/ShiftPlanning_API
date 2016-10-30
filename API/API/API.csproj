@@ -232,6 +232,10 @@
     <Compile Include="Migrations\201610281139173_institution and manager added.Designer.cs">
       <DependentUpon>201610281139173_institution and manager added.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201610301703458_institution on employee title.cs" />
+    <Compile Include="Migrations\201610301703458_institution on employee title.Designer.cs">
+      <DependentUpon>201610301703458_institution on employee title.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CheckIn.cs" />
     <Compile Include="Models\DTO\CreateEmployeeTitleDTO.cs" />
@@ -292,6 +296,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610281139173_institution and manager added.resx">
       <DependentUpon>201610281139173_institution and manager added.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610301703458_institution on employee title.resx">
+      <DependentUpon>201610301703458_institution on employee title.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

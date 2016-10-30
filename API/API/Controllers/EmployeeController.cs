@@ -20,6 +20,7 @@ namespace API.Controllers
     {
         private IEmployeeRepository _employeeRepository;
         private IEmployeeTitleRepository _employeeTitleRepository;
+        private IManagerRepository _managerRepository;
         
         /// <summary>
         /// The controller constructor.
@@ -29,6 +30,7 @@ namespace API.Controllers
             var context = new ShiftPlannerDataContext();
             _employeeRepository = new EmployeeRepository(context);
             _employeeTitleRepository = new EmployeeTitleRepository(context);
+            _managerRepository = new ManagerRepository(context);
         }
 
         // POST api/employees
@@ -47,8 +49,11 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var employee = new Employee { Email = employeeDto.Email, FirstName = employeeDto.FirstName, LastName = employeeDto.LastName };
-            var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId);
+            var manager = GetManager();
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            var employee = new Employee { Email = employeeDto.Email, FirstName = employeeDto.FirstName, LastName = employeeDto.LastName, Institution = manager.Institution };
+            var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Institution.Id);
             if (title != null) employee.EmployeeTitle = title;
             employee = _employeeRepository.Create(employee);
             if(employee != null)
@@ -68,7 +73,10 @@ namespace API.Controllers
         [HttpGet, AdminFilter, Route("")]
         public IHttpActionResult Get()
         {
-            var employees = _employeeRepository.Read();
+            var manager = GetManager();
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            var employees = _employeeRepository.ReadFromInstitution(manager.Institution.Id);
             return Ok(employees);
         }
 
@@ -89,7 +97,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var employee = _employeeRepository.Read(id);
+            var manager = GetManager();
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            var employee = _employeeRepository.Read(id, manager.Institution.Id);
             if(employee != null)
             {
                 return Ok(employee);
@@ -117,11 +128,14 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var employee = _employeeRepository.Read(id);
+            var manager = GetManager();
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            var employee = _employeeRepository.Read(id, manager.Institution.Id);
             if(employee != null)
             {
                 employee = EmployeeManager.UpdateEmployeeFromEmployeeDTO(employee, employeeDto);
-                var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId);
+                var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Institution.Id);
                 if (title != null) employee.EmployeeTitle = title;
                 if (_employeeRepository.Update(employee) > 0)
                 {
@@ -149,8 +163,17 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            _employeeRepository.Delete(id);
+            var manager = GetManager();
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            _employeeRepository.Delete(id, manager.Institution.Id);
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+        }
+
+        private Manager GetManager()
+        {
+            var token = Request.Headers.Authorization.ToString();
+            return _managerRepository.Read(token);
         }
     }
 }

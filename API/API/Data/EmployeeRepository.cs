@@ -28,8 +28,7 @@ namespace API.Data
             if (existingEmployee == null)
             {
                 _context.Employees.Add(employee);
-                _context.SaveChanges();
-                return employee;
+                return _context.SaveChanges() > 0 ? employee : null;
             }
             else
             {
@@ -37,9 +36,9 @@ namespace API.Data
             }
         }
 
-        public void Delete(int id)
+        public void Delete(int id, int institutionId)
         {
-            var employee = _context.Employees.Where(x => x.Id == id).FirstOrDefault();
+            var employee = _context.Employees.Where(x => x.Id == id && x.Institution.Id == institutionId).FirstOrDefault();
             if(employee != null)
             {
                 _context.Employees.Remove(employee);
@@ -47,14 +46,14 @@ namespace API.Data
             }
         }
 
-        public List<Employee> Read()
+        public List<Employee> ReadFromInstitution(int institutionId)
         {
-            return _context.Employees.ToList();
+            return _context.Employees.Where(e => e.Institution.Id == institutionId).ToList();
         }
 
-        public Employee Read(int id)
+        public Employee Read(int id, int institutionId)
         {
-            return _context.Employees.Where(x => x.Id == id).FirstOrDefault();
+            return _context.Employees.Where(x => x.Id == id && x.Institution.Id == institutionId).FirstOrDefault();
         }
 
         public int Update(Employee employee)

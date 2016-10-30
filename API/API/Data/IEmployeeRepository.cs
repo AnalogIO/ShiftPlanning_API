@@ -10,9 +10,9 @@ namespace API.Data
     public interface IEmployeeRepository
     {
         Employee Create(Employee employee);
-        List<Employee> Read();
-        Employee Read(int id);
+        List<Employee> ReadFromInstitution(int institutionId);
+        Employee Read(int id, int institutionId);
         int Update(Employee employee);
-        void Delete(int id);
+        void Delete(int id, int institutionId);
     }
 }
