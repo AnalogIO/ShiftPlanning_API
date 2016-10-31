@@ -39,6 +39,11 @@ namespace API.Data
             Entry(shift).State = EntityState.Modified;
         }
 
+        public void MarkAsModified(Schedule schedule)
+        {
+            Entry(schedule).State = EntityState.Modified;
+        }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             // PostgreSQL uses the public schema by default - not dbo. 

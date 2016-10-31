@@ -207,7 +207,9 @@
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\EmployeeTitleController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
+    <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\ShiftController.cs" />
+    <Compile Include="Data\IScheduleRepository.cs" />
     <Compile Include="Data\IShiftRepository.cs" />
     <Compile Include="Data\ManagerRepository.cs" />
     <Compile Include="Data\EmployeeTitleRepository.cs" />
@@ -215,6 +217,7 @@
     <Compile Include="Data\IShiftPlannerDataContext.cs" />
     <Compile Include="Data\IEmployeeRepository.cs" />
     <Compile Include="Data\IEmployeeTitleRepository.cs" />
+    <Compile Include="Data\ScheduleRepository.cs" />
     <Compile Include="Data\ShiftPlannerDataContext.cs" />
     <Compile Include="Data\EmployeeRepository.cs" />
     <Compile Include="Data\ShiftRepository.cs" />

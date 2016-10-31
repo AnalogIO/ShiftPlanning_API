@@ -18,5 +18,6 @@ namespace API.Data
         void MarkAsModified(Institution institution);
         void MarkAsModified(Manager manager);
         void MarkAsModified(Shift shift);
+        void MarkAsModified(Schedule schedule);
     }
 }
