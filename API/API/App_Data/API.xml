@@ -602,6 +602,24 @@
             If the provided credentials are wrong then the controller will return Unauthorized (401).
             </returns>
         </member>
+        <member name="T:API.Controllers.ScheduleController">
+            <summary>
+            Controller to manage schedule
+            </summary>
+        </member>
+        <member name="M:API.Controllers.ScheduleController.Get">
+            <summary>
+            Gets all the schedules.
+            </summary>
+            <returns>
+            Returns an array of schedules.
+            </returns>
+        </member>
+        <member name="T:API.Controllers.ShiftController">
+            <summary>
+            Controller to manage shifts
+            </summary>
+        </member>
         <member name="M:API.Logic.AdminFilter.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
             <summary>
             OnAuthorization is called whenever a method has the data annotation "[AuthFilter]".
