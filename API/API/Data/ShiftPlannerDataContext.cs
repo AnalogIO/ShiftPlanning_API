@@ -14,6 +14,7 @@ namespace API.Data
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Institution> Institutions { get; set; }
         public DbSet<Manager> Managers { get; set; }
+        public DbSet<Shift> Shifts { get; set; }
         public void MarkAsModified(Employee employee)
         {
             Entry(employee).State = EntityState.Modified;
@@ -31,6 +32,11 @@ namespace API.Data
         public void MarkAsModified(Manager manager)
         {
             Entry(manager).State = EntityState.Modified;
+        }
+
+        public void MarkAsModified(Shift shift)
+        {
+            Entry(shift).State = EntityState.Modified;
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

@@ -11,10 +11,12 @@ namespace API.Data
         DbSet<Schedule> Schedules { get; set; }
         DbSet<Institution> Institutions { get; set; }
         DbSet<Manager> Managers { get; set; }
+        DbSet<Shift> Shifts { get; set; }
         int SaveChanges();
         void MarkAsModified(Employee employee);
         void MarkAsModified(EmployeeTitle employeeTitle);
         void MarkAsModified(Institution institution);
         void MarkAsModified(Manager manager);
+        void MarkAsModified(Shift shift);
     }
 }

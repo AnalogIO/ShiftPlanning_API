@@ -207,6 +207,8 @@
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\EmployeeTitleController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
+    <Compile Include="Controllers\ShiftController.cs" />
+    <Compile Include="Data\IShiftRepository.cs" />
     <Compile Include="Data\ManagerRepository.cs" />
     <Compile Include="Data\EmployeeTitleRepository.cs" />
     <Compile Include="Data\IManagerRepository.cs" />
@@ -215,6 +217,7 @@
     <Compile Include="Data\IEmployeeTitleRepository.cs" />
     <Compile Include="Data\ShiftPlannerDataContext.cs" />
     <Compile Include="Data\EmployeeRepository.cs" />
+    <Compile Include="Data\ShiftRepository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -281,6 +284,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\PublishProfiles\analogio-shiftplanning.pubxml" />
     <None Include="Properties\PublishProfiles\analogio.dk.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
