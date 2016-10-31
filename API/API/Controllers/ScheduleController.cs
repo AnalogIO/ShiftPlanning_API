@@ -38,7 +38,7 @@ namespace API.Controllers
             var manager = GetManager();
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var schedules = _scheduleRepository.ReadFromInstitution(manager.Institution.Id);
+            var schedules = _scheduleRepository.ReadFromInstitution(manager.Institution.Id); // proper dto should be used here
             return Ok(schedules);
         }
 
