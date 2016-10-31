@@ -5,12 +5,12 @@ The project requires a configuration file `connections.config` and `appSettings.
 ```xml
 <connectionStrings>
   <add name="ShiftPlannerDataContext"
-       connectionString="Server=<HOST>;port=<PORT>;Database=<DBNAME>;User Id=<USERNAME>;Password=<PASSWORD>;"
+       connectionString="Server=HOST;port=PORT;Database=DBNAME;User Id=USERNAME;Password=PASSWORD;"
        providerName="Npgsql" />
 </connectionStrings>
 ```
 ```xml
 <appSettings>
-  <add key="TokenKey" value="<SymmetricKey>"/>
+  <add key="TokenKey" value="SYMMETRICKEY"/>
 </appSettings>
 ```
