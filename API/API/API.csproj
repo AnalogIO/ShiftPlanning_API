@@ -251,6 +251,7 @@
     <Compile Include="Models\CheckIn.cs" />
     <Compile Include="Models\DTO\CreateEmployeeTitleDTO.cs" />
     <Compile Include="Models\DTO\CreateEmployeeDTO.cs" />
+    <Compile Include="Models\DTO\CreateScheduleDTO.cs" />
     <Compile Include="Models\DTO\ManagerLoginDTO.cs" />
     <Compile Include="Models\DTO\ManagerLoginResponse.cs" />
     <Compile Include="Models\DTO\UpdateEmployeeTitleDTO.cs" />
