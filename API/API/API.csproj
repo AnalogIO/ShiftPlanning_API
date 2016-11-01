@@ -243,6 +243,10 @@
     <Compile Include="Migrations\201610301703458_institution on employee title.Designer.cs">
       <DependentUpon>201610301703458_institution on employee title.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201611011551375_apikey to institutions.cs" />
+    <Compile Include="Migrations\201611011551375_apikey to institutions.Designer.cs">
+      <DependentUpon>201611011551375_apikey to institutions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CheckIn.cs" />
     <Compile Include="Models\DTO\CreateEmployeeTitleDTO.cs" />
@@ -307,6 +311,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610301703458_institution on employee title.resx">
       <DependentUpon>201610301703458_institution on employee title.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611011551375_apikey to institutions.resx">
+      <DependentUpon>201611011551375_apikey to institutions.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

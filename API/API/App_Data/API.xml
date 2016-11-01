@@ -622,7 +622,14 @@
         </member>
         <member name="M:API.Logic.AdminFilter.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
             <summary>
-            OnAuthorization is called whenever a method has the data annotation "[AuthFilter]".
+            OnAuthorization is called whenever a method has the data annotation "[AdminFilter]".
+            Checks if the manager is authorized.
+            </summary>
+            <param name="actionContext"></param>
+        </member>
+        <member name="M:API.Logic.ApiKeyFilter.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            OnAuthorization is called whenever a method has the data annotation "[ApiKeyFilter]".
             Checks if the user is authorized.
             </summary>
             <param name="actionContext"></param>
