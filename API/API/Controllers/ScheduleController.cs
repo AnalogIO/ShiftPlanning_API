@@ -94,7 +94,7 @@ namespace API.Controllers
             var manager = GetManager();
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var schedule = new Schedule { Name = scheduleDto.Name, NumberOfWeeks = scheduleDto.NumberOfWeeks };
+            var schedule = new Schedule { Name = scheduleDto.Name, NumberOfWeeks = scheduleDto.NumberOfWeeks, Institution = manager.Institution };
             schedule = _scheduleRepository.Create(schedule);
             if (schedule != null)
             {
