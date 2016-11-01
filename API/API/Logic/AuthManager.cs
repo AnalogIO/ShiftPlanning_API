@@ -1,4 +1,5 @@
-﻿using System;
+﻿using API.Data;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -14,5 +15,12 @@ namespace API.Logic
             return apikey.Equals(ConfigurationManager.AppSettings["ApiKey"]);
         }
 
+        public static bool ValidateInstitutionApiKey(string apiKey)
+        {
+            using (var db = new ShiftPlannerDataContext())
+            {
+                return db.Institutions.Where(x => x.ApiKey == apiKey).FirstOrDefault() != null;
+            }
+        }
     }
 }

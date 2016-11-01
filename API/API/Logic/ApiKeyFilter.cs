@@ -9,28 +9,27 @@ using System.Web.Http.Filters;
 
 namespace API.Logic
 {
-    public class AdminFilter : AuthorizationFilterAttribute
+    public class ApiKeyFilter : AuthorizationFilterAttribute
     {
         /// <summary>
-        /// OnAuthorization is called whenever a method has the data annotation "[AdminFilter]".
-        /// Checks if the manager is authorized.
+        /// OnAuthorization is called whenever a method has the data annotation "[ApiKeyFilter]".
+        /// Checks if the user is authorized.
         /// </summary>
         /// <param name="actionContext"></param>
         public override void OnAuthorization(HttpActionContext actionContext)
         {
-            var token = actionContext.Request.Headers.Authorization;
-            if (token == null)
+            var apiKey = actionContext.Request.Headers.Authorization;
+            if (apiKey == null)
             {
                 actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
             }
-            else if (token != null)
+            else if (apiKey != null)
             {
-                if (!TokenManager.ValidateLoginToken(token.ToString()))
+                if (!AuthManager.ValidateInstitutionApiKey(apiKey.ToString()))
                 {
                     actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
                 }
             }
         }
-
     }
 }
