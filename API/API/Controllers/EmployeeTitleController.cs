@@ -1,10 +1,10 @@
 ﻿using API.Logic;
-using API.Models.DTO;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Data.Models;
 using Data.Repositories;
+using DataTransferObjects;
 
 namespace API.Controllers
 {

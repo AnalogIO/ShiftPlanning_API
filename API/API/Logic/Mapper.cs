@@ -1,10 +1,6 @@
-﻿using API.Models;
-using API.Models.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using Data.Models;
+using DataTransferObjects;
 
 namespace API.Logic
 {

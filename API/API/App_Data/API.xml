@@ -486,7 +486,7 @@
             Controller to manipulate with the employees.
             </summary>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Register(API.Models.DTO.CreateEmployeeDTO)">
+        <member name="M:API.Controllers.EmployeeController.Register(DataTransferObjects.CreateEmployeeDTO)">
             <summary>
             Creates the employee from the content in the body.
             </summary>
@@ -513,7 +513,7 @@
             If no employee is found with the corresponding id, the controller will return NotFound (404)
             </returns>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Put(System.Int32,API.Models.DTO.UpdateEmployeeDTO)">
+        <member name="M:API.Controllers.EmployeeController.Put(System.Int32,DataTransferObjects.UpdateEmployeeDTO)">
             <summary>
             Updates the employee with the specified id.
             </summary>
@@ -535,7 +535,7 @@
             Controller to manipulate with the employee titles.
             </summary>
         </member>
-        <member name="M:API.Controllers.EmployeeTitleController.Register(API.Models.DTO.CreateEmployeeTitleDTO)">
+        <member name="M:API.Controllers.EmployeeTitleController.Register(DataTransferObjects.CreateEmployeeTitleDTO)">
             <summary>
             Creates the employee title from the content in the body.
             </summary>
@@ -561,7 +561,7 @@
             If no employee title is found with the corresponding id, the controller will return NotFound (404)
             </returns>
         </member>
-        <member name="M:API.Controllers.EmployeeTitleController.Put(System.Int32,API.Models.DTO.UpdateEmployeeTitleDTO)">
+        <member name="M:API.Controllers.EmployeeTitleController.Put(System.Int32,DataTransferObjects.UpdateEmployeeTitleDTO)">
             <summary>
             Updates the employee title with the specified id.
             </summary>
@@ -588,7 +588,7 @@
             The controller constructor.
             </summary>
         </member>
-        <member name="M:API.Controllers.ManagerController.Login(API.Models.DTO.ManagerLoginDTO)">
+        <member name="M:API.Controllers.ManagerController.Login(DataTransferObjects.ManagerLoginDTO)">
             <summary>
             Login as the manager with the given credentials in the body
             </summary>
@@ -620,7 +620,7 @@
             If no schedule is found with the corresponding id, the controller will return NotFound (404)
             </returns>
         </member>
-        <member name="M:API.Controllers.ScheduleController.Register(API.Models.DTO.CreateScheduleDTO)">
+        <member name="M:API.Controllers.ScheduleController.Register(DataTransferObjects.CreateScheduleDTO)">
             <summary>
             Creates the schedule from the content in the body.
             </summary>
@@ -646,56 +646,6 @@
             Checks if the user is authorized.
             </summary>
             <param name="actionContext"></param>
-        </member>
-        <member name="P:API.Models.DTO.CreateEmployeeTitleDTO.Title">
-            <summary>
-            The employee title.
-            </summary>
-        </member>
-        <member name="P:API.Models.DTO.CreateEmployeeDTO.Email">
-            <summary>
-            The email of the employee to be created
-            </summary>
-        </member>
-        <member name="P:API.Models.DTO.CreateEmployeeDTO.FirstName">
-            <summary>
-            The first name of the employee
-            </summary>
-        </member>
-        <member name="P:API.Models.DTO.CreateEmployeeDTO.LastName">
-            <summary>
-            The last name of the employee
-            </summary>
-        </member>
-        <member name="P:API.Models.DTO.CreateEmployeeDTO.EmployeeTitleId">
-            <summary>
-            The title id of the employee.
-            </summary>
-        </member>
-        <member name="P:API.Models.DTO.UpdateEmployeeTitleDTO.Title">
-            <summary>
-            The employee title.
-            </summary>
-        </member>
-        <member name="P:API.Models.DTO.UpdateEmployeeDTO.Email">
-            <summary>
-            The email of the employee. Leave empty string if the email should not be updated.
-            </summary>
-        </member>
-        <member name="P:API.Models.DTO.UpdateEmployeeDTO.FirstName">
-            <summary>
-            The first name of the employee. Leave empty string if the first name should not be updated.
-            </summary>
-        </member>
-        <member name="P:API.Models.DTO.UpdateEmployeeDTO.LastName">
-            <summary>
-            The last name of the employee. Leave empty string if the last name should not be updated.
-            </summary>
-        </member>
-        <member name="P:API.Models.DTO.UpdateEmployeeDTO.EmployeeTitleId">
-            <summary>
-            The title id of the employee. Leave as 0 if the title should not be updated.
-            </summary>
         </member>
     </members>
 </doc>

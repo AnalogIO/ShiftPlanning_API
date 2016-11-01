@@ -1,5 +1,4 @@
 ﻿using System.Configuration;
-using Data.Npgsql.Repositories;
 using Data.Repositories;
 
 namespace API.Logic

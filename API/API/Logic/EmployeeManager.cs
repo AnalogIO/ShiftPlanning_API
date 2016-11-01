@@ -1,5 +1,5 @@
-﻿using API.Models.DTO;
-using Data.Models;
+﻿using Data.Models;
+using DataTransferObjects;
 
 namespace API.Logic
 {

@@ -1,10 +1,9 @@
 ﻿using API.Logic;
-using API.Models.DTO;
-using System;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Data.Repositories;
+using DataTransferObjects;
 
 namespace API.Controllers
 {
@@ -47,7 +46,7 @@ namespace API.Controllers
                 var responseDto = Mapper.ManagerToLoginResponse(manager);
                 return Ok(responseDto);
             }
-            HttpResponseMessage response = Request.CreateResponse<Object>(HttpStatusCode.Unauthorized, new { Message = "You entered an incorrect username or password!" });
+            HttpResponseMessage response = Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "You entered an incorrect username or password!" });
             return ResponseMessage(response);
         }
     }

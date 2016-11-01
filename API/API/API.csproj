@@ -238,13 +238,6 @@
     <Compile Include="Logic\AuthManager.cs" />
     <Compile Include="Logic\EmployeeManager.cs" />
     <Compile Include="Logic\Mapper.cs" />
-    <Compile Include="Models\DTO\CreateEmployeeTitleDTO.cs" />
-    <Compile Include="Models\DTO\CreateEmployeeDTO.cs" />
-    <Compile Include="Models\DTO\CreateScheduleDTO.cs" />
-    <Compile Include="Models\DTO\ManagerLoginDTO.cs" />
-    <Compile Include="Models\DTO\ManagerLoginResponse.cs" />
-    <Compile Include="Models\DTO\UpdateEmployeeTitleDTO.cs" />
-    <Compile Include="Models\DTO\UpdateEmployeeDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -287,6 +280,10 @@
     <ProjectReference Include="..\Data.Npgsql\Data.Npgsql.csproj">
       <Project>{76f9d8e9-fab7-428e-8c60-a3c71a6d813b}</Project>
       <Name>Data.Npgsql</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataTransferObjects\DataTransferObjects.csproj">
+      <Project>{678cd23a-dec4-4130-9f90-a0d7f760b004}</Project>
+      <Name>DataTransferObjects</Name>
     </ProjectReference>
     <ProjectReference Include="..\Data\Data.csproj">
       <Project>{65c4b72f-3368-439e-beb5-ebd575953fc3}</Project>
