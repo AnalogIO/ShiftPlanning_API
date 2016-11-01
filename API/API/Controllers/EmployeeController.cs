@@ -1,14 +1,10 @@
-﻿using API.Data;
-using API.Logic;
-using API.Models;
+﻿using API.Logic;
 using API.Models.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web;
 using System.Web.Http;
+using Data.Models;
+using Data.Repositories;
 
 namespace API.Controllers
 {
@@ -18,19 +14,17 @@ namespace API.Controllers
     [RoutePrefix("api/employees")]
     public class EmployeeController : ApiController
     {
-        private IEmployeeRepository _employeeRepository;
-        private IEmployeeTitleRepository _employeeTitleRepository;
-        private IManagerRepository _managerRepository;
-        
-        /// <summary>
-        /// The controller constructor.
-        /// </summary>
-        public EmployeeController()
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IEmployeeTitleRepository _employeeTitleRepository;
+        private readonly IManagerRepository _managerRepository;
+
+        public EmployeeController(IEmployeeRepository employeeRepository, 
+            IEmployeeTitleRepository employeeTitleRepository, 
+            IManagerRepository managerRepository)
         {
-            var context = new ShiftPlannerDataContext();
-            _employeeRepository = new EmployeeRepository(context);
-            _employeeTitleRepository = new EmployeeTitleRepository(context);
-            _managerRepository = new ManagerRepository(context);
+            _employeeRepository = employeeRepository;
+            _employeeTitleRepository = employeeTitleRepository;
+            _managerRepository = managerRepository;
         }
 
         // POST api/employees

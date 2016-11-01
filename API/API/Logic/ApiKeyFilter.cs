@@ -1,16 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
-using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
+using Microsoft.Practices.Unity;
 
 namespace API.Logic
 {
     public class ApiKeyFilter : AuthorizationFilterAttribute
     {
+        private readonly AuthManager _authManager;
+
+        public ApiKeyFilter()
+        {
+            _authManager = UnityConfig.GetConfiguredContainer().Resolve<AuthManager>();
+        }
+
         /// <summary>
         /// OnAuthorization is called whenever a method has the data annotation "[ApiKeyFilter]".
         /// Checks if the user is authorized.
@@ -23,12 +27,9 @@ namespace API.Logic
             {
                 actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
             }
-            else if (apiKey != null)
+            else if (!_authManager.ValidateInstitutionApiKey(apiKey.ToString()))
             {
-                if (!AuthManager.ValidateInstitutionApiKey(apiKey.ToString()))
-                {
-                    actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
-                }
+                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
             }
         }
     }

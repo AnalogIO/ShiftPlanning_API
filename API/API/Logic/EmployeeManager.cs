@@ -1,9 +1,5 @@
-﻿using API.Models;
-using API.Models.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using API.Models.DTO;
+using Data.Models;
 
 namespace API.Logic
 {

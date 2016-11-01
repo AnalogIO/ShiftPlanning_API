@@ -1,26 +1,27 @@
-﻿using API.Data;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Web;
+﻿using System.Configuration;
+using Data.Npgsql.Repositories;
+using Data.Repositories;
 
 namespace API.Logic
 {
     public class AuthManager
     {
+        private readonly IInstitutionRepository _institutionRepository;
+
+        public AuthManager(IInstitutionRepository institutionRepository)
+        {
+            _institutionRepository = institutionRepository;
+        }
+        
         // old implementation not used anymore - now authorizing manager tokens instead
-        public static bool AuthenticateToken(string apikey)
+        public bool AuthenticateToken(string apikey)
         {
             return apikey.Equals(ConfigurationManager.AppSettings["ApiKey"]);
         }
 
-        public static bool ValidateInstitutionApiKey(string apiKey)
+        public bool ValidateInstitutionApiKey(string apiKey)
         {
-            using (var db = new ShiftPlannerDataContext())
-            {
-                return db.Institutions.Where(x => x.ApiKey == apiKey).FirstOrDefault() != null;
-            }
+            return _institutionRepository.HasApiKey(apiKey);
         }
     }
 }

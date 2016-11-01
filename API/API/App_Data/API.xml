@@ -486,11 +486,6 @@
             Controller to manipulate with the employees.
             </summary>
         </member>
-        <member name="M:API.Controllers.EmployeeController.#ctor">
-            <summary>
-            The controller constructor.
-            </summary>
-        </member>
         <member name="M:API.Controllers.EmployeeController.Register(API.Models.DTO.CreateEmployeeDTO)">
             <summary>
             Creates the employee from the content in the body.
@@ -588,7 +583,7 @@
             Controller to validate authority (login etc.)
             </summary>
         </member>
-        <member name="M:API.Controllers.ManagerController.#ctor">
+        <member name="M:API.Controllers.ManagerController.#ctor(Data.Repositories.IManagerRepository)">
             <summary>
             The controller constructor.
             </summary>
@@ -615,6 +610,24 @@
             Returns an array of schedules.
             </returns>
         </member>
+        <member name="M:API.Controllers.ScheduleController.Get(System.Int32)">
+            <summary>
+            Gets the schedule with the given id.
+            </summary>
+            <param name="id">The id of the schedule.</param>
+            <returns>
+            Returns the schedule with the given id. 
+            If no schedule is found with the corresponding id, the controller will return NotFound (404)
+            </returns>
+        </member>
+        <member name="M:API.Controllers.ScheduleController.Register(API.Models.DTO.CreateScheduleDTO)">
+            <summary>
+            Creates the schedule from the content in the body.
+            </summary>
+            <returns>
+            Returns 'Created' (201) if the schedule gets created.
+            </returns>
+        </member>
         <member name="T:API.Controllers.ShiftController">
             <summary>
             Controller to manage shifts
@@ -633,19 +646,6 @@
             Checks if the user is authorized.
             </summary>
             <param name="actionContext"></param>
-        </member>
-        <member name="M:API.Logic.HashManager.Hash(System.String)">
-            <summary>
-            Hashes a given password (SHA256 Hashing Algorithm)
-            </summary>
-            <param name="password"></param>
-            <returns></returns>
-        </member>
-        <member name="M:API.Logic.TokenManager.GenerateToken">
-            <summary>
-            Generates and return a JWT token.
-            </summary>
-            <returns></returns>
         </member>
         <member name="P:API.Models.DTO.CreateEmployeeTitleDTO.Title">
             <summary>

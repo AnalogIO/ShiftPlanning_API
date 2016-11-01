@@ -1,14 +1,10 @@
-﻿using API.Data;
-using API.Logic;
-using API.Models;
+﻿using API.Logic;
 using API.Models.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web;
 using System.Web.Http;
+using Data.Models;
+using Data.Repositories;
 
 namespace API.Controllers
 {
@@ -18,14 +14,13 @@ namespace API.Controllers
     [RoutePrefix("api/schedules")]
     public class ScheduleController : ApiController
     {
-        private IScheduleRepository _scheduleRepository;
-        private IManagerRepository _managerRepository;
+        private readonly IScheduleRepository _scheduleRepository;
+        private readonly IManagerRepository _managerRepository;
 
-        public ScheduleController()
+        public ScheduleController(IScheduleRepository scheduleRepository, IManagerRepository managerRepository)
         {
-            var context = new ShiftPlannerDataContext();
-            _scheduleRepository = new ScheduleRepository(context);
-            _managerRepository = new ManagerRepository(context);
+            _scheduleRepository = scheduleRepository;
+            _managerRepository = managerRepository;
         }
 
         // GET api/schedules

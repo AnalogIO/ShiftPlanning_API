@@ -1,9 +1,6 @@
-﻿using API.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Configuration;
 using System.Web.Http;
+using Data.Repositories;
 
 namespace API.Controllers
 {
@@ -13,14 +10,20 @@ namespace API.Controllers
     [RoutePrefix("api/shifts")]
     public class ShiftController : ApiController
     {
-        private IShiftRepository _shiftRepository;
-        public ShiftController()
+        private readonly IShiftRepository _shiftRepository;
+        private readonly int _institutionId;
+
+        public ShiftController(IShiftRepository shiftRepository)
         {
-            var context = new ShiftPlannerDataContext();
-            _shiftRepository = new ShiftRepository(context);
+            _shiftRepository = shiftRepository;
+            _institutionId = int.Parse(ConfigurationManager.AppSettings["InstitutionId"]);
         }
 
-
+        [HttpGet, Route("")]
+        public IHttpActionResult Get()
+        {
+            return Ok(_shiftRepository.ReadFromInstitution(_institutionId));
+        }
 
     }
 }

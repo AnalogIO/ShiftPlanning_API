@@ -1,13 +1,10 @@
-﻿using API.Data;
-using API.Logic;
+﻿using API.Logic;
 using API.Models.DTO;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web;
 using System.Web.Http;
+using Data.Repositories;
 
 namespace API.Controllers
 {
@@ -18,15 +15,14 @@ namespace API.Controllers
     [RoutePrefix("api/manager")]
     public class ManagerController : ApiController
     {
-        private IManagerRepository _managerRepository;
+        private readonly IManagerRepository _managerRepository;
 
         /// <summary>
         /// The controller constructor.
         /// </summary>
-        public ManagerController()
+        public ManagerController(IManagerRepository managerRepository)
         {
-            var context = new ShiftPlannerDataContext();
-            _managerRepository = new ManagerRepository(context);
+            _managerRepository = managerRepository;
         }
 
         // POST api/manager/login

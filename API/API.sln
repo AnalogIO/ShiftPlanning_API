@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{A79D9C08-A1A3-45D3-B0A0-462A4BB4DB64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{65C4B72F-3368-439E-BEB5-EBD575953FC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Npgsql", "Data.Npgsql\Data.Npgsql.csproj", "{76F9D8E9-FAB7-428E-8C60-A3C71A6D813B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{A79D9C08-A1A3-45D3-B0A0-462A4BB4DB64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A79D9C08-A1A3-45D3-B0A0-462A4BB4DB64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A79D9C08-A1A3-45D3-B0A0-462A4BB4DB64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65C4B72F-3368-439E-BEB5-EBD575953FC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65C4B72F-3368-439E-BEB5-EBD575953FC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65C4B72F-3368-439E-BEB5-EBD575953FC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65C4B72F-3368-439E-BEB5-EBD575953FC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76F9D8E9-FAB7-428E-8C60-A3C71A6D813B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76F9D8E9-FAB7-428E-8C60-A3C71A6D813B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76F9D8E9-FAB7-428E-8C60-A3C71A6D813B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76F9D8E9-FAB7-428E-8C60-A3C71A6D813B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

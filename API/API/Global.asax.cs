@@ -13,6 +13,7 @@ namespace API
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            GlobalConfiguration.Configure(UnityConfig.RegisterComponents);
             AreaRegistration.RegisterAllAreas();
         }
     }
