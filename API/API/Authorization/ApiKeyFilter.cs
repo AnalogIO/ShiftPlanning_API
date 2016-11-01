@@ -4,7 +4,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using Microsoft.Practices.Unity;
 
-namespace API.Logic
+namespace API.Authorization
 {
     public class ApiKeyFilter : AuthorizationFilterAttribute
     {

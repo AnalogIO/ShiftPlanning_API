@@ -4,7 +4,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using Data.Token;
 
-namespace API.Logic
+namespace API.Authorization
 {
     public class AdminFilter : AuthorizationFilterAttribute
     {

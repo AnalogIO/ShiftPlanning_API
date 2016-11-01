@@ -233,9 +233,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Logic\AdminFilter.cs" />
-    <Compile Include="Logic\ApiKeyFilter.cs" />
-    <Compile Include="Logic\AuthManager.cs" />
+    <Compile Include="Authorization\AdminFilter.cs" />
+    <Compile Include="Authorization\ApiKeyFilter.cs" />
+    <Compile Include="Authorization\AuthManager.cs" />
     <Compile Include="Logic\EmployeeManager.cs" />
     <Compile Include="Logic\Mapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

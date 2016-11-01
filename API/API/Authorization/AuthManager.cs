@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using Data.Repositories;
 
-namespace API.Logic
+namespace API.Authorization
 {
     public class AuthManager
     {
