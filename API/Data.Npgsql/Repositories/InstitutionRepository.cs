@@ -29,7 +29,7 @@ namespace Data.Npgsql.Repositories
 
         public Institution Read(string name)
         {
-            var institution = _context.Institutions.Where(x => x.Name == name).FirstOrDefault();
+            var institution = _context.Institutions.Where(x => x.Name.ToLower() == name.ToLower()).FirstOrDefault();
             if(institution != null)
             {
                 return _institutionMapper.MapToModel(institution);

@@ -78,7 +78,7 @@ namespace Data.Npgsql.Repositories
 
         public IEnumerable<Shift> GetOngoingShifts(DateTime currentTime)
         {
-            return _shiftMapMany.Map(_context.Shifts.Where(s => s.Start > (currentTime.AddHours(-1)) && s.End < currentTime));
+            return _shiftMapMany.Map(_context.Shifts.Where(s => s.Start > (currentTime.AddHours(-1)) && s.End < currentTime)).ToList();
         }
 
         public void Dispose()
