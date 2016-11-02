@@ -31,10 +31,13 @@ namespace API.Controllers
         }
 
         [HttpGet, Route("ongoing"), ApiKeyFilter]
-        public IHttpActionResult OnGoing()
+        public IHttpActionResult OnGoing(string institutionName)
         {
-            var rand = new Random();
-            return rand.NextDouble() >= 0.5 ? Ok(new { OnGoing = true }) : Ok(new { OnGoing = false });
+            var institution = _institutionRepository.Read(institutionName);
+            if (institution == null) return BadRequest("No institution found with the given name");
+
+            var shifts = _shiftRepository.GetOngoingShifts(DateTime.UtcNow);
+            return Ok(shifts);
         }
     }
 }

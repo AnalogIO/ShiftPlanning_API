@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Data.Models;
+using System;
 
 namespace Data.Repositories
 {
@@ -11,5 +12,6 @@ namespace Data.Repositories
         Shift Read(int id, int institutionId);
         int Update(Shift shift);
         void Delete(int id, int institutionId);
+        IEnumerable<Shift> GetOngoingShifts(DateTime time);
     }
 }
