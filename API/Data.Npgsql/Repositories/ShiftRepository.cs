@@ -6,6 +6,7 @@ using Data.Npgsql.Mapping;
 using Data.Repositories;
 using PGShift = Data.Npgsql.Models.Shift;
 using PGCheckIn = Data.Npgsql.Models.CheckIn;
+using System.Data.Entity;
 
 namespace Data.Npgsql.Repositories
 {
@@ -78,8 +79,8 @@ namespace Data.Npgsql.Repositories
 
         public IEnumerable<Shift> GetOngoingShifts(int institutionId, DateTime currentTime)
         {
-            var currentTimeMinus1 = currentTime.AddHours(-1);
-            return _shiftMapMany.Map(_context.Shifts.Where(s => s.Institution.Id == institutionId && s.Start > currentTimeMinus1 && s.End < currentTime));
+            //var currentTimeMinus1 = currentTime.AddHours(-1);
+            return _shiftMapMany.Map(_context.Shifts.Where(s => s.Institution.Id == institutionId && ((s.Start > DbFunctions.AddHours(currentTime, -1) || s.Start < currentTime) && s.End > currentTime)));
         }
 
         public void Dispose()
