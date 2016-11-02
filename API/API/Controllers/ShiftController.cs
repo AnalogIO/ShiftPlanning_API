@@ -1,6 +1,8 @@
 ﻿using System.Configuration;
 using System.Web.Http;
 using Data.Repositories;
+using API.Authorization;
+using System;
 
 namespace API.Controllers
 {
@@ -25,5 +27,11 @@ namespace API.Controllers
             return Ok(_shiftRepository.ReadFromInstitution(_institutionId));
         }
 
+        [HttpGet, Route("ongoing"), ApiKeyFilter]
+        public IHttpActionResult OnGoing()
+        {
+            var rand = new Random();
+            return rand.NextDouble() >= 0.5 ? Ok(new { OnGoing = true }) : Ok(new { OnGoing = false });
+        }
     }
 }
