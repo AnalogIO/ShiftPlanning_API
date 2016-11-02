@@ -9,22 +9,25 @@ namespace API.Controllers
     /// <summary>
     /// Controller to manage shifts
     /// </summary>
-    [RoutePrefix("api/shifts")]
+    [RoutePrefix("api/{institutionName}/shifts")]
     public class ShiftController : ApiController
     {
         private readonly IShiftRepository _shiftRepository;
-        private readonly int _institutionId;
+        private readonly IInstitutionRepository _institutionRepository;
 
-        public ShiftController(IShiftRepository shiftRepository)
+        public ShiftController(IShiftRepository shiftRepository, IInstitutionRepository institutionRepository)
         {
             _shiftRepository = shiftRepository;
-            _institutionId = int.Parse(ConfigurationManager.AppSettings["InstitutionId"]);
+            _institutionRepository = institutionRepository;
         }
 
         [HttpGet, Route("")]
-        public IHttpActionResult Get()
+        public IHttpActionResult Get(string institutionName)
         {
-            return Ok(_shiftRepository.ReadFromInstitution(_institutionId));
+            var institution = _institutionRepository.Read(institutionName);
+            if (institution == null) return BadRequest("No institution found with the given name");
+            var institutionId = institution.Id;
+            return Ok(_shiftRepository.ReadFromInstitution(institutionId));
         }
 
         [HttpGet, Route("ongoing"), ApiKeyFilter]

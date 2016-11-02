@@ -7,20 +7,14 @@ namespace API
 {
     public static class UnityConfig
     {
-        private static readonly Lazy<IUnityContainer> Container = new Lazy<IUnityContainer>(() => new UnityContainer());
-
+        private static readonly Lazy<IUnityContainer> Container = new Lazy<IUnityContainer>(() => { var container = new UnityContainer(); Data.Npgsql.Configuration.IoCConfig.ConfigureIoC(container); return container; });
         public static IUnityContainer GetConfiguredContainer()
         {
             return Container.Value;
         }
-
         public static void RegisterComponents(HttpConfiguration config)
         {
-            var container = GetConfiguredContainer();
-
-            Data.Npgsql.Configuration.IoCConfig.ConfigureIoC(container);
-
-            config.DependencyResolver = new UnityDependencyResolver(container);
+            config.DependencyResolver = new UnityDependencyResolver(GetConfiguredContainer());
         }
     }
 }
