@@ -36,7 +36,7 @@ namespace API.Controllers
             var institution = _institutionRepository.Read(institutionName);
             if (institution == null) return BadRequest("No institution found with the given name");
 
-            var shifts = _shiftRepository.GetOngoingShifts(DateTime.UtcNow);
+            var shifts = _shiftRepository.GetOngoingShifts(institution.Id, DateTime.UtcNow);
             return Ok(shifts);
         }
     }
