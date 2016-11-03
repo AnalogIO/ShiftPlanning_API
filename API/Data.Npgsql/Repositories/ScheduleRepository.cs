@@ -28,7 +28,6 @@ namespace Data.Npgsql.Repositories
         {
             var newSchedule = _scheduleMapper.MapToEntity(schedule);
             
-
             _context.Schedules.Add(newSchedule);
             return _context.SaveChanges() > 0 ? _scheduleMapper.MapToModel(newSchedule) : null;
         }

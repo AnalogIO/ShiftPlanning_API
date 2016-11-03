@@ -6,6 +6,7 @@ using API.Authorization;
 using Data.Models;
 using Data.Repositories;
 using DataTransferObjects;
+using System.Collections.Generic;
 
 namespace API.Controllers
 {
@@ -90,13 +91,13 @@ namespace API.Controllers
             var manager = GetManager();
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var schedule = new Schedule { Name = scheduleDto.Name, NumberOfWeeks = scheduleDto.NumberOfWeeks, Institution = manager.Institution };
+            var schedule = new Schedule { Name = scheduleDto.Name, NumberOfWeeks = scheduleDto.NumberOfWeeks, Institution = manager.Institution, Shifts = new List<ScheduledShift>() };
             schedule = _scheduleRepository.Create(schedule);
             if (schedule != null)
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
             }
-            return BadRequest("A user with the given email does already exist!");
+            return BadRequest("The schedule could not be created!");
         }
 
         private Manager GetManager()
