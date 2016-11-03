@@ -252,3 +252,4 @@ paket-files/
 *.sln.iml
 /API/API/connections.config
 /API/API/appSettings.config
+/API/Data.Npgsql/connections.config

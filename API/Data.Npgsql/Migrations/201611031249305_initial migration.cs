@@ -1,25 +1,12 @@
-using System.Data.Entity.Migrations;
-
 namespace Data.Npgsql.Migrations
 {
+    using System;
+    using System.Data.Entity.Migrations;
+    
     public partial class initialmigration : DbMigration
     {
         public override void Up()
         {
-            CreateTable(
-                "public.Employees",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Email = c.String(),
-                        FirstName = c.String(),
-                        LastName = c.String(),
-                        EmployeeTitle_Id = c.Int(),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("public.EmployeeTitles", t => t.EmployeeTitle_Id)
-                .Index(t => t.EmployeeTitle_Id);
-            
             CreateTable(
                 "public.CheckIns",
                 c => new
@@ -36,13 +23,83 @@ namespace Data.Npgsql.Migrations
                 .Index(t => t.Shift_Id);
             
             CreateTable(
+                "public.Employees",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Email = c.String(),
+                        FirstName = c.String(),
+                        LastName = c.String(),
+                        Institution_Id = c.Int(),
+                        EmployeeTitle_Id = c.Int(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("public.Institutions", t => t.Institution_Id)
+                .ForeignKey("public.EmployeeTitles", t => t.EmployeeTitle_Id)
+                .Index(t => t.Institution_Id)
+                .Index(t => t.EmployeeTitle_Id);
+            
+            CreateTable(
                 "public.EmployeeTitles",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Title = c.String(),
+                        Institution_Id = c.Int(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("public.Institutions", t => t.Institution_Id)
+                .Index(t => t.Institution_Id);
+            
+            CreateTable(
+                "public.Institutions",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(),
+                        ShortKey = c.String(),
+                        ApiKey = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "public.Managers",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Username = c.String(),
+                        Password = c.String(),
+                        Salt = c.String(),
+                        Institution_Id = c.Int(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("public.Institutions", t => t.Institution_Id)
+                .Index(t => t.Institution_Id);
+            
+            CreateTable(
+                "public.Tokens",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        TokenHash = c.String(),
+                        Manager_Id = c.Int(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("public.Managers", t => t.Manager_Id)
+                .Index(t => t.Manager_Id);
+            
+            CreateTable(
+                "public.Schedules",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(),
+                        NumberOfWeeks = c.Int(nullable: false),
+                        Institution_Id = c.Int(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("public.Institutions", t => t.Institution_Id)
+                .Index(t => t.Institution_Id);
             
             CreateTable(
                 "public.ScheduledShifts",
@@ -59,24 +116,17 @@ namespace Data.Npgsql.Migrations
                 .Index(t => t.Schedule_Id);
             
             CreateTable(
-                "public.Schedules",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                        NumberOfWeeks = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id);
-            
-            CreateTable(
                 "public.Shifts",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Start = c.DateTime(nullable: false),
                         End = c.DateTime(nullable: false),
+                        Institution_Id = c.Int(),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("public.Institutions", t => t.Institution_Id)
+                .Index(t => t.Institution_Id);
             
             CreateTable(
                 "public.ScheduledShiftEmployees",
@@ -108,30 +158,45 @@ namespace Data.Npgsql.Migrations
         
         public override void Down()
         {
+            DropForeignKey("public.Employees", "EmployeeTitle_Id", "public.EmployeeTitles");
+            DropForeignKey("public.Shifts", "Institution_Id", "public.Institutions");
             DropForeignKey("public.ShiftEmployees", "Employee_Id", "public.Employees");
             DropForeignKey("public.ShiftEmployees", "Shift_Id", "public.Shifts");
             DropForeignKey("public.CheckIns", "Shift_Id", "public.Shifts");
             DropForeignKey("public.ScheduledShifts", "Schedule_Id", "public.Schedules");
             DropForeignKey("public.ScheduledShiftEmployees", "Employee_Id", "public.Employees");
             DropForeignKey("public.ScheduledShiftEmployees", "ScheduledShift_Id", "public.ScheduledShifts");
-            DropForeignKey("public.Employees", "EmployeeTitle_Id", "public.EmployeeTitles");
+            DropForeignKey("public.Schedules", "Institution_Id", "public.Institutions");
+            DropForeignKey("public.Tokens", "Manager_Id", "public.Managers");
+            DropForeignKey("public.Managers", "Institution_Id", "public.Institutions");
+            DropForeignKey("public.EmployeeTitles", "Institution_Id", "public.Institutions");
+            DropForeignKey("public.Employees", "Institution_Id", "public.Institutions");
             DropForeignKey("public.CheckIns", "Employee_Id", "public.Employees");
             DropIndex("public.ShiftEmployees", new[] { "Employee_Id" });
             DropIndex("public.ShiftEmployees", new[] { "Shift_Id" });
             DropIndex("public.ScheduledShiftEmployees", new[] { "Employee_Id" });
             DropIndex("public.ScheduledShiftEmployees", new[] { "ScheduledShift_Id" });
+            DropIndex("public.Shifts", new[] { "Institution_Id" });
             DropIndex("public.ScheduledShifts", new[] { "Schedule_Id" });
+            DropIndex("public.Schedules", new[] { "Institution_Id" });
+            DropIndex("public.Tokens", new[] { "Manager_Id" });
+            DropIndex("public.Managers", new[] { "Institution_Id" });
+            DropIndex("public.EmployeeTitles", new[] { "Institution_Id" });
+            DropIndex("public.Employees", new[] { "EmployeeTitle_Id" });
+            DropIndex("public.Employees", new[] { "Institution_Id" });
             DropIndex("public.CheckIns", new[] { "Shift_Id" });
             DropIndex("public.CheckIns", new[] { "Employee_Id" });
-            DropIndex("public.Employees", new[] { "EmployeeTitle_Id" });
             DropTable("public.ShiftEmployees");
             DropTable("public.ScheduledShiftEmployees");
             DropTable("public.Shifts");
-            DropTable("public.Schedules");
             DropTable("public.ScheduledShifts");
+            DropTable("public.Schedules");
+            DropTable("public.Tokens");
+            DropTable("public.Managers");
+            DropTable("public.Institutions");
             DropTable("public.EmployeeTitles");
-            DropTable("public.CheckIns");
             DropTable("public.Employees");
+            DropTable("public.CheckIns");
         }
     }
 }

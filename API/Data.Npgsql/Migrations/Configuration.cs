@@ -1,16 +1,18 @@
-using System.Data.Entity.Migrations;
-using Data.Npgsql.Repositories;
-
 namespace Data.Npgsql.Migrations
 {
-    internal sealed class Configuration : DbMigrationsConfiguration<ShiftPlannerDataContext>
+    using System;
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations;
+    using System.Linq;
+
+    internal sealed class Configuration : DbMigrationsConfiguration<Data.Npgsql.ShiftPlannerDataContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(ShiftPlannerDataContext context)
+        protected override void Seed(Data.Npgsql.ShiftPlannerDataContext context)
         {
             //  This method will be called after migrating to the latest version.
 

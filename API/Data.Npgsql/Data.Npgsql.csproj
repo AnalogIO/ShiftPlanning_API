@@ -91,21 +91,9 @@
     <Compile Include="Mapping\ShiftMapMany.cs" />
     <Compile Include="Mapping\ShiftMapper.cs" />
     <Compile Include="Mapping\TokenMapMany.cs" />
-    <Compile Include="Migrations\201610271414062_initial migration.cs" />
-    <Compile Include="Migrations\201610271414062_initial migration.Designer.cs">
-      <DependentUpon>201610271414062_initial migration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610281139173_institution and manager added.cs" />
-    <Compile Include="Migrations\201610281139173_institution and manager added.Designer.cs">
-      <DependentUpon>201610281139173_institution and manager added.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610301703458_institution on employee title.cs" />
-    <Compile Include="Migrations\201610301703458_institution on employee title.Designer.cs">
-      <DependentUpon>201610301703458_institution on employee title.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611011551375_apikey to institutions.cs" />
-    <Compile Include="Migrations\201611011551375_apikey to institutions.Designer.cs">
-      <DependentUpon>201611011551375_apikey to institutions.cs</DependentUpon>
+    <Compile Include="Migrations\201611031249305_initial migration.cs" />
+    <Compile Include="Migrations\201611031249305_initial migration.Designer.cs">
+      <DependentUpon>201611031249305_initial migration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CheckIn.cs" />
@@ -135,23 +123,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="connections.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201610271414062_initial migration.resx">
-      <DependentUpon>201610271414062_initial migration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610281139173_institution and manager added.resx">
-      <DependentUpon>201610281139173_institution and manager added.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610301703458_institution on employee title.resx">
-      <DependentUpon>201610301703458_institution on employee title.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611011551375_apikey to institutions.resx">
-      <DependentUpon>201611011551375_apikey to institutions.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201611031249305_initial migration.resx">
+      <DependentUpon>201611031249305_initial migration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
