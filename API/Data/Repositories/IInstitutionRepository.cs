@@ -11,6 +11,6 @@ namespace Data.Repositories
     {
         bool HasApiKey(string apiKey);
         Institution Read(int id);
-        Institution Read(string name);
+        Institution Read(string apiKey);
     }
 }

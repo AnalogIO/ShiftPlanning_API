@@ -12,6 +12,6 @@ namespace DataTransferObjects
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public IEnumerable<EmployeeDTO> Employees { get; set; }
-        public int[] CheckedInEmployeeIds { get; set; }
+        public IEnumerable<EmployeeDTO> CheckedInEmployees { get; set; }
     }
 }

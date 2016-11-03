@@ -27,9 +27,9 @@ namespace Data.Npgsql.Repositories
             return _institutionMapper.MapToModel(_context.Institutions.Where(x => x.Id == id).FirstOrDefault());
         }
 
-        public Institution Read(string name)
+        public Institution Read(string apiKey)
         {
-            var institution = _context.Institutions.Where(x => x.Name.ToLower() == name.ToLower()).FirstOrDefault();
+            var institution = _context.Institutions.Where(x => x.ApiKey == apiKey).FirstOrDefault();
             if(institution != null)
             {
                 return _institutionMapper.MapToModel(institution);
