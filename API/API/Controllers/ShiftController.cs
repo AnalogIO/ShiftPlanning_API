@@ -1,11 +1,10 @@
-﻿using System.Configuration;
-using System.Web.Http;
+﻿using System.Web.Http;
 using Data.Repositories;
 using API.Authorization;
 using System;
 using DataTransferObjects;
 using System.Collections.Generic;
-using Data.Models;
+using Microsoft.Practices.Unity;
 
 namespace API.Controllers
 {
@@ -17,17 +16,19 @@ namespace API.Controllers
     {
         private readonly IShiftRepository _shiftRepository;
         private readonly IInstitutionRepository _institutionRepository;
+        private readonly AuthManager _authManager;
 
         public ShiftController(IShiftRepository shiftRepository, IInstitutionRepository institutionRepository)
         {
             _shiftRepository = shiftRepository;
             _institutionRepository = institutionRepository;
+            _authManager = UnityConfig.GetConfiguredContainer().Resolve<AuthManager>();
         }
 
         [HttpGet, Route("")]
         public IHttpActionResult Get()
         {
-            var institution = GetInstitution();
+            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
             if (institution == null) return BadRequest("No institution found with the given name");
             var institutionId = institution.Id;
             return Ok(_shiftRepository.ReadFromInstitution(institutionId));
@@ -36,7 +37,7 @@ namespace API.Controllers
         [HttpGet, Route("ongoing"), ApiKeyFilter]
         public IHttpActionResult OnGoing()
         {
-            var institution = GetInstitution();
+            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
             if (institution == null) return BadRequest("No institution found with the given name");
 
             //var shifts = _shiftRepository.GetOngoingShifts(institution.Id, DateTime.UtcNow); // to be used when shifts are implemented
@@ -51,12 +52,6 @@ namespace API.Controllers
             };
             var fakeShifts = new List<OngoingShiftDTO>() { fakeOngoingShift };
             return Ok(new { Shifts = fakeShifts });
-        }
-
-        private Institution GetInstitution()
-        {
-            var token = Request.Headers.Authorization.ToString();
-            return _institutionRepository.Read(token);
         }
     }
 }

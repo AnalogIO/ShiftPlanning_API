@@ -49,6 +49,7 @@
     <Compile Include="ManagerLoginResponse.cs" />
     <Compile Include="OngoingShiftDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CreateScheduledShiftDTO.cs" />
     <Compile Include="UpdateEmployeeDTO.cs" />
     <Compile Include="UpdateEmployeeTitleDTO.cs" />
   </ItemGroup>

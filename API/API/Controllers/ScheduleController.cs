@@ -7,6 +7,7 @@ using Data.Models;
 using Data.Repositories;
 using DataTransferObjects;
 using System.Collections.Generic;
+using Microsoft.Practices.Unity;
 
 namespace API.Controllers
 {
@@ -18,11 +19,13 @@ namespace API.Controllers
     {
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IManagerRepository _managerRepository;
+        private readonly AuthManager _authManager;
 
         public ScheduleController(IScheduleRepository scheduleRepository, IManagerRepository managerRepository)
         {
             _scheduleRepository = scheduleRepository;
             _managerRepository = managerRepository;
+            _authManager = UnityConfig.GetConfiguredContainer().Resolve<AuthManager>();
         }
 
         // GET api/schedules
@@ -35,7 +38,7 @@ namespace API.Controllers
         [HttpGet, AdminFilter, Route("")]
         public IHttpActionResult Get()
         {
-            var manager = GetManager();
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
             var schedules = _scheduleRepository.ReadFromInstitution(manager.Institution.Id); // proper dto should be used here
@@ -59,7 +62,7 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = GetManager();
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
             var schedule = _scheduleRepository.Read(id, manager.Institution.Id);
@@ -88,7 +91,7 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = GetManager();
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
             var schedule = new Schedule { Name = scheduleDto.Name, NumberOfWeeks = scheduleDto.NumberOfWeeks, Institution = manager.Institution, Shifts = new List<ScheduledShift>() };
@@ -100,10 +103,26 @@ namespace API.Controllers
             return BadRequest("The schedule could not be created!");
         }
 
-        private Manager GetManager()
+        // POST api/schedules/{id}
+        /// <summary>
+        /// Creates the scheduled shift to the schedule with the given id from the content in the body.
+        /// </summary>
+        /// <returns>
+        /// Returns 'Created' (201) if the scheduled shift gets created.
+        /// </returns>
+        [HttpPost, AdminFilter, Route("{id}")]
+        public IHttpActionResult CreateScheduledShift(CreateScheduledShiftDTO scheduledShiftDto)
         {
-            var token = Request.Headers.Authorization.ToString();
-            return _managerRepository.Read(token);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+           
+            return BadRequest("The schedule could not be created!");
         }
 
     }
