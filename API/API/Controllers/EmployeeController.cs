@@ -18,17 +18,16 @@ namespace API.Controllers
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmployeeTitleRepository _employeeTitleRepository;
-        private readonly IManagerRepository _managerRepository;
         private readonly AuthManager _authManager;
 
         public EmployeeController(IEmployeeRepository employeeRepository, 
             IEmployeeTitleRepository employeeTitleRepository, 
-            IManagerRepository managerRepository)
+            IManagerRepository managerRepository,
+            IInstitutionRepository institutionRepository)
         {
             _employeeRepository = employeeRepository;
             _employeeTitleRepository = employeeTitleRepository;
-            _managerRepository = managerRepository;
-            _authManager = UnityConfig.GetConfiguredContainer().Resolve<AuthManager>();
+            _authManager = new AuthManager(institutionRepository, managerRepository);
         }
 
         // POST api/employees

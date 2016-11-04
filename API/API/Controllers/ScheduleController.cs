@@ -22,12 +22,12 @@ namespace API.Controllers
         private readonly AuthManager _authManager;
         private readonly ScheduleManager _scheduleManager;
 
-        public ScheduleController(IScheduleRepository scheduleRepository, IManagerRepository managerRepository)
+        public ScheduleController(IScheduleRepository scheduleRepository, IManagerRepository managerRepository, IInstitutionRepository institutionRepository, IEmployeeRepository employeeRepository)
         {
             _scheduleRepository = scheduleRepository;
             _managerRepository = managerRepository;
-            _authManager = UnityConfig.GetConfiguredContainer().Resolve<AuthManager>();
-            _scheduleManager = UnityConfig.GetConfiguredContainer().Resolve<ScheduleManager>();
+            _authManager = new AuthManager(institutionRepository, managerRepository);
+            _scheduleManager = new ScheduleManager(scheduleRepository, institutionRepository, employeeRepository);
         }
 
         // GET api/schedules
@@ -126,7 +126,7 @@ namespace API.Controllers
             var scheduledShift = _scheduleManager.CreateScheduledShift(scheduledShiftDto, manager.Institution, id);
 
             if (scheduledShift != null) {
-                ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
             }
 
             return BadRequest("The schedule could not be created!");
