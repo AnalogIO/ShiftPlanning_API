@@ -8,8 +8,8 @@ namespace Data.Models
         public int Id { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
-        public virtual IEnumerable<Employee> Employees { get; set; }
-        public virtual IEnumerable<CheckIn> CheckIns { get; set; }
+        public virtual ICollection<Employee> Employees { get; set; }
+        public virtual ICollection<CheckIn> CheckIns { get; set; }
         public virtual Institution Institution { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Data.Models
 {
@@ -9,6 +10,6 @@ namespace Data.Models
         public string Password { get; set; }
         public string Salt { get; set; }
         public virtual Institution Institution { get; set; }
-        public virtual IEnumerable<Token> Tokens { get; set; }
+        public virtual ICollection<Token> Tokens { get; set; }
     }
 }

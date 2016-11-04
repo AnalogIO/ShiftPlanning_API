@@ -2,34 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using Data.Models;
-using Data.Npgsql.Mapping;
 using Data.Repositories;
-using PGEmployee = Data.Npgsql.Models.Employee;
 
 namespace Data.Npgsql.Repositories
 {
     public class EmployeeRepository : IEmployeeRepository, IDisposable
     {
         private readonly IShiftPlannerDataContext _context;
-        private readonly IMapper<Employee, PGEmployee> _employeeMapper;
-        private readonly IMapMany<PGEmployee, Employee> _employeeMapMany;
 
-        public EmployeeRepository(IShiftPlannerDataContext context, IMapper<Employee, PGEmployee> employeeMapper,
-            IMapMany<PGEmployee, Employee> employeeMapMany)
+        public EmployeeRepository(IShiftPlannerDataContext context)
         {
             _context = context;
-            _employeeMapper = employeeMapper;
-            _employeeMapMany = employeeMapMany;
         }
 
         public Employee Create(Employee employee)
         {
             if (!_context.Employees.Any(x => x.Email == employee.Email))
             {
-                var newEmployee = _employeeMapper.MapToEntity(employee);
-
-                _context.Employees.Add(newEmployee);
-                return _context.SaveChanges() > 0 ? _employeeMapper.MapToModel(newEmployee) : null;
+                _context.Employees.Add(employee);
+                return _context.SaveChanges() > 0 ? employee : null;
             }
             return null;
         }
@@ -46,12 +37,12 @@ namespace Data.Npgsql.Repositories
 
         public IEnumerable<Employee> ReadFromInstitution(int institutionId)
         {
-            return _employeeMapMany.Map(_context.Employees.Where(e => e.Institution.Id == institutionId));
+            return _context.Employees.Where(e => e.Institution.Id == institutionId);
         }
 
         public Employee Read(int id, int institutionId)
         {
-            return _employeeMapper.MapToModel(_context.Employees.FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId));
+            return _context.Employees.FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
         }
 
         public int Update(Employee employee)

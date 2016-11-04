@@ -2,38 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using Data.Models;
-using Data.Npgsql.Mapping;
 using Data.Repositories;
 using Data.Token;
-using PGManager = Data.Npgsql.Models.Manager;
-using PGToken = Data.Npgsql.Models.Token;
 
 namespace Data.Npgsql.Repositories
 {
     public class ManagerRepository : IManagerRepository, IDisposable
     {
         private readonly IShiftPlannerDataContext _context;
-        private readonly IMapper<Manager, PGManager> _managerMapper;
-        private readonly IMapMany<PGManager, Manager> _managerMapMany;
         
-        public ManagerRepository(IShiftPlannerDataContext context, 
-            IMapper<Manager, PGManager> managerMapper, 
-            IMapMany<PGManager, Manager> managerMapMany)
+        public ManagerRepository(IShiftPlannerDataContext context)
         {
             _context = context;
-            _managerMapper = managerMapper;
-            _managerMapMany = managerMapMany;
         }
 
         public Manager Create(Manager manager)
         {
             if (!_context.Managers.Any(x => x.Username == manager.Username))
             {
-                var newManager = _managerMapper.MapToEntity(manager);
-
-                _context.Managers.Add(newManager);
+                _context.Managers.Add(manager);
                 _context.SaveChanges();
-                return _managerMapper.MapToModel(newManager);
+                return manager;
             }
             return null;
         }
@@ -50,12 +39,12 @@ namespace Data.Npgsql.Repositories
 
         public IEnumerable<Manager> Read()
         {
-            return _managerMapMany.Map(_context.Managers);
+            return _context.Managers.AsEnumerable();
         }
 
         public Manager Read(int id)
         {
-            return _managerMapper.MapToModel(_context.Managers.FirstOrDefault(x => x.Id == id));
+            return _context.Managers.FirstOrDefault(x => x.Id == id);
         }
 
         public Manager Read(string token)
@@ -64,7 +53,7 @@ namespace Data.Npgsql.Repositories
 
             if (manager != null)
             {
-                return _managerMapper.MapToModel(manager);
+                return manager;
             }
             return null;
         }
@@ -75,10 +64,7 @@ namespace Data.Npgsql.Repositories
 
             dbManager.Password = manager.Password;
             dbManager.Salt = manager.Salt;
-            dbManager.Tokens = manager.Tokens.Select(t => new PGToken(t.TokenHash)
-            {
-                Id = t.Id
-            }).ToList();
+            dbManager.Tokens = manager.Tokens;
 
             return _context.SaveChanges();
         }
@@ -91,10 +77,10 @@ namespace Data.Npgsql.Repositories
                 var hashPassword = HashManager.Hash(password + manager.Salt);
                 if (manager.Password.Equals(hashPassword))
                 {
-                    var token = new PGToken(TokenManager.GenerateLoginToken());
+                    var token = new Models.Token(TokenManager.GenerateLoginToken());
                     manager.Tokens.Add(token);
                     _context.SaveChanges();
-                    return _managerMapper.MapToModel(manager);
+                    return manager;
                 }
             }
             return null;

@@ -1,5 +1,4 @@
-﻿using System;
-using Data.Token;
+﻿using Data.Token;
 
 namespace Data.Models
 {

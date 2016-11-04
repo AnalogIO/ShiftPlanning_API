@@ -1,5 +1,5 @@
 ﻿using System.Data.Entity;
-using Data.Npgsql.Models;
+using Data.Models;
 
 namespace Data.Npgsql
 {

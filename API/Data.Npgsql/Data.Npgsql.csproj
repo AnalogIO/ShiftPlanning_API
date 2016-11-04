@@ -74,37 +74,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\IoCConfig.cs" />
-    <Compile Include="Mapping\CheckInMapMany.cs" />
-    <Compile Include="Mapping\EmployeeMapMany.cs" />
-    <Compile Include="Mapping\EmployeeMapper.cs" />
-    <Compile Include="Mapping\EmployeeTitleMapMany.cs" />
-    <Compile Include="Mapping\EmployeeTitleMapper.cs" />
-    <Compile Include="Mapping\IMapMany.cs" />
-    <Compile Include="Mapping\IMapper.cs" />
-    <Compile Include="Mapping\InstitutionMapper.cs" />
-    <Compile Include="Mapping\ManagerMapMany.cs" />
-    <Compile Include="Mapping\ManagerMapper.cs" />
-    <Compile Include="Mapping\ScheduledShiftMapMany.cs" />
-    <Compile Include="Mapping\ScheduledShiftMapper.cs" />
-    <Compile Include="Mapping\ScheduleMapMany.cs" />
-    <Compile Include="Mapping\ScheduleMapper.cs" />
-    <Compile Include="Mapping\ShiftMapMany.cs" />
-    <Compile Include="Mapping\ShiftMapper.cs" />
-    <Compile Include="Mapping\TokenMapMany.cs" />
     <Compile Include="Migrations\201611031249305_initial migration.cs" />
     <Compile Include="Migrations\201611031249305_initial migration.Designer.cs">
       <DependentUpon>201611031249305_initial migration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\CheckIn.cs" />
-    <Compile Include="Models\Employee.cs" />
-    <Compile Include="Models\EmployeeTitle.cs" />
-    <Compile Include="Models\Institution.cs" />
-    <Compile Include="Models\Manager.cs" />
-    <Compile Include="Models\Schedule.cs" />
-    <Compile Include="Models\ScheduledShift.cs" />
-    <Compile Include="Models\Shift.cs" />
-    <Compile Include="Models\Token.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\EmployeeRepository.cs" />
     <Compile Include="Repositories\EmployeeTitleRepository.cs" />
@@ -123,7 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="connections.config" />
+    <Content Include="connections.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
