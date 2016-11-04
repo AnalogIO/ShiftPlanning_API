@@ -20,12 +20,14 @@ namespace API.Controllers
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IManagerRepository _managerRepository;
         private readonly AuthManager _authManager;
+        private readonly ScheduleManager _scheduleManager;
 
         public ScheduleController(IScheduleRepository scheduleRepository, IManagerRepository managerRepository)
         {
             _scheduleRepository = scheduleRepository;
             _managerRepository = managerRepository;
             _authManager = UnityConfig.GetConfiguredContainer().Resolve<AuthManager>();
+            _scheduleManager = UnityConfig.GetConfiguredContainer().Resolve<ScheduleManager>();
         }
 
         // GET api/schedules
@@ -111,7 +113,7 @@ namespace API.Controllers
         /// Returns 'Created' (201) if the scheduled shift gets created.
         /// </returns>
         [HttpPost, AdminFilter, Route("{id}")]
-        public IHttpActionResult CreateScheduledShift(CreateScheduledShiftDTO scheduledShiftDto)
+        public IHttpActionResult CreateScheduledShift(int id, CreateScheduledShiftDTO scheduledShiftDto)
         {
             if (!ModelState.IsValid)
             {
@@ -121,7 +123,12 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-           
+            var scheduledShift = _scheduleManager.CreateScheduledShift(scheduledShiftDto, manager.Institution, id);
+
+            if (scheduledShift != null) {
+                ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
+            }
+
             return BadRequest("The schedule could not be created!");
         }
 
