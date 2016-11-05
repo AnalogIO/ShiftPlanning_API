@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Data.Repositories;
 using DataTransferObjects;
+using System.Linq;
 
 namespace API.Controllers
 {
@@ -43,7 +44,7 @@ namespace API.Controllers
             var manager = _managerRepository.Login(loginDto.Username, loginDto.Password);
             if(manager != null)
             {
-                var responseDto = Mapper.ManagerToLoginResponse(manager);
+                var responseDto = new ManagerLoginResponse { Token = manager.Tokens.LastOrDefault().TokenHash };
                 return Ok(responseDto);
             }
             HttpResponseMessage response = Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "You entered an incorrect username or password!" });

@@ -7,6 +7,7 @@ using Data.Models;
 using Data.Repositories;
 using DataTransferObjects;
 using Microsoft.Practices.Unity;
+using System.Collections.Generic;
 
 namespace API.Controllers
 {
@@ -74,7 +75,7 @@ namespace API.Controllers
             if (manager == null) return BadRequest("Provided token is invalid!");
 
             var employees = _employeeRepository.ReadFromInstitution(manager.Institution.Id);
-            return Ok(employees);
+            return Ok(Mapper.Map(employees));
         }
 
         // GET api/employees/{id}
@@ -100,7 +101,7 @@ namespace API.Controllers
             var employee = _employeeRepository.Read(id, manager.Institution.Id);
             if(employee != null)
             {
-                return Ok(employee);
+                return Ok(Mapper.Map(employee));
             } else
             {
                 return NotFound();

@@ -181,7 +181,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <HintPath>..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -247,6 +247,7 @@
     <Compile Include="Authorization\AuthManager.cs" />
     <Compile Include="Logic\EmployeeManager.cs" />
     <Compile Include="Logic\Mapper.cs" />
+    <Compile Include="Services\EmployeeService.cs" />
     <Compile Include="Services\ScheduleService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

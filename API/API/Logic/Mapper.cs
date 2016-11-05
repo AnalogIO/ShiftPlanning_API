@@ -1,15 +1,27 @@
-﻿using System.Linq;
-using Data.Models;
+﻿using Data.Models;
 using DataTransferObjects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace API.Logic
 {
     public static class Mapper
     {
-        public static ManagerLoginResponse ManagerToLoginResponse(Manager manager)
+        public static EmployeeDTO Map(Employee employee)
         {
-            var managerDto = new ManagerLoginResponse { Token = manager.Tokens.LastOrDefault().TokenHash };
-            return managerDto;
+            return new EmployeeDTO { Id = employee.Id, FirstName = employee.FirstName, LastName = employee.LastName };
+        }
+
+        public static IEnumerable<EmployeeDTO> Map(IEnumerable<Employee> employees)
+        {
+            var employeeDtos = new List<EmployeeDTO>();
+            foreach(Employee employee in employees)
+            {
+                employeeDtos.Add(Map(employee));
+            }
+            return employeeDtos;
         }
     }
 }
