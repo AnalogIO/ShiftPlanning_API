@@ -1,7 +1,7 @@
-using System;
 using Microsoft.Practices.Unity;
+using Microsoft.Practices.Unity.WebApi;
+using System;
 using System.Web.Http;
-using Unity.WebApi;
 
 namespace API
 {
@@ -14,7 +14,7 @@ namespace API
         }
         public static void RegisterComponents(HttpConfiguration config)
         {
-            config.DependencyResolver = new UnityDependencyResolver(GetConfiguredContainer());
+            config.DependencyResolver = new UnityHierarchicalDependencyResolver(GetConfiguredContainer());
         }
     }
 }

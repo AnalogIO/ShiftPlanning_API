@@ -18,16 +18,16 @@ namespace API.Controllers
     public class ScheduleController : ApiController
     {
         private readonly IScheduleRepository _scheduleRepository;
-        private readonly IManagerRepository _managerRepository;
         private readonly AuthManager _authManager;
-        private readonly ScheduleManager _scheduleManager;
+        private readonly ScheduleService _scheduleService;
 
-        public ScheduleController(IScheduleRepository scheduleRepository, IManagerRepository managerRepository, IInstitutionRepository institutionRepository, IEmployeeRepository employeeRepository)
+        public ScheduleController(IScheduleRepository scheduleRepository, IInstitutionRepository institutionRepository)
         {
             _scheduleRepository = scheduleRepository;
-            _managerRepository = managerRepository;
-            _authManager = new AuthManager(institutionRepository, managerRepository);
-            _scheduleManager = new ScheduleManager(scheduleRepository, institutionRepository, employeeRepository);
+            _authManager = UnityConfig.GetConfiguredContainer().Resolve<AuthManager>();
+            _scheduleService = UnityConfig.GetConfiguredContainer().Resolve<ScheduleService>();
+            //_authManager = new AuthManager(institutionRepository, managerRepository);
+            //_scheduleService = new ScheduleService(scheduleRepository, institutionRepository, employeeRepository);
         }
 
         // GET api/schedules
@@ -123,7 +123,7 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var scheduledShift = _scheduleManager.CreateScheduledShift(scheduledShiftDto, manager.Institution, id);
+            var scheduledShift = _scheduleService.CreateScheduledShift(scheduledShiftDto, manager.Institution, id);
 
             if (scheduledShift != null) {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
