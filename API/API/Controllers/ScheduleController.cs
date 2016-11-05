@@ -132,5 +132,33 @@ namespace API.Controllers
             return BadRequest("The schedule could not be created!");
         }
 
+        // POST api/schedules/{id}/createmultiple
+        /// <summary>
+        /// Creates the scheduled shifts to the schedule with the given id from the content in the body.
+        /// </summary>
+        /// <returns>
+        /// Returns 'Created' (201) if the scheduled shifts gets created.
+        /// </returns>
+        [HttpPost, AdminFilter, Route("{id}/createmultiple")]
+        public IHttpActionResult CreateMultipleScheduledShift(int id, IEnumerable<CreateScheduledShiftDTO> scheduledShiftsDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            var scheduledShifts = _scheduleService.CreateScheduledShifts(scheduledShiftsDto, manager.Institution, id);
+
+            if (scheduledShifts != null)
+            {
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
+            }
+
+            return BadRequest("The schedule could not be created!");
+        }
+
     }
 }
