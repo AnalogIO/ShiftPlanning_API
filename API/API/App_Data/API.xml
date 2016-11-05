@@ -637,6 +637,13 @@
             Returns 'Created' (201) if the schedule gets created.
             </returns>
         </member>
+        <member name="M:API.Controllers.ScheduleController.Delete(System.Int32)">
+            <summary>
+            Deletes the schedule with the specified id.
+            </summary>
+            <param name="id">The id of the schedule.</param>
+            <returns>Returns 'No Content' (204) if the schedule gets deleted.</returns>
+        </member>
         <member name="M:API.Controllers.ScheduleController.CreateScheduledShift(System.Int32,DataTransferObjects.CreateScheduledShiftDTO)">
             <summary>
             Creates the scheduled shift to the schedule with the given id from the content in the body.

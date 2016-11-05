@@ -17,17 +17,13 @@ namespace API.Controllers
     [RoutePrefix("api/schedules")]
     public class ScheduleController : ApiController
     {
-        private readonly IScheduleRepository _scheduleRepository;
         private readonly AuthManager _authManager;
         private readonly ScheduleService _scheduleService;
 
-        public ScheduleController(IScheduleRepository scheduleRepository, IInstitutionRepository institutionRepository)
+        public ScheduleController()
         {
-            _scheduleRepository = scheduleRepository;
             _authManager = UnityConfig.GetConfiguredContainer().Resolve<AuthManager>();
             _scheduleService = UnityConfig.GetConfiguredContainer().Resolve<ScheduleService>();
-            //_authManager = new AuthManager(institutionRepository, managerRepository);
-            //_scheduleService = new ScheduleService(scheduleRepository, institutionRepository, employeeRepository);
         }
 
         // GET api/schedules
@@ -43,8 +39,8 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var schedules = _scheduleRepository.ReadFromInstitution(manager.Institution.Id); // proper dto should be used here
-            return Ok(schedules);
+            var schedules = _scheduleService.GetSchedules(manager);
+            return Ok(schedules); // proper dto should be used here
         }
 
         // GET api/schedules/{id}
@@ -67,10 +63,10 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var schedule = _scheduleRepository.Read(id, manager.Institution.Id);
+            var schedule = _scheduleService.GetSchedule(id, manager);
             if (schedule != null)
             {
-                return Ok(schedule);
+                return Ok(schedule); // proper dto should be used here
             }
             else
             {
@@ -96,13 +92,33 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var schedule = new Schedule { Name = scheduleDto.Name, NumberOfWeeks = scheduleDto.NumberOfWeeks, Institution = manager.Institution, Shifts = new List<ScheduledShift>() };
-            schedule = _scheduleRepository.Create(schedule);
+            var schedule = _scheduleService.CreateSchedule(scheduleDto, manager);
             if (schedule != null)
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
             }
             return BadRequest("The schedule could not be created!");
+        }
+
+        // DELETE /api/schedules/{id}
+        /// <summary>
+        /// Deletes the schedule with the specified id.
+        /// </summary>
+        /// <param name="id">The id of the schedule.</param>
+        /// <returns>Returns 'No Content' (204) if the schedule gets deleted.</returns>
+        [HttpDelete, AdminFilter, Route("{id}")]
+        public IHttpActionResult Delete(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            _scheduleService.DeleteSchedule(id, manager);
+            return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
         }
 
         // POST api/schedules/{id}

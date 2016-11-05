@@ -63,5 +63,26 @@ namespace API.Logic
 
             return dbSchedule.Shifts.Single(s => s.Id == scheduledShiftDto.Id);
         }
+
+        public Schedule CreateSchedule(CreateScheduleDTO scheduleDto, Manager manager)
+        {
+            var schedule = new Schedule { Name = scheduleDto.Name, NumberOfWeeks = scheduleDto.NumberOfWeeks, Institution = manager.Institution, Shifts = new List<ScheduledShift>() };
+            return _scheduleRepository.Create(schedule);
+        }
+
+        public Schedule GetSchedule(int scheduleId, Manager manager)
+        {
+            return _scheduleRepository.Read(scheduleId, manager.Institution.Id);
+        }
+
+        public IEnumerable<Schedule> GetSchedules(Manager manager)
+        {
+            return _scheduleRepository.ReadFromInstitution(manager.Institution.Id);
+        }
+
+        public void DeleteSchedule(int scheduleId, Manager manager)
+        {
+            _scheduleRepository.Delete(scheduleId, manager.Institution.Id);
+        }
     }
 }
