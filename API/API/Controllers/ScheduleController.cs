@@ -132,6 +132,34 @@ namespace API.Controllers
             return BadRequest("The schedule could not be created!");
         }
 
+        // PUT api/schedules/{id}
+        /// <summary>
+        /// Updates the scheduled shift with the given id from the content in the body.
+        /// </summary>
+        /// <returns>
+        /// Returns 'No Content' (204) if the scheduled shift gets updated.
+        /// </returns>
+        [HttpPut, AdminFilter, Route("{id}")]
+        public IHttpActionResult UpdateScheduledShift(int id, UpdateScheduledShiftDTO scheduledShiftDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            var scheduledShift = _scheduleService.UpdateScheduledShift(scheduledShiftDto, manager.Institution, id);
+
+            if (scheduledShift != null)
+            {
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+            }
+
+            return BadRequest("The schedule could not be updated!");
+        }
+
         // POST api/schedules/{id}/createmultiple
         /// <summary>
         /// Creates the scheduled shifts to the schedule with the given id from the content in the body.

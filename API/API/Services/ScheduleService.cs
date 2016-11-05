@@ -45,5 +45,23 @@ namespace API.Logic
             }
             return _scheduleRepository.Update(schedule) > 0 ? scheduledShifts : null;
         }
+
+        public ScheduledShift UpdateScheduledShift(UpdateScheduledShiftDTO scheduledShiftDto, Institution institution, int scheduleId)
+        {
+            var dbSchedule = _scheduleRepository.Read(scheduleId, institution.Id);
+
+            var employees = _employeeRepository.ReadFromInstitution(institution.Id).Where(x => scheduledShiftDto.EmployeeIds.Contains(x.Id)).ToList();
+
+            dbSchedule.Shifts.Single(s => s.Id == scheduledShiftDto.Id).Employees.Clear();
+
+            dbSchedule.Shifts.Single(s => s.Id == scheduledShiftDto.Id).Start = TimeSpan.Parse(scheduledShiftDto.Start);
+            dbSchedule.Shifts.Single(s => s.Id == scheduledShiftDto.Id).End = TimeSpan.Parse(scheduledShiftDto.End);
+            dbSchedule.Shifts.Single(s => s.Id == scheduledShiftDto.Id).Day = scheduledShiftDto.Day;
+            dbSchedule.Shifts.Single(s => s.Id == scheduledShiftDto.Id).Employees = employees;
+
+            _scheduleRepository.Update(dbSchedule);
+
+            return dbSchedule.Shifts.Single(s => s.Id == scheduledShiftDto.Id);
+        }
     }
 }
