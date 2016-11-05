@@ -3,11 +3,9 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using API.Authorization;
-using Data.Models;
-using Data.Repositories;
 using DataTransferObjects;
 using Microsoft.Practices.Unity;
-using System.Collections.Generic;
+using API.Services;
 
 namespace API.Controllers
 {
@@ -17,18 +15,13 @@ namespace API.Controllers
     [RoutePrefix("api/employees")]
     public class EmployeeController : ApiController
     {
-        private readonly IEmployeeRepository _employeeRepository;
-        private readonly IEmployeeTitleRepository _employeeTitleRepository;
         private readonly AuthManager _authManager;
+        private readonly EmployeeService _employeeService;
 
-        public EmployeeController(IEmployeeRepository employeeRepository, 
-            IEmployeeTitleRepository employeeTitleRepository, 
-            IManagerRepository managerRepository,
-            IInstitutionRepository institutionRepository)
+        public EmployeeController()
         {
-            _employeeRepository = employeeRepository;
-            _employeeTitleRepository = employeeTitleRepository;
-            _authManager = new AuthManager(institutionRepository, managerRepository);
+            _authManager = UnityConfig.GetConfiguredContainer().Resolve<AuthManager>();
+            _employeeService = UnityConfig.GetConfiguredContainer().Resolve<EmployeeService>();
         }
 
         // POST api/employees
@@ -50,10 +43,7 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var employee = new Employee { Email = employeeDto.Email, FirstName = employeeDto.FirstName, LastName = employeeDto.LastName, Institution = manager.Institution };
-            var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Institution.Id);
-            if (title != null) employee.EmployeeTitle = title;
-            employee = _employeeRepository.Create(employee);
+            var employee = _employeeService.CreateEmployee(employeeDto, manager);
             if(employee != null)
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
@@ -74,7 +64,7 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var employees = _employeeRepository.ReadFromInstitution(manager.Institution.Id);
+            var employees = _employeeService.GetEmployees(manager);
             return Ok(Mapper.Map(employees));
         }
 
@@ -98,7 +88,7 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var employee = _employeeRepository.Read(id, manager.Institution.Id);
+            var employee = _employeeService.GetEmployee(id, manager);
             if(employee != null)
             {
                 return Ok(Mapper.Map(employee));
@@ -129,22 +119,12 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var employee = _employeeRepository.Read(id, manager.Institution.Id);
+            var employee = _employeeService.UpdateEmployee(id, employeeDto, manager);
             if(employee != null)
             {
-                employee = EmployeeManager.UpdateEmployeeFromEmployeeDTO(employee, employeeDto);
-                var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Institution.Id);
-                if (title != null) employee.EmployeeTitle = title;
-                if (_employeeRepository.Update(employee) > 0)
-                {
-                    return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
-                }
-                else
-                {
-                    return BadRequest("Could not update employee");
-                }
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
             }
-            return NotFound();
+            return BadRequest("Could not update the employee with the corresponding id!");
         }
 
         // DELETE /api/employees/{id}
@@ -164,7 +144,7 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            _employeeRepository.Delete(id, manager.Institution.Id);
+            _employeeService.DeleteEmployee(id, manager);
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
         }
     }
