@@ -11,7 +11,7 @@ namespace API.Logic
     {
         public static EmployeeDTO Map(Employee employee)
         {
-            return new EmployeeDTO { Id = employee.Id, FirstName = employee.FirstName, LastName = employee.LastName, EmployeeTitle = employee.EmployeeTitle.Title, EmployeeTitleId = employee.EmployeeTitle.Id };
+            return new EmployeeDTO { Id = employee.Id, FirstName = employee.FirstName, LastName = employee.LastName, EmployeeTitle = employee.EmployeeTitle?.Title, EmployeeTitleId = employee.EmployeeTitle?.Id };
         }
 
         public static IEnumerable<EmployeeDTO> Map(IEnumerable<Employee> employees)

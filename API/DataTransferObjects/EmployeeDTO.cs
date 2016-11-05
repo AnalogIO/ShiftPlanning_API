@@ -12,6 +12,6 @@ namespace DataTransferObjects
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EmployeeTitle { get; set; }
-        public int EmployeeTitleId { get; set; }
+        public int? EmployeeTitleId { get; set; }
     }
 }

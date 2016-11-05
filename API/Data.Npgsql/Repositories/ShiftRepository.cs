@@ -21,10 +21,16 @@ namespace Data.Npgsql.Repositories
             return _context.SaveChanges() > 0 ? shift : null;
         }
 
-        public IEnumerable<Shift> Create(ICollection<Shift> shifts)
+        public IEnumerable<Shift> Create(IEnumerable<Shift> shifts)
         {
             _context.Shifts.AddRange(shifts);
             return _context.SaveChanges() > 0 ? shifts : null;
+        }
+
+        public void Delete(IEnumerable<Shift> shifts)
+        {
+            _context.Shifts.RemoveRange(shifts);
+            _context.SaveChanges();
         }
 
         public void Delete(int id, int institutionId)

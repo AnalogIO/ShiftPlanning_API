@@ -52,7 +52,7 @@ namespace Data.Npgsql.Repositories
 
             pgSchedule.Name = schedule.Name;
             pgSchedule.NumberOfWeeks = schedule.NumberOfWeeks;
-            pgSchedule.Shifts = schedule.Shifts;
+            pgSchedule.ScheduledShifts = schedule.ScheduledShifts;
             
             return _context.SaveChanges();
         }

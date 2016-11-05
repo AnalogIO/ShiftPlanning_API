@@ -139,7 +139,7 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var scheduledShift = _scheduleService.CreateScheduledShift(scheduledShiftDto, manager.Institution, id);
+            var scheduledShift = _scheduleService.CreateScheduledShift(scheduledShiftDto, manager, id);
 
             if (scheduledShift != null) {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
@@ -194,7 +194,35 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var scheduledShifts = _scheduleService.CreateScheduledShifts(scheduledShiftsDto, manager.Institution, id);
+            var scheduledShifts = _scheduleService.CreateScheduledShifts(scheduledShiftsDto, manager, id);
+
+            if (scheduledShifts != null)
+            {
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
+            }
+
+            return BadRequest("The schedule could not be created!");
+        }
+
+        // POST api/schedules/{id}/rollout
+        /// <summary>
+        /// Creates the scheduled shifts to the schedule with the given id from the content in the body.
+        /// </summary>
+        /// <returns>
+        /// Returns 'Created' (201) if the scheduled shifts gets created.
+        /// </returns>
+        [HttpPost, AdminFilter, Route("{id}/rollout")]
+        public IHttpActionResult RolloutSchedule(int id, string fromDate, string toDate)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            var scheduledShifts = _scheduleService.RolloutSchedule(id, fromDate, toDate, manager);
 
             if (scheduledShifts != null)
             {

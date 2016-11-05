@@ -668,6 +668,14 @@
             Returns 'Created' (201) if the scheduled shifts gets created.
             </returns>
         </member>
+        <member name="M:API.Controllers.ScheduleController.RolloutSchedule(System.Int32,System.String,System.String)">
+            <summary>
+            Creates the scheduled shifts to the schedule with the given id from the content in the body.
+            </summary>
+            <returns>
+            Returns 'Created' (201) if the scheduled shifts gets created.
+            </returns>
+        </member>
         <member name="T:API.Controllers.ShiftController">
             <summary>
             Controller to manage shifts

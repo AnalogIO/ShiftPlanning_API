@@ -11,5 +11,6 @@ namespace Data.Models
         public virtual ICollection<Employee> Employees { get; set; }
         public virtual ICollection<CheckIn> CheckIns { get; set; }
         public virtual Institution Institution { get; set; }
+        public virtual Schedule Schedule { get; set; }
     }
 }
