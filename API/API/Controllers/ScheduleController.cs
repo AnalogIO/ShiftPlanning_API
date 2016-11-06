@@ -3,8 +3,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using API.Authorization;
-using Data.Models;
-using Data.Repositories;
 using DataTransferObjects;
 using System.Collections.Generic;
 using Microsoft.Practices.Unity;
@@ -40,7 +38,7 @@ namespace API.Controllers
             if (manager == null) return BadRequest("Provided token is invalid!");
 
             var schedules = _scheduleService.GetSchedules(manager);
-            return Ok(schedules); // proper dto should be used here
+            return Ok(Mapper.Map(schedules));
         }
 
         // GET api/schedules/{id}
@@ -66,7 +64,7 @@ namespace API.Controllers
             var schedule = _scheduleService.GetSchedule(id, manager);
             if (schedule != null)
             {
-                return Ok(schedule); // proper dto should be used here
+                return Ok(Mapper.Map(schedule));
             }
             else
             {

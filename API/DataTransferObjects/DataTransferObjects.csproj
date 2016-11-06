@@ -50,6 +50,8 @@
     <Compile Include="OngoingShiftDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CreateScheduledShiftDTO.cs" />
+    <Compile Include="ScheduledShiftDTO.cs" />
+    <Compile Include="ScheduleDTO.cs" />
     <Compile Include="UpdateEmployeeDTO.cs" />
     <Compile Include="UpdateEmployeeTitleDTO.cs" />
     <Compile Include="UpdateScheduledShiftDTO.cs" />
