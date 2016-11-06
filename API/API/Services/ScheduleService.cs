@@ -1,8 +1,6 @@
 ﻿using Data.Models;
 using Data.Repositories;
 using DataTransferObjects;
-using Microsoft.Practices.ObjectBuilder2;
-using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,22 +47,22 @@ namespace API.Logic
             return _scheduleRepository.Update(schedule) > 0 ? scheduledShifts : null;
         }
 
-        public ScheduledShift UpdateScheduledShift(UpdateScheduledShiftDTO scheduledShiftDto, Institution institution, int scheduleId)
+        public ScheduledShift UpdateScheduledShift(int scheduledShiftId, int scheduleId, UpdateScheduledShiftDTO scheduledShiftDto, Manager manager)
         {
-            var dbSchedule = _scheduleRepository.Read(scheduleId, institution.Id);
+            var dbSchedule = _scheduleRepository.Read(scheduleId, manager.Institution.Id);
 
-            var employees = _employeeRepository.ReadFromInstitution(institution.Id).Where(x => scheduledShiftDto.EmployeeIds.Contains(x.Id)).ToList();
+            var employees = _employeeRepository.ReadFromInstitution(manager.Institution.Id).Where(x => scheduledShiftDto.EmployeeIds.Contains(x.Id)).ToList();
 
-            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftDto.Id).Employees.Clear();
+            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).Employees.Clear();
 
-            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftDto.Id).Start = TimeSpan.Parse(scheduledShiftDto.Start);
-            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftDto.Id).End = TimeSpan.Parse(scheduledShiftDto.End);
-            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftDto.Id).Day = scheduledShiftDto.Day;
-            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftDto.Id).Employees = employees;
+            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).Start = TimeSpan.Parse(scheduledShiftDto.Start);
+            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).End = TimeSpan.Parse(scheduledShiftDto.End);
+            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).Day = scheduledShiftDto.Day;
+            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).Employees = employees;
 
             _scheduleRepository.Update(dbSchedule);
 
-            return dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftDto.Id);
+            return dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId);
         }
 
         public Schedule CreateSchedule(CreateScheduleDTO scheduleDto, Manager manager)
@@ -86,6 +84,16 @@ namespace API.Logic
         public void DeleteSchedule(int scheduleId, Manager manager)
         {
             _scheduleRepository.Delete(scheduleId, manager.Institution.Id);
+        }
+
+        public Schedule UpdateSchedule(int scheduleId, UpdateScheduleDTO scheduleDto, Manager manager)
+        {
+            var schedule = _scheduleRepository.Read(scheduleId, manager.Institution.Id);
+            if (schedule != null) return null;
+
+            schedule.Name = scheduleDto.Name;
+            schedule.NumberOfWeeks = scheduleDto.NumberOfWeeks;
+            return _scheduleRepository.Update(schedule) > 0 ? schedule : null;
         }
 
         public IEnumerable<Shift> RolloutSchedule(int scheduleId, string fromDate, string toDate, Manager manager)

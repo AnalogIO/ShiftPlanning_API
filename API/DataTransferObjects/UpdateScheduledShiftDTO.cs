@@ -10,8 +10,6 @@ namespace DataTransferObjects
     public class UpdateScheduledShiftDTO
     {
         [Required]
-        public int Id { get; set;}
-        [Required]
         public int Day { get; set; }
         [Required]
         public string Start { get; set; }

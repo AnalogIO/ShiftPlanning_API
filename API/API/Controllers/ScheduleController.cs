@@ -121,6 +121,34 @@ namespace API.Controllers
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
         }
 
+        // PUT api/schedules/{id}
+        /// <summary>
+        /// Updates the schedule with the given id from the content in the body.
+        /// </summary>
+        /// <returns>
+        /// Returns 'No Content' (204) if the schedule gets updated.
+        /// </returns>
+        [HttpPut, AdminFilter, Route("{id}")]
+        public IHttpActionResult UpdateSchedule(int id, UpdateScheduleDTO scheduleDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            var schedule = _scheduleService.UpdateSchedule(id, scheduleDto, manager);
+
+            if (schedule != null)
+            {
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+            }
+
+            return BadRequest("The schedule could not be updated!");
+        }
+
         // POST api/schedules/{id}
         /// <summary>
         /// Creates the scheduled shift to the schedule with the given id from the content in the body.
@@ -148,15 +176,15 @@ namespace API.Controllers
             return BadRequest("The schedule could not be created!");
         }
 
-        // PUT api/schedules/{id}
+        // PUT api/schedules/{scheduleId}/{scheduledShiftId}
         /// <summary>
         /// Updates the scheduled shift with the given id from the content in the body.
         /// </summary>
         /// <returns>
         /// Returns 'No Content' (204) if the scheduled shift gets updated.
         /// </returns>
-        [HttpPut, AdminFilter, Route("{id}")]
-        public IHttpActionResult UpdateScheduledShift(int id, UpdateScheduledShiftDTO scheduledShiftDto)
+        [HttpPut, AdminFilter, Route("{scheduleId}/{scheduledShiftId}")]
+        public IHttpActionResult UpdateScheduledShift(int scheduleId, int scheduledShiftId, UpdateScheduledShiftDTO scheduledShiftDto)
         {
             if (!ModelState.IsValid)
             {
@@ -166,14 +194,14 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var scheduledShift = _scheduleService.UpdateScheduledShift(scheduledShiftDto, manager.Institution, id);
+            var scheduledShift = _scheduleService.UpdateScheduledShift(scheduledShiftId, scheduleId, scheduledShiftDto, manager);
 
             if (scheduledShift != null)
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
             }
 
-            return BadRequest("The schedule could not be updated!");
+            return BadRequest("The scheduled shift could not be updated!");
         }
 
         // POST api/schedules/{id}/createmultiple

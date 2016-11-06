@@ -652,7 +652,7 @@
             Returns 'Created' (201) if the scheduled shift gets created.
             </returns>
         </member>
-        <member name="M:API.Controllers.ScheduleController.UpdateScheduledShift(System.Int32,DataTransferObjects.UpdateScheduledShiftDTO)">
+        <member name="M:API.Controllers.ScheduleController.UpdateScheduledShift(System.Int32,System.Int32,DataTransferObjects.UpdateScheduledShiftDTO)">
             <summary>
             Updates the scheduled shift with the given id from the content in the body.
             </summary>
