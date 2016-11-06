@@ -644,6 +644,14 @@
             <param name="id">The id of the schedule.</param>
             <returns>Returns 'No Content' (204) if the schedule gets deleted.</returns>
         </member>
+        <member name="M:API.Controllers.ScheduleController.UpdateSchedule(System.Int32,DataTransferObjects.UpdateScheduleDTO)">
+            <summary>
+            Updates the schedule with the given id from the content in the body.
+            </summary>
+            <returns>
+            Returns 'No Content' (204) if the schedule gets updated.
+            </returns>
+        </member>
         <member name="M:API.Controllers.ScheduleController.CreateScheduledShift(System.Int32,DataTransferObjects.CreateScheduledShiftDTO)">
             <summary>
             Creates the scheduled shift to the schedule with the given id from the content in the body.
