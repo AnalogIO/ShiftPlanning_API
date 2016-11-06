@@ -9,6 +9,7 @@ namespace Data.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public EmployeeTitle EmployeeTitle { get; set; }
+        public bool Active { get; set; }
         public virtual ICollection<Shift> Shifts { get; set; }
         public virtual ICollection<CheckIn> CheckIns { get; set; }
         public virtual ICollection<ScheduledShift> ScheduledShifts { get; set; }
