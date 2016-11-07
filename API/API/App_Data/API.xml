@@ -4,6 +4,17 @@
         <name>API</name>
     </assembly>
     <members>
+        <member name="T:API.IoCConfig">
+            <summary>
+            API specific Inversion of Control setup.
+            </summary>
+        </member>
+        <member name="M:API.IoCConfig.ConfigureIoC(Microsoft.Practices.Unity.IUnityContainer)">
+            <summary>
+            Sets up the container with required mappings for API.
+            </summary>
+            <param name="container">The Microsoft Unity container to register types on.</param>
+        </member>
         <member name="T:API.App_Start.UnityWebApiActivator">
             <summary>Provides the bootstrapping for integrating Unity with WebApi when it is hosted in ASP.NET</summary>
         </member>
@@ -490,6 +501,20 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="M:API.Authorization.AdminFilter.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            OnAuthorization is called whenever a method has the data annotation "[AdminFilter]".
+            Checks if the manager is authorized.
+            </summary>
+            <param name="actionContext"></param>
+        </member>
+        <member name="M:API.Authorization.ApiKeyFilter.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            OnAuthorization is called whenever a method has the data annotation "[ApiKeyFilter]".
+            Checks if the user is authorized.
+            </summary>
+            <param name="actionContext"></param>
+        </member>
         <member name="T:API.Controllers.EmployeeController">
             <summary>
             Controller to manipulate with the employees.
@@ -606,6 +631,13 @@
             If the provided credentials are wrong then the controller will return Unauthorized (401).
             </returns>
         </member>
+        <member name="M:API.Controllers.OpeningHoursController.Get(System.String)">
+            <summary>
+            Fetch shifts for the next week for a given institution.
+            </summary>
+            <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
+            <returns></returns>
+        </member>
         <member name="T:API.Controllers.ScheduleController">
             <summary>
             Controller to manage schedule
@@ -688,20 +720,6 @@
             <summary>
             Controller to manage shifts
             </summary>
-        </member>
-        <member name="M:API.Authorization.AdminFilter.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
-            <summary>
-            OnAuthorization is called whenever a method has the data annotation "[AdminFilter]".
-            Checks if the manager is authorized.
-            </summary>
-            <param name="actionContext"></param>
-        </member>
-        <member name="M:API.Authorization.ApiKeyFilter.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
-            <summary>
-            OnAuthorization is called whenever a method has the data annotation "[ApiKeyFilter]".
-            Checks if the user is authorized.
-            </summary>
-            <param name="actionContext"></param>
         </member>
     </members>
 </doc>
