@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckInDTO.cs" />
     <Compile Include="CreateEmployeeDTO.cs" />
     <Compile Include="CreateEmployeeTitleDTO.cs" />
     <Compile Include="CreateScheduleDTO.cs" />
@@ -57,7 +58,7 @@
     <Compile Include="OpeningHours\IsOpenDTO.cs" />
     <Compile Include="OpeningHours\OpeningHourEmployeeDTO.cs" />
     <Compile Include="OpeningHours\OpeningHoursDTO.cs" />
-    <Compile Include="OngoingShiftDTO.cs" />
+    <Compile Include="ShiftDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CreateScheduledShiftDTO.cs" />
     <Compile Include="ScheduledShiftDTO.cs" />

@@ -1,5 +1,4 @@
-﻿using API.Logic;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Data.Repositories;
