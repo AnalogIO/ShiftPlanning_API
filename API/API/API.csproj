@@ -263,6 +263,8 @@
     <Compile Include="Services\EmployeeService.cs" />
     <Compile Include="Services\IEmployeeService.cs" />
     <Compile Include="Services\IScheduleService.cs" />
+    <Compile Include="Services\IShiftService.cs" />
+    <Compile Include="Services\ShiftService.cs" />
     <Compile Include="Services\ScheduleService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
