@@ -247,6 +247,7 @@
     <Compile Include="Authorization\IAuthManager.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\EmployeeTitleController.cs" />
+    <Compile Include="Controllers\IsOpenController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\OpeningHoursController.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />

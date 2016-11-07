@@ -5,8 +5,10 @@ using DataTransferObjects.OpeningHours;
 
 namespace API.Mapping
 {
+    /// <inheritdoc cref="IOpeningHoursMapper"/>
     public class OpeningHoursMapper : IOpeningHoursMapper
     {
+        /// <inheritdoc cref="MapToDto"/>
         public IEnumerable<OpeningHoursDTO> MapToDto(IEnumerable<Shift> source)
         {
             var shifts = source as IList<Shift> ?? source.ToList();

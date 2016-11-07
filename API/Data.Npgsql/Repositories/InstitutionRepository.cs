@@ -18,6 +18,11 @@ namespace Data.Npgsql.Repositories
             return _context.Institutions.Any(inst => inst.ShortKey == shortKey);
         }
 
+        public bool Exists(int id)
+        {
+            return _context.Institutions.Any(inst => inst.Id == id);
+        }
+
         public bool HasApiKey(string apiKey)
         {
             return _context.Institutions.Any(i => i.ApiKey == apiKey);

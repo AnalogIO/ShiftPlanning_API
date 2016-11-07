@@ -612,6 +612,25 @@
             <param name="id">The id of the employee title.</param>
             <returns>Returns 'No Content' (204) if the employee title gets deleted.</returns>
         </member>
+        <member name="T:API.Controllers.IsOpenController">
+            <summary>
+            The IsOpenController is the public interface that can tell whether or not
+            a given institution is open.
+            </summary>
+        </member>
+        <member name="M:API.Controllers.IsOpenController.#ctor(API.Services.IShiftService)">
+            <summary>
+            Dependency injection constructor of IsOpenController
+            </summary>
+            <param name="shiftService">An IShiftService implementation</param>
+        </member>
+        <member name="M:API.Controllers.IsOpenController.IsOpen(System.String)">
+            <summary>
+            Find out whether or not the institution identified by short key is open.
+            </summary>
+            <param name="shortKey">The short key of the institution.</param>
+            <returns></returns>
+        </member>
         <member name="T:API.Controllers.ManagerController">
             <summary>
             Controller to validate authority (login etc.)
@@ -636,12 +655,19 @@
             The OpeningHoursController is the public entrance to get opening hour and shift information.
             </summary>
         </member>
+        <member name="M:API.Controllers.OpeningHoursController.#ctor(API.Services.IShiftService,API.Mapping.IOpeningHoursMapper)">
+            <summary>
+            Dependency injection constructor.
+            </summary>
+            <param name="shiftService"></param>
+            <param name="mapper"></param>
+        </member>
         <member name="M:API.Controllers.OpeningHoursController.Get(System.String)">
             <summary>
             Fetch shifts for the next week for a given institution.
             </summary>
             <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
-            <returns></returns>
+            <returns>A collection of OpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
         </member>
         <member name="T:API.Controllers.ScheduleController">
             <summary>
@@ -725,6 +751,24 @@
             <summary>
             Controller to manage shifts
             </summary>
+        </member>
+        <member name="T:API.Mapping.IOpeningHoursMapper">
+            <summary>
+            Mapper interface for opening hour classes and DTOs.
+            </summary>
+        </member>
+        <member name="M:API.Mapping.IOpeningHoursMapper.MapToDto(System.Collections.Generic.IEnumerable{Data.Models.Shift})">
+            <summary>
+            Maps a collection of Shifts into a collection of OpeningHoursDTOs.
+            </summary>
+            <param name="source">The input collection.</param>
+            <returns>The mapped collection.</returns>
+        </member>
+        <member name="T:API.Mapping.OpeningHoursMapper">
+            <inheritdoc cref="T:API.Mapping.IOpeningHoursMapper"/>
+        </member>
+        <member name="M:API.Mapping.OpeningHoursMapper.MapToDto(System.Collections.Generic.IEnumerable{Data.Models.Shift})">
+            <inheritdoc cref="M:API.Mapping.OpeningHoursMapper.MapToDto(System.Collections.Generic.IEnumerable{Data.Models.Shift})"/>
         </member>
         <member name="T:API.Services.IShiftService">
             <summary>
