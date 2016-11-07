@@ -53,5 +53,35 @@ namespace API.Logic
             }
             return scheduleDtos;
         }
+
+        public static CheckInDTO Map(CheckIn checkIn)
+        {
+            return new CheckInDTO { Id = checkIn.Id, Time = checkIn.Time, Employee = Map(checkIn.Employee) };
+        }
+
+        public static IEnumerable<CheckInDTO> Map(IEnumerable<CheckIn> checkIns)
+        {
+            var checkInDtos = new List<CheckInDTO>();
+            foreach (CheckIn checkIn in checkIns)
+            {
+                checkInDtos.Add(Map(checkIn));
+            }
+            return checkInDtos;
+        }
+
+        public static ShiftDTO Map(Shift shift)
+        {
+            return new ShiftDTO { Id = shift.Id, Start = shift.Start, End = shift.End, CheckIns = Map(shift.CheckIns), Employees = Map(shift.Employees) };
+        }
+
+        public static IEnumerable<ShiftDTO> Map(IEnumerable<Shift> shifts)
+        {
+            var shiftDtos = new List<ShiftDTO>();
+            foreach (Shift shift in shifts)
+            {
+                shiftDtos.Add(Map(shift));
+            }
+            return shiftDtos;
+        }
     }
 }

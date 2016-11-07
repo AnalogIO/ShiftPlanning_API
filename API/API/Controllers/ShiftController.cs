@@ -5,6 +5,8 @@ using System;
 using DataTransferObjects;
 using System.Collections.Generic;
 using Microsoft.Practices.Unity;
+using API.Services;
+using API.Logic;
 
 namespace API.Controllers
 {
@@ -14,15 +16,13 @@ namespace API.Controllers
     [RoutePrefix("api/shifts")]
     public class ShiftController : ApiController
     {
-        private readonly IShiftRepository _shiftRepository;
-        private readonly IInstitutionRepository _institutionRepository;
+        private readonly IShiftService _shiftService;
         private readonly IAuthManager _authManager;
 
-        public ShiftController(IAuthManager authManager, IShiftRepository shiftRepository, IInstitutionRepository institutionRepository)
-        {
-            _shiftRepository = shiftRepository;
-            _institutionRepository = institutionRepository;
+        public ShiftController(IAuthManager authManager, IShiftService shiftService)
+        {   
             _authManager = authManager;
+            _shiftService = shiftService;
         }
 
         [HttpGet, Route("")]
@@ -30,8 +30,7 @@ namespace API.Controllers
         {
             var institution = _authManager.GetInstitutionByHeader(Request.Headers);
             if (institution == null) return BadRequest("No institution found with the given name");
-            var institutionId = institution.Id;
-            return Ok(_shiftRepository.ReadFromInstitution(institutionId));
+            return Ok(_shiftService.GetByInstitution(institution.Id));
         }
 
         [HttpGet, Route("ongoing"), ApiKeyFilter]
@@ -42,7 +41,12 @@ namespace API.Controllers
 
             //var shifts = _shiftRepository.GetOngoingShifts(institution.Id, DateTime.UtcNow); // to be used when shifts are implemented
 
-            var fakeOngoingShift = new OngoingShiftDTO
+            var shifts = Mapper.Map(_shiftService.GetOngoingShiftsByInstitution(institution.Id));
+
+
+
+            /*
+            var fakeOngoingShift = new ShiftDTO
             {
                 Id = 1,
                 Start = new DateTime(2016, 11, 4, 10, 0, 0),
@@ -50,8 +54,9 @@ namespace API.Controllers
                 CheckedInEmployees = new List<EmployeeDTO>() { new EmployeeDTO { Id = 1, FirstName = "Frederik", LastName = "Jørgensen" } },
                 Employees = new List<EmployeeDTO>(){ new EmployeeDTO { Id = 1, FirstName = "Frederik", LastName = "Jørgensen" }, new EmployeeDTO { Id = 2, FirstName = "Mark", LastName = "Rostgaard" }, new EmployeeDTO { Id = 3, FirstName = "Frederik", LastName = "Dam" } }
             };
-            var fakeShifts = new List<OngoingShiftDTO>() { fakeOngoingShift };
-            return Ok(new { Shifts = fakeShifts });
+            var fakeShifts = new List<ShiftDTO>() { fakeOngoingShift };
+            */
+            return Ok(new { Shifts = shifts });
         }
     }
 }

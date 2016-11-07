@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace DataTransferObjects
 {
-    public class OngoingShiftDTO
+    public class ShiftDTO
     {
         public int Id { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public IEnumerable<EmployeeDTO> Employees { get; set; }
-        public IEnumerable<EmployeeDTO> CheckedInEmployees { get; set; }
+        public IEnumerable<CheckInDTO> CheckIns { get; set; }
     }
 }
