@@ -1,9 +1,11 @@
 using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
+using System.Xml.Linq;
 using System.Xml.XPath;
 using API.Areas.HelpPage.ModelDescriptions;
 
@@ -14,7 +16,7 @@ namespace API.Areas.HelpPage
     /// </summary>
     public class XmlDocumentationProvider : IDocumentationProvider, IModelDocumentationProvider
     {
-        private XPathNavigator _documentNavigator;
+        private readonly XPathNavigator _documentNavigator;
         private const string TypeExpression = "/doc/members/member[@name='T:{0}']";
         private const string MethodExpression = "/doc/members/member[@name='M:{0}']";
         private const string PropertyExpression = "/doc/members/member[@name='P:{0}']";
@@ -29,10 +31,26 @@ namespace API.Areas.HelpPage
         {
             if (documentPath == null)
             {
-                throw new ArgumentNullException("documentPath");
+                throw new ArgumentNullException(nameof(documentPath));
             }
-            XPathDocument xpath = new XPathDocument(documentPath);
-            _documentNavigator = xpath.CreateNavigator();
+            XDocument finalDoc = null;
+            foreach (var file in Directory.GetFiles(documentPath, "*.xml"))
+            {
+                if (finalDoc == null)
+                {
+                    finalDoc = XDocument.Load(File.OpenRead(file));
+                }
+                else
+                {
+                    var xdocAdditional = XDocument.Load(File.OpenRead(file));
+
+                    finalDoc.Root?.XPathSelectElement("/doc/members")
+                        .Add(xdocAdditional.Root?.XPathSelectElement("/doc/members").Elements());
+                }
+            }
+
+            // Supply the navigator that rest of the XmlDocumentationProvider code looks for
+            _documentNavigator = finalDoc?.CreateNavigator();
         }
 
         public string GetDocumentation(HttpControllerDescriptor controllerDescriptor)
