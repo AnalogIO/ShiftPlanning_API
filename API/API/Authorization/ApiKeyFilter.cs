@@ -8,11 +8,11 @@ namespace API.Authorization
 {
     public class ApiKeyFilter : AuthorizationFilterAttribute
     {
-        private readonly AuthManager _authManager;
+        private readonly IAuthManager _authManager;
 
         public ApiKeyFilter()
         {
-            _authManager = UnityConfig.GetConfiguredContainer().Resolve<AuthManager>();
+            _authManager = UnityConfig.GetConfiguredContainer().Resolve<IAuthManager>();
         }
 
         /// <summary>

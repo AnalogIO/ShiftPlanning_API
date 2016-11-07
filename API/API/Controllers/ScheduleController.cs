@@ -5,7 +5,6 @@ using System.Web.Http;
 using API.Authorization;
 using DataTransferObjects;
 using System.Collections.Generic;
-using Microsoft.Practices.Unity;
 
 namespace API.Controllers
 {
@@ -15,13 +14,13 @@ namespace API.Controllers
     [RoutePrefix("api/schedules")]
     public class ScheduleController : ApiController
     {
-        private readonly AuthManager _authManager;
-        private readonly ScheduleService _scheduleService;
+        private readonly IAuthManager _authManager;
+        private readonly IScheduleService _scheduleService;
 
-        public ScheduleController()
+        public ScheduleController(IAuthManager authManager, IScheduleService scheduleService)
         {
-            _authManager = UnityConfig.GetConfiguredContainer().Resolve<AuthManager>();
-            _scheduleService = UnityConfig.GetConfiguredContainer().Resolve<ScheduleService>();
+            _authManager = authManager;
+            _scheduleService = scheduleService;
         }
 
         // GET api/schedules

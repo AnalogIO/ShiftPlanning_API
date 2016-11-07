@@ -1,14 +1,11 @@
 ﻿using Data.Models;
 using Data.Repositories;
 using DataTransferObjects;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace API.Services
 {
-    public class EmployeeService
+    public class EmployeeService : IEmployeeService
     {
         private readonly IInstitutionRepository _institutionRepository;
         private readonly IEmployeeRepository _employeeRepository;

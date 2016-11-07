@@ -16,13 +16,13 @@ namespace API.Controllers
     {
         private readonly IShiftRepository _shiftRepository;
         private readonly IInstitutionRepository _institutionRepository;
-        private readonly AuthManager _authManager;
+        private readonly IAuthManager _authManager;
 
-        public ShiftController(IShiftRepository shiftRepository, IInstitutionRepository institutionRepository)
+        public ShiftController(IAuthManager authManager, IShiftRepository shiftRepository, IInstitutionRepository institutionRepository)
         {
             _shiftRepository = shiftRepository;
             _institutionRepository = institutionRepository;
-            _authManager = UnityConfig.GetConfiguredContainer().Resolve<AuthManager>();
+            _authManager = authManager;
         }
 
         [HttpGet, Route("")]

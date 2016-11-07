@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Web.Http;
 using API.Authorization;
 using DataTransferObjects;
-using Microsoft.Practices.Unity;
 using API.Services;
 
 namespace API.Controllers
@@ -15,13 +14,13 @@ namespace API.Controllers
     [RoutePrefix("api/employees")]
     public class EmployeeController : ApiController
     {
-        private readonly AuthManager _authManager;
-        private readonly EmployeeService _employeeService;
+        private readonly IAuthManager _authManager;
+        private readonly IEmployeeService _employeeService;
 
-        public EmployeeController()
+        public EmployeeController(IAuthManager authManager, IEmployeeService employeeService)
         {
-            _authManager = UnityConfig.GetConfiguredContainer().Resolve<AuthManager>();
-            _employeeService = UnityConfig.GetConfiguredContainer().Resolve<EmployeeService>();
+            _authManager = authManager;
+            _employeeService = employeeService;
         }
 
         // POST api/employees

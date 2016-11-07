@@ -5,7 +5,6 @@ using API.Authorization;
 using Data.Models;
 using Data.Repositories;
 using DataTransferObjects;
-using Microsoft.Practices.Unity;
 
 namespace API.Controllers
 {
@@ -17,14 +16,14 @@ namespace API.Controllers
     {
         private readonly IEmployeeTitleRepository _employeeTitleRepository;
         private readonly IManagerRepository _managerRepository;
-        private readonly AuthManager _authManager;
+        private readonly IAuthManager _authManager;
 
-        public EmployeeTitleController(IEmployeeTitleRepository employeeTitleRepository, 
+        public EmployeeTitleController(IAuthManager authManager, IEmployeeTitleRepository employeeTitleRepository, 
             IManagerRepository managerRepository)
         {
             _employeeTitleRepository = employeeTitleRepository;
             _managerRepository = managerRepository;
-            _authManager = UnityConfig.GetConfiguredContainer().Resolve<AuthManager>();
+            _authManager = authManager;
         }
 
         // POST api/employeetitles

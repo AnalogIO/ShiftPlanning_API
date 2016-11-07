@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 
 namespace API.Authorization
 {
-    public class AuthManager
+    public class AuthManager : IAuthManager
     {
         private readonly IInstitutionRepository _institutionRepository;
         private readonly IManagerRepository _managerRepository;

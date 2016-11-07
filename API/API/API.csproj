@@ -211,6 +211,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\IoCConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityWebApiActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -242,9 +243,11 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Authorization\IAuthManager.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\EmployeeTitleController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
+    <Compile Include="Controllers\OpeningHoursController.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\ShiftController.cs" />
     <Compile Include="Global.asax.cs">
@@ -255,7 +258,10 @@
     <Compile Include="Authorization\AuthManager.cs" />
     <Compile Include="Logic\EmployeeManager.cs" />
     <Compile Include="Logic\Mapper.cs" />
+    <Compile Include="Mapping\OpeningHoursMapper.cs" />
     <Compile Include="Services\EmployeeService.cs" />
+    <Compile Include="Services\IEmployeeService.cs" />
+    <Compile Include="Services\IScheduleService.cs" />
     <Compile Include="Services\ScheduleService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

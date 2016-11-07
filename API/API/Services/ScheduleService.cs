@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace API.Logic
 {
-    public class ScheduleService
+    public class ScheduleService : IScheduleService
     {
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IInstitutionRepository _institutionRepository;
