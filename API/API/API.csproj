@@ -258,6 +258,7 @@
     <Compile Include="Authorization\AuthManager.cs" />
     <Compile Include="Logic\EmployeeManager.cs" />
     <Compile Include="Logic\Mapper.cs" />
+    <Compile Include="Mapping\IOpeningHoursMapper.cs" />
     <Compile Include="Mapping\OpeningHoursMapper.cs" />
     <Compile Include="Services\EmployeeService.cs" />
     <Compile Include="Services\IEmployeeService.cs" />

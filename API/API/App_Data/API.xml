@@ -631,6 +631,11 @@
             If the provided credentials are wrong then the controller will return Unauthorized (401).
             </returns>
         </member>
+        <member name="T:API.Controllers.OpeningHoursController">
+            <summary>
+            The OpeningHoursController is the public entrance to get opening hour and shift information.
+            </summary>
+        </member>
         <member name="M:API.Controllers.OpeningHoursController.Get(System.String)">
             <summary>
             Fetch shifts for the next week for a given institution.
