@@ -52,6 +52,8 @@
     <Compile Include="EmployeeDTO.cs" />
     <Compile Include="ManagerLoginDTO.cs" />
     <Compile Include="ManagerLoginResponse.cs" />
+    <Compile Include="OpeningHours\IntervalOpeningHourDTO.cs" />
+    <Compile Include="OpeningHours\IntervalOpeningHoursDTO.cs" />
     <Compile Include="OpeningHours\IsOpenDTO.cs" />
     <Compile Include="OpeningHours\OpeningHourEmployeeDTO.cs" />
     <Compile Include="OpeningHours\OpeningHoursDTO.cs" />

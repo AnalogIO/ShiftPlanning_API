@@ -15,5 +15,7 @@ namespace API.Mapping
         /// <param name="source">The input collection.</param>
         /// <returns>The mapped collection.</returns>
         IEnumerable<OpeningHoursDTO> MapToDto(IEnumerable<Shift> source);
+
+        IntervalOpeningHoursDTO MapToIntervalDto(ICollection<Shift> shifts, int interval);
     }
 }

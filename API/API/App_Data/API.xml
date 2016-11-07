@@ -669,6 +669,14 @@
             <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
             <returns>A collection of OpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
         </member>
+        <member name="M:API.Controllers.OpeningHoursController.GetIntervals(System.String,System.Int32)">
+            <summary>
+            Fetch shifts for the next week for a given institution.
+            </summary>
+            <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
+            <param name="interval">The number of minutes an interval should span.</param>
+            <returns>A collection of OpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
+        </member>
         <member name="T:API.Controllers.ScheduleController">
             <summary>
             Controller to manage schedule
