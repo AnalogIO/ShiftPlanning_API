@@ -9,6 +9,7 @@ namespace Data.Repositories
 {
     public interface IInstitutionRepository
     {
+        bool Exists(string shortKey);
         bool HasApiKey(string apiKey);
         Institution Read(int id);
         Institution Read(string apiKey);

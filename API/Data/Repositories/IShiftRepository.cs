@@ -9,6 +9,7 @@ namespace Data.Repositories
         Shift Create(Shift shift);
         IEnumerable<Shift> Create(IEnumerable<Shift> shifts);
         IEnumerable<Shift> ReadFromInstitution(int institutionId);
+        IEnumerable<Shift> ReadFromInstitution(string institutionShortKey);
         Shift Read(int id, int institutionId);
         int Update(Shift shift);
         void Delete(int id, int institutionId);

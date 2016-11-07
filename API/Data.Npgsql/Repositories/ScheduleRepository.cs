@@ -38,12 +38,21 @@ namespace Data.Npgsql.Repositories
 
         public Schedule Read(int id, int institutionId)
         {
-            return _context.Schedules.Include("ScheduledShifts").Include("ScheduledShifts.Employees").Include("ScheduledShifts.Employees.EmployeeTitle").SingleOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
+            return _context.Schedules
+                .Include("ScheduledShifts")
+                .Include("ScheduledShifts.Employees")
+                .Include("ScheduledShifts.Employees.EmployeeTitle")
+                .SingleOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
         }
 
         public IEnumerable<Schedule> ReadFromInstitution(int institutionId)
         {
-            return _context.Schedules.Include("ScheduledShifts").Include("ScheduledShifts.Employees").Include("ScheduledShifts.Employees.EmployeeTitle").Where(x => x.Institution.Id == institutionId).ToList();
+            return _context.Schedules
+                .Include("ScheduledShifts")
+                .Include("ScheduledShifts.Employees")
+                .Include("ScheduledShifts.Employees.EmployeeTitle")
+                .Where(x => x.Institution.Id == institutionId)
+                .ToList();
         }
 
         public int Update(Schedule schedule)

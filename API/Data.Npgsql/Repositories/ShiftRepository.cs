@@ -43,6 +43,11 @@ namespace Data.Npgsql.Repositories
             }
         }
 
+        public IEnumerable<Shift> ReadFromInstitution(string institutionShortKey)
+        {
+            return _context.Shifts.Where(x => x.Institution.ShortKey == institutionShortKey);
+        }
+
         public Shift Read(int id, int institutionId)
         {
             return _context.Shifts.FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
@@ -68,7 +73,8 @@ namespace Data.Npgsql.Repositories
         public IEnumerable<Shift> GetOngoingShifts(int institutionId, DateTime now)
         {
             var inOneHour = now.AddHours(1);
-            return _context.Shifts.Where(s => s.Institution.Id == institutionId && (s.Start < now && s.End > now) || (s.Start > now && s.Start < inOneHour));
+            return _context.Shifts
+                .Where(s => s.Institution.Id == institutionId && (s.Start < now && s.End > now || (s.Start > now && s.Start < inOneHour)));
         }
 
         public void Dispose()

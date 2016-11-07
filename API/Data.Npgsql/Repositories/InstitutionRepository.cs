@@ -13,6 +13,11 @@ namespace Data.Npgsql.Repositories
             _context = context;
         }
 
+        public bool Exists(string shortKey)
+        {
+            return _context.Institutions.Any(inst => inst.ShortKey == shortKey);
+        }
+
         public bool HasApiKey(string apiKey)
         {
             return _context.Institutions.Any(i => i.ApiKey == apiKey);
@@ -20,17 +25,12 @@ namespace Data.Npgsql.Repositories
 
         public Institution Read(int id)
         {
-            return _context.Institutions.Where(x => x.Id == id).FirstOrDefault();
+            return _context.Institutions.FirstOrDefault(x => x.Id == id);
         }
 
         public Institution Read(string apiKey)
         {
-            var institution = _context.Institutions.Where(x => x.ApiKey == apiKey).FirstOrDefault();
-            if(institution != null)
-            {
-                return institution;
-            }
-            return null;
+            return _context.Institutions.FirstOrDefault(x => x.ApiKey == apiKey);
         }
     }
 }

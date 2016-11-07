@@ -39,7 +39,7 @@ namespace Data.Npgsql.Repositories
 
         public IEnumerable<Manager> Read()
         {
-            return _context.Managers.AsEnumerable();
+            return _context.Managers;
         }
 
         public Manager Read(int id)
@@ -49,13 +49,8 @@ namespace Data.Npgsql.Repositories
 
         public Manager Read(string token)
         {
-            var manager = _context.Managers.FirstOrDefault(m => m.Tokens.Any(t => t.TokenHash == token)); // finds the manager with the corresponding token
-
-            if (manager != null)
-            {
-                return manager;
-            }
-            return null;
+            // finds the manager with the corresponding token
+            return _context.Managers.FirstOrDefault(m => m.Tokens.Any(t => t.TokenHash == token));
         }
 
         public int Update(Manager manager)
