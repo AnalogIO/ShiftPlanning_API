@@ -25,6 +25,7 @@ namespace API
                 .RegisterType<IAuthManager, AuthManager>(new HierarchicalLifetimeManager())
 
                 .RegisterType<IEmployeeService, EmployeeService>(new HierarchicalLifetimeManager())
+                .RegisterType<IEmployeeTitleService, EmployeeTitleService>(new HierarchicalLifetimeManager())
                 .RegisterType<IScheduleService, ScheduleService>(new HierarchicalLifetimeManager())
                 .RegisterType<IShiftService, ShiftService>(new HierarchicalLifetimeManager());
         }

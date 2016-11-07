@@ -83,5 +83,20 @@ namespace API.Logic
             }
             return shiftDtos;
         }
+
+        public static EmployeeTitleDTO Map(EmployeeTitle employeeTitle)
+        {
+            return new EmployeeTitleDTO { Id = employeeTitle.Id, Title = employeeTitle.Title };
+        }
+
+        public static IEnumerable<EmployeeTitleDTO> Map(IEnumerable<EmployeeTitle> employeeTitles)
+        {
+            var employeeTitleDtos = new List<EmployeeTitleDTO>();
+            foreach (EmployeeTitle employeeTitle in employeeTitles)
+            {
+                employeeTitleDtos.Add(Map(employeeTitle));
+            }
+            return employeeTitleDtos;
+        }
     }
 }

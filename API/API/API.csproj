@@ -263,7 +263,9 @@
     <Compile Include="Mapping\IOpeningHoursMapper.cs" />
     <Compile Include="Mapping\OpeningHoursMapper.cs" />
     <Compile Include="Services\EmployeeService.cs" />
+    <Compile Include="Services\EmployeeTitleService.cs" />
     <Compile Include="Services\IEmployeeService.cs" />
+    <Compile Include="Services\IEmployeeTitleService.cs" />
     <Compile Include="Services\IScheduleService.cs" />
     <Compile Include="Services\IShiftService.cs" />
     <Compile Include="Services\ShiftService.cs" />
