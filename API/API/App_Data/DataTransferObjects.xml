@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DataTransferObjects</name>
+    </assembly>
+    <members>
+        <member name="P:DataTransferObjects.CreateEmployeeDTO.Email">
+            <summary>
+            The email of the employee to be created
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.CreateEmployeeDTO.FirstName">
+            <summary>
+            The first name of the employee
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.CreateEmployeeDTO.LastName">
+            <summary>
+            The last name of the employee
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.CreateEmployeeDTO.EmployeeTitleId">
+            <summary>
+            The title id of the employee.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.CreateEmployeeTitleDTO.Title">
+            <summary>
+            The employee title.
+            </summary>
+        </member>
+        <member name="T:DataTransferObjects.OpeningHours.IsOpenDTO">
+            <summary>
+            Contains information used to identify whether or not a given institution is open.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.OpeningHours.IsOpenDTO.Open">
+            <summary>
+            States whether or not a given institution is open.
+            </summary>
+        </member>
+        <member name="T:DataTransferObjects.OpeningHours.OpeningHourEmployeeDTO">
+            <summary>
+            Containing public information about a single employee in an institution.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.OpeningHours.OpeningHourEmployeeDTO.Id">
+            <summary>
+            The employee ID. Can be used across Employees and CheckedInEmployees to identify the same employee.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.OpeningHours.OpeningHourEmployeeDTO.FirstName">
+            <summary>
+            The first name of the employee.
+            </summary>
+        </member>
+        <member name="T:DataTransferObjects.OpeningHours.OpeningHoursDTO">
+            <summary>
+            Contains the public information about a single shift, and the employees.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.OpeningHours.OpeningHoursDTO.Id">
+            <summary>
+            The ID of the shift.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.OpeningHours.OpeningHoursDTO.Start">
+            <summary>
+            The starting date and time of the shift.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.OpeningHours.OpeningHoursDTO.End">
+            <summary>
+            The ending date and time.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.OpeningHours.OpeningHoursDTO.Employees">
+            <summary>
+            The attending employees.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.OpeningHours.OpeningHoursDTO.CheckedInEmployees">
+            <summary>
+            The employees that have checked in for this shift.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.UpdateEmployeeDTO.Email">
+            <summary>
+            The email of the employee. Leave empty string if the email should not be updated.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.UpdateEmployeeDTO.FirstName">
+            <summary>
+            The first name of the employee. Leave empty string if the first name should not be updated.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.UpdateEmployeeDTO.LastName">
+            <summary>
+            The last name of the employee. Leave empty string if the last name should not be updated.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.UpdateEmployeeDTO.EmployeeTitleId">
+            <summary>
+            The title id of the employee. Leave as 0 if the title should not be updated.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.UpdateEmployeeDTO.Active">
+            <summary>
+            A flag saying if the employee is currently active or not.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.UpdateEmployeeTitleDTO.Title">
+            <summary>
+            The employee title.
+            </summary>
+        </member>
+    </members>
+</doc>
