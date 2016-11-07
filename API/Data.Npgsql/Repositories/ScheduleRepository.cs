@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Data.Models;
 using Data.Repositories;
+using System.Data.Entity;
 
 namespace Data.Npgsql.Repositories
 {
@@ -39,18 +40,18 @@ namespace Data.Npgsql.Repositories
         public Schedule Read(int id, int institutionId)
         {
             return _context.Schedules
-                .Include("ScheduledShifts")
-                .Include("ScheduledShifts.Employees")
-                .Include("ScheduledShifts.Employees.EmployeeTitle")
+                .Include(x => x.ScheduledShifts)
+                .Include(x => x.ScheduledShifts.Select(y => y.Employees))
+                .Include(x => x.ScheduledShifts.Select(y => y.Employees.Select(z => z.EmployeeTitle)))
                 .SingleOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
         }
 
         public IEnumerable<Schedule> ReadFromInstitution(int institutionId)
         {
             return _context.Schedules
-                .Include("ScheduledShifts")
-                .Include("ScheduledShifts.Employees")
-                .Include("ScheduledShifts.Employees.EmployeeTitle")
+                .Include(x => x.ScheduledShifts)
+                .Include(x => x.ScheduledShifts.Select(y => y.Employees))
+                .Include(x => x.ScheduledShifts.Select(y => y.Employees.Select(z => z.EmployeeTitle)))
                 .Where(x => x.Institution.Id == institutionId)
                 .ToList();
         }
