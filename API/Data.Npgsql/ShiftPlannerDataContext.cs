@@ -20,6 +20,10 @@ namespace Data.Npgsql
         {
             // PostgreSQL uses the public schema by default - not dbo. 
             modelBuilder.HasDefaultSchema("public");
+
+            modelBuilder.Entity<Employee>()
+                .HasOptional(emp => emp.Photo);
+
             base.OnModelCreating(modelBuilder);
         }
     }

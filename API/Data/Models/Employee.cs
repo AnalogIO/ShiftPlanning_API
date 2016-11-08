@@ -14,5 +14,6 @@ namespace Data.Models
         public virtual ICollection<CheckIn> CheckIns { get; set; }
         public virtual ICollection<ScheduledShift> ScheduledShifts { get; set; }
         public virtual Institution Institution { get; set; }
+        public virtual Photo Photo { get; set; }
     }
 }

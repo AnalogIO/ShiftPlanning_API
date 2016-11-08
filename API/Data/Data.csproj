@@ -58,6 +58,7 @@
     <Compile Include="Models\EmployeeTitle.cs" />
     <Compile Include="Models\Institution.cs" />
     <Compile Include="Models\Manager.cs" />
+    <Compile Include="Models\Photo.cs" />
     <Compile Include="Models\Schedule.cs" />
     <Compile Include="Models\ScheduledShift.cs" />
     <Compile Include="Models\Shift.cs" />

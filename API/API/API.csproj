@@ -252,6 +252,7 @@
     <Compile Include="Controllers\OpeningHoursController.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\ShiftController.cs" />
+    <Compile Include="Controllers\VolunteersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -261,7 +262,9 @@
     <Compile Include="Logic\EmployeeManager.cs" />
     <Compile Include="Logic\Mapper.cs" />
     <Compile Include="Mapping\IOpeningHoursMapper.cs" />
+    <Compile Include="Mapping\IVolunteerMapper.cs" />
     <Compile Include="Mapping\OpeningHoursMapper.cs" />
+    <Compile Include="Mapping\VolunteerMapper.cs" />
     <Compile Include="Services\EmployeeService.cs" />
     <Compile Include="Services\EmployeeTitleService.cs" />
     <Compile Include="Services\IEmployeeService.cs" />

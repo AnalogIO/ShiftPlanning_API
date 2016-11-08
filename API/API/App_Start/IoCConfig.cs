@@ -21,6 +21,7 @@ namespace API
 
                 // Container controlled since it has no dependencies/state.
                 .RegisterType<IOpeningHoursMapper, OpeningHoursMapper>(new ContainerControlledLifetimeManager())
+                .RegisterType<IVolunteerMapper, VolunteerMapper>(new ContainerControlledLifetimeManager())
 
                 .RegisterType<IAuthManager, AuthManager>(new HierarchicalLifetimeManager())
 

@@ -43,9 +43,27 @@ namespace Data.Npgsql.Repositories
                 .Where(e => e.Institution.Id == institutionId).OrderBy(x => x.Id);
         }
 
+        public IEnumerable<Employee> ReadFromInstitution(string shortKey)
+        {
+            return _context.Employees
+                .Include(emp => emp.EmployeeTitle)
+                .Include(emp => emp.Photo)
+                .Where(e => e.Institution.ShortKey == shortKey);
+        }
+
         public Employee Read(int id, int institutionId)
         {
-            return _context.Employees.Include(x => x.EmployeeTitle).FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
+            return _context.Employees
+                .Include(x => x.EmployeeTitle)
+                .FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
+        }
+
+        public Employee Read(int id, string shortKey)
+        {
+            return _context.Employees
+                .Include(employee => employee.EmployeeTitle)
+                .Include(employee => employee.Photo)
+                .FirstOrDefault(x => x.Id == id && x.Institution.ShortKey == shortKey);
         }
 
         public int Update(Employee employee)

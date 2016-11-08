@@ -23,9 +23,19 @@ namespace API.Services
             return _employeeRepository.ReadFromInstitution(institutionId);
         }
 
+        public IEnumerable<Employee> GetEmployees(string shortKey)
+        {
+            return _employeeRepository.ReadFromInstitution(shortKey);
+        }
+
         public Employee GetEmployee(int id, int institutionId)
         {
             return _employeeRepository.Read(id, institutionId);
+        }
+
+        public Employee GetEmployee(int id, string shortKey)
+        {
+            return _employeeRepository.Read(id, shortKey);
         }
 
         public Employee CreateEmployee(CreateEmployeeDTO employeeDto, Manager manager)
