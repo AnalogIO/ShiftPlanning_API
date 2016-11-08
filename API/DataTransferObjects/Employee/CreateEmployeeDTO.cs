@@ -25,6 +25,7 @@ namespace DataTransferObjects
         /// <summary>
         /// The title id of the employee.
         /// </summary>
+        [Required]
         public int EmployeeTitleId { get; set; }
     }
 }

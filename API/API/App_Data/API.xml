@@ -523,28 +523,39 @@
         <member name="M:API.Controllers.EmployeeController.Register(DataTransferObjects.CreateEmployeeDTO)">
             <summary>
             Creates the employee from the content in the body.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <returns>
             Returns 'Created' (201) if the employee gets created.
             If an employee already exist with the given email, the controller will return BadRequest (400).
             </returns>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Get(System.Int32)">
+        <member name="M:API.Controllers.EmployeeController.Get">
             <summary>
             Gets all the employees.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <returns>
             Returns an array of employees.
             </returns>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Get(System.Int32,System.Int32)">
+        <member name="M:API.Controllers.EmployeeController.Get(System.Int32)">
             <summary>
             Gets the employee with the given id.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <param name="id">The id of the employee.</param>
             <returns>
             Returns the employee with the given id. 
             If no employee is found with the corresponding id, the controller will return NotFound (404)
+            </returns>
+        </member>
+        <member name="M:API.Controllers.EmployeeController.Get(System.String)">
+            <summary>
+            Gets all the employees.
+            </summary>
+            <returns>
+            Returns an array of employees.
             </returns>
         </member>
         <member name="M:API.Controllers.EmployeeController.Put(System.Int32,DataTransferObjects.UpdateEmployeeDTO)">

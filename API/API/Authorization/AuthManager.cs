@@ -27,11 +27,16 @@ namespace API.Authorization
             return _institutionRepository.HasApiKey(apiKey);
         }
 
+        public Institution GetInstitutionByApiKey(string apiKey)
+        {
+            return _institutionRepository.Read(apiKey);
+        }
+
         public Institution GetInstitutionByHeader(HttpRequestHeaders headers)
         {
             var apiKey = headers.Authorization.ToString();
             if (apiKey == null) return null;
-            return _institutionRepository.Read(apiKey);
+            return GetInstitutionByApiKey(apiKey);
         }
 
         public Manager GetManagerByHeader(HttpRequestHeaders headers)

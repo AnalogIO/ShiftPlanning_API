@@ -26,6 +26,7 @@ namespace API.Controllers
         // POST api/employees
         /// <summary>
         /// Creates the employee from the content in the body.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <returns>
         /// Returns 'Created' (201) if the employee gets created.
@@ -53,14 +54,18 @@ namespace API.Controllers
         // GET api/employees
         /// <summary>
         /// Gets all the employees.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <returns>
         /// Returns an array of employees.
         /// </returns>
-        [HttpGet, Route("")]
-        public IHttpActionResult Get(int institutionId)
+        [HttpGet, AdminFilter, Route("")]
+        public IHttpActionResult Get()
         {
-            var employees = _employeeService.GetEmployees(institutionId);
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            var employees = _employeeService.GetEmployees(manager.Institution.Id);
             if (employees == null) return NotFound();
             return Ok(Mapper.Map(employees));
         }
@@ -68,21 +73,25 @@ namespace API.Controllers
         // GET api/employees/{id}
         /// <summary>
         /// Gets the employee with the given id.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <param name="id">The id of the employee.</param>
         /// <returns>
         /// Returns the employee with the given id. 
         /// If no employee is found with the corresponding id, the controller will return NotFound (404)
         /// </returns>
-        [HttpGet, Route("{id}")]
-        public IHttpActionResult Get(int id, int institutionId)
+        [HttpGet, AdminFilter, Route("{id}")]
+        public IHttpActionResult Get(int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var employee = _employeeService.GetEmployee(id, institutionId);
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            var employee = _employeeService.GetEmployee(id, manager.Institution.Id);
             if (employee != null)
             {
                 return Ok(Mapper.Map(employee));
@@ -92,6 +101,25 @@ namespace API.Controllers
                 return NotFound();
             }
 
+        }
+
+        // GET api/employees
+        /// <summary>
+        /// Gets all the employees.
+        /// Requires 'apiKey' parameter set with the api key of the institution.
+        /// </summary>
+        /// <returns>
+        /// Returns an array of employees.
+        /// </returns>
+        [HttpGet, Route("")]
+        public IHttpActionResult Get(string apiKey)
+        {
+            var institution = _authManager.GetInstitutionByApiKey(apiKey);
+            if (institution == null) return BadRequest("No institution found with the given name");
+
+            var employees = _employeeService.GetEmployees(institution.Id);
+            if (employees == null) return NotFound();
+            return Ok(Mapper.Map(employees));
         }
 
         // PUT api/employees/5
