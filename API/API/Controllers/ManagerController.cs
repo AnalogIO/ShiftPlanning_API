@@ -43,7 +43,7 @@ namespace API.Controllers
             var manager = _managerRepository.Login(loginDto.Username, loginDto.Password);
             if(manager != null)
             {
-                var responseDto = new ManagerLoginResponse { Token = manager.Tokens.LastOrDefault().TokenHash };
+                var responseDto = new ManagerLoginResponse { Token = manager.Tokens.LastOrDefault().TokenHash, InstitutionId = manager.Institution.Id, InstitutionName = manager.Institution.Name };
                 return Ok(responseDto);
             }
             HttpResponseMessage response = Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "You entered an incorrect username or password!" });

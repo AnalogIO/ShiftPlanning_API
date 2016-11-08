@@ -529,7 +529,7 @@
             If an employee already exist with the given email, the controller will return BadRequest (400).
             </returns>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Get">
+        <member name="M:API.Controllers.EmployeeController.Get(System.Int32)">
             <summary>
             Gets all the employees.
             </summary>
@@ -537,7 +537,7 @@
             Returns an array of employees.
             </returns>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Get(System.Int32)">
+        <member name="M:API.Controllers.EmployeeController.Get(System.Int32,System.Int32)">
             <summary>
             Gets the employee with the given id.
             </summary>
@@ -856,7 +856,7 @@
             Implementation of IShiftService that uses Repositories for data access.
             </summary>
         </member>
-        <member name="M:API.Services.ShiftService.#ctor(Data.Repositories.IShiftRepository,Data.Repositories.IInstitutionRepository)">
+        <member name="M:API.Services.ShiftService.#ctor(Data.Repositories.IShiftRepository,Data.Repositories.IInstitutionRepository,Data.Repositories.IEmployeeRepository)">
             <summary>
             Injection constructor.
             </summary>
