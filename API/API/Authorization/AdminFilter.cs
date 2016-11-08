@@ -18,13 +18,13 @@ namespace API.Authorization
             var token = actionContext.Request.Headers.Authorization;
             if (token == null)
             {
-                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+                actionContext.Response = actionContext.Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "Please set the 'Authorization' header to the token granted on login!" });
             }
             else if (token != null)
             {
                 if (!TokenManager.ValidateLoginToken(token.ToString()))
                 {
-                    actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+                    actionContext.Response = actionContext.Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "The provided token is not valid!" });
                 }
             }
         }

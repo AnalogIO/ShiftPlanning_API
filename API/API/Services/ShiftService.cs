@@ -85,6 +85,7 @@ namespace API.Services
         {
             var shift = _shiftRepository.Read(shiftId, institutionId);
             if (shift == null) return null;
+            if (shift.CheckIns.Where(x => x.Employee.Id == employeeId).FirstOrDefault() != null) return null;
             var employee = _employeeRepository.Read(employeeId, institutionId);
             if (employee == null) return null;
             var checkIn = new CheckIn { Employee = employee, Time = DateTime.UtcNow };
