@@ -37,7 +37,7 @@ namespace Data.Npgsql.Repositories
 
         public IEnumerable<Employee> ReadFromInstitution(int institutionId)
         {
-            return _context.Employees.Where(e => e.Institution.Id == institutionId);
+            return _context.Employees.Where(e => e.Institution.Id == institutionId).OrderBy(x => x.Id);
         }
 
         public Employee Read(int id, int institutionId)
