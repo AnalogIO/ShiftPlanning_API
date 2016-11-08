@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Data.Models;
 using Data.Repositories;
+using System.Data.Entity;
 
 namespace Data.Npgsql.Repositories
 {
@@ -11,7 +12,7 @@ namespace Data.Npgsql.Repositories
         private readonly IShiftPlannerDataContext _context;
 
         public ShiftRepository(IShiftPlannerDataContext context)
-        {                                                        
+        {
             _context = context;
         }
 
@@ -36,7 +37,7 @@ namespace Data.Npgsql.Repositories
         public void Delete(int id, int institutionId)
         {
             var shift = _context.Shifts.FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
-            if(shift != null)
+            if (shift != null)
             {
                 _context.Shifts.Remove(shift);
                 _context.SaveChanges();
@@ -55,7 +56,12 @@ namespace Data.Npgsql.Repositories
 
         public IEnumerable<Shift> ReadFromInstitution(int institutionId)
         {
-            return _context.Shifts.Where(x => x.Institution.Id == institutionId);
+            return _context.Shifts
+                .Include(x => x.CheckIns)
+                .Include(x => x.CheckIns.Select(y => y.Employee))
+                .Include(x => x.Employees)
+                .Include(x => x.Employees.Select(y => y.EmployeeTitle))
+                .Where(x => x.Institution.Id == institutionId);
         }
 
         public int Update(Shift shift)
@@ -66,7 +72,7 @@ namespace Data.Npgsql.Repositories
             dbShift.End = shift.End;
             dbShift.Employees = shift.Employees.Select(e => _context.Employees.Single(em => em.Id == e.Id)).ToList();
             dbShift.CheckIns = shift.CheckIns;
-            
+
             return _context.SaveChanges();
         }
 

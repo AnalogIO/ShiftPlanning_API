@@ -32,7 +32,8 @@ namespace API.Services
         {
             var employee = new Employee { Email = employeeDto.Email, FirstName = employeeDto.FirstName, LastName = employeeDto.LastName, Institution = manager.Institution, Active = true };
             var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Institution.Id);
-            if (title != null) employee.EmployeeTitle = title;
+            if (title == null) return null;
+            employee.EmployeeTitle = title;
             return _employeeRepository.Create(employee);
         }
 
@@ -45,7 +46,7 @@ namespace API.Services
                 employee.FirstName = employeeDto.FirstName;
                 employee.LastName = employeeDto.LastName;
                 employee.Active = employeeDto.Active;
-                
+
                 var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Institution.Id);
                 if (title != null) employee.EmployeeTitle = title;
                 return _employeeRepository.Update(employee) > 0 ? employee : null;

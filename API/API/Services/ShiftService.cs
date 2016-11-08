@@ -13,16 +13,18 @@ namespace API.Services
     {
         private readonly IShiftRepository _shiftRepository;
         private readonly IInstitutionRepository _institutionRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
         /// <summary>
         /// Injection constructor.
         /// </summary>
         /// <param name="shiftRepository">An IShiftRepository implementation.</param>
         /// <param name="institutionRepository">An IInstitution implementation.</param>
-        public ShiftService(IShiftRepository shiftRepository, IInstitutionRepository institutionRepository)
+        public ShiftService(IShiftRepository shiftRepository, IInstitutionRepository institutionRepository, IEmployeeRepository employeeRepository)
         {
             _shiftRepository = shiftRepository;
             _institutionRepository = institutionRepository;
+            _employeeRepository = employeeRepository;
         }
 
         /// <inheritdoc cref="IShiftService.GetByInstitution(string)"/>
@@ -77,6 +79,17 @@ namespace API.Services
         {
             var now = DateTime.Now;
             return GetByInstitution(id).Where(shift => shift.Start <= now && now <= shift.End);
+        }
+
+        public CheckIn CheckInEmployee(int shiftId, int employeeId, int institutionId)
+        {
+            var shift = _shiftRepository.Read(shiftId, institutionId);
+            if (shift == null) return null;
+            var employee = _employeeRepository.Read(employeeId, institutionId);
+            if (employee == null) return null;
+            var checkIn = new CheckIn { Employee = employee, Time = DateTime.UtcNow };
+            shift.CheckIns.Add(checkIn);
+            return _shiftRepository.Update(shift) > 0 ? shift.CheckIns.LastOrDefault() : null;
         }
     }
 }

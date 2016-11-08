@@ -43,11 +43,11 @@ namespace API.Controllers
             if (manager == null) return BadRequest("Provided token is invalid!");
 
             var employee = _employeeService.CreateEmployee(employeeDto, manager);
-            if(employee != null)
+            if (employee != null)
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
             }
-            return BadRequest("A user with the given email does already exist!");
+            return BadRequest("The user could not be created!");
         }
 
         // GET api/employees
@@ -88,14 +88,15 @@ namespace API.Controllers
             if (manager == null) return BadRequest("Provided token is invalid!");
 
             var employee = _employeeService.GetEmployee(id, manager);
-            if(employee != null)
+            if (employee != null)
             {
                 return Ok(Mapper.Map(employee));
-            } else
+            }
+            else
             {
                 return NotFound();
             }
-            
+
         }
 
         // PUT api/employees/5
@@ -119,7 +120,7 @@ namespace API.Controllers
             if (manager == null) return BadRequest("Provided token is invalid!");
 
             var employee = _employeeService.UpdateEmployee(id, employeeDto, manager);
-            if(employee != null)
+            if (employee != null)
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
             }
