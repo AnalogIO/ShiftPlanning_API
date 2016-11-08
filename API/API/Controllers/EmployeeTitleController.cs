@@ -28,6 +28,7 @@ namespace API.Controllers
         // POST api/employeetitles
         /// <summary>
         /// Creates the employee title from the content in the body.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <returns>
         /// Returns 'Created' (201) if the employee title gets created.
@@ -57,6 +58,7 @@ namespace API.Controllers
         // GET api/employeetitles
         /// <summary>
         /// Gets all the employee titles.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <returns>
         /// Returns an array of employee titles.
@@ -75,6 +77,7 @@ namespace API.Controllers
         // GET api/employeetitles/{id}
         /// <summary>
         /// Gets the employee title with the given id.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <param name="id">The id of the employee title.</param>
         /// <returns>
@@ -108,6 +111,7 @@ namespace API.Controllers
         // PUT api/employeetitles/5
         /// <summary>
         /// Updates the employee title with the specified id.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <param name="id">The id of the employee title.</param>
         /// <returns>
@@ -138,6 +142,7 @@ namespace API.Controllers
         // DELETE /api/employeetitles/{id}
         /// <summary>
         /// Deletes the employee title with the specified id.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <param name="id">The id of the employee title.</param>
         /// <returns>Returns 'No Content' (204) if the employee title gets deleted.</returns>

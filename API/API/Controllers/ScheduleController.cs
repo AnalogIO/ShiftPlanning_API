@@ -26,6 +26,7 @@ namespace API.Controllers
         // GET api/schedules
         /// <summary>
         /// Gets all the schedules.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <returns>
         /// Returns an array of schedules.
@@ -43,6 +44,7 @@ namespace API.Controllers
         // GET api/schedules/{id}
         /// <summary>
         /// Gets the schedule with the given id.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <param name="id">The id of the schedule.</param>
         /// <returns>
@@ -74,6 +76,7 @@ namespace API.Controllers
         // POST api/schedules
         /// <summary>
         /// Creates the schedule from the content in the body.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <returns>
         /// Returns 'Created' (201) if the schedule gets created.
@@ -100,6 +103,7 @@ namespace API.Controllers
         // DELETE /api/schedules/{id}
         /// <summary>
         /// Deletes the schedule with the specified id.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <param name="id">The id of the schedule.</param>
         /// <returns>Returns 'No Content' (204) if the schedule gets deleted.</returns>
@@ -121,6 +125,7 @@ namespace API.Controllers
         // PUT api/schedules/{id}
         /// <summary>
         /// Updates the schedule with the given id from the content in the body.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <returns>
         /// Returns 'No Content' (204) if the schedule gets updated.
@@ -149,6 +154,7 @@ namespace API.Controllers
         // POST api/schedules/{id}
         /// <summary>
         /// Creates the scheduled shift to the schedule with the given id from the content in the body.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <returns>
         /// Returns 'Created' (201) if the scheduled shift gets created.
@@ -176,6 +182,7 @@ namespace API.Controllers
         // PUT api/schedules/{scheduleId}/{scheduledShiftId}
         /// <summary>
         /// Updates the scheduled shift with the given id from the content in the body.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <returns>
         /// Returns 'No Content' (204) if the scheduled shift gets updated.
@@ -204,6 +211,7 @@ namespace API.Controllers
         // POST api/schedules/{id}/createmultiple
         /// <summary>
         /// Creates the scheduled shifts to the schedule with the given id from the content in the body.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <returns>
         /// Returns 'Created' (201) if the scheduled shifts gets created.
@@ -232,6 +240,7 @@ namespace API.Controllers
         // POST api/schedules/{id}/rollout
         /// <summary>
         /// Creates the scheduled shifts to the schedule with the given id from the content in the body.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <returns>
         /// Returns 'Created' (201) if the scheduled shifts gets created.

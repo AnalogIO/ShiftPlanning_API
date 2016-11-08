@@ -125,6 +125,7 @@ namespace API.Controllers
         // PUT api/employees/5
         /// <summary>
         /// Updates the employee with the specified id.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <param name="id">The id of the employee.</param>
         /// <returns>
@@ -153,6 +154,7 @@ namespace API.Controllers
         // DELETE /api/employees/{id}
         /// <summary>
         /// Deletes the employee with the specified id.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <param name="id">The id of the employee.</param>
         /// <returns>Returns 'No Content' (204) if the employee gets deleted.</returns>
