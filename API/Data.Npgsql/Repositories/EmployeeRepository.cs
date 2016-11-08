@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Data.Models;
 using Data.Repositories;
+using System.Data.Entity;
 
 namespace Data.Npgsql.Repositories
 {
@@ -37,12 +38,14 @@ namespace Data.Npgsql.Repositories
 
         public IEnumerable<Employee> ReadFromInstitution(int institutionId)
         {
-            return _context.Employees.Where(e => e.Institution.Id == institutionId).OrderBy(x => x.Id);
+            return _context.Employees
+                .Include(x => x.EmployeeTitle)
+                .Where(e => e.Institution.Id == institutionId).OrderBy(x => x.Id);
         }
 
         public Employee Read(int id, int institutionId)
         {
-            return _context.Employees.FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
+            return _context.Employees.Include(x => x.EmployeeTitle).FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
         }
 
         public int Update(Employee employee)
