@@ -261,6 +261,7 @@
     <Compile Include="Authorization\AuthManager.cs" />
     <Compile Include="Logic\EmployeeManager.cs" />
     <Compile Include="Logic\Mapper.cs" />
+    <Compile Include="Logic\Toolbox.cs" />
     <Compile Include="Mapping\IOpeningHoursMapper.cs" />
     <Compile Include="Mapping\IVolunteerMapper.cs" />
     <Compile Include="Mapping\OpeningHoursMapper.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Data.Models;
+using DataTransferObjects.Shift;
 
 namespace API.Services
 {
@@ -78,5 +79,7 @@ namespace API.Services
         IEnumerable<Shift> GetOngoingShiftsByInstitution(int id);
 
         CheckIn CheckInEmployee(int shiftId, int employeeId, int institutionId);
+
+        Shift CreateShiftOutsideSchedule(CreateShiftOutsideScheduleDTO shiftDto, Institution institution);
     }
 }

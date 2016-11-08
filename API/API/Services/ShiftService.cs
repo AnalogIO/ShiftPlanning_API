@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Data.Models;
 using Data.Repositories;
+using DataTransferObjects.Shift;
+using API.Logic;
 
 namespace API.Services
 {
@@ -92,6 +94,18 @@ namespace API.Services
             var checkIn = new CheckIn { Employee = employee, Time = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second) };
             shift.CheckIns.Add(checkIn);
             return _shiftRepository.Update(shift) > 0 ? shift.CheckIns.LastOrDefault() : null;
+        }
+
+        public Shift CreateShiftOutsideSchedule(CreateShiftOutsideScheduleDTO shiftDto, Institution institution)
+        {
+            var employees = _employeeRepository.ReadFromInstitution(institution.Id).Where(x => shiftDto.EmployeeIds.Contains(x.Id)).ToList();
+            if (employees == null) return null;
+            var now = DateTime.UtcNow;
+            var start = Toolbox.RoundUp(now, TimeSpan.FromMinutes(15));
+            var end = start.AddMinutes(shiftDto.OpenMinutes);
+
+            var shift = new Shift { Start = start, End = end, CheckIns = new List<CheckIn>(), Employees = employees, Institution = institution};
+            return _shiftRepository.Create(shift);
         }
     }
 }

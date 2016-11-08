@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Microsoft.Practices.Unity;
 using API.Services;
 using API.Logic;
+using DataTransferObjects.Shift;
 
 namespace API.Controllers
 {
@@ -61,6 +62,25 @@ namespace API.Controllers
                 return Ok(new { Message = "The employee was successfully checked in!" });
             }
             return BadRequest("Could not check-in the employee - try again!");
+        }
+
+        [HttpPost, Route("createoutsideschedule"), ApiKeyFilter]
+        public IHttpActionResult CreateOutsideSchedule(CreateShiftOutsideScheduleDTO shiftDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
+            if (institution == null) return BadRequest("No institution found with the given name");
+
+            var shift = _shiftService.CreateShiftOutsideSchedule(shiftDto, institution);
+            if(shift != null)
+            {
+                return Ok(Mapper.Map(shift));
+            }
+            return BadRequest("Could not create shift outside of schedule!");
         }
     }
 }
