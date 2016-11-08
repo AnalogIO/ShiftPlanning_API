@@ -68,6 +68,7 @@
     <Compile Include="EmployeeTitles\UpdateEmployeeTitleDTO.cs" />
     <Compile Include="ScheduledShift\UpdateScheduledShiftDTO.cs" />
     <Compile Include="Schedule\UpdateScheduleDTO.cs" />
+    <Compile Include="Volunteers\VolunteerDTO.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

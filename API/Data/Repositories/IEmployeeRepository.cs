@@ -7,7 +7,9 @@ namespace Data.Repositories
     {
         Employee Create(Employee employee);
         IEnumerable<Employee> ReadFromInstitution(int institutionId);
+        IEnumerable<Employee> ReadFromInstitution(string shortKey);
         Employee Read(int id, int institutionId);
+        Employee Read(int id, string shortKey);
         int Update(Employee employee);
         void Delete(int id, int institutionId);
     }
