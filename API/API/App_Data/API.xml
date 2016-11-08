@@ -856,7 +856,7 @@
             Implementation of IShiftService that uses Repositories for data access.
             </summary>
         </member>
-        <member name="M:API.Services.ShiftService.#ctor(Data.Repositories.IShiftRepository,Data.Repositories.IInstitutionRepository)">
+        <member name="M:API.Services.ShiftService.#ctor(Data.Repositories.IShiftRepository,Data.Repositories.IInstitutionRepository,Data.Repositories.IEmployeeRepository)">
             <summary>
             Injection constructor.
             </summary>

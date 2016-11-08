@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Data.Models;
 using Data.Repositories;
+using System.Data.Entity;
 
 namespace Data.Npgsql.Repositories
 {
@@ -55,7 +56,12 @@ namespace Data.Npgsql.Repositories
 
         public IEnumerable<Shift> ReadFromInstitution(int institutionId)
         {
-            return _context.Shifts.Where(x => x.Institution.Id == institutionId);
+            return _context.Shifts
+                .Include(x => x.CheckIns)
+                .Include(x => x.CheckIns.Select(y => y.Employee))
+                .Include(x => x.Employees)
+                .Include(x => x.Employees.Select(y => y.EmployeeTitle))
+                .Where(x => x.Institution.Id == institutionId);
         }
 
         public int Update(Shift shift)

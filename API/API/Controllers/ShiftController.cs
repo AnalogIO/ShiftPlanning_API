@@ -39,24 +39,28 @@ namespace API.Controllers
             var institution = _authManager.GetInstitutionByHeader(Request.Headers);
             if (institution == null) return BadRequest("No institution found with the given name");
 
-            //var shifts = _shiftRepository.GetOngoingShifts(institution.Id, DateTime.UtcNow); // to be used when shifts are implemented
-
             var shifts = Mapper.Map(_shiftService.GetOngoingShiftsByInstitution(institution.Id));
 
-
-
-            /*
-            var fakeOngoingShift = new ShiftDTO
-            {
-                Id = 1,
-                Start = new DateTime(2016, 11, 4, 10, 0, 0),
-                End = new DateTime(2016, 11, 4, 13, 0, 0),
-                CheckedInEmployees = new List<EmployeeDTO>() { new EmployeeDTO { Id = 1, FirstName = "Frederik", LastName = "Jørgensen" } },
-                Employees = new List<EmployeeDTO>(){ new EmployeeDTO { Id = 1, FirstName = "Frederik", LastName = "Jørgensen" }, new EmployeeDTO { Id = 2, FirstName = "Mark", LastName = "Rostgaard" }, new EmployeeDTO { Id = 3, FirstName = "Frederik", LastName = "Dam" } }
-            };
-            var fakeShifts = new List<ShiftDTO>() { fakeOngoingShift };
-            */
             return Ok(new { Shifts = shifts });
+        }
+
+        [HttpPost, Route("{id}/checkin"), ApiKeyFilter]
+        public IHttpActionResult CheckIn(int id, int employeeId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
+            if (institution == null) return BadRequest("No institution found with the given name");
+
+            var checkIn = _shiftService.CheckInEmployee(id, employeeId, institution.Id);
+            if(checkIn != null)
+            {
+                return Ok(new { Message = "The employee was successfully checked in!" });
+            }
+            return BadRequest("Could not check-in the employee - try again!");
         }
     }
 }

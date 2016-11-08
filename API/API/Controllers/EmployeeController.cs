@@ -47,7 +47,7 @@ namespace API.Controllers
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
             }
-            return BadRequest("A user with the given email does already exist!");
+            return BadRequest("The user could not be created!");
         }
 
         // GET api/employees

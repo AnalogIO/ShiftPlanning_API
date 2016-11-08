@@ -76,5 +76,7 @@ namespace API.Services
         /// null if the institution was not found.
         /// </returns>
         IEnumerable<Shift> GetOngoingShiftsByInstitution(int id);
+
+        CheckIn CheckInEmployee(int shiftId, int employeeId, int institutionId);
     }
 }
