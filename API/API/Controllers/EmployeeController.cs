@@ -57,7 +57,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns an array of employees.
         /// </returns>
-        [HttpGet, AdminFilter, Route("")]
+        [HttpGet, Route("")]
         public IHttpActionResult Get()
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
@@ -76,7 +76,7 @@ namespace API.Controllers
         /// Returns the employee with the given id. 
         /// If no employee is found with the corresponding id, the controller will return NotFound (404)
         /// </returns>
-        [HttpGet, AdminFilter, Route("{id}")]
+        [HttpGet, Route("{id}")]
         public IHttpActionResult Get(int id)
         {
             if (!ModelState.IsValid)
