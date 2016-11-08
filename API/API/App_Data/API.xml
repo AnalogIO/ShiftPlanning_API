@@ -553,6 +553,7 @@
         <member name="M:API.Controllers.EmployeeController.Get(System.String)">
             <summary>
             Gets all the employees.
+            Requires 'apiKey' parameter set with the api key of the institution.
             </summary>
             <returns>
             Returns an array of employees.
@@ -561,6 +562,7 @@
         <member name="M:API.Controllers.EmployeeController.Put(System.Int32,DataTransferObjects.UpdateEmployeeDTO)">
             <summary>
             Updates the employee with the specified id.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <param name="id">The id of the employee.</param>
             <returns>
@@ -571,6 +573,7 @@
         <member name="M:API.Controllers.EmployeeController.Delete(System.Int32)">
             <summary>
             Deletes the employee with the specified id.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <param name="id">The id of the employee.</param>
             <returns>Returns 'No Content' (204) if the employee gets deleted.</returns>
@@ -583,6 +586,7 @@
         <member name="M:API.Controllers.EmployeeTitleController.Register(DataTransferObjects.CreateEmployeeTitleDTO)">
             <summary>
             Creates the employee title from the content in the body.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <returns>
             Returns 'Created' (201) if the employee title gets created.
@@ -591,6 +595,7 @@
         <member name="M:API.Controllers.EmployeeTitleController.Get">
             <summary>
             Gets all the employee titles.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <returns>
             Returns an array of employee titles.
@@ -599,6 +604,7 @@
         <member name="M:API.Controllers.EmployeeTitleController.Get(System.Int32)">
             <summary>
             Gets the employee title with the given id.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <param name="id">The id of the employee title.</param>
             <returns>
@@ -609,6 +615,7 @@
         <member name="M:API.Controllers.EmployeeTitleController.Put(System.Int32,DataTransferObjects.UpdateEmployeeTitleDTO)">
             <summary>
             Updates the employee title with the specified id.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <param name="id">The id of the employee title.</param>
             <returns>
@@ -619,6 +626,7 @@
         <member name="M:API.Controllers.EmployeeTitleController.Delete(System.Int32)">
             <summary>
             Deletes the employee title with the specified id.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <param name="id">The id of the employee title.</param>
             <returns>Returns 'No Content' (204) if the employee title gets deleted.</returns>
@@ -696,6 +704,7 @@
         <member name="M:API.Controllers.ScheduleController.Get">
             <summary>
             Gets all the schedules.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <returns>
             Returns an array of schedules.
@@ -704,6 +713,7 @@
         <member name="M:API.Controllers.ScheduleController.Get(System.Int32)">
             <summary>
             Gets the schedule with the given id.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <param name="id">The id of the schedule.</param>
             <returns>
@@ -714,6 +724,7 @@
         <member name="M:API.Controllers.ScheduleController.Register(DataTransferObjects.CreateScheduleDTO)">
             <summary>
             Creates the schedule from the content in the body.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <returns>
             Returns 'Created' (201) if the schedule gets created.
@@ -722,6 +733,7 @@
         <member name="M:API.Controllers.ScheduleController.Delete(System.Int32)">
             <summary>
             Deletes the schedule with the specified id.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <param name="id">The id of the schedule.</param>
             <returns>Returns 'No Content' (204) if the schedule gets deleted.</returns>
@@ -729,6 +741,7 @@
         <member name="M:API.Controllers.ScheduleController.UpdateSchedule(System.Int32,DataTransferObjects.UpdateScheduleDTO)">
             <summary>
             Updates the schedule with the given id from the content in the body.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <returns>
             Returns 'No Content' (204) if the schedule gets updated.
@@ -737,6 +750,7 @@
         <member name="M:API.Controllers.ScheduleController.CreateScheduledShift(System.Int32,DataTransferObjects.CreateScheduledShiftDTO)">
             <summary>
             Creates the scheduled shift to the schedule with the given id from the content in the body.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <returns>
             Returns 'Created' (201) if the scheduled shift gets created.
@@ -745,6 +759,7 @@
         <member name="M:API.Controllers.ScheduleController.UpdateScheduledShift(System.Int32,System.Int32,DataTransferObjects.UpdateScheduledShiftDTO)">
             <summary>
             Updates the scheduled shift with the given id from the content in the body.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <returns>
             Returns 'No Content' (204) if the scheduled shift gets updated.
@@ -753,6 +768,7 @@
         <member name="M:API.Controllers.ScheduleController.CreateMultipleScheduledShift(System.Int32,System.Collections.Generic.IEnumerable{DataTransferObjects.CreateScheduledShiftDTO})">
             <summary>
             Creates the scheduled shifts to the schedule with the given id from the content in the body.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <returns>
             Returns 'Created' (201) if the scheduled shifts gets created.
@@ -761,6 +777,7 @@
         <member name="M:API.Controllers.ScheduleController.RolloutSchedule(System.Int32,System.String,System.String)">
             <summary>
             Creates the scheduled shifts to the schedule with the given id from the content in the body.
+            Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <returns>
             Returns 'Created' (201) if the scheduled shifts gets created.
