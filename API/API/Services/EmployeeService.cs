@@ -18,14 +18,14 @@ namespace API.Services
             _employeeTitleRepository = employeeTitleRepository;
         }
 
-        public IEnumerable<Employee> GetEmployees(Manager manager)
+        public IEnumerable<Employee> GetEmployees(int institutionId)
         {
-            return _employeeRepository.ReadFromInstitution(manager.Institution.Id);
+            return _employeeRepository.ReadFromInstitution(institutionId);
         }
 
-        public Employee GetEmployee(int id, Manager manager)
+        public Employee GetEmployee(int id, int institutionId)
         {
-            return _employeeRepository.Read(id, manager.Institution.Id);
+            return _employeeRepository.Read(id, institutionId);
         }
 
         public Employee CreateEmployee(CreateEmployeeDTO employeeDto, Manager manager)

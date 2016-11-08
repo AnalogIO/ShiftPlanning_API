@@ -58,12 +58,10 @@ namespace API.Controllers
         /// Returns an array of employees.
         /// </returns>
         [HttpGet, Route("")]
-        public IHttpActionResult Get()
+        public IHttpActionResult Get(int institutionId)
         {
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
-
-            var employees = _employeeService.GetEmployees(manager);
+            var employees = _employeeService.GetEmployees(institutionId);
+            if (employees == null) return NotFound();
             return Ok(Mapper.Map(employees));
         }
 
@@ -77,17 +75,14 @@ namespace API.Controllers
         /// If no employee is found with the corresponding id, the controller will return NotFound (404)
         /// </returns>
         [HttpGet, Route("{id}")]
-        public IHttpActionResult Get(int id)
+        public IHttpActionResult Get(int id, int institutionId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
-
-            var employee = _employeeService.GetEmployee(id, manager);
+            var employee = _employeeService.GetEmployee(id, institutionId);
             if (employee != null)
             {
                 return Ok(Mapper.Map(employee));
