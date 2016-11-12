@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DataTransferObjects.Employee;
+using System;
 
-namespace DataTransferObjects
+namespace DataTransferObjects.Shift
 {
     public class CheckInDTO
     {

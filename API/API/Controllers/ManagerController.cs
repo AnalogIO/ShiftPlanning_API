@@ -2,8 +2,8 @@
 using System.Net.Http;
 using System.Web.Http;
 using Data.Repositories;
-using DataTransferObjects;
 using System.Linq;
+using DataTransferObjects.Manager;
 
 namespace API.Controllers
 {

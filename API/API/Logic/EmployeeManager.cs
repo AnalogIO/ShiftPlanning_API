@@ -1,5 +1,5 @@
 ﻿using Data.Models;
-using DataTransferObjects;
+using DataTransferObjects.Employee;
 
 namespace API.Logic
 {

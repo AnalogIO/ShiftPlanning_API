@@ -3,8 +3,8 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using API.Authorization;
-using DataTransferObjects;
 using API.Services;
+using DataTransferObjects.Employee;
 
 namespace API.Controllers
 {

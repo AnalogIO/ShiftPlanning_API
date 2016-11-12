@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataTransferObjects
+namespace DataTransferObjects.Schedule
 {
     public class UpdateScheduleDTO
     {

@@ -5,6 +5,8 @@ using System.Web.Http;
 using API.Authorization;
 using DataTransferObjects;
 using System.Collections.Generic;
+using DataTransferObjects.Schedule;
+using DataTransferObjects.ScheduledShift;
 
 namespace API.Controllers
 {
@@ -239,14 +241,14 @@ namespace API.Controllers
 
         // POST api/schedules/{id}/rollout
         /// <summary>
-        /// Creates the scheduled shifts to the schedule with the given id from the content in the body.
+        /// Creates shifts from the set schedule id in the interval set in the body with from and to datetimes.
         /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <returns>
-        /// Returns 'Created' (201) if the scheduled shifts gets created.
+        /// Returns 'Created' (201) if the scheduled gets rolled out.
         /// </returns>
         [HttpPost, AdminFilter, Route("{id}/rollout")]
-        public IHttpActionResult RolloutSchedule(int id, string fromDate, string toDate)
+        public IHttpActionResult RolloutSchedule(int id, RolloutScheduleDTO rolloutDto)
         {
             if (!ModelState.IsValid)
             {
@@ -256,9 +258,9 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var scheduledShifts = _scheduleService.RolloutSchedule(id, fromDate, toDate, manager);
+            var shifts = _scheduleService.RolloutSchedule(id, rolloutDto, manager);
 
-            if (scheduledShifts != null)
+            if (shifts != null)
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
             }

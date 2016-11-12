@@ -1,6 +1,6 @@
 ﻿using Microsoft.Build.Framework;
 
-namespace DataTransferObjects
+namespace DataTransferObjects.Employee
 {
     public class UpdateEmployeeDTO
     {

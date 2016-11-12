@@ -2,11 +2,9 @@
 using System.Net.Http;
 using System.Web.Http;
 using API.Authorization;
-using Data.Models;
-using Data.Repositories;
-using DataTransferObjects;
 using API.Services;
 using API.Logic;
+using DataTransferObjects.EmployeeTitles;
 
 namespace API.Controllers
 {

@@ -1,10 +1,8 @@
-﻿using System;
+﻿using DataTransferObjects.Employee;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DataTransferObjects
+namespace DataTransferObjects.Shift
 {
     public class ShiftDTO
     {

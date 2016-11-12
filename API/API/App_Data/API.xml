@@ -520,7 +520,7 @@
             Controller to manipulate with the employees.
             </summary>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Register(DataTransferObjects.CreateEmployeeDTO)">
+        <member name="M:API.Controllers.EmployeeController.Register(DataTransferObjects.Employee.CreateEmployeeDTO)">
             <summary>
             Creates the employee from the content in the body.
             Requires 'Authorization' header set with the token granted upon manager login.
@@ -559,7 +559,7 @@
             Returns an array of employees.
             </returns>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Put(System.Int32,DataTransferObjects.UpdateEmployeeDTO)">
+        <member name="M:API.Controllers.EmployeeController.Put(System.Int32,DataTransferObjects.Employee.UpdateEmployeeDTO)">
             <summary>
             Updates the employee with the specified id.
             Requires 'Authorization' header set with the token granted upon manager login.
@@ -583,7 +583,7 @@
             Controller to manipulate with the employee titles.
             </summary>
         </member>
-        <member name="M:API.Controllers.EmployeeTitleController.Register(DataTransferObjects.CreateEmployeeTitleDTO)">
+        <member name="M:API.Controllers.EmployeeTitleController.Register(DataTransferObjects.EmployeeTitles.CreateEmployeeTitleDTO)">
             <summary>
             Creates the employee title from the content in the body.
             Requires 'Authorization' header set with the token granted upon manager login.
@@ -612,7 +612,7 @@
             If no employee title is found with the corresponding id, the controller will return NotFound (404)
             </returns>
         </member>
-        <member name="M:API.Controllers.EmployeeTitleController.Put(System.Int32,DataTransferObjects.UpdateEmployeeTitleDTO)">
+        <member name="M:API.Controllers.EmployeeTitleController.Put(System.Int32,DataTransferObjects.EmployeeTitles.UpdateEmployeeTitleDTO)">
             <summary>
             Updates the employee title with the specified id.
             Requires 'Authorization' header set with the token granted upon manager login.
@@ -660,7 +660,7 @@
             The controller constructor.
             </summary>
         </member>
-        <member name="M:API.Controllers.ManagerController.Login(DataTransferObjects.ManagerLoginDTO)">
+        <member name="M:API.Controllers.ManagerController.Login(DataTransferObjects.Manager.ManagerLoginDTO)">
             <summary>
             Login as the manager with the given credentials in the body
             </summary>
@@ -721,7 +721,7 @@
             If no schedule is found with the corresponding id, the controller will return NotFound (404)
             </returns>
         </member>
-        <member name="M:API.Controllers.ScheduleController.Register(DataTransferObjects.CreateScheduleDTO)">
+        <member name="M:API.Controllers.ScheduleController.Register(DataTransferObjects.Schedule.CreateScheduleDTO)">
             <summary>
             Creates the schedule from the content in the body.
             Requires 'Authorization' header set with the token granted upon manager login.
@@ -738,7 +738,7 @@
             <param name="id">The id of the schedule.</param>
             <returns>Returns 'No Content' (204) if the schedule gets deleted.</returns>
         </member>
-        <member name="M:API.Controllers.ScheduleController.UpdateSchedule(System.Int32,DataTransferObjects.UpdateScheduleDTO)">
+        <member name="M:API.Controllers.ScheduleController.UpdateSchedule(System.Int32,DataTransferObjects.Schedule.UpdateScheduleDTO)">
             <summary>
             Updates the schedule with the given id from the content in the body.
             Requires 'Authorization' header set with the token granted upon manager login.
@@ -747,7 +747,7 @@
             Returns 'No Content' (204) if the schedule gets updated.
             </returns>
         </member>
-        <member name="M:API.Controllers.ScheduleController.CreateScheduledShift(System.Int32,DataTransferObjects.CreateScheduledShiftDTO)">
+        <member name="M:API.Controllers.ScheduleController.CreateScheduledShift(System.Int32,DataTransferObjects.ScheduledShift.CreateScheduledShiftDTO)">
             <summary>
             Creates the scheduled shift to the schedule with the given id from the content in the body.
             Requires 'Authorization' header set with the token granted upon manager login.
@@ -756,7 +756,7 @@
             Returns 'Created' (201) if the scheduled shift gets created.
             </returns>
         </member>
-        <member name="M:API.Controllers.ScheduleController.UpdateScheduledShift(System.Int32,System.Int32,DataTransferObjects.UpdateScheduledShiftDTO)">
+        <member name="M:API.Controllers.ScheduleController.UpdateScheduledShift(System.Int32,System.Int32,DataTransferObjects.ScheduledShift.UpdateScheduledShiftDTO)">
             <summary>
             Updates the scheduled shift with the given id from the content in the body.
             Requires 'Authorization' header set with the token granted upon manager login.
@@ -765,7 +765,7 @@
             Returns 'No Content' (204) if the scheduled shift gets updated.
             </returns>
         </member>
-        <member name="M:API.Controllers.ScheduleController.CreateMultipleScheduledShift(System.Int32,System.Collections.Generic.IEnumerable{DataTransferObjects.CreateScheduledShiftDTO})">
+        <member name="M:API.Controllers.ScheduleController.CreateMultipleScheduledShift(System.Int32,System.Collections.Generic.IEnumerable{DataTransferObjects.ScheduledShift.CreateScheduledShiftDTO})">
             <summary>
             Creates the scheduled shifts to the schedule with the given id from the content in the body.
             Requires 'Authorization' header set with the token granted upon manager login.
@@ -774,13 +774,13 @@
             Returns 'Created' (201) if the scheduled shifts gets created.
             </returns>
         </member>
-        <member name="M:API.Controllers.ScheduleController.RolloutSchedule(System.Int32,System.String,System.String)">
+        <member name="M:API.Controllers.ScheduleController.RolloutSchedule(System.Int32,DataTransferObjects.Schedule.RolloutScheduleDTO)">
             <summary>
-            Creates the scheduled shifts to the schedule with the given id from the content in the body.
+            Creates shifts from the set schedule id in the interval set in the body with from and to datetimes.
             Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <returns>
-            Returns 'Created' (201) if the scheduled shifts gets created.
+            Returns 'Created' (201) if the scheduled gets rolled out.
             </returns>
         </member>
         <member name="T:API.Controllers.ShiftController">

@@ -1,4 +1,4 @@
-﻿namespace DataTransferObjects
+﻿namespace DataTransferObjects.Manager
 {
     public class ManagerLoginResponse
     {

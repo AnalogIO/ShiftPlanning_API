@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Data.Models;
-using DataTransferObjects;
+using DataTransferObjects.Schedule;
+using DataTransferObjects.ScheduledShift;
 
 namespace API.Logic
 {
@@ -12,7 +13,7 @@ namespace API.Logic
         void DeleteSchedule(int scheduleId, Manager manager);
         Schedule GetSchedule(int scheduleId, Manager manager);
         IEnumerable<Schedule> GetSchedules(Manager manager);
-        IEnumerable<Shift> RolloutSchedule(int scheduleId, string fromDate, string toDate, Manager manager);
+        IEnumerable<Shift> RolloutSchedule(int scheduleId, RolloutScheduleDTO rolloutDto, Manager manager);
         Schedule UpdateSchedule(int scheduleId, UpdateScheduleDTO scheduleDto, Manager manager);
         ScheduledShift UpdateScheduledShift(int scheduledShiftId, int scheduleId, UpdateScheduledShiftDTO scheduledShiftDto, Manager manager);
     }

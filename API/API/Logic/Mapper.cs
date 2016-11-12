@@ -1,9 +1,9 @@
 ﻿using Data.Models;
-using DataTransferObjects;
-using System;
+using DataTransferObjects.Employee;
+using DataTransferObjects.EmployeeTitles;
+using DataTransferObjects.Schedule;
+using DataTransferObjects.Shift;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace API.Logic
 {

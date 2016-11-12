@@ -1,6 +1,7 @@
 ﻿using Data.Models;
 using Data.Repositories;
-using DataTransferObjects;
+using DataTransferObjects.Schedule;
+using DataTransferObjects.ScheduledShift;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,10 +97,13 @@ namespace API.Logic
             return _scheduleRepository.Update(schedule) > 0 ? schedule : null;
         }
 
-        public IEnumerable<Shift> RolloutSchedule(int scheduleId, string fromDate, string toDate, Manager manager)
+        public IEnumerable<Shift> RolloutSchedule(int scheduleId, RolloutScheduleDTO rolloutDto, Manager manager)
         {
-            var from = DateTime.Parse(fromDate);
-            var to = DateTime.Parse(toDate);
+            //var from = DateTime.Parse(fromDate);
+            //var to = DateTime.Parse(toDate);
+
+            var from = DateTimeOffset.Parse(rolloutDto.From).UtcDateTime;
+            var to = DateTimeOffset.Parse(rolloutDto.To).UtcDateTime;
 
             var currentDate = from;
             var currentDay = (int)from.DayOfWeek;

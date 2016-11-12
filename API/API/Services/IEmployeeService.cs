@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Data.Models;
-using DataTransferObjects;
+using DataTransferObjects.Employee;
 
 namespace API.Services
 {
