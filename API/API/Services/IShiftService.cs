@@ -78,6 +78,11 @@ namespace API.Services
         /// </returns>
         IEnumerable<Shift> GetOngoingShiftsByInstitution(int id);
 
+        Shift GetShift(int shiftId, int institutionId);
+
+        void DeleteShift(int shiftId, int institutionId);
+        Shift UpdateShift(int shiftId, int institutionId, UpdateShiftDTO updateShiftDto);
+
         CheckIn CheckInEmployee(int shiftId, int employeeId, int institutionId);
 
         Shift CreateShiftOutsideSchedule(CreateShiftOutsideScheduleDTO shiftDto, Institution institution);

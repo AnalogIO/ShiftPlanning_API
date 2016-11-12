@@ -8,6 +8,8 @@ using Microsoft.Practices.Unity;
 using API.Services;
 using API.Logic;
 using DataTransferObjects.Shift;
+using System.Net.Http;
+using System.Net;
 
 namespace API.Controllers
 {
@@ -33,6 +35,48 @@ namespace API.Controllers
             if (institution == null) return BadRequest("No institution found with the given name");
             return Ok(_shiftService.GetByInstitution(institution.Id));
         }
+
+        [HttpGet, Route("{id}")]
+        public IHttpActionResult Get(int id)
+        {
+            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
+            if (institution == null) return BadRequest("No institution found with the given name");
+
+            var shift = _shiftService.GetShift(id, institution.Id);
+            if(shift != null)
+            {
+                return Ok(Mapper.Map(shift));
+            }
+            return NotFound();
+        }
+
+        [HttpDelete, Route("{id}")]
+        public IHttpActionResult Delete(int id)
+        {
+            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
+            if (institution == null) return BadRequest("No institution found with the given name");
+
+            _shiftService.DeleteShift(id, institution.Id);
+            
+            return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+        }
+
+        [HttpPut, Route("{id}")]
+        public IHttpActionResult Update(int id, UpdateShiftDTO shiftDto)
+        {
+            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
+            if (institution == null) return BadRequest("No institution found with the given name");
+
+            var shift = _shiftService.UpdateShift(id, institution.Id, shiftDto);
+
+            if(shift != null)
+            {
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+            }
+
+            return BadRequest("The shift could not be updated!");
+        }
+
 
         [HttpGet, Route("ongoing"), ApiKeyFilter]
         public IHttpActionResult OnGoing()

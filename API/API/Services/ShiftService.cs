@@ -107,5 +107,33 @@ namespace API.Services
             var shift = new Shift { Start = start, End = end, CheckIns = new List<CheckIn>(), Employees = employees, Institution = institution};
             return _shiftRepository.Create(shift);
         }
+
+        public Shift GetShift(int shiftId, int institutionId)
+        {
+            return _shiftRepository.Read(shiftId, institutionId);
+        }
+
+        public void DeleteShift(int shiftId, int institutionId)
+        {
+            _shiftRepository.Delete(shiftId, institutionId);
+        }
+
+        public Shift UpdateShift(int shiftId, int institutionId, UpdateShiftDTO updateShiftDto)
+        {
+            var shift = _shiftRepository.Read(shiftId, institutionId);
+            if (shift == null) return null;
+
+            var employees = _employeeRepository.ReadFromInstitution(institutionId).Where(x => updateShiftDto.EmployeeIds.Contains(x.Id)).ToList();
+
+            var start = DateTimeOffset.Parse(updateShiftDto.Start).UtcDateTime;
+            var end = DateTimeOffset.Parse(updateShiftDto.End).UtcDateTime;
+
+            shift.Employees = employees;
+            shift.CheckIns = shift.CheckIns.Where(x => updateShiftDto.CheckInIds.Contains(x.Id)).ToList();
+            shift.Start = start;
+            shift.End = end;
+
+            return _shiftRepository.Update(shift) > 0 ? shift : null;
+        }
     }
 }
