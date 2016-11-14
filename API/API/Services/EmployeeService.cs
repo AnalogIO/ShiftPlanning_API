@@ -59,7 +59,8 @@ namespace API.Services
 
                 var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Institution.Id);
                 if (title != null) employee.EmployeeTitle = title;
-                return _employeeRepository.Update(employee) > 0 ? employee : null;
+                _employeeRepository.Update(employee);
+                return employee;
             }
             return null;
         }

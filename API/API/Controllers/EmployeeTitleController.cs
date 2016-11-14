@@ -93,7 +93,7 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var employeeTitle = _employeeTitleService.GetEmployeeTitles(manager);
+            var employeeTitle = _employeeTitleService.GetEmployeeTitle(id, manager);
             if (employeeTitle != null)
             {
                 return Ok(Mapper.Map(employeeTitle));

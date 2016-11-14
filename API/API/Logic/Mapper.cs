@@ -11,17 +11,15 @@ namespace API.Logic
     {
         public static EmployeeDTO Map(Employee employee)
         {
-            return new EmployeeDTO { Id = employee.Id, FirstName = employee.FirstName, LastName = employee.LastName, EmployeeTitle = employee.EmployeeTitle?.Title, EmployeeTitleId = employee.EmployeeTitle?.Id };
+            return new EmployeeDTO { Id = employee.Id, FirstName = employee.FirstName, LastName = employee.LastName, Email = employee.Email, Active = employee.Active, EmployeeTitle = employee.EmployeeTitle?.Title, EmployeeTitleId = employee.EmployeeTitle?.Id };
         }
 
         public static IEnumerable<EmployeeDTO> Map(IEnumerable<Employee> employees)
         {
-            var employeeDtos = new List<EmployeeDTO>();
             foreach(Employee employee in employees)
             {
-                employeeDtos.Add(Map(employee));
+                yield return Map(employee);
             }
-            return employeeDtos;
         }
 
         public static ScheduledShiftDTO Map(ScheduledShift scheduledShift)
@@ -31,12 +29,10 @@ namespace API.Logic
 
         public static IEnumerable<ScheduledShiftDTO> Map(IEnumerable<ScheduledShift> scheduledShifts)
         {
-            var scheduledShiftDtos = new List<ScheduledShiftDTO>();
             foreach (ScheduledShift scheduledShift in scheduledShifts)
             {
-                scheduledShiftDtos.Add(Map(scheduledShift));
+                yield return Map(scheduledShift);
             }
-            return scheduledShiftDtos;
         }
 
         public static ScheduleDTO Map(Schedule schedule)
@@ -46,12 +42,10 @@ namespace API.Logic
 
         public static IEnumerable<ScheduleDTO> Map(IEnumerable<Schedule> schedules)
         {
-            var scheduleDtos = new List<ScheduleDTO>();
             foreach (Schedule schedule in schedules)
             {
-                scheduleDtos.Add(Map(schedule));
+                yield return Map(schedule);
             }
-            return scheduleDtos;
         }
 
         public static CheckInDTO Map(CheckIn checkIn)
@@ -61,12 +55,10 @@ namespace API.Logic
 
         public static IEnumerable<CheckInDTO> Map(IEnumerable<CheckIn> checkIns)
         {
-            var checkInDtos = new List<CheckInDTO>();
             foreach (CheckIn checkIn in checkIns)
             {
-                checkInDtos.Add(Map(checkIn));
+                yield return Map(checkIn);
             }
-            return checkInDtos;
         }
 
         public static ShiftDTO Map(Shift shift)
@@ -76,12 +68,10 @@ namespace API.Logic
 
         public static IEnumerable<ShiftDTO> Map(IEnumerable<Shift> shifts)
         {
-            var shiftDtos = new List<ShiftDTO>();
             foreach (Shift shift in shifts)
             {
-                shiftDtos.Add(Map(shift));
+                yield return Map(shift);
             }
-            return shiftDtos;
         }
 
         public static EmployeeTitleDTO Map(EmployeeTitle employeeTitle)
@@ -91,12 +81,10 @@ namespace API.Logic
 
         public static IEnumerable<EmployeeTitleDTO> Map(IEnumerable<EmployeeTitle> employeeTitles)
         {
-            var employeeTitleDtos = new List<EmployeeTitleDTO>();
             foreach (EmployeeTitle employeeTitle in employeeTitles)
             {
-                employeeTitleDtos.Add(Map(employeeTitle));
+                yield return Map(employeeTitle);
             }
-            return employeeTitleDtos;
         }
     }
 }
