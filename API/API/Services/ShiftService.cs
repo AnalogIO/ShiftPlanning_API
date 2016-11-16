@@ -90,7 +90,7 @@ namespace API.Services
             if (shift.CheckIns.Where(x => x.Employee.Id == employeeId).FirstOrDefault() != null) return null;
             var employee = _employeeRepository.Read(employeeId, institutionId);
             if (employee == null) return null;
-            var now = DateTime.UtcNow;
+            var now = DateTime.Now;
             var checkIn = new CheckIn { Employee = employee, Time = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second) };
             shift.CheckIns.Add(checkIn);
             return _shiftRepository.Update(shift) > 0 ? shift.CheckIns.LastOrDefault() : null;
@@ -100,7 +100,7 @@ namespace API.Services
         {
             var employees = _employeeRepository.ReadFromInstitution(institution.Id).Where(x => shiftDto.EmployeeIds.Contains(x.Id)).ToList();
             if (employees == null) return null;
-            var now = DateTime.UtcNow;
+            var now = DateTime.Now;
             var start = Toolbox.RoundUp(now, TimeSpan.FromMinutes(15));
             var end = start.AddMinutes(shiftDto.OpenMinutes);
 
