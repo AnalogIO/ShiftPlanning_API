@@ -47,7 +47,7 @@ namespace API.Controllers
             var employeeTitle = _employeeTitleService.CreateEmployeeTitle(employeeTitleDto, manager);
             if (employeeTitle != null)
             {
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
+                return Created($"/api/employeetitles/{employeeTitle.Id}", Mapper.Map(employeeTitle));
             }
             return BadRequest("Could not create the employee title!");
         }

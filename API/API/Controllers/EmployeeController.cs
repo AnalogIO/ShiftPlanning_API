@@ -46,7 +46,7 @@ namespace API.Controllers
             var employee = _employeeService.CreateEmployee(employeeDto, manager);
             if (employee != null)
             {
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
+                return Created($"/api/employees/{employee.Id}", Mapper.Map(employee));
             }
             return BadRequest("The user could not be created!");
         }
@@ -73,7 +73,7 @@ namespace API.Controllers
             var employees = _employeeService.CreateManyEmployees(employeeDtos, manager);
             if (employees != null)
             {
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
+                return Created($"/api/employees", Mapper.Map(employees));
             }
             return BadRequest("The employees could not be created!");
         }
