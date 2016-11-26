@@ -51,6 +51,33 @@ namespace API.Controllers
             return BadRequest("The user could not be created!");
         }
 
+        // POST api/employees/createmany
+        /// <summary>
+        /// Creates the employees from the content in the body.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
+        /// </summary>
+        /// <returns>
+        /// Returns 'Created' (201) if the employees gets created.
+        /// </returns>
+        [HttpPost, AdminFilter, Route("createmany")]
+        public IHttpActionResult RegisterMany(CreateEmployeeDTO[] employeeDtos)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            var employees = _employeeService.CreateManyEmployees(employeeDtos, manager);
+            if (employees != null)
+            {
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
+            }
+            return BadRequest("The employees could not be created!");
+        }
+
         // GET api/employees
         /// <summary>
         /// Gets all the employees.
