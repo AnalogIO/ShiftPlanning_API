@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using Data.Models;
-using DataTransferObjects.Volunteers;
+using DataTransferObjects.Public.Employees;
 
 namespace PublicApi.Mapping
 {
     public interface IVolunteerMapper
     {
-        VolunteerDTO Map(Employee employee);
-        IEnumerable<VolunteerDTO> Map(IEnumerable<Employee> employees);
+        EmployeeDTO Map(Employee employee);
+        IEnumerable<EmployeeDTO> Map(IEnumerable<Employee> employees);
     }
 }

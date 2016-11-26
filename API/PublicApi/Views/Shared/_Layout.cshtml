@@ -27,11 +27,20 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - AnalogIO</p>
-        </footer>
     </div>
+        
+    <footer class="footer">
+        <div class="container">
+            <hr />
+            @{
+                const int creationYear = 2016;
+                var thisYear = DateTime.Today.Year;
+
+                var copyYear = thisYear > creationYear ? $"{creationYear}-{thisYear}" : thisYear.ToString();
+            }<p>&copy; @copyYear - AnalogIO</p>
+        </div>
+    </footer>
+    
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

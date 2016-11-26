@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DataTransferObjects.OpeningHours
+namespace DataTransferObjects.Public.OpeningHours
 {
     /// <summary>
     /// Contains the public information about a single shift, and the employees.

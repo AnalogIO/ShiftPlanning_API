@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Data.Models;
-using DataTransferObjects.Volunteers;
+using DataTransferObjects.Public.Employees;
 
 namespace PublicApi.Mapping
 {
     public class VolunteerMapper : IVolunteerMapper
     {
-        public IEnumerable<VolunteerDTO> Map(IEnumerable<Employee> employees)
+        public IEnumerable<EmployeeDTO> Map(IEnumerable<Employee> employees)
         {
-            return employees.Select(emp => new VolunteerDTO
+            return employees.Select(emp => new EmployeeDTO
             {
                 Name = emp.FirstName,
                 Title = emp.EmployeeTitle.Title,
@@ -17,9 +17,9 @@ namespace PublicApi.Mapping
             });
         }
 
-        public VolunteerDTO Map(Employee employee)
+        public EmployeeDTO Map(Employee employee)
         {
-            return new VolunteerDTO
+            return new EmployeeDTO
             {
                 Name = employee.FirstName,
                 Title = employee.EmployeeTitle.Title,

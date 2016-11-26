@@ -191,7 +191,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -231,9 +230,9 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\IsOpenController.cs" />
-    <Compile Include="Controllers\OpeningHoursController.cs" />
-    <Compile Include="Controllers\VolunteersController.cs" />
+    <Compile Include="Controllers\OpenController.cs" />
+    <Compile Include="Controllers\ShiftsController.cs" />
+    <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -244,6 +243,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\DataTransferObjects.xml" />
+    <Content Include="App_Data\PublicApi.XML" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />

@@ -59,77 +59,77 @@
             The employee title.
             </summary>
         </member>
-        <member name="T:DataTransferObjects.OpeningHours.IsOpenDTO">
+        <member name="T:DataTransferObjects.Public.OpeningHours.IsOpenDTO">
             <summary>
             Contains information used to identify whether or not a given institution is open.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.OpeningHours.IsOpenDTO.Open">
+        <member name="P:DataTransferObjects.Public.OpeningHours.IsOpenDTO.Open">
             <summary>
             States whether or not a given institution is open.
             </summary>
         </member>
-        <member name="T:DataTransferObjects.OpeningHours.OpeningHourEmployeeDTO">
+        <member name="T:DataTransferObjects.Public.OpeningHours.OpeningHourEmployeeDTO">
             <summary>
             Containing public information about a single employee in an institution.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.OpeningHours.OpeningHourEmployeeDTO.Id">
+        <member name="P:DataTransferObjects.Public.OpeningHours.OpeningHourEmployeeDTO.Id">
             <summary>
             The employee ID. Can be used across Employees and CheckedInEmployees to identify the same employee.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.OpeningHours.OpeningHourEmployeeDTO.FirstName">
+        <member name="P:DataTransferObjects.Public.OpeningHours.OpeningHourEmployeeDTO.FirstName">
             <summary>
             The first name of the employee.
             </summary>
         </member>
-        <member name="T:DataTransferObjects.OpeningHours.OpeningHoursDTO">
+        <member name="T:DataTransferObjects.Public.OpeningHours.OpeningHoursDTO">
             <summary>
             Contains the public information about a single shift, and the employees.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.OpeningHours.OpeningHoursDTO.Id">
+        <member name="P:DataTransferObjects.Public.OpeningHours.OpeningHoursDTO.Id">
             <summary>
             The ID of the shift.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.OpeningHours.OpeningHoursDTO.Start">
+        <member name="P:DataTransferObjects.Public.OpeningHours.OpeningHoursDTO.Start">
             <summary>
             The starting date and time of the shift.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.OpeningHours.OpeningHoursDTO.End">
+        <member name="P:DataTransferObjects.Public.OpeningHours.OpeningHoursDTO.End">
             <summary>
             The ending date and time.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.OpeningHours.OpeningHoursDTO.Employees">
+        <member name="P:DataTransferObjects.Public.OpeningHours.OpeningHoursDTO.Employees">
             <summary>
             The attending employees.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.OpeningHours.OpeningHoursDTO.CheckedInEmployees">
+        <member name="P:DataTransferObjects.Public.OpeningHours.OpeningHoursDTO.CheckedInEmployees">
             <summary>
             The employees that have checked in for this shift.
             </summary>
         </member>
-        <member name="T:DataTransferObjects.Volunteers.VolunteerDTO">
+        <member name="T:DataTransferObjects.Public.Employees.EmployeeDTO">
             <summary>
             Contains public information about the volunteers in an institution.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.Volunteers.VolunteerDTO.Name">
+        <member name="P:DataTransferObjects.Public.Employees.EmployeeDTO.Name">
             <summary>
             The shown name of the volunteer.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.Volunteers.VolunteerDTO.Title">
+        <member name="P:DataTransferObjects.Public.Employees.EmployeeDTO.Title">
             <summary>
             The title of the volunteer. This can for instance be "Barista".
             </summary>
         </member>
-        <member name="P:DataTransferObjects.Volunteers.VolunteerDTO.Photo">
+        <member name="P:DataTransferObjects.Public.Employees.EmployeeDTO.Photo">
             <summary>
             A photo of the volunteer.
             </summary>

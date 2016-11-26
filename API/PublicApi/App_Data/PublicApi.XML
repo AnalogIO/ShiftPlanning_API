@@ -495,51 +495,82 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="T:PublicApi.Controllers.IsOpenController">
+        <member name="T:PublicApi.Controllers.OpenController">
             <summary>
-            The IsOpenController is the public interface that can tell whether or not
+            The OpenController is the public interface that can tell whether or not
             a given institution is open.
             </summary>
         </member>
-        <member name="M:PublicApi.Controllers.IsOpenController.#ctor(Data.Services.IShiftService)">
+        <member name="M:PublicApi.Controllers.OpenController.#ctor(Data.Services.IShiftService)">
             <summary>
-            Dependency injection constructor of IsOpenController
+            Dependency injection constructor of OpenController
             </summary>
             <param name="shiftService">An IShiftService implementation</param>
         </member>
-        <member name="M:PublicApi.Controllers.IsOpenController.IsOpen(System.String)">
+        <member name="M:PublicApi.Controllers.OpenController.IsOpen(System.String)">
             <summary>
             Find out whether or not the institution identified by short key is open.
             </summary>
             <param name="shortKey">The short key of the institution.</param>
             <returns></returns>
         </member>
-        <member name="T:PublicApi.Controllers.OpeningHoursController">
+        <member name="T:PublicApi.Controllers.ShiftsController">
             <summary>
-            The OpeningHoursController is the public entrance to get opening hour and shift information.
+            The ShiftsController is the public entrance to get opening hour and shift information.
             </summary>
         </member>
-        <member name="M:PublicApi.Controllers.OpeningHoursController.#ctor(Data.Services.IShiftService,PublicApi.Mapping.IOpeningHoursMapper)">
+        <member name="M:PublicApi.Controllers.ShiftsController.#ctor(Data.Services.IShiftService,PublicApi.Mapping.IOpeningHoursMapper)">
             <summary>
             Dependency injection constructor.
             </summary>
             <param name="shiftService"></param>
             <param name="mapper"></param>
         </member>
-        <member name="M:PublicApi.Controllers.OpeningHoursController.Get(System.String)">
+        <member name="M:PublicApi.Controllers.ShiftsController.Get(System.String)">
             <summary>
             Fetch shifts for the next week for a given institution.
             </summary>
             <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
             <returns>A collection of OpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
         </member>
-        <member name="M:PublicApi.Controllers.OpeningHoursController.GetIntervals(System.String,System.Int32)">
+        <member name="M:PublicApi.Controllers.ShiftsController.GetIntervals(System.String,System.Int32)">
             <summary>
             Fetch shifts for the next week for a given institution.
             </summary>
             <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
             <param name="interval">The number of minutes an interval should span.</param>
             <returns>A collection of OpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
+        </member>
+        <member name="T:PublicApi.Controllers.EmployeesController">
+            <summary>
+            The public API to access employee information for institutions.
+            </summary>
+        </member>
+        <member name="M:PublicApi.Controllers.EmployeesController.Get(System.String)">
+            <summary>
+            Retrive all employees for a given institution.
+            </summary>
+            <param name="shortKey">The shortkey of the institution.</param>
+            <returns>A collection of employees, if the institution was found. Http 404 otherwise.</returns>
+        </member>
+        <member name="M:PublicApi.Controllers.EmployeesController.Get(System.String,System.Int32)">
+            <summary>
+            Retrieve a certain employee from an institution.
+            </summary>
+            <param name="shortKey">The shortkey of an institution.</param>
+            <param name="id">The id of the employee.</param>
+            <returns>A representation of the employee, if a shortKey/id match was found.</returns>
+        </member>
+        <member name="M:PublicApi.Controllers.EmployeesController.GetImage(System.String,System.Int32)">
+            <summary>
+            Retrieve the photo for an employee.
+            </summary>
+            <param name="shortKey">The shortkey of an institution.</param>
+            <param name="id">The id of an employee.</param>
+            <returns>
+            A photo if the shortkey/id match was found. Http 404 otherwise.
+            If the employee has no photo registered, an empty response is generated.
+            </returns>
         </member>
         <member name="T:PublicApi.Mapping.IOpeningHoursMapper">
             <summary>

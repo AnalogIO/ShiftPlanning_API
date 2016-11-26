@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Data.Models;
-using DataTransferObjects.OpeningHours;
+using DataTransferObjects.Public.OpeningHours;
 
 namespace PublicApi.Mapping
 {
