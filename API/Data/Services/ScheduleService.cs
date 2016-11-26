@@ -11,14 +11,12 @@ namespace Data.Services
     public class ScheduleService : IScheduleService
     {
         private readonly IScheduleRepository _scheduleRepository;
-        private readonly IOrganizationRepository _organizationRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IShiftRepository _shiftRepository;
 
-        public ScheduleService(IScheduleRepository scheduleRepository, IOrganizationRepository organizationRepository, IEmployeeRepository employeeRepository, IShiftRepository shiftRepository)
+        public ScheduleService(IScheduleRepository scheduleRepository, IEmployeeRepository employeeRepository, IShiftRepository shiftRepository)
         {
             _scheduleRepository = scheduleRepository;
-            _organizationRepository = organizationRepository;
             _employeeRepository = employeeRepository;
             _shiftRepository = shiftRepository;
         }
@@ -90,7 +88,7 @@ namespace Data.Services
         public Schedule UpdateSchedule(int scheduleId, UpdateScheduleDTO scheduleDto, Manager manager)
         {
             var schedule = _scheduleRepository.Read(scheduleId, manager.Organization.Id);
-            if (schedule != null) return null;
+            if (schedule == null) return null;
 
             schedule.Name = scheduleDto.Name;
             schedule.NumberOfWeeks = scheduleDto.NumberOfWeeks;

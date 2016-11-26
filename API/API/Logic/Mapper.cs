@@ -26,7 +26,7 @@ namespace API.Logic
                 Active = employee.Active,
                 EmployeeTitle = employee.EmployeeTitle?.Title,
                 EmployeeTitleId = employee.EmployeeTitle?.Id,
-                PhotoRef = $"{url.Scheme}://{url.Host}{portString}/{PhotosController.RoutePrefix}/{employee.Photo.Id}"
+                PhotoRef = $"{url.Scheme}://{url.Host}{portString}/shiftplanning/{PhotosController.RoutePrefix}/{employee.Photo.Id}/{employee.Organization.Id}" // ugly temp fix for /shiftplanning/
             };
         }
 

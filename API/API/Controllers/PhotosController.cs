@@ -24,18 +24,15 @@ namespace API.Controllers
         /// Retrieves a photo from an organization.
         /// </summary>
         /// <param name="photoId">Id of the photo.</param>
+        /// <param name="organizationId">Id of the organization.</param>
         /// <returns>
         /// A response containing the image if found. 
         /// If the provided authorization token is invalid: Http 400 (Bad Request) is returned.
         /// If the photo is not found: Http 404 (Not Found) is returned.</returns>
-        [AdminFilter]
-        [HttpGet, Route("{photoId}")]
-        public IHttpActionResult Get(int photoId)
+        [HttpGet, Route("{photoId}/{organizationId}")]
+        public IHttpActionResult Get(int photoId, int organizationId)
         {
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
-
-            var photo = _photoService.Read(photoId, manager.Organization.Id);
+            var photo = _photoService.Read(photoId, organizationId);
 
             if (photo == null) return NotFound();
 
