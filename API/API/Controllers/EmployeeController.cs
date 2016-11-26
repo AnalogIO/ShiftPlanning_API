@@ -53,12 +53,11 @@ namespace API.Controllers
 
         // POST api/employees/createmany
         /// <summary>
-        /// Creates the employee from the content in the body.
+        /// Creates the employees from the content in the body.
         /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <returns>
-        /// Returns 'Created' (201) if the employee gets created.
-        /// If an employee already exist with the given email, the controller will return BadRequest (400).
+        /// Returns 'Created' (201) if the employees gets created.
         /// </returns>
         [HttpPost, AdminFilter, Route("createmany")]
         public IHttpActionResult RegisterMany(CreateEmployeeDTO[] employeeDtos)
