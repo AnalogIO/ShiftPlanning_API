@@ -19,6 +19,11 @@ namespace API.Controllers
         private readonly IAuthManager _authManager;
         private readonly IScheduleService _scheduleService;
 
+        /// <summary>
+        /// The constructor of the schedule controller
+        /// </summary>
+        /// <param name="authManager"></param>
+        /// <param name="scheduleService"></param>
         public ScheduleController(IAuthManager authManager, IScheduleService scheduleService)
         {
             _authManager = authManager;

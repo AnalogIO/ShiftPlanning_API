@@ -520,6 +520,13 @@
             Controller to manipulate with the employees.
             </summary>
         </member>
+        <member name="M:API.Controllers.EmployeeController.#ctor(API.Authorization.IAuthManager,Data.Services.IEmployeeService)">
+            <summary>
+            The constructor of the employee controller
+            </summary>
+            <param name="authManager"></param>
+            <param name="employeeService"></param>
+        </member>
         <member name="M:API.Controllers.EmployeeController.Register(DataTransferObjects.Employee.CreateEmployeeDTO)">
             <summary>
             Creates the employee from the content in the body.
@@ -574,6 +581,7 @@
             Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <param name="id">The id of the employee.</param>
+            <param name="employeeDto">The dto of the employee</param>
             <returns>
             Returns 'No Content' (204) if the employee gets updated.
             If no employee is found with the given id, the controller will return NotFound (404)
@@ -591,6 +599,13 @@
             <summary>
             Controller to manipulate with the employee titles.
             </summary>
+        </member>
+        <member name="M:API.Controllers.EmployeeTitleController.#ctor(API.Authorization.IAuthManager,Data.Services.IEmployeeTitleService)">
+            <summary>
+            Employee title controller constructor
+            </summary>
+            <param name="authManager"></param>
+            <param name="employeeTitleService"></param>
         </member>
         <member name="M:API.Controllers.EmployeeTitleController.Register(DataTransferObjects.EmployeeTitles.CreateEmployeeTitleDTO)">
             <summary>
@@ -627,6 +642,7 @@
             Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <param name="id">The id of the employee title.</param>
+            <param name="employeeTitleDto">The employee title dto</param>
             <returns>
             Returns 'No Content' (204) if the employee title gets updated.
             If no employee title is found with the given id, the controller will return NotFound (404)
@@ -663,6 +679,13 @@
             <summary>
             Controller to manage schedule
             </summary>
+        </member>
+        <member name="M:API.Controllers.ScheduleController.#ctor(API.Authorization.IAuthManager,Data.Services.IScheduleService)">
+            <summary>
+            The constructor of the schedule controller
+            </summary>
+            <param name="authManager"></param>
+            <param name="scheduleService"></param>
         </member>
         <member name="M:API.Controllers.ScheduleController.Get">
             <summary>
@@ -750,6 +773,62 @@
             <summary>
             Controller to manage shifts
             </summary>
+        </member>
+        <member name="M:API.Controllers.ShiftController.#ctor(API.Authorization.IAuthManager,Data.Services.IShiftService)">
+            <summary>
+            The constructor of the shift controller
+            </summary>
+            <param name="authManager"></param>
+            <param name="shiftService"></param>
+        </member>
+        <member name="M:API.Controllers.ShiftController.Get">
+            <summary>
+            Returns all shifts of the specified organization in the 'Authorization' header
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.ShiftController.Get(System.Int32)">
+            <summary>
+            Returns the shift for the given id in the parameter
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.ShiftController.Delete(System.Int32)">
+            <summary>
+            Deletes the shift with the given id in the parameter
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.ShiftController.Update(System.Int32,DataTransferObjects.Shift.UpdateShiftDTO)">
+            <summary>
+            Updates the shift with the id in the parameter with the content in the body
+            </summary>
+            <param name="id"></param>
+            <param name="shiftDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.ShiftController.OnGoing">
+            <summary>
+            Gets the shifts currently ongoing with the corresponding employees planned to be on the shift and the employees checked-in on that shift
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.ShiftController.CheckIn(System.Int32,System.Int32)">
+            <summary>
+            Checks in the employee with the given employee id in the parameters for the given shift id in the parameters
+            </summary>
+            <param name="id"></param>
+            <param name="employeeId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.ShiftController.CreateOutsideSchedule(DataTransferObjects.Shift.CreateShiftOutsideScheduleDTO)">
+            <summary>
+            Creates a shift with the given employees from now (rounded up to nearest 15 minutes) and for the next xx minutes defined in the body
+            </summary>
+            <param name="shiftDto"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>

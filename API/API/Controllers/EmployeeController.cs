@@ -17,6 +17,11 @@ namespace API.Controllers
         private readonly IAuthManager _authManager;
         private readonly IEmployeeService _employeeService;
 
+        /// <summary>
+        /// The constructor of the employee controller
+        /// </summary>
+        /// <param name="authManager"></param>
+        /// <param name="employeeService"></param>
         public EmployeeController(IAuthManager authManager, IEmployeeService employeeService)
         {
             _authManager = authManager;
@@ -155,6 +160,7 @@ namespace API.Controllers
         /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <param name="id">The id of the employee.</param>
+        /// <param name="employeeDto">The dto of the employee</param>
         /// <returns>
         /// Returns 'No Content' (204) if the employee gets updated.
         /// If no employee is found with the given id, the controller will return NotFound (404)
