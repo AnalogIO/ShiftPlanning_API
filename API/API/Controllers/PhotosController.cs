@@ -8,13 +8,13 @@ using Data.Services;
 namespace API.Controllers
 {
     [RoutePrefix(RoutePrefix)]
-    public class PhotoController : ApiController
+    public class PhotosController : ApiController
     {
-        private const string RoutePrefix = "api/photos";
+        public const string RoutePrefix = "api/photos";
         private readonly IPhotoService _photoService;
         private readonly IAuthManager _authManager;
 
-        public PhotoController(IAuthManager authManager, IPhotoService photoService)
+        public PhotosController(IAuthManager authManager, IPhotoService photoService)
         {
             _authManager = authManager;
             _photoService = photoService;

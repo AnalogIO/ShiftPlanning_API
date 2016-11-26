@@ -46,6 +46,7 @@ namespace Data.Npgsql.Repositories
         {
             return _context.Employees
                 .Include(x => x.EmployeeTitle)
+                .Include(x => x.Photo)
                 .Where(e => e.Organization.Id == organizationId).OrderBy(x => x.Id);
         }
 

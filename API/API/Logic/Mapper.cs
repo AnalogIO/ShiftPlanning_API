@@ -1,9 +1,11 @@
-﻿using Data.Models;
+﻿using API.Controllers;
+using Data.Models;
 using DataTransferObjects.Employee;
 using DataTransferObjects.EmployeeTitles;
 using DataTransferObjects.Schedule;
 using DataTransferObjects.Shift;
 using System.Collections.Generic;
+using System.Web;
 
 namespace API.Logic
 {
@@ -11,7 +13,21 @@ namespace API.Logic
     {
         public static EmployeeDTO Map(Employee employee)
         {
-            return new EmployeeDTO { Id = employee.Id, FirstName = employee.FirstName, LastName = employee.LastName, Email = employee.Email, Active = employee.Active, EmployeeTitle = employee.EmployeeTitle?.Title, EmployeeTitleId = employee.EmployeeTitle?.Id };
+            var url = HttpContext.Current.Request.Url;
+
+            var portString = url.IsDefaultPort ? "" : $":{url.Port}";
+
+            return new EmployeeDTO
+            {
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Email = employee.Email,
+                Active = employee.Active,
+                EmployeeTitle = employee.EmployeeTitle?.Title,
+                EmployeeTitleId = employee.EmployeeTitle?.Id,
+                PhotoRef = $"{url.Scheme}://{url.Host}{portString}/{PhotosController.RoutePrefix}/{employee.Photo.Id}"
+            };
         }
 
         public static IEnumerable<EmployeeDTO> Map(IEnumerable<Employee> employees)
