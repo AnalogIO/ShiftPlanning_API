@@ -631,25 +631,6 @@
             <param name="id">The id of the employee title.</param>
             <returns>Returns 'No Content' (204) if the employee title gets deleted.</returns>
         </member>
-        <member name="T:API.Controllers.IsOpenController">
-            <summary>
-            The IsOpenController is the public interface that can tell whether or not
-            a given institution is open.
-            </summary>
-        </member>
-        <member name="M:API.Controllers.IsOpenController.#ctor(API.Services.IShiftService)">
-            <summary>
-            Dependency injection constructor of IsOpenController
-            </summary>
-            <param name="shiftService">An IShiftService implementation</param>
-        </member>
-        <member name="M:API.Controllers.IsOpenController.IsOpen(System.String)">
-            <summary>
-            Find out whether or not the institution identified by short key is open.
-            </summary>
-            <param name="shortKey">The short key of the institution.</param>
-            <returns></returns>
-        </member>
         <member name="T:API.Controllers.ManagerController">
             <summary>
             Controller to validate authority (login etc.)
@@ -668,33 +649,6 @@
             Returns 'Ok' (200) with a valid token if the provided username and password matches.
             If the provided credentials are wrong then the controller will return Unauthorized (401).
             </returns>
-        </member>
-        <member name="T:API.Controllers.OpeningHoursController">
-            <summary>
-            The OpeningHoursController is the public entrance to get opening hour and shift information.
-            </summary>
-        </member>
-        <member name="M:API.Controllers.OpeningHoursController.#ctor(API.Services.IShiftService,API.Mapping.IOpeningHoursMapper)">
-            <summary>
-            Dependency injection constructor.
-            </summary>
-            <param name="shiftService"></param>
-            <param name="mapper"></param>
-        </member>
-        <member name="M:API.Controllers.OpeningHoursController.Get(System.String)">
-            <summary>
-            Fetch shifts for the next week for a given institution.
-            </summary>
-            <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
-            <returns>A collection of OpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
-        </member>
-        <member name="M:API.Controllers.OpeningHoursController.GetIntervals(System.String,System.Int32)">
-            <summary>
-            Fetch shifts for the next week for a given institution.
-            </summary>
-            <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
-            <param name="interval">The number of minutes an interval should span.</param>
-            <returns>A collection of OpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
         </member>
         <member name="T:API.Controllers.ScheduleController">
             <summary>
@@ -787,133 +741,6 @@
             <summary>
             Controller to manage shifts
             </summary>
-        </member>
-        <member name="T:API.Mapping.IOpeningHoursMapper">
-            <summary>
-            Mapper interface for opening hour classes and DTOs.
-            </summary>
-        </member>
-        <member name="M:API.Mapping.IOpeningHoursMapper.MapToDto(System.Collections.Generic.IEnumerable{Data.Models.Shift})">
-            <summary>
-            Maps a collection of Shifts into a collection of OpeningHoursDTOs.
-            </summary>
-            <param name="source">The input collection.</param>
-            <returns>The mapped collection.</returns>
-        </member>
-        <member name="T:API.Mapping.OpeningHoursMapper">
-            <inheritdoc cref="T:API.Mapping.IOpeningHoursMapper"/>
-        </member>
-        <member name="M:API.Mapping.OpeningHoursMapper.MapToDto(System.Collections.Generic.IEnumerable{Data.Models.Shift})">
-            <inheritdoc cref="M:API.Mapping.OpeningHoursMapper.MapToDto(System.Collections.Generic.IEnumerable{Data.Models.Shift})"/>
-        </member>
-        <member name="T:API.Services.IShiftService">
-            <summary>
-            Interaction logic for shifts.
-            </summary>
-        </member>
-        <member name="M:API.Services.IShiftService.GetByInstitution(System.String)">
-            <summary>
-            Returns all shifts from an institution.
-            </summary>
-            <param name="shortKey">The short key of the institution</param>
-            <returns>A collection of shifts. null if the institution was not found.</returns>
-        </member>
-        <member name="M:API.Services.IShiftService.GetByInstitution(System.Int32)">
-            <summary>
-            Returns all shifts from an institution.
-            </summary>
-            <param name="id">The ID of the institution</param>
-            <returns>A collection of shifts. null if the institution was not found.</returns>
-        </member>
-        <member name="M:API.Services.IShiftService.GetByInstitution(System.String,System.DateTime)">
-            <summary>
-            Returns all shifts that crosses or are inside the date denoted by <paramref name="date"/>
-            </summary>
-            <param name="shortKey">The short key of the institution</param>
-            <param name="date">The date of interesting shifts.</param>
-            <returns>A collection of shifts. null if the institution was not found.</returns>
-        </member>
-        <member name="M:API.Services.IShiftService.GetByInstitution(System.Int32,System.DateTime)">
-            <summary>
-            Returns all shifts that crosses or are inside the date denoted by <paramref name="date"/>
-            </summary>
-            <param name="id">The ID of the institution</param>
-            <param name="date">The date of interesting shifts.</param>
-            <returns>A collection of shifts. null if the institution was not found.</returns>
-        </member>
-        <member name="M:API.Services.IShiftService.GetByInstitution(System.String,System.DateTime,System.DateTime)">
-            <summary>
-            Returns all shifts that crosses or are inside the range denoted by <paramref name="from"/> and <paramref name="to"/>
-            </summary>
-            <param name="shortKey">The short key of the institution</param>
-            <param name="from">Beginning of range.</param>
-            <param name="to">End of range.</param>
-            <returns>A collection of shifts. null if the institution was not found.</returns>
-        </member>
-        <member name="M:API.Services.IShiftService.GetByInstitution(System.Int32,System.DateTime,System.DateTime)">
-            <summary>
-            Returns all shifts that crosses or are inside the range denoted by <paramref name="from"/> and <paramref name="to"/>
-            </summary>
-            <param name="id">The ID of the institution</param>
-            <param name="from">Beginning of range.</param>
-            <param name="to">End of range.</param>
-            <returns>A collection of shifts. null if the institution was not found.</returns>
-        </member>
-        <member name="M:API.Services.IShiftService.GetOngoingShiftsByInstitution(System.String)">
-            <summary>
-            Retrieve ongoing shifts for the given institution.
-            </summary>
-            <param name="shortKey">The short key of the institution.</param>
-            <returns>
-            A collection of shifts, mostly (hopefully) containing only a single element.
-            null if the institution was not found.
-            </returns>
-        </member>
-        <member name="M:API.Services.IShiftService.GetOngoingShiftsByInstitution(System.Int32)">
-            <summary>
-            Retrieve ongoing shifts for the given institution.
-            </summary>
-            <param name="id">The ID of the institution.</param>
-            <returns>
-            A collection of shifts, mostly (hopefully) containing only a single element.
-            null if the institution was not found.
-            </returns>
-        </member>
-        <member name="T:API.Services.ShiftService">
-            <summary>
-            Implementation of IShiftService that uses Repositories for data access.
-            </summary>
-        </member>
-        <member name="M:API.Services.ShiftService.#ctor(Data.Repositories.IShiftRepository,Data.Repositories.IInstitutionRepository,Data.Repositories.IEmployeeRepository)">
-            <summary>
-            Injection constructor.
-            </summary>
-            <param name="shiftRepository">An IShiftRepository implementation.</param>
-            <param name="institutionRepository">An IInstitution implementation.</param>
-        </member>
-        <member name="M:API.Services.ShiftService.GetByInstitution(System.String)">
-            <inheritdoc cref="M:API.Services.IShiftService.GetByInstitution(System.String)"/>
-        </member>
-        <member name="M:API.Services.ShiftService.GetByInstitution(System.Int32)">
-            <inheritdoc cref="M:API.Services.IShiftService.GetByInstitution(System.Int32)"/>
-        </member>
-        <member name="M:API.Services.ShiftService.GetByInstitution(System.String,System.DateTime,System.DateTime)">
-            <inheritdoc cref="M:API.Services.IShiftService.GetByInstitution(System.String,System.DateTime,System.DateTime)"/>
-        </member>
-        <member name="M:API.Services.ShiftService.GetByInstitution(System.Int32,System.DateTime,System.DateTime)">
-            <inheritdoc cref="M:API.Services.IShiftService.GetByInstitution(System.Int32,System.DateTime,System.DateTime)"/>
-        </member>
-        <member name="M:API.Services.ShiftService.GetByInstitution(System.String,System.DateTime)">
-            <inheritdoc cref="M:API.Services.IShiftService.GetByInstitution(System.String,System.DateTime)"/>
-        </member>
-        <member name="M:API.Services.ShiftService.GetByInstitution(System.Int32,System.DateTime)">
-            <inheritdoc cref="M:API.Services.IShiftService.GetByInstitution(System.Int32,System.DateTime)"/>
-        </member>
-        <member name="M:API.Services.ShiftService.GetOngoingShiftsByInstitution(System.String)">
-            <inheritdoc cref="M:API.Services.IShiftService.GetOngoingShiftsByInstitution(System.String)"/>
-        </member>
-        <member name="M:API.Services.ShiftService.GetOngoingShiftsByInstitution(System.Int32)">
-            <inheritdoc cref="M:API.Services.IShiftService.GetOngoingShiftsByInstitution(System.Int32)"/>
         </member>
     </members>
 </doc>

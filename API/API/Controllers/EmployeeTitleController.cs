@@ -2,8 +2,8 @@
 using System.Net.Http;
 using System.Web.Http;
 using API.Authorization;
-using API.Services;
 using API.Logic;
+using Data.Services;
 using DataTransferObjects.EmployeeTitles;
 
 namespace API.Controllers

@@ -3,8 +3,8 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using API.Authorization;
-using DataTransferObjects;
 using System.Collections.Generic;
+using Data.Services;
 using DataTransferObjects.Schedule;
 using DataTransferObjects.ScheduledShift;
 

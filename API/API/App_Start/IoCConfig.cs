@@ -1,7 +1,5 @@
 ﻿using API.Authorization;
-using API.Logic;
-using API.Mapping;
-using API.Services;
+using Data.Services;
 using Microsoft.Practices.Unity;
 
 namespace API
@@ -17,18 +15,11 @@ namespace API
         /// <param name="container">The Microsoft Unity container to register types on.</param>
         public static void ConfigureIoC(IUnityContainer container)
         {
+            Data.Npgsql.Configuration.IoCConfig.ConfigureIoC(container);
+            Data.IoCConfig.ConfigureIoC(container);
+
             container
-
-                // Container controlled since it has no dependencies/state.
-                .RegisterType<IOpeningHoursMapper, OpeningHoursMapper>(new ContainerControlledLifetimeManager())
-                .RegisterType<IVolunteerMapper, VolunteerMapper>(new ContainerControlledLifetimeManager())
-
-                .RegisterType<IAuthManager, AuthManager>(new HierarchicalLifetimeManager())
-
-                .RegisterType<IEmployeeService, EmployeeService>(new HierarchicalLifetimeManager())
-                .RegisterType<IEmployeeTitleService, EmployeeTitleService>(new HierarchicalLifetimeManager())
-                .RegisterType<IScheduleService, ScheduleService>(new HierarchicalLifetimeManager())
-                .RegisterType<IShiftService, ShiftService>(new HierarchicalLifetimeManager());
+                .RegisterType<IAuthManager, AuthManager>(new HierarchicalLifetimeManager());
         }
     }
 }

@@ -11,7 +11,6 @@ namespace API
         private static readonly Lazy<IUnityContainer> Container = new Lazy<IUnityContainer>(() =>
         {
             var container = new UnityContainer();
-            Data.Npgsql.Configuration.IoCConfig.ConfigureIoC(container);
             API.IoCConfig.ConfigureIoC(container);
             return container;
         }, LazyThreadSafetyMode.ExecutionAndPublication);

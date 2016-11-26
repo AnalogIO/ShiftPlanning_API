@@ -253,3 +253,5 @@ paket-files/
 /API/API/connections.config
 /API/API/appSettings.config
 /API/Data.Npgsql/connections.config
+/API/PublicApi/connections.config
+/API/PublicApi/appSettings.config

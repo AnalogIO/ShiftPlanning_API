@@ -1,15 +1,10 @@
 ﻿using System.Web.Http;
-using Data.Repositories;
 using API.Authorization;
-using System;
-using DataTransferObjects;
-using System.Collections.Generic;
-using Microsoft.Practices.Unity;
-using API.Services;
 using API.Logic;
 using DataTransferObjects.Shift;
 using System.Net.Http;
 using System.Net;
+using Data.Services;
 
 namespace API.Controllers
 {
