@@ -11,6 +11,6 @@ namespace DataTransferObjects.Schedule
         public int Id { get; set; }
         public string Name { get; set; }
         public int NumberOfWeeks { get; set; }
-        public IEnumerable<ScheduledShiftDTO> SchedulesShifts { get; set; }
+        public IEnumerable<ScheduledShiftDTO> ScheduledShifts { get; set; }
     }
 }
