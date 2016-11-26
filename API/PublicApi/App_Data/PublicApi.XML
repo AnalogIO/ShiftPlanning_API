@@ -561,7 +561,7 @@
             <param name="id">The id of the employee.</param>
             <returns>A representation of the employee, if a shortKey/id match was found.</returns>
         </member>
-        <member name="M:PublicApi.Controllers.EmployeesController.GetImage(System.String,System.Int32)">
+        <member name="M:PublicApi.Controllers.EmployeesController.GetPhoto(System.String,System.Int32)">
             <summary>
             Retrieve the photo for an employee.
             </summary>

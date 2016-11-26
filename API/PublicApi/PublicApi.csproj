@@ -231,6 +231,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OpenController.cs" />
+    <Compile Include="Controllers\PhotosController.cs" />
     <Compile Include="Controllers\ShiftsController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -239,7 +240,7 @@
     <Compile Include="Mapping\IOpeningHoursMapper.cs" />
     <Compile Include="Mapping\IVolunteerMapper.cs" />
     <Compile Include="Mapping\OpeningHoursMapper.cs" />
-    <Compile Include="Mapping\VolunteerMapper.cs" />
+    <Compile Include="Mapping\EmployeeMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

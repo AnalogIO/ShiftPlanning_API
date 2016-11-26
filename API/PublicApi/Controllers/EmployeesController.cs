@@ -72,8 +72,8 @@ namespace PublicApi.Controllers
         /// A photo if the shortkey/id match was found. Http 404 otherwise.
         /// If the employee has no photo registered, an empty response is generated.
         /// </returns>
-        [HttpGet, Route("{shortKey}/{id}/image")]
-        public IHttpActionResult GetImage(string shortKey, int id)
+        [HttpGet, Route("{shortKey}/{id}/photo")]
+        public IHttpActionResult GetPhoto(string shortKey, int id)
         {
             var employee = _employeeService.GetEmployee(id, shortKey);
 

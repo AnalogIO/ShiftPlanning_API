@@ -129,7 +129,7 @@
             The title of the volunteer. This can for instance be "Barista".
             </summary>
         </member>
-        <member name="P:DataTransferObjects.Public.Employees.EmployeeDTO.Photo">
+        <member name="P:DataTransferObjects.Public.Employees.EmployeeDTO.PhotoRef">
             <summary>
             A photo of the volunteer.
             </summary>

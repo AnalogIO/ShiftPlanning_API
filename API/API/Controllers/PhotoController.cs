@@ -10,7 +10,7 @@ namespace API.Controllers
     [RoutePrefix(RoutePrefix)]
     public class PhotoController : ApiController
     {
-        private const string RoutePrefix = "api/photo";
+        private const string RoutePrefix = "api/photos";
         private readonly IPhotoService _photoService;
         private readonly IAuthManager _authManager;
 
@@ -32,12 +32,12 @@ namespace API.Controllers
         [HttpGet, Route("{photoId}")]
         public IHttpActionResult Get(int photoId)
         {
-            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
-            if (organization == null) return BadRequest("Provided token is invalid!");
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var photo = _photoService.Read(photoId, organization.Id);
+            var photo = _photoService.Read(photoId, manager.Organization.Id);
 
-            if (photo != null) return NotFound();
+            if (photo == null) return NotFound();
 
             var message = new HttpResponseMessage(HttpStatusCode.OK);
 

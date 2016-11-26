@@ -18,6 +18,6 @@
         /// <summary>
         /// A photo of the volunteer.
         /// </summary>
-        public byte[] Photo { get; set; }
+        public string PhotoRef { get; set; }
     }
 }

@@ -8,6 +8,11 @@ namespace Data.Services
     {
         private readonly IPhotoRepository _photoRepository;
 
+        public PhotoService(IPhotoRepository photoRepository)
+        {
+            _photoRepository = photoRepository;
+        }
+
         public Photo Read(int photoId, int organizationId)
         {
             return _photoRepository.Read(photoId, organizationId);

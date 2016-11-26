@@ -12,7 +12,7 @@ namespace PublicApi
 
             container
                 .RegisterType<IOpeningHoursMapper, OpeningHoursMapper>(new ContainerControlledLifetimeManager())
-                .RegisterType<IVolunteerMapper, VolunteerMapper>(new ContainerControlledLifetimeManager());
+                .RegisterType<IVolunteerMapper, EmployeeMapper>(new ContainerControlledLifetimeManager());
         }
     }
 }
