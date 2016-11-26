@@ -26,9 +26,9 @@ namespace Data.Npgsql.Repositories
             return null;
         }
 
-        public void Delete(int id, int institutionId)
+        public void Delete(int id, int organizationId)
         {
-            var employee = _context.Employees.FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
+            var employee = _context.Employees.FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
             if(employee != null)
             {
                 _context.Employees.Remove(employee);
@@ -36,26 +36,26 @@ namespace Data.Npgsql.Repositories
             }
         }
 
-        public IEnumerable<Employee> ReadFromInstitution(int institutionId)
+        public IEnumerable<Employee> ReadFromOrganization(int organizationId)
         {
             return _context.Employees
                 .Include(x => x.EmployeeTitle)
-                .Where(e => e.Institution.Id == institutionId).OrderBy(x => x.Id);
+                .Where(e => e.Organization.Id == organizationId).OrderBy(x => x.Id);
         }
 
-        public IEnumerable<Employee> ReadFromInstitution(string shortKey)
+        public IEnumerable<Employee> ReadFromOrganization(string shortKey)
         {
             return _context.Employees
                 .Include(emp => emp.EmployeeTitle)
                 .Include(emp => emp.Photo)
-                .Where(e => e.Institution.ShortKey == shortKey);
+                .Where(e => e.Organization.ShortKey == shortKey);
         }
 
-        public Employee Read(int id, int institutionId)
+        public Employee Read(int id, int organizationId)
         {
             return _context.Employees
                 .Include(x => x.EmployeeTitle)
-                .FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
+                .FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
         }
 
         public Employee Read(int id, string shortKey)
@@ -63,7 +63,7 @@ namespace Data.Npgsql.Repositories
             return _context.Employees
                 .Include(employee => employee.EmployeeTitle)
                 .Include(employee => employee.Photo)
-                .FirstOrDefault(x => x.Id == id && x.Institution.ShortKey == shortKey);
+                .FirstOrDefault(x => x.Id == id && x.Organization.ShortKey == shortKey);
         }
 
         public int Update(Employee employee)

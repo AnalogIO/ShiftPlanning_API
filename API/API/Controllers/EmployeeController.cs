@@ -65,7 +65,7 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var employees = _employeeService.GetEmployees(manager.Institution.Id);
+            var employees = _employeeService.GetEmployees(manager.Organization.Id);
             if (employees == null) return NotFound();
             return Ok(Mapper.Map(employees));
         }
@@ -91,7 +91,7 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var employee = _employeeService.GetEmployee(id, manager.Institution.Id);
+            var employee = _employeeService.GetEmployee(id, manager.Organization.Id);
             if (employee != null)
             {
                 return Ok(Mapper.Map(employee));
@@ -114,7 +114,7 @@ namespace API.Controllers
         [HttpGet, Route("")]
         public IHttpActionResult Get(string apiKey)
         {
-            var institution = _authManager.GetInstitutionByApiKey(apiKey);
+            var institution = _authManager.GetOrganizationByApiKey(apiKey);
             if (institution == null) return BadRequest("No institution found with the given name");
 
             var employees = _employeeService.GetEmployees(institution.Id);

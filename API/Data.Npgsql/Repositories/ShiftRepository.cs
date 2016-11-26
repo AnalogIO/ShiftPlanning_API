@@ -34,9 +34,9 @@ namespace Data.Npgsql.Repositories
             _context.SaveChanges();
         }
 
-        public void Delete(int id, int institutionId)
+        public void Delete(int id, int organizationId)
         {
-            var shift = _context.Shifts.FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
+            var shift = _context.Shifts.FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
             if (shift != null)
             {
                 _context.Shifts.Remove(shift);
@@ -44,24 +44,24 @@ namespace Data.Npgsql.Repositories
             }
         }
 
-        public IEnumerable<Shift> ReadFromInstitution(string institutionShortKey)
+        public IEnumerable<Shift> ReadFromOrganization(string organizationShortKey)
         {
-            return _context.Shifts.Where(x => x.Institution.ShortKey == institutionShortKey);
+            return _context.Shifts.Where(x => x.Organization.ShortKey == organizationShortKey);
         }
 
-        public Shift Read(int id, int institutionId)
+        public Shift Read(int id, int organizationId)
         {
-            return _context.Shifts.FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
+            return _context.Shifts.FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
         }
 
-        public IEnumerable<Shift> ReadFromInstitution(int institutionId)
+        public IEnumerable<Shift> ReadFromOrganization(int organizationId)
         {
             return _context.Shifts
                 .Include(x => x.CheckIns)
                 .Include(x => x.CheckIns.Select(y => y.Employee))
                 .Include(x => x.Employees)
                 .Include(x => x.Employees.Select(y => y.EmployeeTitle))
-                .Where(x => x.Institution.Id == institutionId);
+                .Where(x => x.Organization.Id == organizationId);
         }
 
         public int Update(Shift shift)
@@ -76,11 +76,11 @@ namespace Data.Npgsql.Repositories
             return _context.SaveChanges();
         }
 
-        public IEnumerable<Shift> GetOngoingShifts(int institutionId, DateTime now)
+        public IEnumerable<Shift> GetOngoingShifts(int organizationId, DateTime now)
         {
             var inOneHour = now.AddHours(1);
             return _context.Shifts
-                .Where(s => s.Institution.Id == institutionId && (s.Start < now && s.End > now || (s.Start > now && s.Start < inOneHour)));
+                .Where(s => s.Organization.Id == organizationId && (s.Start < now && s.End > now || (s.Start > now && s.Start < inOneHour)));
         }
 
         public void Dispose()

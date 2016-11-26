@@ -21,9 +21,9 @@ namespace Data.Npgsql.Repositories
             return _context.SaveChanges() > 0 ? employeeTitle : null;
         }
 
-        public void Delete(int id, int institutionId)
+        public void Delete(int id, int organizationId)
         {
-            var employeeTitle = _context.EmployeeTitles.FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
+            var employeeTitle = _context.EmployeeTitles.FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
             if (employeeTitle != null)
             {
                 _context.EmployeeTitles.Remove(employeeTitle);
@@ -31,14 +31,14 @@ namespace Data.Npgsql.Repositories
             }
         }
 
-        public IEnumerable<EmployeeTitle> ReadFromInstitution(int institutionId)
+        public IEnumerable<EmployeeTitle> ReadFromOrganization(int organizationId)
         {
-            return _context.EmployeeTitles.Where(x => x.Institution.Id == institutionId);
+            return _context.EmployeeTitles.Where(x => x.Organization.Id == organizationId);
         }
 
-        public EmployeeTitle Read(int id, int institutionId)
+        public EmployeeTitle Read(int id, int organizationId)
         {
-            return _context.EmployeeTitles.FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
+            return _context.EmployeeTitles.FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
         }
 
         public int Update(EmployeeTitle employeeTitle)

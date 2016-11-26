@@ -22,9 +22,9 @@ namespace Data.Npgsql.Repositories
             return _context.SaveChanges() > 0 ? schedule : null;
         }
 
-        public void Delete(int id, int institutionId)
+        public void Delete(int id, int organizationId)
         {
-            var schedule = _context.Schedules.SingleOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
+            var schedule = _context.Schedules.SingleOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
             if(schedule != null)
             {
                 _context.Schedules.Remove(schedule);
@@ -37,22 +37,22 @@ namespace Data.Npgsql.Repositories
             _context.Dispose();
         }
 
-        public Schedule Read(int id, int institutionId)
+        public Schedule Read(int id, int organizationId)
         {
             return _context.Schedules
                 .Include(x => x.ScheduledShifts)
                 .Include(x => x.ScheduledShifts.Select(y => y.Employees))
                 .Include(x => x.ScheduledShifts.Select(y => y.Employees.Select(z => z.EmployeeTitle)))
-                .SingleOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
+                .SingleOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
         }
 
-        public IEnumerable<Schedule> ReadFromInstitution(int institutionId)
+        public IEnumerable<Schedule> ReadFromOrganization(int organizationId)
         {
             return _context.Schedules
                 .Include(x => x.ScheduledShifts)
                 .Include(x => x.ScheduledShifts.Select(y => y.Employees))
                 .Include(x => x.ScheduledShifts.Select(y => y.Employees.Select(z => z.EmployeeTitle)))
-                .Where(x => x.Institution.Id == institutionId)
+                .Where(x => x.Organization.Id == organizationId)
                 .ToList();
         }
 

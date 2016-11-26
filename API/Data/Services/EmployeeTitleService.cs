@@ -16,28 +16,28 @@ namespace Data.Services
 
         public EmployeeTitle CreateEmployeeTitle(CreateEmployeeTitleDTO employeeTitleDto, Manager manager)
         {
-            var employeeTitle = new EmployeeTitle { Title = employeeTitleDto.Title, Institution = manager.Institution };
+            var employeeTitle = new EmployeeTitle { Title = employeeTitleDto.Title, Organization = manager.Organization };
             return _employeeTitleRepository.Create(employeeTitle);
         }
 
         public void DeleteEmployeeTitle(int employeeTitleId, Manager manager)
         {
-            _employeeTitleRepository.Delete(employeeTitleId, manager.Institution.Id);
+            _employeeTitleRepository.Delete(employeeTitleId, manager.Organization.Id);
         }
 
         public EmployeeTitle GetEmployeeTitle(int id, Manager manager)
         {
-            return _employeeTitleRepository.Read(id, manager.Institution.Id);
+            return _employeeTitleRepository.Read(id, manager.Organization.Id);
         }
 
         public IEnumerable<EmployeeTitle> GetEmployeeTitles(Manager manager)
         {
-            return _employeeTitleRepository.ReadFromInstitution(manager.Institution.Id);
+            return _employeeTitleRepository.ReadFromOrganization(manager.Organization.Id);
         }
 
         public EmployeeTitle UpdateEmployeeTitle(int employeeTitleId, UpdateEmployeeTitleDTO employeeTitleDto, Manager manager)
         {
-            var employeeTitle = _employeeTitleRepository.Read(employeeTitleId, manager.Institution.Id);
+            var employeeTitle = _employeeTitleRepository.Read(employeeTitleId, manager.Organization.Id);
             if (employeeTitle != null)
             {
                 employeeTitle.Title = employeeTitleDto.Title;

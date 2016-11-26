@@ -13,7 +13,7 @@ namespace Data.Services
     public class ShiftService : IShiftService
     {
         private readonly IShiftRepository _shiftRepository;
-        private readonly IInstitutionRepository _institutionRepository;
+        private readonly IOrganizationRepository _organizationRepository;
         private readonly IEmployeeRepository _employeeRepository;
 
         /// <summary>
@@ -21,65 +21,65 @@ namespace Data.Services
         /// </summary>
         /// <param name="shiftRepository">An IShiftRepository implementation.</param>
         /// <param name="institutionRepository">An IInstitution implementation.</param>
-        public ShiftService(IShiftRepository shiftRepository, IInstitutionRepository institutionRepository, IEmployeeRepository employeeRepository)
+        public ShiftService(IShiftRepository shiftRepository, IOrganizationRepository organizationRepository, IEmployeeRepository employeeRepository)
         {
             _shiftRepository = shiftRepository;
-            _institutionRepository = institutionRepository;
+            _organizationRepository = organizationRepository;
             _employeeRepository = employeeRepository;
         }
 
-        /// <inheritdoc cref="IShiftService.GetByInstitution(string)"/>
-        public IEnumerable<Shift> GetByInstitution(string shortKey)
+        /// <inheritdoc cref="IShiftService.GetByOrganization(string)"/>
+        public IEnumerable<Shift> GetByOrganization(string shortKey)
         {
-            if (_institutionRepository.Exists(shortKey))
-                return _shiftRepository.ReadFromInstitution(shortKey);
+            if (_organizationRepository.Exists(shortKey))
+                return _shiftRepository.ReadFromOrganization(shortKey);
             return null;
         }
 
-        /// <inheritdoc cref="IShiftService.GetByInstitution(int)"/>
-        public IEnumerable<Shift> GetByInstitution(int id)
+        /// <inheritdoc cref="IShiftService.GetByOrganization(int)"/>
+        public IEnumerable<Shift> GetByOrganization(int id)
         {
-            if (_institutionRepository.Exists(id))
-                return _shiftRepository.ReadFromInstitution(id);
+            if (_organizationRepository.Exists(id))
+                return _shiftRepository.ReadFromOrganization(id);
             return null;
         }
 
-        /// <inheritdoc cref="IShiftService.GetByInstitution(string, DateTime, DateTime)"/>
-        public IEnumerable<Shift> GetByInstitution(string shortKey, DateTime from, DateTime to)
+        /// <inheritdoc cref="IShiftService.GetByOrganization(string, DateTime, DateTime)"/>
+        public IEnumerable<Shift> GetByOrganization(string shortKey, DateTime from, DateTime to)
         {
-            return GetByInstitution(shortKey).Where(shift => shift.End >= from && shift.Start <= to);
+            return GetByOrganization(shortKey).Where(shift => shift.End >= from && shift.Start <= to);
         }
 
-        /// <inheritdoc cref="IShiftService.GetByInstitution(int, DateTime, DateTime)"/>
-        public IEnumerable<Shift> GetByInstitution(int id, DateTime from, DateTime to)
+        /// <inheritdoc cref="IShiftService.GetByOrganization(int, DateTime, DateTime)"/>
+        public IEnumerable<Shift> GetByOrganization(int id, DateTime from, DateTime to)
         {
-            return GetByInstitution(id).Where(shift => shift.End >= from && shift.Start <= to);
+            return GetByOrganization(id).Where(shift => shift.End >= from && shift.Start <= to);
         }
 
-        /// <inheritdoc cref="IShiftService.GetByInstitution(string, DateTime)"/>
-        public IEnumerable<Shift> GetByInstitution(string shortKey, DateTime date)
+        /// <inheritdoc cref="IShiftService.GetByOrganization(string, DateTime)"/>
+        public IEnumerable<Shift> GetByOrganization(string shortKey, DateTime date)
         {
-            return GetByInstitution(shortKey, date.Date, date.Date.AddDays(1));
+            return GetByOrganization(shortKey, date.Date, date.Date.AddDays(1));
         }
 
-        /// <inheritdoc cref="IShiftService.GetByInstitution(int, DateTime)"/>
-        public IEnumerable<Shift> GetByInstitution(int id, DateTime date)
+        /// <inheritdoc cref="IShiftService.GetByOrganization(int, DateTime)"/>
+        public IEnumerable<Shift> GetByOrganization(int id, DateTime date)
         {
-            return GetByInstitution(id, date.Date, date.Date.AddDays(1));
+            return GetByOrganization(id, date.Date, date.Date.AddDays(1));
         }
 
-        /// <inheritdoc cref="IShiftService.GetOngoingShiftsByInstitution(string)"/>
-        public IEnumerable<Shift> GetOngoingShiftsByInstitution(string shortKey)
+        /// <inheritdoc cref="IShiftService.GetOngoingShiftsByOrganization(string)"/>
+        public IEnumerable<Shift> GetOngoingShiftsByOrganization(string shortKey)
         {
             var now = DateTime.Now;
-            return GetByInstitution(shortKey).Where(shift => shift.Start <= now && now <= shift.End);
+            return GetByOrganization(shortKey).Where(shift => shift.Start <= now && now <= shift.End);
         }
 
-        /// <inheritdoc cref="IShiftService.GetOngoingShiftsByInstitution(int)"/>
-        public IEnumerable<Shift> GetOngoingShiftsByInstitution(int id)
+        /// <inheritdoc cref="IShiftService.GetOngoingShiftsByOrganization(int)"/>
+        public IEnumerable<Shift> GetOngoingShiftsByOrganization(int id)
         {
             var now = DateTime.Now;
-            return GetByInstitution(id).Where(shift => shift.Start <= now && now <= shift.End);
+            return GetByOrganization(id).Where(shift => shift.Start <= now && now <= shift.End);
         }
 
         public CheckIn CheckInEmployee(int shiftId, int employeeId, int institutionId)
@@ -95,34 +95,34 @@ namespace Data.Services
             return _shiftRepository.Update(shift) > 0 ? shift.CheckIns.LastOrDefault() : null;
         }
 
-        public Shift CreateShiftOutsideSchedule(CreateShiftOutsideScheduleDTO shiftDto, Institution institution)
+        public Shift CreateShiftOutsideSchedule(CreateShiftOutsideScheduleDTO shiftDto, Organization organization)
         {
-            var employees = _employeeRepository.ReadFromInstitution(institution.Id).Where(x => shiftDto.EmployeeIds.Contains(x.Id)).ToList();
+            var employees = _employeeRepository.ReadFromOrganization(organization.Id).Where(x => shiftDto.EmployeeIds.Contains(x.Id)).ToList();
             if (employees == null) return null;
             var now = DateTime.Now;
             var start = Toolbox.RoundUp(now, TimeSpan.FromMinutes(15));
             var end = start.AddMinutes(shiftDto.OpenMinutes);
 
-            var shift = new Shift { Start = start, End = end, CheckIns = new List<CheckIn>(), Employees = employees, Institution = institution};
+            var shift = new Shift { Start = start, End = end, CheckIns = new List<CheckIn>(), Employees = employees, Organization = organization };
             return _shiftRepository.Create(shift);
         }
 
-        public Shift GetShift(int shiftId, int institutionId)
+        public Shift GetShift(int shiftId, int organizationId)
         {
-            return _shiftRepository.Read(shiftId, institutionId);
+            return _shiftRepository.Read(shiftId, organizationId);
         }
 
-        public void DeleteShift(int shiftId, int institutionId)
+        public void DeleteShift(int shiftId, int organizationId)
         {
-            _shiftRepository.Delete(shiftId, institutionId);
+            _shiftRepository.Delete(shiftId, organizationId);
         }
 
-        public Shift UpdateShift(int shiftId, int institutionId, UpdateShiftDTO updateShiftDto)
+        public Shift UpdateShift(int shiftId, int organizationId, UpdateShiftDTO updateShiftDto)
         {
-            var shift = _shiftRepository.Read(shiftId, institutionId);
+            var shift = _shiftRepository.Read(shiftId, organizationId);
             if (shift == null) return null;
 
-            var employees = _employeeRepository.ReadFromInstitution(institutionId).Where(x => updateShiftDto.EmployeeIds.Contains(x.Id)).ToList();
+            var employees = _employeeRepository.ReadFromOrganization(organizationId).Where(x => updateShiftDto.EmployeeIds.Contains(x.Id)).ToList();
 
             var start = DateTimeOffset.Parse(updateShiftDto.Start).UtcDateTime;
             var end = DateTimeOffset.Parse(updateShiftDto.End).UtcDateTime;

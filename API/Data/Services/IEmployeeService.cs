@@ -8,9 +8,9 @@ namespace Data.Services
     {
         Employee CreateEmployee(CreateEmployeeDTO employeeDto, Manager manager);
         void DeleteEmployee(int employeeId, Manager manager);
-        Employee GetEmployee(int id, int institutionId);
+        Employee GetEmployee(int id, int organizationId);
         Employee GetEmployee(int id, string shortKey);
-        IEnumerable<Employee> GetEmployees(int institutionId);
+        IEnumerable<Employee> GetEmployees(int organizationId);
         IEnumerable<Employee> GetEmployees(string shortKey);
         Employee UpdateEmployee(int employeeId, UpdateEmployeeDTO employeeDto, Manager manager);
     }

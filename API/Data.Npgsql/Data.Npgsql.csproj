@@ -99,12 +99,16 @@
     <Compile Include="Migrations\201611081903378_Added photo to employee.Designer.cs">
       <DependentUpon>201611081903378_Added photo to employee.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201611261728168_Institution is now Organization.cs" />
+    <Compile Include="Migrations\201611261728168_Institution is now Organization.Designer.cs">
+      <DependentUpon>201611261728168_Institution is now Organization.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\EmployeeRepository.cs" />
     <Compile Include="Repositories\EmployeeTitleRepository.cs" />
     <Compile Include="IShiftPlannerDataContext.cs" />
-    <Compile Include="Repositories\InstitutionRepository.cs" />
+    <Compile Include="Repositories\OrganizationRepository.cs" />
     <Compile Include="Repositories\ManagerRepository.cs" />
     <Compile Include="Repositories\ScheduleRepository.cs" />
     <Compile Include="ShiftPlannerDataContext.cs" />
@@ -139,6 +143,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201611081903378_Added photo to employee.resx">
       <DependentUpon>201611081903378_Added photo to employee.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611261728168_Institution is now Organization.resx">
+      <DependentUpon>201611261728168_Institution is now Organization.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -11,23 +11,23 @@ namespace Data.Services
     public class ScheduleService : IScheduleService
     {
         private readonly IScheduleRepository _scheduleRepository;
-        private readonly IInstitutionRepository _institutionRepository;
+        private readonly IOrganizationRepository _organizationRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IShiftRepository _shiftRepository;
 
-        public ScheduleService(IScheduleRepository scheduleRepository, IInstitutionRepository institutionRepository, IEmployeeRepository employeeRepository, IShiftRepository shiftRepository)
+        public ScheduleService(IScheduleRepository scheduleRepository, IOrganizationRepository organizationRepository, IEmployeeRepository employeeRepository, IShiftRepository shiftRepository)
         {
             _scheduleRepository = scheduleRepository;
-            _institutionRepository = institutionRepository;
+            _organizationRepository = organizationRepository;
             _employeeRepository = employeeRepository;
             _shiftRepository = shiftRepository;
         }
 
         public ScheduledShift CreateScheduledShift(CreateScheduledShiftDTO scheduledShiftDto, Manager manager, int scheduleId)
         {
-            var schedule = _scheduleRepository.Read(scheduleId, manager.Institution.Id);
+            var schedule = _scheduleRepository.Read(scheduleId, manager.Organization.Id);
             if (schedule == null) return null;
-            var employees = _employeeRepository.ReadFromInstitution(manager.Institution.Id).Where(x => scheduledShiftDto.EmployeeIds.Contains(x.Id)).ToList();
+            var employees = _employeeRepository.ReadFromOrganization(manager.Organization.Id).Where(x => scheduledShiftDto.EmployeeIds.Contains(x.Id)).ToList();
             var scheduledShift = new ScheduledShift { Day = scheduledShiftDto.Day, Start = TimeSpan.Parse(scheduledShiftDto.Start), End = TimeSpan.Parse(scheduledShiftDto.End), Schedule = schedule, Employees = employees };
             schedule.ScheduledShifts.Add(scheduledShift);
             return _scheduleRepository.Update(schedule) > 0 ? scheduledShift : null;
@@ -35,12 +35,12 @@ namespace Data.Services
 
         public IEnumerable<ScheduledShift> CreateScheduledShifts(IEnumerable<CreateScheduledShiftDTO> scheduledShiftsDto, Manager manager, int scheduleId)
         {
-            var schedule = _scheduleRepository.Read(scheduleId, manager.Institution.Id);
+            var schedule = _scheduleRepository.Read(scheduleId, manager.Organization.Id);
             if (schedule == null) return null;
             var scheduledShifts = new List<ScheduledShift>();
             foreach(CreateScheduledShiftDTO scheduledShiftDto in scheduledShiftsDto)
             {
-                var employees = _employeeRepository.ReadFromInstitution(manager.Institution.Id).Where(x => scheduledShiftDto.EmployeeIds.Contains(x.Id)).ToList();
+                var employees = _employeeRepository.ReadFromOrganization(manager.Organization.Id).Where(x => scheduledShiftDto.EmployeeIds.Contains(x.Id)).ToList();
                 var scheduledShift = new ScheduledShift { Day = scheduledShiftDto.Day, Start = TimeSpan.Parse(scheduledShiftDto.Start), End = TimeSpan.Parse(scheduledShiftDto.End), Schedule = schedule, Employees = employees };
                 scheduledShifts.Add(scheduledShift);
                 schedule.ScheduledShifts.Add(scheduledShift);
@@ -50,9 +50,9 @@ namespace Data.Services
 
         public ScheduledShift UpdateScheduledShift(int scheduledShiftId, int scheduleId, UpdateScheduledShiftDTO scheduledShiftDto, Manager manager)
         {
-            var dbSchedule = _scheduleRepository.Read(scheduleId, manager.Institution.Id);
+            var dbSchedule = _scheduleRepository.Read(scheduleId, manager.Organization.Id);
 
-            var employees = _employeeRepository.ReadFromInstitution(manager.Institution.Id).Where(x => scheduledShiftDto.EmployeeIds.Contains(x.Id)).ToList();
+            var employees = _employeeRepository.ReadFromOrganization(manager.Organization.Id).Where(x => scheduledShiftDto.EmployeeIds.Contains(x.Id)).ToList();
 
             dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).Employees.Clear();
 
@@ -68,28 +68,28 @@ namespace Data.Services
 
         public Schedule CreateSchedule(CreateScheduleDTO scheduleDto, Manager manager)
         {
-            var schedule = new Schedule { Name = scheduleDto.Name, NumberOfWeeks = scheduleDto.NumberOfWeeks, Institution = manager.Institution, ScheduledShifts = new List<ScheduledShift>(), Shifts = new List<Shift>() };
+            var schedule = new Schedule { Name = scheduleDto.Name, NumberOfWeeks = scheduleDto.NumberOfWeeks, Organization = manager.Organization, ScheduledShifts = new List<ScheduledShift>(), Shifts = new List<Shift>() };
             return _scheduleRepository.Create(schedule);
         }
 
         public Schedule GetSchedule(int scheduleId, Manager manager)
         {
-            return _scheduleRepository.Read(scheduleId, manager.Institution.Id);
+            return _scheduleRepository.Read(scheduleId, manager.Organization.Id);
         }
 
         public IEnumerable<Schedule> GetSchedules(Manager manager)
         {
-            return _scheduleRepository.ReadFromInstitution(manager.Institution.Id);
+            return _scheduleRepository.ReadFromOrganization(manager.Organization.Id);
         }
 
         public void DeleteSchedule(int scheduleId, Manager manager)
         {
-            _scheduleRepository.Delete(scheduleId, manager.Institution.Id);
+            _scheduleRepository.Delete(scheduleId, manager.Organization.Id);
         }
 
         public Schedule UpdateSchedule(int scheduleId, UpdateScheduleDTO scheduleDto, Manager manager)
         {
-            var schedule = _scheduleRepository.Read(scheduleId, manager.Institution.Id);
+            var schedule = _scheduleRepository.Read(scheduleId, manager.Organization.Id);
             if (schedule != null) return null;
 
             schedule.Name = scheduleDto.Name;
@@ -108,7 +108,7 @@ namespace Data.Services
             var currentDate = from;
             var currentDay = (int)from.DayOfWeek;
 
-            var schedule = _scheduleRepository.Read(scheduleId, manager.Institution.Id);
+            var schedule = _scheduleRepository.Read(scheduleId, manager.Organization.Id);
 
             if (schedule == null) return null;
 
@@ -133,7 +133,7 @@ namespace Data.Services
                             End = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, scheduledShift.End.Hours, scheduledShift.End.Minutes, scheduledShift.End.Seconds),
                             CheckIns = new List<CheckIn>(),
                             Employees = scheduledShift.Employees,
-                            Institution = manager.Institution,
+                            Organization = manager.Organization,
                             Schedule = schedule
                         };
                         shifts.Add(shift);

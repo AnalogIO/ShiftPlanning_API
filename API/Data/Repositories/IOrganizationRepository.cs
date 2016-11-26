@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
-    public interface IInstitutionRepository
+    public interface IOrganizationRepository
     {
         bool Exists(string shortKey);
         bool Exists(int id);
         bool HasApiKey(string apiKey);
-        Institution Read(int id);
-        Institution Read(string apiKey);
+        Organization Read(int id);
+        Organization Read(string apiKey);
     }
 }

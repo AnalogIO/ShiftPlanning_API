@@ -7,12 +7,12 @@ namespace API.Authorization
 {
     public class AuthManager : IAuthManager
     {
-        private readonly IInstitutionRepository _institutionRepository;
+        private readonly IOrganizationRepository _organizationRepository;
         private readonly IManagerRepository _managerRepository;
 
-        public AuthManager(IInstitutionRepository institutionRepository, IManagerRepository managerRepository)
+        public AuthManager(IOrganizationRepository organizationRepository, IManagerRepository managerRepository)
         {
-            _institutionRepository = institutionRepository;
+            _organizationRepository = organizationRepository;
             _managerRepository = managerRepository;
         }
         
@@ -22,21 +22,21 @@ namespace API.Authorization
             return apikey.Equals(ConfigurationManager.AppSettings["ApiKey"]);
         }
 
-        public bool ValidateInstitutionApiKey(string apiKey)
+        public bool ValidateOrganizationApiKey(string apiKey)
         {
-            return _institutionRepository.HasApiKey(apiKey);
+            return _organizationRepository.HasApiKey(apiKey);
         }
 
-        public Institution GetInstitutionByApiKey(string apiKey)
+        public Organization GetOrganizationByApiKey(string apiKey)
         {
-            return _institutionRepository.Read(apiKey);
+            return _organizationRepository.Read(apiKey);
         }
 
-        public Institution GetInstitutionByHeader(HttpRequestHeaders headers)
+        public Organization GetOrganizationByHeader(HttpRequestHeaders headers)
         {
             var apiKey = headers.Authorization.ToString();
             if (apiKey == null) return null;
-            return GetInstitutionByApiKey(apiKey);
+            return GetOrganizationByApiKey(apiKey);
         }
 
         public Manager GetManagerByHeader(HttpRequestHeaders headers)

@@ -27,7 +27,7 @@ namespace API.Authorization
             {
                 actionContext.Response = actionContext.Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "Please set the 'Authorization' header to the api key of the institution!" });
             }
-            else if (!_authManager.ValidateInstitutionApiKey(apiKey.ToString()))
+            else if (!_authManager.ValidateOrganizationApiKey(apiKey.ToString()))
             {
                 actionContext.Response = actionContext.Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "The provided api key is not valid!" });
             }

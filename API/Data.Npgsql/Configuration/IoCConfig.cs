@@ -13,7 +13,7 @@ namespace Data.Npgsql.Configuration
                 
                 .RegisterType<IEmployeeRepository, EmployeeRepository>(new HierarchicalLifetimeManager())
                 .RegisterType<IEmployeeTitleRepository, EmployeeTitleRepository>(new HierarchicalLifetimeManager())
-                .RegisterType<IInstitutionRepository, InstitutionRepository>(new HierarchicalLifetimeManager())
+                .RegisterType<IOrganizationRepository, OrganizationRepository>(new HierarchicalLifetimeManager())
                 .RegisterType<IManagerRepository, ManagerRepository>(new HierarchicalLifetimeManager())
                 .RegisterType<IScheduleRepository, ScheduleRepository>(new HierarchicalLifetimeManager())
                 .RegisterType<IShiftRepository, ShiftRepository>(new HierarchicalLifetimeManager());

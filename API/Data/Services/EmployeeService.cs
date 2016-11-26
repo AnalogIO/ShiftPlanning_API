@@ -7,25 +7,25 @@ namespace Data.Services
 {
     public class EmployeeService : IEmployeeService
     {
-        private readonly IInstitutionRepository _institutionRepository;
+        private readonly IOrganizationRepository _organizationRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmployeeTitleRepository _employeeTitleRepository;
 
-        public EmployeeService(IInstitutionRepository institutionRepository, IEmployeeRepository employeeRepository, IEmployeeTitleRepository employeeTitleRepository)
+        public EmployeeService(IOrganizationRepository organizationRepository, IEmployeeRepository employeeRepository, IEmployeeTitleRepository employeeTitleRepository)
         {
-            _institutionRepository = institutionRepository;
+            _organizationRepository = organizationRepository;
             _employeeRepository = employeeRepository;
             _employeeTitleRepository = employeeTitleRepository;
         }
 
-        public IEnumerable<Employee> GetEmployees(int institutionId)
+        public IEnumerable<Employee> GetEmployees(int organizationId)
         {
-            return _employeeRepository.ReadFromInstitution(institutionId);
+            return _employeeRepository.ReadFromOrganization(organizationId);
         }
 
         public IEnumerable<Employee> GetEmployees(string shortKey)
         {
-            return _employeeRepository.ReadFromInstitution(shortKey);
+            return _employeeRepository.ReadFromOrganization(shortKey);
         }
 
         public Employee GetEmployee(int id, int institutionId)
@@ -40,8 +40,8 @@ namespace Data.Services
 
         public Employee CreateEmployee(CreateEmployeeDTO employeeDto, Manager manager)
         {
-            var employee = new Employee { Email = employeeDto.Email, FirstName = employeeDto.FirstName, LastName = employeeDto.LastName, Institution = manager.Institution, Active = true };
-            var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Institution.Id);
+            var employee = new Employee { Email = employeeDto.Email, FirstName = employeeDto.FirstName, LastName = employeeDto.LastName, Organization = manager.Organization, Active = true };
+            var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Organization.Id);
             if (title == null) return null;
             employee.EmployeeTitle = title;
             return _employeeRepository.Create(employee);
@@ -49,7 +49,7 @@ namespace Data.Services
 
         public Employee UpdateEmployee(int employeeId, UpdateEmployeeDTO employeeDto, Manager manager)
         {
-            var employee = _employeeRepository.Read(employeeId, manager.Institution.Id);
+            var employee = _employeeRepository.Read(employeeId, manager.Organization.Id);
             if (employee != null)
             {
                 employee.Email = employeeDto.Email;
@@ -57,7 +57,7 @@ namespace Data.Services
                 employee.LastName = employeeDto.LastName;
                 employee.Active = employeeDto.Active;
 
-                var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Institution.Id);
+                var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Organization.Id);
                 if (title != null) employee.EmployeeTitle = title;
                 _employeeRepository.Update(employee);
                 return employee;
@@ -67,7 +67,7 @@ namespace Data.Services
 
         public void DeleteEmployee(int employeeId, Manager manager)
         {
-            _employeeRepository.Delete(employeeId, manager.Institution.Id);
+            _employeeRepository.Delete(employeeId, manager.Organization.Id);
         }
     }
 }

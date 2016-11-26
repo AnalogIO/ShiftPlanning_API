@@ -6,9 +6,9 @@ namespace Data.Repositories
     public interface IScheduleRepository
     {
         Schedule Create(Schedule schedule);
-        IEnumerable<Schedule> ReadFromInstitution(int institutionId);
-        Schedule Read(int id, int institutionId);
+        IEnumerable<Schedule> ReadFromOrganization(int organizationId);
+        Schedule Read(int id, int organizationId);
         int Update(Schedule schedule);
-        void Delete(int id, int institutionId);
+        void Delete(int id, int organizationId);
     }
 }

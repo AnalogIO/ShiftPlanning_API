@@ -26,18 +26,18 @@ namespace API.Controllers
         [HttpGet, Route("")]
         public IHttpActionResult Get()
         {
-            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
-            if (institution == null) return BadRequest("No institution found with the given name");
-            return Ok(_shiftService.GetByInstitution(institution.Id));
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No institution found with the given name");
+            return Ok(_shiftService.GetByOrganization(organization.Id));
         }
 
         [HttpGet, Route("{id}")]
         public IHttpActionResult Get(int id)
         {
-            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
-            if (institution == null) return BadRequest("No institution found with the given name");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No institution found with the given name");
 
-            var shift = _shiftService.GetShift(id, institution.Id);
+            var shift = _shiftService.GetShift(id, organization.Id);
             if(shift != null)
             {
                 return Ok(Mapper.Map(shift));
@@ -48,10 +48,10 @@ namespace API.Controllers
         [HttpDelete, Route("{id}")]
         public IHttpActionResult Delete(int id)
         {
-            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
-            if (institution == null) return BadRequest("No institution found with the given name");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No institution found with the given name");
 
-            _shiftService.DeleteShift(id, institution.Id);
+            _shiftService.DeleteShift(id, organization.Id);
             
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
         }
@@ -59,10 +59,10 @@ namespace API.Controllers
         [HttpPut, Route("{id}")]
         public IHttpActionResult Update(int id, UpdateShiftDTO shiftDto)
         {
-            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
-            if (institution == null) return BadRequest("No institution found with the given name");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No institution found with the given name");
 
-            var shift = _shiftService.UpdateShift(id, institution.Id, shiftDto);
+            var shift = _shiftService.UpdateShift(id, organization.Id, shiftDto);
 
             if(shift != null)
             {
@@ -76,10 +76,10 @@ namespace API.Controllers
         [HttpGet, Route("ongoing"), ApiKeyFilter]
         public IHttpActionResult OnGoing()
         {
-            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
-            if (institution == null) return BadRequest("No institution found with the given name");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No institution found with the given name");
 
-            var shifts = Mapper.Map(_shiftService.GetOngoingShiftsByInstitution(institution.Id));
+            var shifts = Mapper.Map(_shiftService.GetOngoingShiftsByOrganization(organization.Id));
 
             return Ok(new { Shifts = shifts });
         }
@@ -92,10 +92,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
-            if (institution == null) return BadRequest("No institution found with the given name");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No institution found with the given name");
 
-            var checkIn = _shiftService.CheckInEmployee(id, employeeId, institution.Id);
+            var checkIn = _shiftService.CheckInEmployee(id, employeeId, organization.Id);
             if (checkIn != null)
             {
                 return Ok(new { Message = "The employee was successfully checked in!" });
@@ -111,7 +111,7 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
+            var institution = _authManager.GetOrganizationByHeader(Request.Headers);
             if (institution == null) return BadRequest("No institution found with the given name");
 
             var shift = _shiftService.CreateShiftOutsideSchedule(shiftDto, institution);

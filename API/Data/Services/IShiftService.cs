@@ -11,80 +11,80 @@ namespace Data.Services
     public interface IShiftService
     {
         /// <summary>
-        /// Returns all shifts from an institution.
+        /// Returns all shifts from an organization.
         /// </summary>
-        /// <param name="shortKey">The short key of the institution</param>
-        /// <returns>A collection of shifts. null if the institution was not found.</returns>
-        IEnumerable<Shift> GetByInstitution(string shortKey);
+        /// <param name="shortKey">The short key of the organization</param>
+        /// <returns>A collection of shifts. null if the organization was not found.</returns>
+        IEnumerable<Shift> GetByOrganization(string shortKey);
 
         /// <summary>
-        /// Returns all shifts from an institution.
+        /// Returns all shifts from an organization.
         /// </summary>
-        /// <param name="id">The ID of the institution</param>
-        /// <returns>A collection of shifts. null if the institution was not found.</returns>
-        IEnumerable<Shift> GetByInstitution(int id);
-
-        /// <summary>
-        /// Returns all shifts that crosses or are inside the date denoted by <paramref name="date"/>
-        /// </summary>
-        /// <param name="shortKey">The short key of the institution</param>
-        /// <param name="date">The date of interesting shifts.</param>
-        /// <returns>A collection of shifts. null if the institution was not found.</returns>
-        IEnumerable<Shift> GetByInstitution(string shortKey, DateTime date);
+        /// <param name="id">The ID of the organization</param>
+        /// <returns>A collection of shifts. null if the orgnanization was not found.</returns>
+        IEnumerable<Shift> GetByOrganization(int id);
 
         /// <summary>
         /// Returns all shifts that crosses or are inside the date denoted by <paramref name="date"/>
         /// </summary>
-        /// <param name="id">The ID of the institution</param>
+        /// <param name="shortKey">The short key of the organization</param>
         /// <param name="date">The date of interesting shifts.</param>
-        /// <returns>A collection of shifts. null if the institution was not found.</returns>
-        IEnumerable<Shift> GetByInstitution(int id, DateTime date);
+        /// <returns>A collection of shifts. null if the organization was not found.</returns>
+        IEnumerable<Shift> GetByOrganization(string shortKey, DateTime date);
+
+        /// <summary>
+        /// Returns all shifts that crosses or are inside the date denoted by <paramref name="date"/>
+        /// </summary>
+        /// <param name="id">The ID of the organization</param>
+        /// <param name="date">The date of interesting shifts.</param>
+        /// <returns>A collection of shifts. null if the organization was not found.</returns>
+        IEnumerable<Shift> GetByOrganization(int id, DateTime date);
 
         /// <summary>
         /// Returns all shifts that crosses or are inside the range denoted by <paramref name="from"/> and <paramref name="to"/>
         /// </summary>
-        /// <param name="shortKey">The short key of the institution</param>
+        /// <param name="shortKey">The short key of the organization</param>
         /// <param name="from">Beginning of range.</param>
         /// <param name="to">End of range.</param>
-        /// <returns>A collection of shifts. null if the institution was not found.</returns>
-        IEnumerable<Shift> GetByInstitution(string shortKey, DateTime from, DateTime to);
+        /// <returns>A collection of shifts. null if the organization was not found.</returns>
+        IEnumerable<Shift> GetByOrganization(string shortKey, DateTime from, DateTime to);
 
         /// <summary>
         /// Returns all shifts that crosses or are inside the range denoted by <paramref name="from"/> and <paramref name="to"/>
         /// </summary>
-        /// <param name="id">The ID of the institution</param>
+        /// <param name="id">The ID of the organization</param>
         /// <param name="from">Beginning of range.</param>
         /// <param name="to">End of range.</param>
-        /// <returns>A collection of shifts. null if the institution was not found.</returns>
-        IEnumerable<Shift> GetByInstitution(int id, DateTime from, DateTime to);
+        /// <returns>A collection of shifts. null if the organization was not found.</returns>
+        IEnumerable<Shift> GetByOrganization(int id, DateTime from, DateTime to);
 
         /// <summary>
-        /// Retrieve ongoing shifts for the given institution.
+        /// Retrieve ongoing shifts for the given organization.
         /// </summary>
-        /// <param name="shortKey">The short key of the institution.</param>
+        /// <param name="shortKey">The short key of the organization.</param>
         /// <returns>
         /// A collection of shifts, mostly (hopefully) containing only a single element.
-        /// null if the institution was not found.
+        /// null if the organization was not found.
         /// </returns>
-        IEnumerable<Shift> GetOngoingShiftsByInstitution(string shortKey);
+        IEnumerable<Shift> GetOngoingShiftsByOrganization(string shortKey);
 
         /// <summary>
-        /// Retrieve ongoing shifts for the given institution.
+        /// Retrieve ongoing shifts for the given organization.
         /// </summary>
-        /// <param name="id">The ID of the institution.</param>
+        /// <param name="id">The ID of the organization.</param>
         /// <returns>
         /// A collection of shifts, mostly (hopefully) containing only a single element.
-        /// null if the institution was not found.
+        /// null if the organization was not found.
         /// </returns>
-        IEnumerable<Shift> GetOngoingShiftsByInstitution(int id);
+        IEnumerable<Shift> GetOngoingShiftsByOrganization(int id);
 
-        Shift GetShift(int shiftId, int institutionId);
+        Shift GetShift(int shiftId, int organizationId);
 
-        void DeleteShift(int shiftId, int institutionId);
-        Shift UpdateShift(int shiftId, int institutionId, UpdateShiftDTO updateShiftDto);
+        void DeleteShift(int shiftId, int organizationId);
+        Shift UpdateShift(int shiftId, int organizationId, UpdateShiftDTO updateShiftDto);
 
-        CheckIn CheckInEmployee(int shiftId, int employeeId, int institutionId);
+        CheckIn CheckInEmployee(int shiftId, int employeeId, int organizationId);
 
-        Shift CreateShiftOutsideSchedule(CreateShiftOutsideScheduleDTO shiftDto, Institution institution);
+        Shift CreateShiftOutsideSchedule(CreateShiftOutsideScheduleDTO shiftDto, Organization organization);
     }
 }
