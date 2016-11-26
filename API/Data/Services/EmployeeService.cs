@@ -3,6 +3,7 @@ using Data.Models;
 using Data.Repositories;
 using DataTransferObjects.Employee;
 using System.Linq;
+using System;
 
 namespace Data.Services
 {
@@ -39,9 +40,9 @@ namespace Data.Services
             return _employeeRepository.Read(id, shortKey);
         }
 
-        public Employee CreateEmployee(CreateEmployeeDTO employeeDto, Manager manager)
+        public Employee CreateEmployee(CreateEmployeeDTO employeeDto, Manager manager, Photo photo)
         {
-            var employee = new Employee { Email = employeeDto.Email, FirstName = employeeDto.FirstName, LastName = employeeDto.LastName, Organization = manager.Organization, Active = true };
+            var employee = new Employee { Email = employeeDto.Email, FirstName = employeeDto.FirstName, LastName = employeeDto.LastName, Organization = manager.Organization, Active = true, Photo = photo };
             var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Organization.Id);
             if (title == null) return null;
             employee.EmployeeTitle = title;
@@ -80,6 +81,15 @@ namespace Data.Services
         public void DeleteEmployee(int employeeId, Manager manager)
         {
             _employeeRepository.Delete(employeeId, manager.Organization.Id);
+        }
+
+        public void SetPhoto(int employeeId, int organizationId, Photo photo)
+        {
+            var employee = _employeeRepository.Read(employeeId, organizationId);
+
+            employee.Photo = photo;
+
+            _employeeRepository.Update(employee);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace PublicApi.Controllers
         [HttpGet, Route("{shortKey}")]
         public IHttpActionResult IsOpen(string shortKey)
         {
-            var currentShifts = _shiftService.GetOngoingShiftsByInstitution(shortKey);
+            var currentShifts = _shiftService.GetOngoingShiftsByOrganization(shortKey);
 
             if (currentShifts == null)
             {

@@ -7,8 +7,10 @@ namespace Data
     {
         public static void ConfigureIoC(IUnityContainer container)
         {
-            container.RegisterType<IEmployeeService, EmployeeService>(new HierarchicalLifetimeManager())
+            container
+                .RegisterType<IEmployeeService, EmployeeService>(new HierarchicalLifetimeManager())
                 .RegisterType<IEmployeeTitleService, EmployeeTitleService>(new HierarchicalLifetimeManager())
+                .RegisterType<IPhotoService, PhotoService>(new HierarchicalLifetimeManager())
                 .RegisterType<IScheduleService, ScheduleService>(new HierarchicalLifetimeManager())
                 .RegisterType<IShiftService, ShiftService>(new HierarchicalLifetimeManager());
         }

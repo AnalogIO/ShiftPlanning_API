@@ -11,6 +11,7 @@ namespace Data.Npgsql.Configuration
             container
                 .RegisterType<IShiftPlannerDataContext, ShiftPlannerDataContext>(new HierarchicalLifetimeManager())
                 
+                .RegisterType<IPhotoRepository, PhotoRepository>(new HierarchicalLifetimeManager())
                 .RegisterType<IEmployeeRepository, EmployeeRepository>(new HierarchicalLifetimeManager())
                 .RegisterType<IEmployeeTitleRepository, EmployeeTitleRepository>(new HierarchicalLifetimeManager())
                 .RegisterType<IOrganizationRepository, OrganizationRepository>(new HierarchicalLifetimeManager())

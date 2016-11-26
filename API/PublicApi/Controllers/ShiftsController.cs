@@ -38,7 +38,7 @@ namespace PublicApi.Controllers
         [ResponseType(typeof(IEnumerable<OpeningHoursDTO>))]
         public IHttpActionResult Get(string shortKey)
         {
-            var shifts = _shiftService.GetByInstitution(shortKey, DateTime.Today, DateTime.Today.AddDays(7));
+            var shifts = _shiftService.GetByOrganization(shortKey, DateTime.Today, DateTime.Today.AddDays(7));
 
             if (shifts == null)
             {
@@ -58,7 +58,7 @@ namespace PublicApi.Controllers
         [ResponseType(typeof(IEnumerable<OpeningHoursDTO>))]
         public IHttpActionResult GetIntervals(string shortKey, int interval = 30)
         {
-            var shifts = _shiftService.GetByInstitution(shortKey, DateTime.Today, DateTime.Today.AddDays(7))?.ToList();
+            var shifts = _shiftService.GetByOrganization(shortKey, DateTime.Today, DateTime.Today.AddDays(7))?.ToList();
 
             if (shifts == null) return NotFound();
 

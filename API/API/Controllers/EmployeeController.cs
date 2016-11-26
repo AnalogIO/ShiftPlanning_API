@@ -1,8 +1,13 @@
 ﻿using API.Logic;
+using System.Linq;
+using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using API.Authorization;
+using Data.Models;
 using Data.Services;
 using DataTransferObjects.Employee;
 
@@ -23,6 +28,39 @@ namespace API.Controllers
             _employeeService = employeeService;
         }
 
+        [HttpPut, AdminFilter, Route("{userId:int}/photo")]
+        public IHttpActionResult UpdatePhoto([FromUri] int userId)
+        {
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            var files = HttpContext.Current.Request.Files;
+            
+            if (files.AllKeys.Any())
+            {
+                var file = files[0];
+
+                byte[] fileData = null;
+                using (var binaryReader = new BinaryReader(file.InputStream))
+                {
+                    fileData = binaryReader.ReadBytes(file.ContentLength);
+                }
+
+                if (file.ContentType.Contains("image"))
+                {
+                    var photo = new Photo { Type = file.ContentType, Data = fileData };
+
+                    _employeeService.SetPhoto(userId, manager.Organization.Id, photo);
+
+                    return Ok();
+                }
+
+                return StatusCode(HttpStatusCode.UnsupportedMediaType);
+            }
+
+            return BadRequest();
+        }
+
         // POST api/employees
         /// <summary>
         /// Creates the employee from the content in the body.
@@ -33,22 +71,61 @@ namespace API.Controllers
         /// If an employee already exist with the given email, the controller will return BadRequest (400).
         /// </returns>
         [HttpPost, AdminFilter, Route("")]
-        public IHttpActionResult Register(CreateEmployeeDTO employeeDto)
+        public IHttpActionResult Register()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var employee = _employeeService.CreateEmployee(employeeDto, manager);
+            var form = HttpContext.Current.Request.Form;
+
+            var employeeDto = new CreateEmployeeDTO
+            {
+                Email = form["email"],
+                FirstName = form["firstName"],
+                LastName = form["lastName"],
+                EmployeeTitleId = Convert.ToInt32(form["employeeTitleId"])
+            };
+
+            if (!IsCreateEmployeeDtoAlright(employeeDto))
+            {
+                return BadRequest("An employee must contain an email, a first name, a last name and an employee title.");
+            }
+
+            var files = HttpContext.Current.Request.Files;
+
+            Photo photo = new Photo { Id = 0 }; // Default "null" image.
+
+            if (files.AllKeys.Any())
+            {
+                var file = files[0];
+
+                byte[] fileData = null;
+                using (var binaryReader = new BinaryReader(file.InputStream))
+                {
+                    fileData = binaryReader.ReadBytes(file.ContentLength);
+                }
+
+                if (file.ContentType.Contains("image"))
+                {
+                    photo = new Photo { Type = file.ContentType, Data = fileData };
+                }
+            }
+
+            var employee = _employeeService.CreateEmployee(employeeDto, manager, photo);
             if (employee != null)
             {
                 return Created($"/api/employees/{employee.Id}", Mapper.Map(employee));
             }
             return BadRequest("The user could not be created!");
+        }
+
+        private bool IsCreateEmployeeDtoAlright(CreateEmployeeDTO dto)
+        {
+            if (dto == null 
+                || string.IsNullOrWhiteSpace(dto.Email) 
+                || string.IsNullOrWhiteSpace(dto.FirstName) 
+                || string.IsNullOrWhiteSpace(dto.LastName)) return false;
+            return true;
         }
 
         // POST api/employees/createmany

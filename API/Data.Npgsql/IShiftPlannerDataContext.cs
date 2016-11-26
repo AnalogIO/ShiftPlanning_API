@@ -8,6 +8,7 @@ namespace Data.Npgsql
     {
         DbSet<Employee> Employees { get; set; }
         DbSet<EmployeeTitle> EmployeeTitles { get; set; }
+        DbSet<Photo> Photos { get; set; }
         DbSet<Schedule> Schedules { get; set; }
         DbSet<Organization> Organizations { get; set; }
         DbSet<Manager> Managers { get; set; }
