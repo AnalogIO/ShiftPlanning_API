@@ -37,7 +37,7 @@ namespace API.Logic
 
         public static ScheduleDTO Map(Schedule schedule)
         {
-            return new ScheduleDTO { Id = schedule.Id, Name = schedule.Name, NumberOfWeeks = schedule.NumberOfWeeks, SchedulesShifts = Map(schedule.ScheduledShifts) };
+            return new ScheduleDTO { Id = schedule.Id, Name = schedule.Name, NumberOfWeeks = schedule.NumberOfWeeks, ScheduledShifts = Map(schedule.ScheduledShifts) };
         }
 
         public static IEnumerable<ScheduleDTO> Map(IEnumerable<Schedule> schedules)

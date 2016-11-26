@@ -17,6 +17,11 @@ namespace API.Controllers
         private readonly IAuthManager _authManager;
         private readonly IEmployeeTitleService _employeeTitleService;
 
+        /// <summary>
+        /// Employee title controller constructor
+        /// </summary>
+        /// <param name="authManager"></param>
+        /// <param name="employeeTitleService"></param>
         public EmployeeTitleController(IAuthManager authManager, IEmployeeTitleService employeeTitleService)
         {
             _authManager = authManager;
@@ -38,8 +43,6 @@ namespace API.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            var token = Request.Headers.Authorization.ToString();
 
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
@@ -112,6 +115,7 @@ namespace API.Controllers
         /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <param name="id">The id of the employee title.</param>
+        /// <param name="employeeTitleDto">The employee title dto</param>
         /// <returns>
         /// Returns 'No Content' (204) if the employee title gets updated.
         /// If no employee title is found with the given id, the controller will return NotFound (404)

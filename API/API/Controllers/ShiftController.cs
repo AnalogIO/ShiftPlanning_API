@@ -17,20 +17,34 @@ namespace API.Controllers
         private readonly IShiftService _shiftService;
         private readonly IAuthManager _authManager;
 
+        /// <summary>
+        /// The constructor of the shift controller
+        /// </summary>
+        /// <param name="authManager"></param>
+        /// <param name="shiftService"></param>
         public ShiftController(IAuthManager authManager, IShiftService shiftService)
         {
             _authManager = authManager;
             _shiftService = shiftService;
         }
 
+        /// <summary>
+        /// Returns all shifts of the specified organization in the 'Authorization' header
+        /// </summary>
+        /// <returns></returns>
         [HttpGet, Route("")]
         public IHttpActionResult Get()
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
             if (organization == null) return BadRequest("No institution found with the given name");
-            return Ok(_shiftService.GetByOrganization(organization.Id));
+            return Ok(Mapper.Map(_shiftService.GetByOrganization(organization.Id)));
         }
 
+        /// <summary>
+        /// Returns the shift for the given id in the parameter
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet, Route("{id}")]
         public IHttpActionResult Get(int id)
         {
@@ -45,6 +59,11 @@ namespace API.Controllers
             return NotFound();
         }
 
+        /// <summary>
+        /// Deletes the shift with the given id in the parameter
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete, Route("{id}")]
         public IHttpActionResult Delete(int id)
         {
@@ -56,6 +75,12 @@ namespace API.Controllers
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
         }
 
+        /// <summary>
+        /// Updates the shift with the id in the parameter with the content in the body
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="shiftDto"></param>
+        /// <returns></returns>
         [HttpPut, Route("{id}")]
         public IHttpActionResult Update(int id, UpdateShiftDTO shiftDto)
         {
@@ -73,6 +98,10 @@ namespace API.Controllers
         }
 
 
+        /// <summary>
+        /// Gets the shifts currently ongoing with the corresponding employees planned to be on the shift and the employees checked-in on that shift
+        /// </summary>
+        /// <returns></returns>
         [HttpGet, Route("ongoing"), ApiKeyFilter]
         public IHttpActionResult OnGoing()
         {
@@ -84,6 +113,12 @@ namespace API.Controllers
             return Ok(new { Shifts = shifts });
         }
 
+        /// <summary>
+        /// Checks in the employee with the given employee id in the parameters for the given shift id in the parameters
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="employeeId"></param>
+        /// <returns></returns>
         [HttpPost, Route("{id}/checkin"), ApiKeyFilter]
         public IHttpActionResult CheckIn(int id, int employeeId)
         {
@@ -103,6 +138,11 @@ namespace API.Controllers
             return BadRequest("Could not check-in the employee - try again!");
         }
 
+        /// <summary>
+        /// Creates a shift with the given employees from now (rounded up to nearest 15 minutes) and for the next xx minutes defined in the body
+        /// </summary>
+        /// <param name="shiftDto"></param>
+        /// <returns></returns>
         [HttpPost, Route("createoutsideschedule"), ApiKeyFilter]
         public IHttpActionResult CreateOutsideSchedule(CreateShiftOutsideScheduleDTO shiftDto)
         {
