@@ -97,7 +97,7 @@ namespace API.Controllers
             var schedule = _scheduleService.CreateSchedule(scheduleDto, manager);
             if (schedule != null)
             {
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
+                return Created($"/api/schedules/{schedule.Id}", Mapper.Map(schedule));
             }
             return BadRequest("The schedule could not be created!");
         }
@@ -175,7 +175,7 @@ namespace API.Controllers
             var scheduledShift = _scheduleService.CreateScheduledShift(scheduledShiftDto, manager, id);
 
             if (scheduledShift != null) {
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
+                return Created($"/api/schedules/{id}", Mapper.Map(scheduledShift));
             }
 
             return BadRequest("The schedule could not be created!");
@@ -233,7 +233,7 @@ namespace API.Controllers
 
             if (scheduledShifts != null)
             {
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
+                return Created($"/api/schedules/{id}", Mapper.Map(scheduledShifts));
             }
 
             return BadRequest("The schedule could not be created!");
@@ -262,7 +262,7 @@ namespace API.Controllers
 
             if (shifts != null)
             {
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
+                return Created($"/api/schedules/{id}", Mapper.Map(shifts));
             }
 
             return BadRequest("The schedule could not be created!");
