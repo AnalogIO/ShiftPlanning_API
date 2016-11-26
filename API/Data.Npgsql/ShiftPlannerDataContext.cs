@@ -25,6 +25,13 @@ namespace Data.Npgsql
             modelBuilder.Entity<Employee>()
                 .HasOptional(emp => emp.Photo);
 
+            modelBuilder.Entity<Photo>()
+                .HasRequired(photo => photo.Organization)
+                .WithMany();
+
+            modelBuilder.Entity<Organization>()
+                .HasRequired(org => org.DefaultPhoto);
+
             base.OnModelCreating(modelBuilder);
         }
     }

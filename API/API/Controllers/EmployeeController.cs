@@ -98,7 +98,7 @@ namespace API.Controllers
 
             var files = HttpContext.Current.Request.Files;
 
-            Photo photo = new Photo { Id = 0 }; // Default "null" image.
+            var photo = manager.Organization.DefaultPhoto;
 
             if (files.AllKeys.Any())
             {
@@ -122,15 +122,6 @@ namespace API.Controllers
                 return Created($"/api/employees/{employee.Id}", Mapper.Map(employee));
             }
             return BadRequest("The user could not be created!");
-        }
-
-        private bool IsCreateEmployeeDtoAlright(CreateEmployeeDTO dto)
-        {
-            if (dto == null 
-                || string.IsNullOrWhiteSpace(dto.Email) 
-                || string.IsNullOrWhiteSpace(dto.FirstName) 
-                || string.IsNullOrWhiteSpace(dto.LastName)) return false;
-            return true;
         }
 
         // POST api/employees/createmany
@@ -281,6 +272,15 @@ namespace API.Controllers
 
             _employeeService.DeleteEmployee(id, manager);
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+        }
+
+        private static bool IsCreateEmployeeDtoAlright(CreateEmployeeDTO dto)
+        {
+            if (dto == null
+                || string.IsNullOrWhiteSpace(dto.Email)
+                || string.IsNullOrWhiteSpace(dto.FirstName)
+                || string.IsNullOrWhiteSpace(dto.LastName)) return false;
+            return true;
         }
     }
 }
