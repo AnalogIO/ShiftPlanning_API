@@ -6,6 +6,7 @@ namespace Data.Repositories
     public interface IEmployeeRepository
     {
         Employee Create(Employee employee);
+        IEnumerable<Employee> CreateMany(IEnumerable<Employee> employees);
         IEnumerable<Employee> ReadFromInstitution(int institutionId);
         IEnumerable<Employee> ReadFromInstitution(string shortKey);
         Employee Read(int id, int institutionId);

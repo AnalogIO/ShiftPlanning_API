@@ -26,6 +26,12 @@ namespace Data.Npgsql.Repositories
             return null;
         }
 
+        public IEnumerable<Employee> CreateMany(IEnumerable<Employee> employees)
+        {
+            _context.Employees.AddRange(employees);
+            return _context.SaveChanges() > 0 ? employees : null;
+        }
+
         public void Delete(int id, int institutionId)
         {
             var employee = _context.Employees.FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId);

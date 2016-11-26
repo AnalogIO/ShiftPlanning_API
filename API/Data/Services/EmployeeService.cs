@@ -2,6 +2,7 @@
 using Data.Models;
 using Data.Repositories;
 using DataTransferObjects.Employee;
+using System.Linq;
 
 namespace Data.Services
 {
@@ -63,6 +64,17 @@ namespace Data.Services
                 return employee;
             }
             return null;
+        }
+
+        public IEnumerable<Employee> CreateManyEmployees(CreateEmployeeDTO[] employeeDtos, Manager manager)
+        {
+            return _employeeRepository.CreateMany(employeeDtos.Select(employeeDto => new Employee {
+                Email = employeeDto.Email,
+                FirstName = employeeDto.FirstName,
+                LastName = employeeDto.LastName,
+                Institution = manager.Institution,
+                Active = true,
+                EmployeeTitle = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Institution.Id) }));
         }
 
         public void DeleteEmployee(int employeeId, Manager manager)
