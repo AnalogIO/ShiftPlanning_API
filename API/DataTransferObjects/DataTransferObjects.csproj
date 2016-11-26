@@ -55,11 +55,11 @@
     <Compile Include="EmployeeTitles\EmployeeTitleDTO.cs" />
     <Compile Include="Manager\ManagerLoginDTO.cs" />
     <Compile Include="Manager\ManagerLoginResponse.cs" />
-    <Compile Include="OpeningHours\IntervalOpeningHourDTO.cs" />
-    <Compile Include="OpeningHours\IntervalOpeningHoursDTO.cs" />
-    <Compile Include="OpeningHours\IsOpenDTO.cs" />
-    <Compile Include="OpeningHours\OpeningHourEmployeeDTO.cs" />
-    <Compile Include="OpeningHours\OpeningHoursDTO.cs" />
+    <Compile Include="Public\OpeningHours\IntervalOpeningHourDTO.cs" />
+    <Compile Include="Public\OpeningHours\IntervalOpeningHoursDTO.cs" />
+    <Compile Include="Public\OpeningHours\IsOpenDTO.cs" />
+    <Compile Include="Public\OpeningHours\OpeningHourEmployeeDTO.cs" />
+    <Compile Include="Public\OpeningHours\OpeningHoursDTO.cs" />
     <Compile Include="Shift\CreateShiftOutsideScheduleDTO.cs" />
     <Compile Include="Shift\ShiftDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,7 +71,7 @@
     <Compile Include="ScheduledShift\UpdateScheduledShiftDTO.cs" />
     <Compile Include="Schedule\UpdateScheduleDTO.cs" />
     <Compile Include="Shift\UpdateShiftDTO.cs" />
-    <Compile Include="Volunteers\VolunteerDTO.cs" />
+    <Compile Include="Public\Employees\EmployeeDTO.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

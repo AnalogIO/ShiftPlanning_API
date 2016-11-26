@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DataTransferObjects.OpeningHours
+namespace DataTransferObjects.Public.OpeningHours
 {
     public class IntervalOpeningHoursDTO
     {

@@ -4,16 +4,16 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Data.Services;
-using DataTransferObjects.OpeningHours;
+using DataTransferObjects.Public.OpeningHours;
 using PublicApi.Mapping;
 
 namespace PublicApi.Controllers
 {
     /// <summary>
-    /// The OpeningHoursController is the public entrance to get opening hour and shift information.
+    /// The ShiftsController is the public entrance to get opening hour and shift information.
     /// </summary>
-    [RoutePrefix("api/{shortKey}/openinghours")]
-    public class OpeningHoursController : ApiController
+    [RoutePrefix("api/shifts")]
+    public class ShiftsController : ApiController
     {
         private readonly IShiftService _shiftService;
         private readonly IOpeningHoursMapper _mapper;
@@ -23,7 +23,7 @@ namespace PublicApi.Controllers
         /// </summary>
         /// <param name="shiftService"></param>
         /// <param name="mapper"></param>
-        public OpeningHoursController(IShiftService shiftService, IOpeningHoursMapper mapper)
+        public ShiftsController(IShiftService shiftService, IOpeningHoursMapper mapper)
         {
             _shiftService = shiftService;
             _mapper = mapper;
@@ -34,7 +34,7 @@ namespace PublicApi.Controllers
         /// </summary>
         /// <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
         /// <returns>A collection of OpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
-        [HttpGet, Route("")]
+        [HttpGet, Route("{shortKey}")]
         [ResponseType(typeof(IEnumerable<OpeningHoursDTO>))]
         public IHttpActionResult Get(string shortKey)
         {
@@ -54,9 +54,9 @@ namespace PublicApi.Controllers
         /// <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
         /// <param name="interval">The number of minutes an interval should span.</param>
         /// <returns>A collection of OpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
-        [HttpGet, Route("intervals/{interval:int}")]
+        [HttpGet, Route("~/api/openinghours/{shortKey}")]
         [ResponseType(typeof(IEnumerable<OpeningHoursDTO>))]
-        public IHttpActionResult GetIntervals(string shortKey, int interval)
+        public IHttpActionResult GetIntervals(string shortKey, int interval = 30)
         {
             var shifts = _shiftService.GetByInstitution(shortKey, DateTime.Today, DateTime.Today.AddDays(7))?.ToList();
 

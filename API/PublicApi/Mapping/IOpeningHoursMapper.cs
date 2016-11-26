@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Data.Models;
-using DataTransferObjects.OpeningHours;
+using DataTransferObjects.Public.OpeningHours;
 
 namespace PublicApi.Mapping
 {

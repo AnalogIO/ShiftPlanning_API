@@ -2,24 +2,24 @@
 using System.Web.Http;
 using System.Web.Http.Description;
 using Data.Services;
-using DataTransferObjects.OpeningHours;
+using DataTransferObjects.Public.OpeningHours;
 
 namespace PublicApi.Controllers
 {
     /// <summary>
-    /// The IsOpenController is the public interface that can tell whether or not
+    /// The OpenController is the public interface that can tell whether or not
     /// a given institution is open.
     /// </summary>
-    [RoutePrefix("api/{shortKey}/isOpen")]
-    public class IsOpenController : ApiController
+    [RoutePrefix("api/open")]
+    public class OpenController : ApiController
     {
         private readonly IShiftService _shiftService;
 
         /// <summary>
-        /// Dependency injection constructor of IsOpenController
+        /// Dependency injection constructor of OpenController
         /// </summary>
         /// <param name="shiftService">An IShiftService implementation</param>
-        public IsOpenController(IShiftService shiftService)
+        public OpenController(IShiftService shiftService)
         {
             _shiftService = shiftService;
         }
@@ -30,7 +30,7 @@ namespace PublicApi.Controllers
         /// <param name="shortKey">The short key of the institution.</param>
         /// <returns></returns>
         [ResponseType(typeof(IsOpenDTO))]
-        [HttpGet, Route("")]
+        [HttpGet, Route("{shortKey}")]
         public IHttpActionResult IsOpen(string shortKey)
         {
             var currentShifts = _shiftService.GetOngoingShiftsByInstitution(shortKey);

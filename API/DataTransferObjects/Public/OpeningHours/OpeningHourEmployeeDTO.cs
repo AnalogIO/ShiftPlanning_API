@@ -1,4 +1,4 @@
-﻿namespace DataTransferObjects.OpeningHours
+﻿namespace DataTransferObjects.Public.OpeningHours
 {
     /// <summary>
     /// Containing public information about a single employee in an institution.

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace DataTransferObjects.OpeningHours
+namespace DataTransferObjects.Public.OpeningHours
 {
     /// <summary>
     /// Contains information used to identify whether or not a given institution is open.
