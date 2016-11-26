@@ -10,6 +10,8 @@ using API.Authorization;
 using Data.Models;
 using Data.Services;
 using DataTransferObjects.Employee;
+using System.Collections.Generic;
+using System.Web.Http.Description;
 
 namespace API.Controllers
 {
@@ -76,6 +78,7 @@ namespace API.Controllers
         /// If an employee already exist with the given email, the controller will return BadRequest (400).
         /// </returns>
         [HttpPost, AdminFilter, Route("")]
+        [ResponseType(typeof(EmployeeDTO))]
         public IHttpActionResult Register()
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
@@ -133,6 +136,7 @@ namespace API.Controllers
         /// Returns 'Created' (201) if the employees gets created.
         /// </returns>
         [HttpPost, AdminFilter, Route("createmany")]
+        [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
         public IHttpActionResult RegisterMany(CreateEmployeeDTO[] employeeDtos)
         {
             if (!ModelState.IsValid)
@@ -160,6 +164,7 @@ namespace API.Controllers
         /// Returns an array of employees.
         /// </returns>
         [HttpGet, AdminFilter, Route("")]
+        [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
         public IHttpActionResult Get()
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
@@ -181,6 +186,7 @@ namespace API.Controllers
         /// If no employee is found with the corresponding id, the controller will return NotFound (404)
         /// </returns>
         [HttpGet, AdminFilter, Route("{id}")]
+        [ResponseType(typeof(EmployeeDTO))]
         public IHttpActionResult Get(int id)
         {
             if (!ModelState.IsValid)
@@ -212,6 +218,7 @@ namespace API.Controllers
         /// Returns an array of employees.
         /// </returns>
         [HttpGet, Route("")]
+        [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
         public IHttpActionResult Get(string apiKey)
         {
             var institution = _authManager.GetOrganizationByApiKey(apiKey);
