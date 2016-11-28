@@ -41,11 +41,12 @@ namespace API.Controllers
             }
 
             var manager = _managerRepository.Login(loginDto.Username, loginDto.Password);
-            if(manager != null)
+            if (manager != null)
             {
-                var responseDto = new ManagerLoginResponse { Token = manager.Tokens.LastOrDefault().TokenHash, OrganizationId = manager.Organization.Id, OrganizationName = manager.Organization.Name };
+                var responseDto = new ManagerLoginResponse { Token = manager.Tokens.LastOrDefault()?.TokenHash, OrganizationId = manager.Organization.Id, OrganizationName = manager.Organization.Name };
                 return Ok(responseDto);
             }
+
             HttpResponseMessage response = Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "You entered an incorrect username or password!" });
             return ResponseMessage(response);
         }

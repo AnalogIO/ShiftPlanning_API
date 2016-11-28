@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Web.Http;
 using Data.Models;
 using Data.Repositories;
 using Data.Token;
@@ -67,8 +70,8 @@ namespace Data.Npgsql.Repositories
         public Manager Login(string username, string password)
         {
             var manager = _context.Managers.FirstOrDefault(m => m.Username == username);
-            if (manager != null)
-            {
+
+            if(manager != null) { 
                 var hashPassword = HashManager.Hash(password + manager.Salt);
                 if (manager.Password.Equals(hashPassword))
                 {
@@ -78,7 +81,8 @@ namespace Data.Npgsql.Repositories
                     return manager;
                 }
             }
-            return null;
+
+            throw new HttpResponseException( new HttpResponseMessage(){Content = new ObjectContent<object>(new { Message = "You entered an incorrect username or password!" }, new JsonMediaTypeFormatter())});
         }
 
         public void Dispose()
