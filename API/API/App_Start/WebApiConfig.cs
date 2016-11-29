@@ -13,9 +13,11 @@ namespace API
             // Web API configuration and services
             config.EnableCors(new EnableCorsAttribute(origins: "*", headers: "*", methods: "*"));
 
+            config.Filters.Add(new ExceptionToHttpStatusFilterAttribute());
+
             var jsonFormatter = config.Formatters.OfType<JsonMediaTypeFormatter>().First();
             jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            
+
             config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
 
             // Web API routes

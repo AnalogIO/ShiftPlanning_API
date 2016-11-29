@@ -214,6 +214,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\ExceptionToHttpStatusFilterAttribute.cs" />
     <Compile Include="App_Start\IoCConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityWebApiActivator.cs" />
