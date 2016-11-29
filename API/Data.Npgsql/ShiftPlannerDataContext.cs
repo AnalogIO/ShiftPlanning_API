@@ -22,15 +22,22 @@ namespace Data.Npgsql
             // PostgreSQL uses the public schema by default - not dbo. 
             modelBuilder.HasDefaultSchema("public");
 
-            modelBuilder.Entity<Employee>()
-                .HasOptional(emp => emp.Photo);
-
-            modelBuilder.Entity<Photo>()
-                .HasRequired(photo => photo.Organization)
-                .WithMany();
+            modelBuilder.Entity<Organization>()
+                .HasKey(org => org.Id);
 
             modelBuilder.Entity<Organization>()
                 .HasRequired(org => org.DefaultPhoto);
+
+            modelBuilder.Entity<Employee>()
+                .HasKey(emp => emp.Id)
+                .HasOptional(emp => emp.Photo);
+
+            modelBuilder.Entity<Photo>()
+                .HasKey(photo => photo.Id);
+
+            modelBuilder.Entity<Photo>()
+                .HasRequired(photo => photo.Organization)
+                .WithMany(org => org.Photos);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -12,6 +12,7 @@ namespace Data.Models
         // public TimeZone TimeZone { get; set; } removed for now
 
         public virtual Photo DefaultPhoto { get; set; }
+        public virtual ICollection<Photo> Photos { get; set; }
         public virtual ICollection<Manager> Managers { get; set; }
         public virtual ICollection<Employee> Employees { get; set; }
         public virtual ICollection<EmployeeTitle> EmployeeTitles { get; set; }

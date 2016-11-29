@@ -55,7 +55,7 @@ namespace API.Controllers
 
                 if (file.ContentType.Contains("image"))
                 {
-                    var photo = new Photo { Type = file.ContentType, Data = fileData };
+                    var photo = new Photo { Type = file.ContentType, Data = fileData, Organization = manager.Organization };
 
                     _employeeService.SetPhoto(userId, manager.Organization.Id, photo);
 
@@ -115,7 +115,7 @@ namespace API.Controllers
 
                 if (file.ContentType.Contains("image"))
                 {
-                    photo = new Photo { Type = file.ContentType, Data = fileData };
+                    photo = new Photo { Type = file.ContentType, Data = fileData, Organization = manager.Organization };
                 }
             }
 
