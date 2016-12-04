@@ -40,7 +40,7 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = _managerRepository.Login(loginDto.Username, loginDto.Password);
+            var manager = _managerRepository.Login(loginDto.Username.Trim(), loginDto.Password);
             if (manager != null)
             {
                 var responseDto = new ManagerLoginResponse { Token = manager.Tokens.LastOrDefault()?.TokenHash, OrganizationId = manager.Organization.Id, OrganizationName = manager.Organization.Name };
