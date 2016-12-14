@@ -24,6 +24,13 @@
             The title id of the employee.
             </summary>
         </member>
+        <member name="P:DataTransferObjects.Employee.CreateEmployeeDTO.ProfilePhoto">
+            <summary>
+            A base64 encoding of the profile picture.
+            
+            May be left empty.
+            </summary>
+        </member>
         <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.Email">
             <summary>
             The email of the employee.
@@ -47,6 +54,13 @@
         <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.Active">
             <summary>
             A flag saying if the employee is currently active or not.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.ProfilePhoto">
+            <summary>
+            A base64 encoding of the profile picture.
+            
+            May be left empty.
             </summary>
         </member>
         <member name="P:DataTransferObjects.EmployeeTitles.CreateEmployeeTitleDTO.Title">

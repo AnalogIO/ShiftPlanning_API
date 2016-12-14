@@ -36,9 +36,11 @@ namespace API.Controllers
 
             if (photo == null) return NotFound();
 
-            var message = new HttpResponseMessage(HttpStatusCode.OK);
+            var message = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(photo.Data)
+            };
 
-            message.Content = new ByteArrayContent(photo.Data);
             message.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(photo.Type);
 
             return ResponseMessage(message);

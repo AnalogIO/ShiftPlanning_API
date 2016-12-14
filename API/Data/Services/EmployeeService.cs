@@ -42,14 +42,22 @@ namespace Data.Services
 
         public Employee CreateEmployee(CreateEmployeeDTO employeeDto, Manager manager, Photo photo)
         {
-            var employee = new Employee { Email = employeeDto.Email, FirstName = employeeDto.FirstName, LastName = employeeDto.LastName, Organization = manager.Organization, Active = true, Photo = photo };
+            var employee = new Employee
+            {
+                Email = employeeDto.Email,
+                FirstName = employeeDto.FirstName,
+                LastName = employeeDto.LastName,
+                Organization = manager.Organization,
+                Active = true,
+                Photo = photo
+            };
             var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Organization.Id);
             if (title == null) return null;
             employee.EmployeeTitle = title;
             return _employeeRepository.Create(employee);
         }
 
-        public Employee UpdateEmployee(int employeeId, UpdateEmployeeDTO employeeDto, Manager manager)
+        public Employee UpdateEmployee(int employeeId, UpdateEmployeeDTO employeeDto, Manager manager, Photo photo)
         {
             var employee = _employeeRepository.Read(employeeId, manager.Organization.Id);
             if (employee != null)
@@ -58,6 +66,11 @@ namespace Data.Services
                 employee.FirstName = employeeDto.FirstName;
                 employee.LastName = employeeDto.LastName;
                 employee.Active = employeeDto.Active;
+
+                if (photo != null)
+                {
+                    employee.Photo = photo;
+                }
 
                 var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Organization.Id);
                 if (title != null) employee.EmployeeTitle = title;

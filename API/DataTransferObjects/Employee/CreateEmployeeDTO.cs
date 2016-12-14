@@ -27,5 +27,12 @@ namespace DataTransferObjects.Employee
         /// </summary>
         [Required]
         public int EmployeeTitleId { get; set; }
+
+        /// <summary>
+        /// A base64 encoding of the profile picture.
+        /// 
+        /// May be left empty.
+        /// </summary>
+        public string ProfilePhoto { get; set; }
     }
 }

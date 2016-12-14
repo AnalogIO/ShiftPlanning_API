@@ -13,7 +13,7 @@ namespace Data.Services
         Employee GetEmployee(int id, string shortKey);
         IEnumerable<Employee> GetEmployees(int organizationId);
         IEnumerable<Employee> GetEmployees(string shortKey);
-        Employee UpdateEmployee(int employeeId, UpdateEmployeeDTO employeeDto, Manager manager);
+        Employee UpdateEmployee(int employeeId, UpdateEmployeeDTO employeeDto, Manager manager, Photo photo);
         void SetPhoto(int employeeId, int organizationId, Photo photo);
     }
 }

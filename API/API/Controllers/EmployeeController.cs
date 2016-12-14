@@ -1,16 +1,14 @@
 ﻿using API.Logic;
-using System.Linq;
 using System;
-using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Web;
 using System.Web.Http;
 using API.Authorization;
 using Data.Models;
 using Data.Services;
 using DataTransferObjects.Employee;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Web.Http.Description;
 
 namespace API.Controllers
@@ -36,36 +34,23 @@ namespace API.Controllers
         }
 
         [HttpPut, AdminFilter, Route("{userId:int}/photo")]
-        public IHttpActionResult UpdatePhoto([FromUri] int userId)
+        public IHttpActionResult UpdatePhoto([FromUri] int userId, [FromBody] string profilePhoto)
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var files = HttpContext.Current.Request.Files;
-            
-            if (files.AllKeys.Any())
+            try
             {
-                var file = files[0];
+                var photo = ParseBase64Photo(profilePhoto, manager.Organization);
 
-                byte[] fileData = null;
-                using (var binaryReader = new BinaryReader(file.InputStream))
-                {
-                    fileData = binaryReader.ReadBytes(file.ContentLength);
-                }
+                _employeeService.SetPhoto(userId, manager.Organization.Id, photo);
 
-                if (file.ContentType.Contains("image"))
-                {
-                    var photo = new Photo { Type = file.ContentType, Data = fileData, Organization = manager.Organization };
-
-                    _employeeService.SetPhoto(userId, manager.Organization.Id, photo);
-
-                    return Ok();
-                }
-
-                return StatusCode(HttpStatusCode.UnsupportedMediaType);
+                return Ok();
             }
-
-            return BadRequest();
+            catch (ArgumentOutOfRangeException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST api/employees
@@ -79,43 +64,32 @@ namespace API.Controllers
         /// </returns>
         [HttpPost, AdminFilter, Route("")]
         [ResponseType(typeof(EmployeeDTO))]
-        public IHttpActionResult Register()
+        public IHttpActionResult Register(CreateEmployeeDTO employeeDto)
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var form = HttpContext.Current.Request.Form;
-
-            var employeeDto = new CreateEmployeeDTO
+            if (!ModelState.IsValid)
             {
-                Email = form["email"],
-                FirstName = form["firstName"],
-                LastName = form["lastName"],
-                EmployeeTitleId = Convert.ToInt32(form["employeeTitleId"])
-            };
+                return BadRequest(ModelState);
+            }
 
             if (!IsCreateEmployeeDtoAlright(employeeDto))
             {
                 return BadRequest("An employee must contain an email, a first name, a last name and an employee title.");
             }
-
-            var files = HttpContext.Current.Request.Files;
-
+            
             var photo = manager.Organization.DefaultPhoto;
 
-            if (files.AllKeys.Any())
+            if (!string.IsNullOrWhiteSpace(employeeDto.ProfilePhoto))
             {
-                var file = files[0];
-
-                byte[] fileData = null;
-                using (var binaryReader = new BinaryReader(file.InputStream))
+                try
                 {
-                    fileData = binaryReader.ReadBytes(file.ContentLength);
+                    photo = ParseBase64Photo(employeeDto.ProfilePhoto, manager.Organization);
                 }
-
-                if (file.ContentType.Contains("image"))
+                catch (ArgumentOutOfRangeException ex)
                 {
-                    photo = new Photo { Type = file.ContentType, Data = fileData, Organization = manager.Organization };
+                    return BadRequest(ex.Message);
                 }
             }
 
@@ -251,7 +225,21 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var employee = _employeeService.UpdateEmployee(id, employeeDto, manager);
+            Photo photo = null;
+
+            if (!string.IsNullOrWhiteSpace(employeeDto.ProfilePhoto))
+            {
+                try
+                {
+                    photo = ParseBase64Photo(employeeDto.ProfilePhoto, manager.Organization);
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+
+            var employee = _employeeService.UpdateEmployee(id, employeeDto, manager, photo);
             if (employee != null)
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
@@ -288,6 +276,35 @@ namespace API.Controllers
                 || string.IsNullOrWhiteSpace(dto.FirstName)
                 || string.IsNullOrWhiteSpace(dto.LastName)) return false;
             return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="base64EncodedPhoto"></param>
+        /// <param name="organization"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException">If the encoded string does not contain a media type.</exception>
+        private Photo ParseBase64Photo(string base64EncodedPhoto, Organization organization)
+        {
+            const string pattern = @"^data:([a-z/]+);base64,";
+            var match = Regex.Match(base64EncodedPhoto, pattern);
+
+            if (!match.Success)
+            {
+                throw new ArgumentOutOfRangeException(nameof(base64EncodedPhoto), "Unsupported image type");
+            }
+            
+            var type = match.Groups[0].Value;
+
+            var data = Convert.FromBase64String(Regex.Replace(base64EncodedPhoto, pattern, ""));
+
+            return new Photo
+            {
+                Data = data,
+                Type = type,
+                Organization = organization
+            };
         }
     }
 }

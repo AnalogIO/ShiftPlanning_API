@@ -527,7 +527,7 @@
             <param name="authManager"></param>
             <param name="employeeService"></param>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Register">
+        <member name="M:API.Controllers.EmployeeController.Register(DataTransferObjects.Employee.CreateEmployeeDTO)">
             <summary>
             Creates the employee from the content in the body.
             Requires 'Authorization' header set with the token granted upon manager login.
@@ -594,6 +594,15 @@
             </summary>
             <param name="id">The id of the employee.</param>
             <returns>Returns 'No Content' (204) if the employee gets deleted.</returns>
+        </member>
+        <member name="M:API.Controllers.EmployeeController.ParseBase64Photo(System.String,Data.Models.Organization)">
+            <summary>
+            
+            </summary>
+            <param name="base64EncodedPhoto"></param>
+            <param name="organization"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">If the encoded string does not contain a media type.</exception>
         </member>
         <member name="T:API.Controllers.EmployeeTitleController">
             <summary>
