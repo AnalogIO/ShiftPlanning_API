@@ -33,6 +33,18 @@ namespace API.Controllers
             _employeeService = employeeService;
         }
 
+        [HttpDelete, AdminFilter, Route("{userId:int}/photo")]
+        public IHttpActionResult DeletePhoto([FromUri] int userId)
+        {
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            // Todo: Make sure to remove old photo from database.
+            _employeeService.SetPhoto(userId, manager.Organization.Id, manager.Organization.DefaultPhoto);
+
+            return Ok();
+        }
+
         [HttpPut, AdminFilter, Route("{userId:int}/photo")]
         public IHttpActionResult UpdatePhoto([FromUri] int userId, [FromBody] string profilePhoto)
         {
