@@ -38,7 +38,8 @@ namespace PublicApi.Controllers
         [ResponseType(typeof(IEnumerable<OpeningHoursDTO>))]
         public IHttpActionResult Get(string shortKey)
         {
-            var shifts = _shiftService.GetByOrganization(shortKey, DateTime.Today, DateTime.Today.AddDays(7));
+            var monday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
+            var shifts = _shiftService.GetByOrganization(shortKey, monday, monday.AddDays(7));
 
             if (shifts == null)
             {
