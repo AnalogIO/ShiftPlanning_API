@@ -37,7 +37,9 @@ namespace PublicApi.Mapping
             var openingHoursDto = new IntervalOpeningHoursDTO
             {
                 IntervalMinutes = interval,
-                Shifts = new SortedDictionary<string, ICollection<IntervalOpeningHourDTO>>()
+                Shifts = new SortedDictionary<string, ICollection<IntervalOpeningHourDTO>>(),
+                EndHour = 16,
+                StartHour = 8
             };
 
             if (!shifts.Any()) return openingHoursDto; // if no shifts are available then return the opening hours dto with an empty dictionary for shifts.
@@ -55,12 +57,12 @@ namespace PublicApi.Mapping
                 if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday) continue;
                 while (currentDate.Hour < end)
                 {
-                    var openingHourShift = new IntervalOpeningHourDTO { ShiftStart = currentDate, Employees = new List<OpeningHourEmployeeDTO>() };
+                    var openingHourShift = new IntervalOpeningHourDTO { ShiftStart = currentDate, Employees = new List<string>() };
 
                     foreach (var shift in shifts.Where(x => x.Start <= currentDate && x.End >= currentDate.AddMinutes(interval)).ToList())
                     {
                         openingHourShift.Open = shift.Employees.Any();
-                        openingHourShift.Employees = shift.Employees.Select(emp => new OpeningHourEmployeeDTO { Id = emp.Id, FirstName = emp.FirstName });
+                        openingHourShift.Employees = shift.Employees.Select(emp => emp.FirstName );
                     }
                     if (!openingHoursDto.Shifts.ContainsKey(currentDateString))
                     {
