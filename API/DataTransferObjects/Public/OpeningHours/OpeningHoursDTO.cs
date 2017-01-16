@@ -17,17 +17,17 @@ namespace DataTransferObjects.Public.OpeningHours
         /// <summary>
         /// The starting date and time of the shift.
         /// </summary>
-        public DateTime Start { get; set; }
+        public DateTime Open { get; set; }
 
         /// <summary>
         /// The ending date and time.
         /// </summary>
-        public DateTime End { get; set; }
+        public DateTime Close { get; set; }
 
         /// <summary>
         /// The attending employees.
         /// </summary>
-        public IEnumerable<OpeningHourEmployeeDTO> Employees { get; set; }
+        public IEnumerable<string> Employees { get; set; }
 
         /// <summary>
         /// The employees that have checked in for this shift.

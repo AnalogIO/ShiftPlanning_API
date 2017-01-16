@@ -9,6 +9,7 @@ namespace PublicApi.Mapping
     /// <inheritdoc cref="IOpeningHoursMapper"/>
     public class OpeningHoursMapper : IOpeningHoursMapper
     {
+
         /// <inheritdoc cref="MapToDto"/>
         public IEnumerable<OpeningHoursDTO> MapToDto(IEnumerable<Shift> source)
         {
@@ -17,13 +18,9 @@ namespace PublicApi.Mapping
             return shifts.Select(shift => new OpeningHoursDTO
             {
                 Id = shift.Id,
-                Start = shift.Start,
-                End = shift.End,
-                Employees = shift.Employees.Select(emp => new OpeningHourEmployeeDTO
-                {
-                    Id = emp.Id,
-                    FirstName = emp.FirstName
-                }),
+                Open = shift.Start.ToUniversalTime().ToLocalTime(), // hack to add the timezone (old tamigo format)
+                Close = shift.End.ToUniversalTime().ToLocalTime(), // hack to add the timezone (old tamigo format)
+                Employees = shift.Employees.Select(emp => emp.FirstName),
                 CheckedInEmployees = shift.CheckIns.Select(checkIn => new OpeningHourEmployeeDTO
                 {
                     Id = checkIn.Employee.Id,
