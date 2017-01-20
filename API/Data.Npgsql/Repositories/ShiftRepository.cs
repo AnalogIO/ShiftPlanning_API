@@ -46,7 +46,12 @@ namespace Data.Npgsql.Repositories
 
         public IEnumerable<Shift> ReadFromOrganization(string organizationShortKey)
         {
-            return _context.Shifts.Where(x => x.Organization.ShortKey == organizationShortKey);
+            return _context.Shifts
+                .Include(x => x.CheckIns)
+                .Include(x => x.CheckIns.Select(y => y.Employee))
+                .Include(x => x.Employees)
+                .Include(x => x.Employees.Select(y => y.EmployeeTitle))
+                .Where(x => x.Organization.ShortKey == organizationShortKey);
         }
 
         public Shift Read(int id, int organizationId)

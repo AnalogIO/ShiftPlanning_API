@@ -86,7 +86,7 @@ namespace Data.Services
         {
             var shift = _shiftRepository.Read(shiftId, institutionId);
             if (shift == null) return null;
-            if (shift.CheckIns.Where(x => x.Employee.Id == employeeId).FirstOrDefault() != null) return null;
+            if (shift.CheckIns.FirstOrDefault(x => x.Employee.Id == employeeId) != null) return null;
             var employee = _employeeRepository.Read(employeeId, institutionId);
             if (employee == null) return null;
             var now = DateTime.Now;
