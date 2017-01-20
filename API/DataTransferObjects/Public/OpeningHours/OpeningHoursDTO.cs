@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DataTransferObjects.Public.Employees;
 
 namespace DataTransferObjects.Public.OpeningHours
 {
@@ -27,7 +28,7 @@ namespace DataTransferObjects.Public.OpeningHours
         /// <summary>
         /// The attending employees.
         /// </summary>
-        public IEnumerable<string> Employees { get; set; }
+        public IEnumerable<EmployeeDTO> Employees { get; set; }
 
         /// <summary>
         /// The employees that have checked in for this shift.

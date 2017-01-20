@@ -6,9 +6,14 @@
     public class EmployeeDTO
     {
         /// <summary>
-        /// The shown name of the volunteer.
+        /// The shown first name of the volunteer.
         /// </summary>
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// The shown last name of the volunteer.
+        /// </summary>
+        public string LastName { get; set; }
 
         /// <summary>
         /// The title of the volunteer. This can for instance be "Barista".

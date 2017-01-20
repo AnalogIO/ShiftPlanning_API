@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Data.Models;
+using DataTransferObjects.Public.Employees;
 using DataTransferObjects.Public.OpeningHours;
 
 namespace PublicApi.Mapping
@@ -20,7 +21,11 @@ namespace PublicApi.Mapping
                 Id = shift.Id,
                 Open = shift.Start.ToUniversalTime().ToLocalTime(), // hack to add the timezone (old tamigo format)
                 Close = shift.End.ToUniversalTime().ToLocalTime(), // hack to add the timezone (old tamigo format)
-                Employees = shift.Employees.Select(emp => emp.FirstName),
+                Employees = shift.Employees.Select(emp => new EmployeeDTO
+                {
+                    FirstName = emp.FirstName,
+                    LastName = emp.LastName
+                }),
                 CheckedInEmployees = shift.CheckIns.Select(checkIn => new OpeningHourEmployeeDTO
                 {
                     Id = checkIn.Employee.Id,
