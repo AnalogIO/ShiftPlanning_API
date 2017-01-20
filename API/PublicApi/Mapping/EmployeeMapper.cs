@@ -17,7 +17,8 @@ namespace PublicApi.Mapping
 
             return employees.Select(emp => new EmployeeDTO
             {
-                Name = emp.FirstName,
+                FirstName = emp.FirstName,
+                LastName = emp.LastName,
                 Title = emp.EmployeeTitle.Title,
                 PhotoRef = $"{url.Scheme}://{url.Host}{portString}/{PhotosController.RoutePrefix}/{emp.Photo.Organization.ShortKey}/{emp.Photo.Id}"
             });
@@ -31,7 +32,8 @@ namespace PublicApi.Mapping
 
             return new EmployeeDTO
             {
-                Name = employee.FirstName,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
                 Title = employee.EmployeeTitle.Title,
                 PhotoRef = $"{url.Scheme}://{url.Host}{portString}/{PhotosController.RoutePrefix}/{employee.Photo.Organization.ShortKey}/{employee.Photo.Id}"
             };
