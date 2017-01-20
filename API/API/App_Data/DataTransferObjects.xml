@@ -133,9 +133,14 @@
             Contains public information about the volunteers in an institution.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.Public.Employees.EmployeeDTO.Name">
+        <member name="P:DataTransferObjects.Public.Employees.EmployeeDTO.FirstName">
             <summary>
-            The shown name of the volunteer.
+            The shown first name of the volunteer.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.Public.Employees.EmployeeDTO.LastName">
+            <summary>
+            The shown last name of the volunteer.
             </summary>
         </member>
         <member name="P:DataTransferObjects.Public.Employees.EmployeeDTO.Title">

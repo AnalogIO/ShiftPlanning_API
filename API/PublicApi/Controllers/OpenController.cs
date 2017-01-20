@@ -42,7 +42,7 @@ namespace PublicApi.Controllers
 
             return Ok(new IsOpenDTO
             {
-                Open = currentShifts.Any()
+                Open = currentShifts.Any(s => s.CheckIns.Any())
             });
         }
     }
