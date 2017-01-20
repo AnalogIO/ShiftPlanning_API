@@ -54,12 +54,16 @@ namespace PublicApi.Mapping
                 if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday) continue;
                 while (currentDate.Hour < end)
                 {
-                    var openingHourShift = new IntervalOpeningHourDTO { ShiftStart = currentDate, Employees = new List<string>() };
+                    var openingHourShift = new IntervalOpeningHourDTO { ShiftStart = currentDate, Employees = new List<OpeningHourEmployeeDTO>() };
 
                     foreach (var shift in shifts.Where(x => x.Start <= currentDate && x.End >= currentDate.AddMinutes(interval)).ToList())
                     {
                         openingHourShift.Open = shift.Employees.Any();
-                        openingHourShift.Employees = shift.Employees.Select(emp => emp.FirstName );
+                        openingHourShift.Employees = shift.Employees.Select(emp => new OpeningHourEmployeeDTO
+                        {
+                            FirstName = emp.FirstName,
+                            Id = emp.Id
+                        });
                     }
                     if (!openingHoursDto.Shifts.ContainsKey(currentDateString))
                     {

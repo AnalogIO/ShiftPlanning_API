@@ -7,6 +7,6 @@ namespace DataTransferObjects.Public.OpeningHours
     {
         public DateTime ShiftStart { get; set; }
         public bool Open { get; set; }
-        public IEnumerable<string> Employees { get; set; }
+        public IEnumerable<OpeningHourEmployeeDTO> Employees { get; set; }
     }
 }
