@@ -108,12 +108,12 @@
             The ID of the shift.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.Public.OpeningHours.OpeningHoursDTO.Open">
+        <member name="P:DataTransferObjects.Public.OpeningHours.OpeningHoursDTO.Start">
             <summary>
             The starting date and time of the shift.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.Public.OpeningHours.OpeningHoursDTO.Close">
+        <member name="P:DataTransferObjects.Public.OpeningHours.OpeningHoursDTO.End">
             <summary>
             The ending date and time.
             </summary>

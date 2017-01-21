@@ -25,7 +25,7 @@ namespace PublicApi.Controllers
         }
 
         /// <summary>
-        /// Find out whether or not the institution identified by short key is open.
+        /// Find out whether or not the institution identified by short key is open based on whether or not any employee has checked in.
         /// </summary>
         /// <param name="shortKey">The short key of the institution.</param>
         /// <returns></returns>

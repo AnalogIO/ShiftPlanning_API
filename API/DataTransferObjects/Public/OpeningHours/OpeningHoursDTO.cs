@@ -18,12 +18,12 @@ namespace DataTransferObjects.Public.OpeningHours
         /// <summary>
         /// The starting date and time of the shift.
         /// </summary>
-        public DateTime Open { get; set; }
+        public DateTime Start { get; set; }
 
         /// <summary>
         /// The ending date and time.
         /// </summary>
-        public DateTime Close { get; set; }
+        public DateTime End { get; set; }
 
         /// <summary>
         /// The attending employees.

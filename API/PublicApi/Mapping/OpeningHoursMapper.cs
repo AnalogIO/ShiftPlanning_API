@@ -19,8 +19,8 @@ namespace PublicApi.Mapping
             return shifts.Select(shift => new OpeningHoursDTO
             {
                 Id = shift.Id,
-                Open = shift.Start.ToUniversalTime().ToLocalTime(), // hack to add the timezone (old tamigo format)
-                Close = shift.End.ToUniversalTime().ToLocalTime(), // hack to add the timezone (old tamigo format)
+                Start = shift.Start, // hack to add the timezone (old tamigo format)
+                End = shift.End, // hack to add the timezone (old tamigo format)
                 Employees = shift.Employees.Select(emp => new EmployeeDTO
                 {
                     FirstName = emp.FirstName,
