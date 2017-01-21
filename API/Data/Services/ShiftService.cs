@@ -79,7 +79,8 @@ namespace Data.Services
         public IEnumerable<Shift> GetOngoingShiftsByOrganization(int id)
         {
             var now = DateTime.Now;
-            return GetByOrganization(id).Where(shift => shift.Start <= now && now <= shift.End);
+            var nextHour = now.AddHours(1);
+            return GetByOrganization(id).Where(shift => (shift.Start <= now || shift.Start <= nextHour) && now <= shift.End);
         }
 
         public CheckIn CheckInEmployee(int shiftId, int employeeId, int institutionId)
