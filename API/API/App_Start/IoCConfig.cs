@@ -19,7 +19,7 @@ namespace API
             Data.IoCConfig.ConfigureIoC(container);
 
             container
-                .RegisterType<IAuthManager, AuthManager>(new HierarchicalLifetimeManager());
+                .RegisterType<IAuthManager, AuthManager>(new PerResolveLifetimeManager());
         }
     }
 }

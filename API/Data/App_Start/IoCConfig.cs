@@ -8,11 +8,11 @@ namespace Data
         public static void ConfigureIoC(IUnityContainer container)
         {
             container
-                .RegisterType<IEmployeeService, EmployeeService>(new HierarchicalLifetimeManager())
-                .RegisterType<IEmployeeTitleService, EmployeeTitleService>(new HierarchicalLifetimeManager())
-                .RegisterType<IPhotoService, PhotoService>(new HierarchicalLifetimeManager())
-                .RegisterType<IScheduleService, ScheduleService>(new HierarchicalLifetimeManager())
-                .RegisterType<IShiftService, ShiftService>(new HierarchicalLifetimeManager());
+                .RegisterType<IEmployeeService, EmployeeService>(new PerResolveLifetimeManager())
+                .RegisterType<IEmployeeTitleService, EmployeeTitleService>(new PerResolveLifetimeManager())
+                .RegisterType<IPhotoService, PhotoService>(new PerResolveLifetimeManager())
+                .RegisterType<IScheduleService, ScheduleService>(new PerResolveLifetimeManager())
+                .RegisterType<IShiftService, ShiftService>(new PerResolveLifetimeManager());
         }
     }
 }

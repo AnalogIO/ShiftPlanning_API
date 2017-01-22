@@ -9,15 +9,15 @@ namespace Data.Npgsql.Configuration
         public static void ConfigureIoC(IUnityContainer container)
         {
             container
-                .RegisterType<IShiftPlannerDataContext, ShiftPlannerDataContext>(new HierarchicalLifetimeManager())
+                .RegisterType<IShiftPlannerDataContext, ShiftPlannerDataContext>(new PerResolveLifetimeManager())
                 
-                .RegisterType<IPhotoRepository, PhotoRepository>(new HierarchicalLifetimeManager())
-                .RegisterType<IEmployeeRepository, EmployeeRepository>(new HierarchicalLifetimeManager())
-                .RegisterType<IEmployeeTitleRepository, EmployeeTitleRepository>(new HierarchicalLifetimeManager())
-                .RegisterType<IOrganizationRepository, OrganizationRepository>(new HierarchicalLifetimeManager())
-                .RegisterType<IManagerRepository, ManagerRepository>(new HierarchicalLifetimeManager())
-                .RegisterType<IScheduleRepository, ScheduleRepository>(new HierarchicalLifetimeManager())
-                .RegisterType<IShiftRepository, ShiftRepository>(new HierarchicalLifetimeManager());
+                .RegisterType<IPhotoRepository, PhotoRepository>(new PerResolveLifetimeManager())
+                .RegisterType<IEmployeeRepository, EmployeeRepository>(new PerResolveLifetimeManager())
+                .RegisterType<IEmployeeTitleRepository, EmployeeTitleRepository>(new PerResolveLifetimeManager())
+                .RegisterType<IOrganizationRepository, OrganizationRepository>(new PerResolveLifetimeManager())
+                .RegisterType<IManagerRepository, ManagerRepository>(new PerResolveLifetimeManager())
+                .RegisterType<IScheduleRepository, ScheduleRepository>(new PerResolveLifetimeManager())
+                .RegisterType<IShiftRepository, ShiftRepository>(new PerResolveLifetimeManager());
         }
     }
 }
