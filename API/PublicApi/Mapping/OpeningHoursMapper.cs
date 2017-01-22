@@ -69,7 +69,11 @@ namespace PublicApi.Mapping
             {
                 var currentDate = new DateTime(DateTime.Now.Year, 1, 1, start, 0, 0).AddDays(i - 1);
                 var currentDateString = $"{currentDate:yyyy-MM-dd}";
-                if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday) continue;
+                if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    if(!shifts.Any(s => s.Start.DayOfYear == currentDate.DayOfYear || s.End.DayOfYear == currentDate.DayOfYear)) continue;
+                }
+                //if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday) continue;
                 while (currentDate.Hour < end)
                 {
                     var openingHourShift = new IntervalOpeningHourDTO { ShiftStart = currentDate, Employees = new List<OpeningHourEmployeeDTO>() };

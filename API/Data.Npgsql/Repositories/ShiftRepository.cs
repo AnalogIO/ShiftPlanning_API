@@ -66,6 +66,7 @@ namespace Data.Npgsql.Repositories
                 .Include(x => x.CheckIns.Select(y => y.Employee))
                 .Include(x => x.Employees)
                 .Include(x => x.Employees.Select(y => y.EmployeeTitle))
+                .Include(x => x.Employees.Select(y => y.Photo))
                 .Where(x => x.Organization.Id == organizationId);
         }
 

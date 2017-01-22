@@ -38,8 +38,9 @@ namespace PublicApi.Controllers
         [ResponseType(typeof(IEnumerable<OpeningHoursDTO>))]
         public IHttpActionResult Get(string shortKey)
         {
-            var monday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
-            var shifts = _shiftService.GetByOrganization(shortKey, monday, monday.AddDays(7));
+            //var monday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
+            var sunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
+            var shifts = _shiftService.GetByOrganization(shortKey, sunday, sunday.AddDays(7)).OrderBy(s => s.Start).ToList();
 
             if (shifts == null)
             {
@@ -59,8 +60,9 @@ namespace PublicApi.Controllers
         [ResponseType(typeof(IEnumerable<IntervalOpeningHoursDTO>))]
         public IHttpActionResult GetIntervals(string shortKey, int interval = 30)
         {
-            var monday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
-            var shifts = _shiftService.GetByOrganization(shortKey, monday, monday.AddDays(7))?.ToList();
+            //var monday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
+            var sunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
+            var shifts = _shiftService.GetByOrganization(shortKey, sunday, sunday.AddDays(7)).OrderBy(s => s.Start)?.ToList();
 
             if (shifts == null) return NotFound();
 
