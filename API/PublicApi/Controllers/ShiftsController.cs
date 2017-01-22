@@ -54,9 +54,9 @@ namespace PublicApi.Controllers
         /// </summary>
         /// <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
         /// <param name="interval">The number of minutes an interval should span.</param>
-        /// <returns>A collection of OpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
+        /// <returns>A collection of IntervalOpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
         [HttpGet, Route("~/api/openinghours/{shortKey}")]
-        [ResponseType(typeof(IEnumerable<OpeningHoursDTO>))]
+        [ResponseType(typeof(IEnumerable<IntervalOpeningHoursDTO>))]
         public IHttpActionResult GetIntervals(string shortKey, int interval = 30)
         {
             var monday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
