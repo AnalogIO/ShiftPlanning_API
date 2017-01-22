@@ -49,8 +49,21 @@ namespace PublicApi.Mapping
             var startDate = shifts.OrderBy(x => x.Start).First();
             var endDate = shifts.OrderBy(x => x.End).Last();
 
+            var earliestShift = shifts.OrderBy(s => s.Start.Hour).FirstOrDefault();
+            var latestShift = shifts.OrderByDescending(s => s.End.Hour).FirstOrDefault();
             var start = shifts.Min(s => s.Start.Hour);
             var end = shifts.Max(s => s.End.Hour);
+
+            if (start < openingHoursDto.StartHour) openingHoursDto.StartHour = start;
+            if (latestShift.End.Hour > openingHoursDto.EndHour)
+            {
+                openingHoursDto.EndHour = latestShift.End.Hour;
+                if (latestShift.End.Minute > 0)
+                {
+                    openingHoursDto.EndHour++; // if latest shift is 17:30 we round up to 18
+                    end = openingHoursDto.EndHour;
+                }
+            }
 
             for (var i = startDate.Start.DayOfYear; i <= endDate.Start.DayOfYear; i++)
             {
