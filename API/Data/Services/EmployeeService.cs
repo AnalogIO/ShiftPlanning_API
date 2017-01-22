@@ -63,24 +63,22 @@ namespace Data.Services
         public Employee UpdateEmployee(int employeeId, UpdateEmployeeDTO employeeDto, Manager manager, Photo photo)
         {
             var employee = _employeeRepository.Read(employeeId, manager.Organization.Id);
-            if (employee != null)
+            if (employee == null) throw new ObjectNotFoundException("Could not find an employee corresponding to the given id");
+
+            employee.Email = employeeDto.Email;
+            employee.FirstName = employeeDto.FirstName;
+            employee.LastName = employeeDto.LastName;
+            employee.Active = employeeDto.Active;
+
+            if (photo != null)
             {
-                employee.Email = employeeDto.Email;
-                employee.FirstName = employeeDto.FirstName;
-                employee.LastName = employeeDto.LastName;
-                employee.Active = employeeDto.Active;
-
-                if (photo != null)
-                {
-                    employee.Photo = photo;
-                }
-
-                var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Organization.Id);
-                if (title != null) employee.EmployeeTitle = title;
-                _employeeRepository.Update(employee);
-                return employee;
+                employee.Photo = photo;
             }
-            throw new ObjectNotFoundException("Could not find an employee corresponding to the given id");
+
+            var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Organization.Id);
+            if (title != null) employee.EmployeeTitle = title;
+            _employeeRepository.Update(employee);
+            return employee;
         }
 
         public IEnumerable<Employee> CreateManyEmployees(CreateEmployeeDTO[] employeeDtos, Manager manager)

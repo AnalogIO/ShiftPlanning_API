@@ -20,7 +20,7 @@ namespace Data.Npgsql.Repositories
 
         public Employee Create(Employee employee)
         {
-            if (_context.Employees.Any(x => x.Email == employee.Email)) throw new ForbiddenException("An employee already exist with the given email");
+            if (_context.Employees.Any(x => x.Email == employee.Email && x.Organization.Id == employee.Organization.Id)) throw new ForbiddenException("An employee already exist with the given email");
 
             _context.Employees.Add(employee);
             return _context.SaveChanges() > 0 ? employee : null;
@@ -28,6 +28,11 @@ namespace Data.Npgsql.Repositories
 
         public IEnumerable<Employee> CreateMany(IEnumerable<Employee> employees)
         {
+            var employeeDict = _context.Employees.ToDictionary(e => e.Email, e => e);
+            var existingEmployees = employees.Where(e => employeeDict.ContainsKey(e.Email)).Select(e => e.Email);
+
+            if(existingEmployees.Any()) throw new ForbiddenException($"The following emails do already exist: {String.Join(", ", existingEmployees)}");
+
             _context.Employees.AddRange(employees);
             return _context.SaveChanges() > 0 ? employees : null;
         }
@@ -74,6 +79,8 @@ namespace Data.Npgsql.Repositories
 
         public int Update(Employee employee)
         {
+            if(_context.Employees.Any(e => e.Email == employee.Email && e.Organization.Id == employee.Organization.Id)) throw new ForbiddenException("An employee already exist with the given email");
+
             var dbEmployee = _context.Employees.Single(e => e.Id == employee.Id);
 
             dbEmployee.Email = employee.Email;

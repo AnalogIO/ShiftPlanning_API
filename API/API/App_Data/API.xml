@@ -780,6 +780,15 @@
             Returns 'No Content' (204) if the scheduled shift gets updated.
             </returns>
         </member>
+        <member name="M:API.Controllers.ScheduleController.DeleteScheduledShift(System.Int32,System.Int32)">
+            <summary>
+            Deletes the scheduled shift with the given id.
+            Requires 'Authorization' header set with the token granted upon manager login.
+            </summary>
+            <returns>
+            Returns 'No Content' (204) if the scheduled shift gets deleted.
+            </returns>
+        </member>
         <member name="M:API.Controllers.ScheduleController.CreateMultipleScheduledShift(System.Int32,System.Collections.Generic.IEnumerable{DataTransferObjects.ScheduledShift.CreateScheduledShiftDTO})">
             <summary>
             Creates the scheduled shifts to the schedule with the given id from the content in the body.
