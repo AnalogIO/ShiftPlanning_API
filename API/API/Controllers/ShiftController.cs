@@ -32,12 +32,12 @@ namespace API.Controllers
         /// Returns all shifts of the specified organization in the 'Authorization' header
         /// </summary>
         /// <returns></returns>
-        [HttpGet, Route("")]
+        [HttpGet, Route(""), AdminFilter]
         public IHttpActionResult Get()
         {
-            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
-            if (organization == null) return BadRequest("No institution found with the given name");
-            return Ok(Mapper.Map(_shiftService.GetByOrganization(organization.Id)));
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("No manager found with the given name");
+            return Ok(Mapper.Map(_shiftService.GetByOrganization(manager.Organization.Id)));
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet, Route("{id}")]
+        [HttpGet, Route("{id}"), AdminFilter]
         public IHttpActionResult Get(int id)
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
