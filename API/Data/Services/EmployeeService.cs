@@ -6,6 +6,7 @@ using System.Linq;
 using System;
 using System.Data;
 using System.IdentityModel;
+using Data.Exceptions;
 
 namespace Data.Services
 {

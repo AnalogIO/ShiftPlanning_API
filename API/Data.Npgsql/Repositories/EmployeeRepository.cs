@@ -4,6 +4,8 @@ using System.Linq;
 using Data.Models;
 using Data.Repositories;
 using System.Data.Entity;
+using Data.Exceptions;
+using System.Data;
 
 namespace Data.Npgsql.Repositories
 {
@@ -18,12 +20,10 @@ namespace Data.Npgsql.Repositories
 
         public Employee Create(Employee employee)
         {
-            if (!_context.Employees.Any(x => x.Email == employee.Email))
-            {
-                _context.Employees.Add(employee);
-                return _context.SaveChanges() > 0 ? employee : null;
-            }
-            return null;
+            if (_context.Employees.Any(x => x.Email == employee.Email)) throw new ForbiddenException("An employee already exist with the given email");
+
+            _context.Employees.Add(employee);
+            return _context.SaveChanges() > 0 ? employee : null;
         }
 
         public IEnumerable<Employee> CreateMany(IEnumerable<Employee> employees)
@@ -35,11 +35,10 @@ namespace Data.Npgsql.Repositories
         public void Delete(int id, int organizationId)
         {
             var employee = _context.Employees.FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
-            if(employee != null)
-            {
-                _context.Employees.Remove(employee);
-                _context.SaveChanges();
-            }
+            if (employee == null) throw new ObjectNotFoundException("Could not find an employee corresponding to the given id");
+ 
+            _context.Employees.Remove(employee);
+            _context.SaveChanges();
         }
 
         public IEnumerable<Employee> ReadFromOrganization(int organizationId)

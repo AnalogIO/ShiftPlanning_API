@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Data.Models;
 using Data.Repositories;
@@ -37,11 +38,10 @@ namespace Data.Npgsql.Repositories
         public void Delete(int id, int organizationId)
         {
             var shift = _context.Shifts.FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
-            if (shift != null)
-            {
-                _context.Shifts.Remove(shift);
-                _context.SaveChanges();
-            }
+            if (shift == null) throw new ObjectNotFoundException("Could not find a shift corresponding to the given id");
+
+            _context.Shifts.Remove(shift);
+            _context.SaveChanges();
         }
 
         public IEnumerable<Shift> ReadFromOrganization(string organizationShortKey)

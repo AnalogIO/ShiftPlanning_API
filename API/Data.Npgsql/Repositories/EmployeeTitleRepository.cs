@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
 using System.Linq;
 using Data.Models;
 using Data.Repositories;
@@ -24,11 +25,10 @@ namespace Data.Npgsql.Repositories
         public void Delete(int id, int organizationId)
         {
             var employeeTitle = _context.EmployeeTitles.FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
-            if (employeeTitle != null)
-            {
-                _context.EmployeeTitles.Remove(employeeTitle);
-                _context.SaveChanges();
-            }
+            if (employeeTitle == null) throw new ObjectNotFoundException("The employee title could not be found");
+
+            _context.EmployeeTitles.Remove(employeeTitle);
+            _context.SaveChanges();
         }
 
         public IEnumerable<EmployeeTitle> ReadFromOrganization(int organizationId)

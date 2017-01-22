@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Data.Models;
 using Data.Repositories;
@@ -25,11 +26,10 @@ namespace Data.Npgsql.Repositories
         public void Delete(int id, int organizationId)
         {
             var schedule = _context.Schedules.SingleOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
-            if(schedule != null)
-            {
-                _context.Schedules.Remove(schedule);
-                _context.SaveChanges();
-            }
+            if (schedule == null) throw new ObjectNotFoundException("Could not find a schedule corresponding to the given id");
+
+            _context.Schedules.Remove(schedule);
+            _context.SaveChanges();
         }
 
         public void Dispose()
@@ -70,9 +70,11 @@ namespace Data.Npgsql.Repositories
         public void DeleteScheduledShift(int scheduleId, int scheduledShiftId, int organizationId)
         {
             var schedule = _context.Schedules.SingleOrDefault(x => x.Id == scheduleId && x.Organization.Id == organizationId);
-            if (schedule == null) return;
+            if (schedule == null) throw new ObjectNotFoundException("Could not find a schedule corresponding to the given id");
 
             var scheduledShift = schedule.ScheduledShifts.SingleOrDefault(x => x.Id == scheduledShiftId);
+            if(scheduledShift == null) throw new ObjectNotFoundException("Could not find a scheduledshift corresponding to the given id of the given schedule");
+
             schedule.ScheduledShifts.Remove(scheduledShift);
 
             _context.SaveChanges();

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web.Http;
+using Data.Exceptions;
 using Data.Models;
 using Data.Repositories;
 using Data.Token;
@@ -21,23 +23,20 @@ namespace Data.Npgsql.Repositories
 
         public Manager Create(Manager manager)
         {
-            if (!_context.Managers.Any(x => x.Username == manager.Username))
-            {
-                _context.Managers.Add(manager);
-                _context.SaveChanges();
-                return manager;
-            }
-            return null;
+            if (_context.Managers.Any(x => x.Username == manager.Username)) throw new ForbiddenException("A manager does already exist with the given username");
+
+            _context.Managers.Add(manager);
+            _context.SaveChanges();
+            return manager;
         }
 
         public void Delete(int id)
         {
             var manager = _context.Managers.FirstOrDefault(x => x.Id == id);
-            if (manager != null)
-            {
-                _context.Managers.Remove(manager);
-                _context.SaveChanges();
-            }
+            if (manager == null) throw new ObjectNotFoundException("Could not find a manager corresponding to the given id");
+
+            _context.Managers.Remove(manager);
+            _context.SaveChanges();
         }
 
         public IEnumerable<Manager> Read()
@@ -81,8 +80,7 @@ namespace Data.Npgsql.Repositories
                     return manager;
                 }
             }
-
-            throw new HttpResponseException( new HttpResponseMessage(){Content = new ObjectContent<object>(new { Message = "You entered an incorrect username or password!" }, new JsonMediaTypeFormatter())});
+            throw new UnauthorizedAccessException("You entered an incorrect username or password!");
         }
 
         public void Dispose()
