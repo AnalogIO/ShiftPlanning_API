@@ -215,6 +215,24 @@ namespace API.Controllers
             return BadRequest("The scheduled shift could not be updated!");
         }
 
+        // PUT api/schedules/{scheduleId}/{scheduledShiftId}
+        /// <summary>
+        /// Deletes the scheduled shift with the given id.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
+        /// </summary>
+        /// <returns>
+        /// Returns 'No Content' (204) if the scheduled shift gets deleted.
+        /// </returns>
+        [HttpDelete, AdminFilter, Route("{scheduleId}/{scheduledShiftId}")]
+        public IHttpActionResult DeleteScheduledShift(int scheduleId, int scheduledShiftId)
+        {
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+
+            _scheduleService.DeleteScheduledShift(scheduleId, scheduledShiftId, manager);
+
+            return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+        }
+
         // POST api/schedules/{id}/createmultiple
         /// <summary>
         /// Creates the scheduled shifts to the schedule with the given id from the content in the body.

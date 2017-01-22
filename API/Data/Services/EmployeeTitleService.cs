@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using Data.Models;
 using Data.Repositories;
 using DataTransferObjects.EmployeeTitles;
@@ -38,12 +39,10 @@ namespace Data.Services
         public EmployeeTitle UpdateEmployeeTitle(int employeeTitleId, UpdateEmployeeTitleDTO employeeTitleDto, Manager manager)
         {
             var employeeTitle = _employeeTitleRepository.Read(employeeTitleId, manager.Organization.Id);
-            if (employeeTitle != null)
-            {
-                employeeTitle.Title = employeeTitleDto.Title;
-                return (_employeeTitleRepository.Update(employeeTitle) > 0) ? employeeTitle : null;
-            }
-            return null;
+            if (employeeTitle == null) throw new ObjectNotFoundException("Could not find a title corresponding to the given id");
+
+            employeeTitle.Title = employeeTitleDto.Title;
+            return (_employeeTitleRepository.Update(employeeTitle) > 0) ? employeeTitle : null;
         }
     }
 }

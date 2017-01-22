@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Data.Models;
 using Data.Repositories;
@@ -24,7 +25,7 @@ namespace Data.Services
         public ScheduledShift CreateScheduledShift(CreateScheduledShiftDTO scheduledShiftDto, Manager manager, int scheduleId)
         {
             var schedule = _scheduleRepository.Read(scheduleId, manager.Organization.Id);
-            if (schedule == null) return null;
+            if (schedule == null) throw new ObjectNotFoundException("Could not find a schedule corresponding to the given id");
             var employees = _employeeRepository.ReadFromOrganization(manager.Organization.Id).Where(x => scheduledShiftDto.EmployeeIds.Contains(x.Id)).ToList();
             var scheduledShift = new ScheduledShift { Day = scheduledShiftDto.Day, Start = TimeSpan.Parse(scheduledShiftDto.Start), End = TimeSpan.Parse(scheduledShiftDto.End), Schedule = schedule, Employees = employees };
             schedule.ScheduledShifts.Add(scheduledShift);
@@ -34,7 +35,7 @@ namespace Data.Services
         public IEnumerable<ScheduledShift> CreateScheduledShifts(IEnumerable<CreateScheduledShiftDTO> scheduledShiftsDto, Manager manager, int scheduleId)
         {
             var schedule = _scheduleRepository.Read(scheduleId, manager.Organization.Id);
-            if (schedule == null) return null;
+            if (schedule == null) throw new ObjectNotFoundException("Could not find a schedule corresponding to the given id");
             var scheduledShifts = new List<ScheduledShift>();
             foreach(CreateScheduledShiftDTO scheduledShiftDto in scheduledShiftsDto)
             {
@@ -88,7 +89,7 @@ namespace Data.Services
         public Schedule UpdateSchedule(int scheduleId, UpdateScheduleDTO scheduleDto, Manager manager)
         {
             var schedule = _scheduleRepository.Read(scheduleId, manager.Organization.Id);
-            if (schedule == null) return null;
+            if (schedule == null) throw new ObjectNotFoundException("Could not find a schedule corresponding to the given id");
 
             schedule.Name = scheduleDto.Name;
             schedule.NumberOfWeeks = scheduleDto.NumberOfWeeks;
@@ -108,7 +109,7 @@ namespace Data.Services
 
             var schedule = _scheduleRepository.Read(scheduleId, manager.Organization.Id);
 
-            if (schedule == null) return null;
+            if (schedule == null) throw new ObjectNotFoundException("Could not find a schedule corresponding to the given id");
 
             var shifts = new List<Shift>();
             for(int i = 0; i <= ((to - from).TotalDays / (7*schedule.NumberOfWeeks)); i++)
@@ -145,5 +146,11 @@ namespace Data.Services
             _scheduleRepository.Update(schedule);
             return _shiftRepository.Create(shifts);
         }
+
+        public void DeleteScheduledShift(int scheduleId, int scheduledShiftId, Manager manager)
+        {
+            _scheduleRepository.DeleteScheduledShift(scheduleId, scheduledShiftId, manager.Organization.Id);
+        }
+
     }
 }

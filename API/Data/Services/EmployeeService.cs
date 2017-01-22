@@ -4,6 +4,8 @@ using Data.Repositories;
 using DataTransferObjects.Employee;
 using System.Linq;
 using System;
+using System.Data;
+using System.IdentityModel;
 
 namespace Data.Services
 {
@@ -52,7 +54,7 @@ namespace Data.Services
                 Photo = photo
             };
             var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Organization.Id);
-            if (title == null) return null;
+            if (title == null) throw new ObjectNotFoundException("Could not find a title corresponding to the given id");
             employee.EmployeeTitle = title;
             return _employeeRepository.Create(employee);
         }
@@ -77,7 +79,7 @@ namespace Data.Services
                 _employeeRepository.Update(employee);
                 return employee;
             }
-            return null;
+            throw new ObjectNotFoundException("Could not find an employee corresponding to the given id");
         }
 
         public IEnumerable<Employee> CreateManyEmployees(CreateEmployeeDTO[] employeeDtos, Manager manager)

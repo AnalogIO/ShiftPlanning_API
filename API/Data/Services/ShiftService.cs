@@ -4,6 +4,8 @@ using System.Linq;
 using Data.Models;
 using Data.Repositories;
 using DataTransferObjects.Shift;
+using System.Data;
+using Data.Exceptions;
 
 namespace Data.Services
 {
@@ -33,7 +35,7 @@ namespace Data.Services
         {
             if (_organizationRepository.Exists(shortKey))
                 return _shiftRepository.ReadFromOrganization(shortKey);
-            return null;
+            throw new ObjectNotFoundException("Could not find an organization corresponding to the given shortkey");
         }
 
         /// <inheritdoc cref="IShiftService.GetByOrganization(int)"/>
@@ -41,7 +43,7 @@ namespace Data.Services
         {
             if (_organizationRepository.Exists(id))
                 return _shiftRepository.ReadFromOrganization(id);
-            return null;
+            throw new ObjectNotFoundException("Could not find an organization corresponding to the given id");
         }
 
         /// <inheritdoc cref="IShiftService.GetByOrganization(string, DateTime, DateTime)"/>
@@ -86,10 +88,10 @@ namespace Data.Services
         public CheckIn CheckInEmployee(int shiftId, int employeeId, int institutionId)
         {
             var shift = _shiftRepository.Read(shiftId, institutionId);
-            if (shift == null) return null;
-            if (shift.CheckIns.FirstOrDefault(x => x.Employee.Id == employeeId) != null) return null;
+            if (shift == null) throw new ObjectNotFoundException("Could not find a shift corresponding to the given id");
+            if (shift.CheckIns.FirstOrDefault(x => x.Employee.Id == employeeId) != null) throw new ForbiddenException("Could not check in because the given employee is already checked in");
             var employee = _employeeRepository.Read(employeeId, institutionId);
-            if (employee == null) return null;
+            if (employee == null) throw new ObjectNotFoundException("Could not find an employee corresponding to the given id");
             var now = DateTime.Now;
             var checkIn = new CheckIn { Employee = employee, Time = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second) };
             shift.CheckIns.Add(checkIn);
@@ -99,7 +101,7 @@ namespace Data.Services
         public Shift CreateShiftOutsideSchedule(CreateShiftOutsideScheduleDTO shiftDto, Organization organization)
         {
             var employees = _employeeRepository.ReadFromOrganization(organization.Id).Where(x => shiftDto.EmployeeIds.Contains(x.Id)).ToList();
-            if (employees == null) return null;
+            if (employees == null) throw new ObjectNotFoundException("Could not find the employees corresponding to the given ids");
             var now = DateTime.Now;
             var start = Toolbox.RoundUp(now, TimeSpan.FromMinutes(15));
             var end = start.AddMinutes(shiftDto.OpenMinutes);
@@ -121,7 +123,7 @@ namespace Data.Services
         public Shift UpdateShift(int shiftId, int organizationId, UpdateShiftDTO updateShiftDto)
         {
             var shift = _shiftRepository.Read(shiftId, organizationId);
-            if (shift == null) return null;
+            if (shift == null) throw new ObjectNotFoundException("Could not find a shift corresponding to the given id");
 
             var employees = _employeeRepository.ReadFromOrganization(organizationId).Where(x => updateShiftDto.EmployeeIds.Contains(x.Id)).ToList();
 

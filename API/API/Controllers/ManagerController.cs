@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Configuration;
+using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Data.Repositories;
@@ -44,7 +45,10 @@ namespace API.Controllers
             var manager = _managerRepository.Login(loginDto.Username.Trim(), loginDto.Password);
             if (manager != null)
             {
-                var responseDto = new ManagerLoginResponse { Token = manager.Tokens.LastOrDefault()?.TokenHash, OrganizationId = manager.Organization.Id, OrganizationName = manager.Organization.Name };
+                var responseDto = new ManagerLoginResponse
+                {
+                    Token = manager.Tokens.LastOrDefault()?.TokenHash, OrganizationId = manager.Organization.Id, OrganizationName = manager.Organization.Name, Expires = int.Parse(ConfigurationManager.AppSettings["TokenAgeHour"])*60*60 // from hours to seconds 
+                };
                 return Ok(responseDto);
             }
 

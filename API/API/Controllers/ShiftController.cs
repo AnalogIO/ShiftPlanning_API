@@ -64,7 +64,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete, Route("{id}")]
+        [HttpDelete, Route("{id}"), AdminFilter]
         public IHttpActionResult Delete(int id)
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
@@ -81,7 +81,7 @@ namespace API.Controllers
         /// <param name="id"></param>
         /// <param name="shiftDto"></param>
         /// <returns></returns>
-        [HttpPut, Route("{id}")]
+        [HttpPut, Route("{id}"), AdminFilter]
         public IHttpActionResult Update(int id, UpdateShiftDTO shiftDto)
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);

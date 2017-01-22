@@ -684,6 +684,15 @@
             If the provided credentials are wrong then the controller will return Unauthorized (401).
             </returns>
         </member>
+        <member name="M:API.Controllers.ManagerController.Validate">
+            <summary>
+            Validates the token set in the 'Authorization' header.
+            </summary>
+            <returns>
+            Returns 'Ok' (200) if the token is valid.
+            If the token is invalid then the controller will return Unauthorized (401).
+            </returns>
+        </member>
         <member name="M:API.Controllers.PhotosController.Get(System.Int32,System.Int32)">
             <summary>
             Retrieves a photo from an organization.

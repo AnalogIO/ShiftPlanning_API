@@ -10,5 +10,6 @@ namespace Data.Repositories
         Schedule Read(int id, int organizationId);
         int Update(Schedule schedule);
         void Delete(int id, int organizationId);
+        void DeleteScheduledShift(int scheduleId, int scheduledShiftId, int organizationId);
     }
 }

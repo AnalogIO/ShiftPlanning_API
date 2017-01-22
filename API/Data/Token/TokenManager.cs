@@ -28,7 +28,7 @@ namespace Data.Token
             var symmetricKey = GetBytes(ConfigurationManager.AppSettings["TokenKey"]);
             var securityToken = TokenHandler.CreateToken(new SecurityTokenDescriptor
             {
-                Lifetime = new Lifetime(DateTime.UtcNow, DateTime.UtcNow.AddHours(24)),
+                Lifetime = new Lifetime(DateTime.UtcNow, DateTime.UtcNow.AddHours(int.Parse(ConfigurationManager.AppSettings["TokenAgeHour"]))),
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.Role, "Login"),

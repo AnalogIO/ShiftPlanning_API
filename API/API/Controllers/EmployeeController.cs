@@ -37,7 +37,6 @@ namespace API.Controllers
         public IHttpActionResult DeletePhoto([FromUri] int userId)
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
 
             // Todo: Make sure to remove old photo from database.
             _employeeService.SetPhoto(userId, manager.Organization.Id, manager.Organization.DefaultPhoto);

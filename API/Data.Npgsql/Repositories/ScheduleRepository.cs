@@ -66,5 +66,17 @@ namespace Data.Npgsql.Repositories
             
             return _context.SaveChanges();
         }
+
+        public void DeleteScheduledShift(int scheduleId, int scheduledShiftId, int organizationId)
+        {
+            var schedule = _context.Schedules.SingleOrDefault(x => x.Id == scheduleId && x.Organization.Id == organizationId);
+            if (schedule == null) return;
+
+            var scheduledShift = schedule.ScheduledShifts.SingleOrDefault(x => x.Id == scheduledShiftId);
+            schedule.ScheduledShifts.Remove(scheduledShift);
+
+            _context.SaveChanges();
+
+        }
     }
 }
