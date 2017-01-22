@@ -79,7 +79,7 @@ namespace Data.Npgsql.Repositories
 
         public int Update(Employee employee)
         {
-            if(_context.Employees.Any(e => e.Email == employee.Email && e.Organization.Id == employee.Organization.Id)) throw new ForbiddenException("An employee already exist with the given email");
+            if(_context.Employees.Any(e => e.Email == employee.Email && e.Organization.Id == employee.Organization.Id && e.Id != employee.Id)) throw new ForbiddenException("An employee already exist with the given email");
 
             var dbEmployee = _context.Employees.Single(e => e.Id == employee.Id);
 

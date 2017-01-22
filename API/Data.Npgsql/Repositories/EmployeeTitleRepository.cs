@@ -44,7 +44,7 @@ namespace Data.Npgsql.Repositories
 
         public int Update(EmployeeTitle employeeTitle)
         {
-            if(_context.EmployeeTitles.Any(et => et.Organization.Id == employeeTitle.Organization.Id && et.Title == employeeTitle.Title)) throw new ForbiddenException("An employee title with the given title does already exist");
+            if(_context.EmployeeTitles.Any(et => et.Organization.Id == employeeTitle.Organization.Id && et.Title == employeeTitle.Title && et.Id != employeeTitle.Id)) throw new ForbiddenException("An employee title with the given title does already exist");
 
             var dbEmployeeTitle = _context.EmployeeTitles.Single(et => et.Id == employeeTitle.Id);
 
