@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Manager\ManagerValidateTokenDTO.cs" />
     <Compile Include="Schedule\RolloutScheduleDTO.cs" />
     <Compile Include="Shift\CheckInDTO.cs" />
     <Compile Include="Employee\CreateEmployeeDTO.cs" />

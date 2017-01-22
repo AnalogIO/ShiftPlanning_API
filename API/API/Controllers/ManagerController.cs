@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Data.Repositories;
 using System.Linq;
+using API.Authorization;
 using DataTransferObjects.Manager;
 
 namespace API.Controllers
@@ -49,6 +50,20 @@ namespace API.Controllers
 
             HttpResponseMessage response = Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "You entered an incorrect username or password!" });
             return ResponseMessage(response);
+        }
+
+        // POST api/manager/validate
+        /// <summary>
+        /// Validates the token set in the 'Authorization' header.
+        /// </summary>
+        /// <returns>
+        /// Returns 'Ok' (200) if the token is valid.
+        /// If the token is invalid then the controller will return Unauthorized (401).
+        /// </returns>
+        [HttpPost, Route("validate"), AdminFilter]
+        public IHttpActionResult Validate()
+        {
+            return Ok();
         }
     }
 }
