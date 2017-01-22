@@ -539,7 +539,7 @@
             </summary>
             <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
             <param name="interval">The number of minutes an interval should span.</param>
-            <returns>A collection of OpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
+            <returns>A collection of IntervalOpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
         </member>
         <member name="T:PublicApi.Controllers.EmployeesController">
             <summary>
