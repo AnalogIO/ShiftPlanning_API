@@ -103,7 +103,7 @@ namespace Data.Services
             var employees = _employeeRepository.ReadFromOrganization(organization.Id).Where(x => shiftDto.EmployeeIds.Contains(x.Id)).ToList();
             if (employees == null) throw new ObjectNotFoundException("Could not find the employees corresponding to the given ids");
             var now = DateTime.Now;
-            var start = Toolbox.RoundUp(now, TimeSpan.FromMinutes(15));
+            var start = Toolbox.RoundUp(now);
             var end = start.AddMinutes(shiftDto.OpenMinutes);
 
             var shift = new Shift { Start = start, End = end, CheckIns = new List<CheckIn>(), Employees = employees, Organization = organization };

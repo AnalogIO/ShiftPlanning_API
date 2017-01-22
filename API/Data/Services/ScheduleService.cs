@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IdentityModel;
 using System.Linq;
 using Data.Models;
 using Data.Repositories;
@@ -103,6 +104,8 @@ namespace Data.Services
 
             var from = DateTimeOffset.Parse(rolloutDto.From).UtcDateTime;
             var to = DateTimeOffset.Parse(rolloutDto.To).UtcDateTime;
+
+            if(from >= to) throw new BadRequestException("'From' date should be before 'To' date");
 
             var currentDate = from;
             var currentDay = (int)from.DayOfWeek;
