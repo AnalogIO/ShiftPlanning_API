@@ -4,7 +4,6 @@ using System.IdentityModel;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http.Filters;
-using API.Exceptions;
 using Data.Exceptions;
 
 namespace API
