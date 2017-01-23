@@ -137,5 +137,25 @@ namespace Data.Services
 
             return _shiftRepository.Update(shift) > 0 ? shift : null;
         }
+
+        public Shift CreateShift(Organization organization, CreateShiftDTO shiftDto)
+        {
+            var employees = _employeeRepository.ReadFromOrganization(organization.Id).Where(x => shiftDto.EmployeeIds.Contains(x.Id)).ToList();
+
+            var start = DateTimeOffset.Parse(shiftDto.Start).UtcDateTime;
+            var end = DateTimeOffset.Parse(shiftDto.End).UtcDateTime;
+
+            var shift = new Shift
+            {
+                CheckIns = new List<CheckIn>(),
+                Start = start,
+                End = end,
+                Employees = employees,
+                Organization = organization,
+                Schedule = null
+            };
+
+            return _shiftRepository.Create(shift);
+        }
     }
 }

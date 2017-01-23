@@ -61,6 +61,7 @@
     <Compile Include="Public\OpeningHours\IsOpenDTO.cs" />
     <Compile Include="Public\OpeningHours\OpeningHourEmployeeDTO.cs" />
     <Compile Include="Public\OpeningHours\OpeningHoursDTO.cs" />
+    <Compile Include="Shift\CreateShiftDTO.cs" />
     <Compile Include="Shift\CreateShiftOutsideScheduleDTO.cs" />
     <Compile Include="Shift\ShiftDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

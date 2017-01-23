@@ -82,6 +82,7 @@ namespace Data.Services
 
         void DeleteShift(int shiftId, int organizationId);
         Shift UpdateShift(int shiftId, int organizationId, UpdateShiftDTO updateShiftDto);
+        Shift CreateShift(Organization organization, CreateShiftDTO shiftDto);
 
         CheckIn CheckInEmployee(int shiftId, int employeeId, int organizationId);
 

@@ -84,10 +84,10 @@ namespace API.Controllers
         [HttpPut, Route("{id}"), AdminFilter]
         public IHttpActionResult Update(int id, UpdateShiftDTO shiftDto)
         {
-            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
-            if (organization == null) return BadRequest("No institution found with the given name");
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("No manager found with the given token");
 
-            var shift = _shiftService.UpdateShift(id, organization.Id, shiftDto);
+            var shift = _shiftService.UpdateShift(id, manager.Organization.Id, shiftDto);
 
             if(shift != null)
             {
@@ -95,6 +95,30 @@ namespace API.Controllers
             }
 
             return BadRequest("The shift could not be updated!");
+        }
+
+        /// <summary>
+        /// Creates a shift with the given employees for the given time defined in the body
+        /// </summary>
+        /// <param name="shiftDto"></param>
+        /// <returns></returns>
+        [HttpPost, Route(""), AdminFilter]
+        public IHttpActionResult Create(CreateShiftDTO shiftDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("No manager found with the given token");
+
+            var shift = _shiftService.CreateShift(manager.Organization, shiftDto);
+            if (shift != null)
+            {
+                return Ok(Mapper.Map(shift));
+            }
+            return BadRequest("Could not create shift outside of schedule!");
         }
 
 
@@ -151,10 +175,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var institution = _authManager.GetOrganizationByHeader(Request.Headers);
-            if (institution == null) return BadRequest("No institution found with the given name");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No institution found with the given name");
 
-            var shift = _shiftService.CreateShiftOutsideSchedule(shiftDto, institution);
+            var shift = _shiftService.CreateShiftOutsideSchedule(shiftDto, organization);
             if(shift != null)
             {
                 return Ok(Mapper.Map(shift));

@@ -847,6 +847,13 @@
             <param name="shiftDto"></param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.ShiftController.Create(DataTransferObjects.Shift.CreateShiftDTO)">
+            <summary>
+            Creates a shift with the given employees for the given time defined in the body
+            </summary>
+            <param name="shiftDto"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.ShiftController.OnGoing">
             <summary>
             Gets the shifts currently ongoing with the corresponding employees planned to be on the shift and the employees checked-in on that shift
