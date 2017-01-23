@@ -118,7 +118,7 @@ namespace API.Controllers
             {
                 return Ok(Mapper.Map(shift));
             }
-            return BadRequest("Could not create shift outside of schedule!");
+            return BadRequest("Could not create shift!");
         }
 
 
@@ -168,7 +168,7 @@ namespace API.Controllers
         /// <param name="shiftDto"></param>
         /// <returns></returns>
         [HttpPost, Route("createoutsideschedule"), ApiKeyFilter]
-        public IHttpActionResult CreateOutsideSchedule(CreateShiftOutsideScheduleDTO shiftDto)
+        public IHttpActionResult CreateOutsideSchedule(CreateShiftDTO shiftDto)
         {
             if (!ModelState.IsValid)
             {
@@ -178,12 +178,12 @@ namespace API.Controllers
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
             if (organization == null) return BadRequest("No institution found with the given name");
 
-            var shift = _shiftService.CreateShiftOutsideSchedule(shiftDto, organization);
-            if(shift != null)
+            var shift = _shiftService.CreateShift(organization, shiftDto);
+            if (shift != null)
             {
                 return Ok(Mapper.Map(shift));
             }
-            return BadRequest("Could not create shift outside of schedule!");
+            return BadRequest("Could not create shift!");
         }
     }
 }
