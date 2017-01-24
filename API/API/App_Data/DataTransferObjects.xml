@@ -4,6 +4,21 @@
         <name>DataTransferObjects</name>
     </assembly>
     <members>
+        <member name="P:DataTransferObjects.Shift.CreateShiftDTO.EmployeeIds">
+            <summary>
+            Array of employee ids
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.Shift.CreateShiftDTO.Start">
+            <summary>
+            Time the shift will start. ISO 8601 format.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.Shift.CreateShiftDTO.End">
+            <summary>
+            Time the shift will end. ISO 8601 format.
+            </summary>
+        </member>
         <member name="P:DataTransferObjects.Employee.CreateEmployeeDTO.Email">
             <summary>
             The email of the employee to be created

@@ -157,5 +157,27 @@ namespace Data.Services
 
             return _shiftRepository.Create(shift);
         }
+
+        public Shift CreateLimitedShift(Organization organization, CreateShiftDTO shiftDto, int maxLengthMinutes)
+        {
+            var employees = _employeeRepository.ReadFromOrganization(organization.Id).Where(x => shiftDto.EmployeeIds.Contains(x.Id)).ToList();
+
+            var start = DateTimeOffset.Parse(shiftDto.Start).UtcDateTime;
+            var end = DateTimeOffset.Parse(shiftDto.End).UtcDateTime;
+
+            if((end - start).TotalMinutes > maxLengthMinutes) throw new ForbiddenException($"You cannot create a shift that has a duration over {maxLengthMinutes} minutes");
+
+            var shift = new Shift
+            {
+                CheckIns = new List<CheckIn>(),
+                Start = start,
+                End = end,
+                Employees = employees,
+                Organization = organization,
+                Schedule = null
+            };
+
+            return _shiftRepository.Create(shift);
+        }
     }
 }

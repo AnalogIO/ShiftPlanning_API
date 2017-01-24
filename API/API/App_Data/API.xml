@@ -868,7 +868,7 @@
             <param name="employeeId"></param>
             <returns></returns>
         </member>
-        <member name="M:API.Controllers.ShiftController.CreateOutsideSchedule(DataTransferObjects.Shift.CreateShiftOutsideScheduleDTO)">
+        <member name="M:API.Controllers.ShiftController.CreateOutsideSchedule(DataTransferObjects.Shift.CreateShiftDTO)">
             <summary>
             Creates a shift with the given employees from now (rounded up to nearest 15 minutes) and for the next xx minutes defined in the body
             </summary>
