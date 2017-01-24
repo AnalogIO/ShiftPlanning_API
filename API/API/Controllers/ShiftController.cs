@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using API.Authorization;
 using API.Logic;
 using DataTransferObjects.Shift;
@@ -119,6 +120,24 @@ namespace API.Controllers
                 return Ok(Mapper.Map(shift));
             }
             return BadRequest("Could not create shift!");
+        }
+
+        /// <summary>
+        /// Gets the shifts for today
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet, Route("today"), ApiKeyFilter]
+        public IHttpActionResult Today()
+        {
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No institution found with the given name");
+
+            var now = DateTime.Now.Date;
+            var end = now.AddDays(1).AddTicks(-1);
+
+            var shifts = Mapper.Map(_shiftService.GetByOrganization(organization.Id,now,end));
+
+            return Ok(new { Shifts = shifts });
         }
 
 

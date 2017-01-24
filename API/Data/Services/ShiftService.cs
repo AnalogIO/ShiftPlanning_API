@@ -5,6 +5,7 @@ using Data.Models;
 using Data.Repositories;
 using DataTransferObjects.Shift;
 using System.Data;
+using System.Runtime.CompilerServices;
 using Data.Exceptions;
 
 namespace Data.Services
@@ -167,9 +168,17 @@ namespace Data.Services
 
             if((end - start).TotalMinutes > maxLengthMinutes) throw new ForbiddenException($"You cannot create a shift that has a duration over {maxLengthMinutes} minutes");
 
+            var now = DateTime.Now;
+
+            var checkIns = employees.Select(e => new CheckIn
+            {
+                Employee = e,
+                Time = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second)
+            }).ToList();
+
             var shift = new Shift
             {
-                CheckIns = new List<CheckIn>(),
+                CheckIns = checkIns,
                 Start = start,
                 End = end,
                 Employees = employees,
