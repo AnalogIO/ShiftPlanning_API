@@ -36,12 +36,21 @@ namespace PublicApi.Mapping
 
         public IntervalOpeningHoursDTO MapToIntervalDto(ICollection<Shift> shifts, int interval)
         {
+            var now = DateTime.Now;
+            var ongoing = shifts.Where(shift => shift.Start <= now && now <= shift.End);
+            var currentlyCheckedIn = ongoing.SelectMany(s => s.CheckIns);
+
             var openingHoursDto = new IntervalOpeningHoursDTO
             {
                 IntervalMinutes = interval,
                 Shifts = new SortedDictionary<string, ICollection<IntervalOpeningHourDTO>>(),
                 EndHour = 16,
-                StartHour = 8
+                StartHour = 8,
+                CheckedInEmployees = currentlyCheckedIn.Select(checkIn => new OpeningHourEmployeeDTO
+                {
+                    Id = checkIn.Employee.Id,
+                    FirstName = checkIn.Employee.FirstName
+                })
             };
 
             if (!shifts.Any()) return openingHoursDto; // if no shifts are available then return the opening hours dto with an empty dictionary for shifts.
