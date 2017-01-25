@@ -64,6 +64,11 @@ namespace PublicApi.Mapping
             var end = shifts.Max(s => s.End.Hour);
 
             if (start < openingHoursDto.StartHour) openingHoursDto.StartHour = start;
+            else start = openingHoursDto.StartHour;
+
+            if (end > openingHoursDto.EndHour) openingHoursDto.EndHour = end;
+            else end = openingHoursDto.EndHour;
+
             if (latestShift.End.Hour > openingHoursDto.EndHour)
             {
                 openingHoursDto.EndHour = latestShift.End.Hour;
