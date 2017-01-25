@@ -69,7 +69,7 @@ namespace PublicApi.Mapping
             if (end > openingHoursDto.EndHour) openingHoursDto.EndHour = end;
             else end = openingHoursDto.EndHour;
 
-            if (latestShift.End.Hour > openingHoursDto.EndHour)
+            if (latestShift.End.Hour >= openingHoursDto.EndHour)
             {
                 openingHoursDto.EndHour = latestShift.End.Hour;
                 if (latestShift.End.Minute > 0)
