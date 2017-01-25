@@ -42,7 +42,10 @@ namespace Data.Services
             if (employeeTitle == null) throw new ObjectNotFoundException("Could not find a title corresponding to the given id");
 
             employeeTitle.Title = employeeTitleDto.Title;
-            return (_employeeTitleRepository.Update(employeeTitle) > 0) ? employeeTitle : null;
+
+            _employeeTitleRepository.Update(employeeTitle);
+
+            return employeeTitle;
         }
     }
 }

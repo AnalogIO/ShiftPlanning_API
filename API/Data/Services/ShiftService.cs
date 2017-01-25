@@ -139,15 +139,17 @@ namespace Data.Services
 
             var employees = _employeeRepository.ReadFromOrganization(organizationId).Where(x => updateShiftDto.EmployeeIds.Contains(x.Id)).ToList();
 
-            var start = DateTimeOffset.Parse(updateShiftDto.Start).UtcDateTime;
-            var end = DateTimeOffset.Parse(updateShiftDto.End).UtcDateTime;
+            var start = DateTimeOffset.Parse(updateShiftDto.Start).LocalDateTime;
+            var end = DateTimeOffset.Parse(updateShiftDto.End).LocalDateTime;
 
             shift.Employees = employees;
             shift.CheckIns = shift.CheckIns.Where(x => updateShiftDto.CheckInIds.Contains(x.Id)).ToList();
             shift.Start = start;
             shift.End = end;
 
-            return _shiftRepository.Update(shift) > 0 ? shift : null;
+            _shiftRepository.Update(shift);
+
+            return shift;
         }
 
         public Shift CreateShift(Organization organization, CreateShiftDTO shiftDto)

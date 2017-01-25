@@ -94,7 +94,10 @@ namespace Data.Services
 
             schedule.Name = scheduleDto.Name;
             schedule.NumberOfWeeks = scheduleDto.NumberOfWeeks;
-            return _scheduleRepository.Update(schedule) > 0 ? schedule : null;
+
+            _scheduleRepository.Update(schedule);
+
+            return schedule;
         }
 
         public IEnumerable<Shift> RolloutSchedule(int scheduleId, RolloutScheduleDTO rolloutDto, Manager manager)
