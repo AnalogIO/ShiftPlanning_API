@@ -498,7 +498,7 @@
         <member name="T:PublicApi.Controllers.OpenController">
             <summary>
             The OpenController is the public interface that can tell whether or not
-            a given institution is open.
+            a given organization is open.
             </summary>
         </member>
         <member name="M:PublicApi.Controllers.OpenController.#ctor(Data.Services.IShiftService)">

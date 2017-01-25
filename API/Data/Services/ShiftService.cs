@@ -163,12 +163,17 @@ namespace Data.Services
         {
             var employees = _employeeRepository.ReadFromOrganization(organization.Id).Where(x => shiftDto.EmployeeIds.Contains(x.Id)).ToList();
 
-            var start = DateTimeOffset.Parse(shiftDto.Start).LocalDateTime;
-            var end = DateTimeOffset.Parse(shiftDto.End).LocalDateTime;
-
-            if((end - start).TotalMinutes > maxLengthMinutes) throw new ForbiddenException($"You cannot create a shift that has a duration over {maxLengthMinutes} minutes");
+            var startSpan = TimeSpan.Parse(shiftDto.Start);
+            var endSpan = TimeSpan.Parse(shiftDto.End);
 
             var now = DateTime.Now;
+
+            var start = new DateTime(now.Year, now.Month, now.Day, startSpan.Hours, startSpan.Minutes, startSpan.Seconds);
+            var end = new DateTime(now.Year, now.Month, now.Day, endSpan.Hours, endSpan.Minutes, endSpan.Seconds);
+
+            if (start > end) throw new ForbiddenException("The shift cannot end before it has started");
+            if (end < now) throw new ForbiddenException("The end of the shift should be in the future");
+            if((end - start).TotalMinutes > maxLengthMinutes) throw new ForbiddenException($"You cannot create a shift that has a duration over {maxLengthMinutes} minutes");
 
             var checkIns = employees.Select(e => new CheckIn
             {

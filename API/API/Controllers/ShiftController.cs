@@ -197,7 +197,7 @@ namespace API.Controllers
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
             if (organization == null) return BadRequest("No institution found with the given name");
 
-            var shift = _shiftService.CreateLimitedShift(organization, shiftDto, 180); // Create shift if it doesnt exceed a duration of 3 hours
+            var shift = _shiftService.CreateLimitedShift(organization, shiftDto, 300); // Create shift if it doesnt exceed a duration of 5 hours
             if (shift != null)
             {
                 return Ok(Mapper.Map(shift));
