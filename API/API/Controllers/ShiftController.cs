@@ -68,10 +68,10 @@ namespace API.Controllers
         [HttpDelete, Route("{id}"), AdminFilter]
         public IHttpActionResult Delete(int id)
         {
-            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
-            if (organization == null) return BadRequest("No institution found with the given name");
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("No manager found with the given token");
 
-            _shiftService.DeleteShift(id, organization.Id);
+            _shiftService.DeleteShift(id, manager.Organization.Id);
             
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
         }

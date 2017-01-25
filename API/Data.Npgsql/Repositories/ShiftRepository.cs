@@ -5,6 +5,7 @@ using System.Linq;
 using Data.Models;
 using Data.Repositories;
 using System.Data.Entity;
+using Data.Exceptions;
 
 namespace Data.Npgsql.Repositories
 {
@@ -39,6 +40,8 @@ namespace Data.Npgsql.Repositories
         {
             var shift = _context.Shifts.FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
             if (shift == null) throw new ObjectNotFoundException("Could not find a shift corresponding to the given id");
+
+            if(shift.CheckIns.Any()) throw new ForbiddenException("You cannot delete a shift that contains checked in employees");
 
             _context.Shifts.Remove(shift);
             _context.SaveChanges();
