@@ -94,6 +94,7 @@ namespace Data.Services
             var employee = _employeeRepository.Read(employeeId, institutionId);
             if (employee == null) throw new ObjectNotFoundException("Could not find an employee corresponding to the given id");
             var now = DateTime.Now;
+            if(now > shift.End) throw new ForbiddenException("You cannot check into a shift that has ended");
             var checkIn = new CheckIn { Employee = employee, Time = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second) };
             shift.CheckIns.Add(checkIn);
             return _shiftRepository.Update(shift) > 0 ? shift.CheckIns.LastOrDefault() : null;

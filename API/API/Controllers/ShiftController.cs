@@ -137,7 +137,7 @@ namespace API.Controllers
 
             var shifts = Mapper.Map(_shiftService.GetByOrganization(organization.Id,now,end));
 
-            return Ok(new { Shifts = shifts });
+            return Ok(shifts);
         }
 
 
