@@ -30,10 +30,10 @@ namespace PublicApi.Controllers
         }
 
         /// <summary>
-        /// Fetch shifts for the next week for a given institution.
+        /// Fetch shifts for the next week for a given organization.
         /// </summary>
         /// <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
-        /// <returns>A collection of OpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
+        /// <returns>A collection of OpeningHoursDTO. NotFound if organizationRepository was not found.</returns>
         [HttpGet, Route("{shortKey}")]
         [ResponseType(typeof(IEnumerable<OpeningHoursDTO>))]
         public IHttpActionResult Get(string shortKey)
@@ -51,13 +51,13 @@ namespace PublicApi.Controllers
         }
 
         /// <summary>
-        /// Fetch shifts for the next week for a given institution.
+        /// Fetch shifts for the next week for a given organization.
         /// </summary>
-        /// <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
+        /// <param name="shortKey">ShortKey of the organization to fetch opening hours for.</param>
         /// <param name="interval">The number of minutes an interval should span.</param>
-        /// <returns>A collection of IntervalOpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
+        /// <returns>A collection of IntervalOpeningHoursDTO. NotFound if organizationRepository was not found.</returns>
         [HttpGet, Route("~/api/openinghours/{shortKey}")]
-        [ResponseType(typeof(IEnumerable<IntervalOpeningHoursDTO>))]
+        [ResponseType(typeof(IntervalOpeningHoursDTO))]
         public IHttpActionResult GetIntervals(string shortKey, int interval = 30)
         {
             //var monday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);

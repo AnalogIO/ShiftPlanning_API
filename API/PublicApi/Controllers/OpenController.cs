@@ -8,7 +8,7 @@ namespace PublicApi.Controllers
 {
     /// <summary>
     /// The OpenController is the public interface that can tell whether or not
-    /// a given institution is open.
+    /// a given organization is open.
     /// </summary>
     [RoutePrefix("api/open")]
     public class OpenController : ApiController
@@ -25,7 +25,7 @@ namespace PublicApi.Controllers
         }
 
         /// <summary>
-        /// Find out whether or not the institution identified by short key is open based on whether or not any employee has checked in.
+        /// Find out whether or not the organization identified by short key is open based on whether or not any employee has checked in.
         /// </summary>
         /// <param name="shortKey">The short key of the institution.</param>
         /// <returns></returns>

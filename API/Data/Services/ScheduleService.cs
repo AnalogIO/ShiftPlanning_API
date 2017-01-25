@@ -102,8 +102,8 @@ namespace Data.Services
             //var from = DateTime.Parse(fromDate);
             //var to = DateTime.Parse(toDate);
 
-            var from = DateTimeOffset.Parse(rolloutDto.From).UtcDateTime;
-            var to = DateTimeOffset.Parse(rolloutDto.To).UtcDateTime;
+            var from = DateTimeOffset.Parse(rolloutDto.From).LocalDateTime;
+            var to = DateTimeOffset.Parse(rolloutDto.To).LocalDateTime;
 
             if(from >= to) throw new BadRequestException("'From' date should be before 'To' date");
 

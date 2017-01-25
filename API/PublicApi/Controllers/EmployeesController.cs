@@ -12,7 +12,7 @@ using PublicApi.Mapping;
 namespace PublicApi.Controllers
 {
     /// <summary>
-    /// The public API to access employee information for institutions.
+    /// The public API to access employee information for organizations.
     /// </summary>
     [RoutePrefix("api/employees")]
     public class EmployeesController : ApiController
@@ -27,10 +27,10 @@ namespace PublicApi.Controllers
         }
 
         /// <summary>
-        /// Retrive all employees for a given institution.
+        /// Retrive all employees for a given organization.
         /// </summary>
-        /// <param name="shortKey">The shortkey of the institution.</param>
-        /// <returns>A collection of employees, if the institution was found. Http 404 otherwise.</returns>
+        /// <param name="shortKey">The shortkey of the organization.</param>
+        /// <returns>A collection of employees, if the organization was found. Http 404 otherwise.</returns>
         [HttpGet, Route("{shortKey}")]
         [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
         public IHttpActionResult Get(string shortKey)
@@ -46,9 +46,9 @@ namespace PublicApi.Controllers
         }
 
         /// <summary>
-        /// Retrieve a certain employee from an institution.
+        /// Retrieve a certain employee from an organization.
         /// </summary>
-        /// <param name="shortKey">The shortkey of an institution.</param>
+        /// <param name="shortKey">The shortkey of an organization.</param>
         /// <param name="id">The id of the employee.</param>
         /// <returns>A representation of the employee, if a shortKey/id match was found.</returns>
         [HttpGet, Route("{shortKey}/{id}")]
@@ -66,7 +66,7 @@ namespace PublicApi.Controllers
         /// <summary>
         /// Retrieve the photo for an employee.
         /// </summary>
-        /// <param name="shortKey">The shortkey of an institution.</param>
+        /// <param name="shortKey">The shortkey of an organization.</param>
         /// <param name="id">The id of an employee.</param>
         /// <returns>
         /// A photo if the shortkey/id match was found. Http 404 otherwise.

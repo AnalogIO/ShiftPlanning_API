@@ -509,7 +509,7 @@
         </member>
         <member name="M:PublicApi.Controllers.OpenController.IsOpen(System.String)">
             <summary>
-            Find out whether or not the institution identified by short key is open based on whether or not any employee has checked in.
+            Find out whether or not the organization identified by short key is open based on whether or not any employee has checked in.
             </summary>
             <param name="shortKey">The short key of the institution.</param>
             <returns></returns>
@@ -528,36 +528,36 @@
         </member>
         <member name="M:PublicApi.Controllers.ShiftsController.Get(System.String)">
             <summary>
-            Fetch shifts for the next week for a given institution.
+            Fetch shifts for the next week for a given organization.
             </summary>
             <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
-            <returns>A collection of OpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
+            <returns>A collection of OpeningHoursDTO. NotFound if organizationRepository was not found.</returns>
         </member>
         <member name="M:PublicApi.Controllers.ShiftsController.GetIntervals(System.String,System.Int32)">
             <summary>
-            Fetch shifts for the next week for a given institution.
+            Fetch shifts for the next week for a given organization.
             </summary>
-            <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
+            <param name="shortKey">ShortKey of the organization to fetch opening hours for.</param>
             <param name="interval">The number of minutes an interval should span.</param>
-            <returns>A collection of IntervalOpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
+            <returns>A collection of IntervalOpeningHoursDTO. NotFound if organizationRepository was not found.</returns>
         </member>
         <member name="T:PublicApi.Controllers.EmployeesController">
             <summary>
-            The public API to access employee information for institutions.
+            The public API to access employee information for organizations.
             </summary>
         </member>
         <member name="M:PublicApi.Controllers.EmployeesController.Get(System.String)">
             <summary>
-            Retrive all employees for a given institution.
+            Retrive all employees for a given organization.
             </summary>
-            <param name="shortKey">The shortkey of the institution.</param>
-            <returns>A collection of employees, if the institution was found. Http 404 otherwise.</returns>
+            <param name="shortKey">The shortkey of the organization.</param>
+            <returns>A collection of employees, if the organization was found. Http 404 otherwise.</returns>
         </member>
         <member name="M:PublicApi.Controllers.EmployeesController.Get(System.String,System.Int32)">
             <summary>
-            Retrieve a certain employee from an institution.
+            Retrieve a certain employee from an organization.
             </summary>
-            <param name="shortKey">The shortkey of an institution.</param>
+            <param name="shortKey">The shortkey of an organization.</param>
             <param name="id">The id of the employee.</param>
             <returns>A representation of the employee, if a shortKey/id match was found.</returns>
         </member>
@@ -565,7 +565,7 @@
             <summary>
             Retrieve the photo for an employee.
             </summary>
-            <param name="shortKey">The shortkey of an institution.</param>
+            <param name="shortKey">The shortkey of an organization.</param>
             <param name="id">The id of an employee.</param>
             <returns>
             A photo if the shortkey/id match was found. Http 404 otherwise.
