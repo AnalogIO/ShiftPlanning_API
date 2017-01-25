@@ -7,6 +7,7 @@ using DataTransferObjects.Shift;
 using System.Data;
 using System.Runtime.CompilerServices;
 using Data.Exceptions;
+using Microsoft.Practices.ObjectBuilder2;
 
 namespace Data.Services
 {
@@ -134,16 +135,25 @@ namespace Data.Services
 
         public Shift UpdateShift(int shiftId, int organizationId, UpdateShiftDTO updateShiftDto)
         {
+            var now = DateTime.Now;
+
             var shift = _shiftRepository.Read(shiftId, organizationId);
             if (shift == null) throw new ObjectNotFoundException("Could not find a shift corresponding to the given id");
-
-            var employees = _employeeRepository.ReadFromOrganization(organizationId).Where(x => updateShiftDto.EmployeeIds.Contains(x.Id)).ToList();
 
             var start = DateTimeOffset.Parse(updateShiftDto.Start).LocalDateTime;
             var end = DateTimeOffset.Parse(updateShiftDto.End).LocalDateTime;
 
+            if (start > end) throw new ForbiddenException("The shift cannot end before it has started");
+            if (end < now) throw new ForbiddenException("The end of the shift should be in the future");
+
+            var intersectingShifts = GetIntersectingShifts(organizationId, start, end);
+
+            if (intersectingShifts.Any(s => s.Id != shift.Id)) throw new ForbiddenException("You cannot update a shift that will intersect other shifts");
+
+            var employees = _employeeRepository.ReadFromOrganization(organizationId).Where(x => updateShiftDto.EmployeeIds.Contains(x.Id)).ToList();
+
+            shift.Employees.Where(e => !updateShiftDto.EmployeeIds.Contains(e.Id)).ForEach(e => e.Shifts.Remove(shift));
             shift.Employees = employees;
-            shift.CheckIns = shift.CheckIns.Where(x => updateShiftDto.CheckInIds.Contains(x.Id)).ToList();
             shift.Start = start;
             shift.End = end;
 
@@ -154,8 +164,13 @@ namespace Data.Services
 
         public Shift CreateShift(Organization organization, CreateShiftDTO shiftDto)
         {
+            var now = DateTime.Now;
+
             var start = DateTimeOffset.Parse(shiftDto.Start).LocalDateTime;
             var end = DateTimeOffset.Parse(shiftDto.End).LocalDateTime;
+
+            if (start > end) throw new ForbiddenException("The shift cannot end before it has started");
+            if (end < now) throw new ForbiddenException("The end of the shift should be in the future");
 
             var intersectingShifts = GetIntersectingShifts(organization.Id, start, end);
 
@@ -196,6 +211,8 @@ namespace Data.Services
             if((end - start).TotalMinutes < 30) throw new ForbiddenException("The shift has to last minimum 30 minutes");
 
             var employees = _employeeRepository.ReadFromOrganization(organization.Id).Where(x => shiftDto.EmployeeIds.Contains(x.Id)).ToList();
+
+            if (!employees.Any()) throw new ForbiddenException("You have to select at least 1 employee to create the shift");
 
             var checkIns = employees.Select(e => new CheckIn
             {
