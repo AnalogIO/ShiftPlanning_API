@@ -86,6 +86,16 @@ namespace Data.Services
             return GetByOrganization(id).Where(shift => (shift.Start <= now || shift.Start <= nextHour) && now <= shift.End);
         }
 
+        public IEnumerable<Shift> GetIntersectingShifts(int organizationId, DateTime start, DateTime end)
+        {
+            var existingShifts =
+                _shiftRepository.ReadFromOrganization(organizationId)
+                    .Where(s => start == s.Start || end == s.End
+                    || (s.Start < start && ((s.End > start && s.End < end) || (s.End > end)))
+                    || (s.Start > start && ((end > s.Start && end < s.End) || end > s.End)));
+            return existingShifts;
+        }
+
         public CheckIn CheckInEmployee(int shiftId, int employeeId, int institutionId)
         {
             var shift = _shiftRepository.Read(shiftId, institutionId);
@@ -142,10 +152,14 @@ namespace Data.Services
 
         public Shift CreateShift(Organization organization, CreateShiftDTO shiftDto)
         {
-            var employees = _employeeRepository.ReadFromOrganization(organization.Id).Where(x => shiftDto.EmployeeIds.Contains(x.Id)).ToList();
-
             var start = DateTimeOffset.Parse(shiftDto.Start).LocalDateTime;
             var end = DateTimeOffset.Parse(shiftDto.End).LocalDateTime;
+
+            var intersectingShifts = GetIntersectingShifts(organization.Id, start, end);
+
+            if (intersectingShifts.Any()) throw new ForbiddenException("You cannot create a shift the intersects with another");
+
+            var employees = _employeeRepository.ReadFromOrganization(organization.Id).Where(x => shiftDto.EmployeeIds.Contains(x.Id)).ToList();
 
             var shift = new Shift
             {
@@ -162,8 +176,6 @@ namespace Data.Services
 
         public Shift CreateLimitedShift(Organization organization, CreateShiftDTO shiftDto, int maxLengthMinutes)
         {
-            var employees = _employeeRepository.ReadFromOrganization(organization.Id).Where(x => shiftDto.EmployeeIds.Contains(x.Id)).ToList();
-
             var startSpan = TimeSpan.Parse(shiftDto.Start);
             var endSpan = TimeSpan.Parse(shiftDto.End);
 
@@ -172,9 +184,16 @@ namespace Data.Services
             var start = new DateTime(now.Year, now.Month, now.Day, startSpan.Hours, startSpan.Minutes, startSpan.Seconds);
             var end = new DateTime(now.Year, now.Month, now.Day, endSpan.Hours, endSpan.Minutes, endSpan.Seconds);
 
+            var intersectingShifts = GetIntersectingShifts(organization.Id, start, end);
+
+            if (intersectingShifts.Any()) throw new ForbiddenException("You cannot create a shift the intersects with another");
+            
             if (start > end) throw new ForbiddenException("The shift cannot end before it has started");
             if (end < now) throw new ForbiddenException("The end of the shift should be in the future");
             if((end - start).TotalMinutes > maxLengthMinutes) throw new ForbiddenException($"You cannot create a shift that has a duration over {maxLengthMinutes} minutes");
+            if((end - start).TotalMinutes < 30) throw new ForbiddenException("The shift has to last minimum 30 minutes");
+
+            var employees = _employeeRepository.ReadFromOrganization(organization.Id).Where(x => shiftDto.EmployeeIds.Contains(x.Id)).ToList();
 
             var checkIns = employees.Select(e => new CheckIn
             {
