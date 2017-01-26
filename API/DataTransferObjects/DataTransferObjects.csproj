@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Manager\ManagerValidateTokenDTO.cs" />
     <Compile Include="Schedule\RolloutScheduleDTO.cs" />
+    <Compile Include="Shift\AddEmployeesDTO.cs" />
     <Compile Include="Shift\CheckInDTO.cs" />
     <Compile Include="Employee\CreateEmployeeDTO.cs" />
     <Compile Include="EmployeeTitles\CreateEmployeeTitleDTO.cs" />

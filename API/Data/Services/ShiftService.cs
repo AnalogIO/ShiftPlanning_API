@@ -97,18 +97,34 @@ namespace Data.Services
             return existingShifts;
         }
 
-        public CheckIn CheckInEmployee(int shiftId, int employeeId, int institutionId)
+        public CheckIn CheckInEmployee(int shiftId, int employeeId, int organizationId)
         {
-            var shift = _shiftRepository.Read(shiftId, institutionId);
+            var shift = _shiftRepository.Read(shiftId, organizationId);
             if (shift == null) throw new ObjectNotFoundException("Could not find a shift corresponding to the given id");
             if (shift.CheckIns.FirstOrDefault(x => x.Employee.Id == employeeId) != null) throw new ForbiddenException("Could not check in because the given employee is already checked in");
-            var employee = _employeeRepository.Read(employeeId, institutionId);
+            var employee = _employeeRepository.Read(employeeId, organizationId);
             if (employee == null) throw new ObjectNotFoundException("Could not find an employee corresponding to the given id");
             var now = DateTime.Now;
             if(now > shift.End) throw new ForbiddenException("You cannot check into a shift that has ended");
             var checkIn = new CheckIn { Employee = employee, Time = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second) };
             shift.CheckIns.Add(checkIn);
             return _shiftRepository.Update(shift) > 0 ? shift.CheckIns.LastOrDefault() : null;
+        }
+
+        public Shift AddEmployeesToShift(int shiftId, int organizationId, AddEmployeesDTO employeesDto)
+        {
+            var shift = _shiftRepository.Read(shiftId, organizationId);
+            if (shift == null) throw new ObjectNotFoundException("Could not find a shift corresponding to the given id");
+            if (shift.Employees.Any(x => employeesDto.EmployeeIds.Contains(x.Id))) throw new ForbiddenException("You cannot add employees to a shift if they are already added to the shift");
+            var employees =
+                _employeeRepository.ReadFromOrganization(organizationId)
+                    .Where(e => employeesDto.EmployeeIds.Contains(e.Id));
+            if (!employees.Any()) throw new ObjectNotFoundException("Could not find any employees corresponding to the given ids");
+            foreach (var employee in employees)
+            {
+                shift.Employees.Add(employee);
+            }
+            return _shiftRepository.Update(shift) > 0 ? shift : null;
         }
 
         public Shift CreateShiftOutsideSchedule(CreateShiftOutsideScheduleDTO shiftDto, Organization organization)

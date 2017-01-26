@@ -182,6 +182,30 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Adds the employees from the body to the given shift
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost, Route("{id}/addEmployees"), ApiKeyFilter]
+        public IHttpActionResult AddEmployees(int id, AddEmployeesDTO employees)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No institution found with the given name");
+
+            var shift = _shiftService.AddEmployeesToShift(id, organization.Id, employees);
+            if (shift != null)
+            {
+                return Ok(Mapper.Map(shift));
+            }
+            return BadRequest("Could not add the employees");
+        }
+
+        /// <summary>
         /// Creates a shift with the given employees from now (rounded up to nearest 15 minutes) and for the next xx minutes defined in the body
         /// </summary>
         /// <param name="shiftDto"></param>
