@@ -176,7 +176,7 @@ namespace API.Controllers
             var checkIn = _shiftService.CheckInEmployee(id, employeeId, organization.Id);
             if (checkIn != null)
             {
-                return Ok(new { Message = "The employee was successfully checked in!" });
+                return Ok(Mapper.Map(checkIn));
             }
             return BadRequest("Could not check-in the employee - try again!");
         }
