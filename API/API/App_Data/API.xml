@@ -501,7 +501,7 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="M:API.Authorization.AdminFilter.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
+        <member name="M:API.Authorization.AdminFilterAttribute.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
             <summary>
             OnAuthorization is called whenever a method has the data annotation "[AdminFilter]".
             Checks if the manager is authorized.

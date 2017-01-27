@@ -7,7 +7,7 @@ using Data.Token;
 
 namespace API.Authorization
 {
-    public class AdminFilter : AuthorizationFilterAttribute
+    public class AdminFilterAttribute : AuthorizationFilterAttribute
     {
         /// <summary>
         /// OnAuthorization is called whenever a method has the data annotation "[AdminFilter]".
@@ -19,15 +19,13 @@ namespace API.Authorization
             var token = actionContext.Request.Headers.Authorization;
             if (token == null)
             {
-                throw new UnauthorizedAccessException("Please set the 'Authorization' header to the token granted on login!");
-                //actionContext.Response = actionContext.Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "Please set the 'Authorization' header to the token granted on login!" });
+                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Please set the 'Authorization' header to the token granted on login!");
             }
-            else if (token != null)
+            else
             {
                 if (!TokenManager.ValidateLoginToken(token.ToString()))
                 {
-                    throw new UnauthorizedAccessException("The provided token is not valid!");
-                    //actionContext.Response = actionContext.Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "The provided token is not valid!" });
+                    actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "The provided token is not valid!");
                 }
             }
         }
