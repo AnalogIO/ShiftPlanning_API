@@ -12,5 +12,6 @@ The project requires a configuration file `connections.config` and `appSettings.
 ```xml
 <appSettings>
   <add key="TokenKey" value="SYMMETRICKEY"/>
+  <add key="TokenAgeHour" value="24"/>
 </appSettings>
 ```
