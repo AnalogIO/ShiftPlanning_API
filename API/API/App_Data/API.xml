@@ -520,12 +520,13 @@
             Controller to manipulate with the employees.
             </summary>
         </member>
-        <member name="M:API.Controllers.EmployeeController.#ctor(API.Authorization.IAuthManager,Data.Services.IEmployeeService)">
+        <member name="M:API.Controllers.EmployeeController.#ctor(API.Authorization.IAuthManager,Data.Services.IEmployeeService,API.Logic.PhotoMapper)">
             <summary>
             The constructor of the employee controller
             </summary>
             <param name="authManager"></param>
             <param name="employeeService"></param>
+            <param name="photoMapper"></param>
         </member>
         <member name="M:API.Controllers.EmployeeController.Register(DataTransferObjects.Employee.CreateEmployeeDTO)">
             <summary>
@@ -594,15 +595,6 @@
             </summary>
             <param name="id">The id of the employee.</param>
             <returns>Returns 'No Content' (204) if the employee gets deleted.</returns>
-        </member>
-        <member name="M:API.Controllers.EmployeeController.ParseBase64Photo(System.String,Data.Models.Organization)">
-            <summary>
-            
-            </summary>
-            <param name="base64EncodedPhoto"></param>
-            <param name="organization"></param>
-            <returns></returns>
-            <exception cref="T:System.ArgumentOutOfRangeException">If the encoded string does not contain a media type.</exception>
         </member>
         <member name="T:API.Controllers.EmployeeTitleController">
             <summary>
@@ -887,6 +879,15 @@
             </summary>
             <param name="shiftDto"></param>
             <returns></returns>
+        </member>
+        <member name="M:API.Logic.PhotoMapper.ParseBase64Photo(System.String,Data.Models.Organization)">
+            <summary>
+            
+            </summary>
+            <param name="base64EncodedPhoto"></param>
+            <param name="organization"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">If the encoded string does not contain a media type.</exception>
         </member>
     </members>
 </doc>

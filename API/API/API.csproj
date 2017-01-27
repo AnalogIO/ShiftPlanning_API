@@ -262,6 +262,7 @@
     <Compile Include="Authorization\ApiKeyFilter.cs" />
     <Compile Include="Authorization\AuthManager.cs" />
     <Compile Include="Logic\Mapper.cs" />
+    <Compile Include="Logic\PhotoMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
