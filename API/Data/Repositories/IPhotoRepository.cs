@@ -6,5 +6,7 @@ namespace Data.Repositories
     {
         Photo Read(int photoId, string organizationShortKey);
         Photo Read(int photoId, int organizationId);
+
+        Photo Create(Photo photo);
     }
 }

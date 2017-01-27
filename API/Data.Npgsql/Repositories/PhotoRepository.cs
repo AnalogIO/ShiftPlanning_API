@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Data.Models;
 
 namespace Data.Npgsql.Repositories
@@ -25,6 +24,12 @@ namespace Data.Npgsql.Repositories
         public Photo Read(int photoId, string organizationShortKey)
         {
             return _context.Photos.SingleOrDefault(photo => photo.Id == photoId && photo.Organization.ShortKey == organizationShortKey);
+        }
+
+        public Photo Create(Photo photo)
+        {
+            _context.Photos.Add(photo);
+            return _context.SaveChanges() > 0 ? photo : null;
         }
     }
 }

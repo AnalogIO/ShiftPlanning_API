@@ -8,7 +8,6 @@ using Data.Models;
 using Data.Services;
 using DataTransferObjects.Employee;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Web.Http.Description;
 
 namespace API.Controllers
@@ -21,16 +20,19 @@ namespace API.Controllers
     {
         private readonly IAuthManager _authManager;
         private readonly IEmployeeService _employeeService;
+        private readonly PhotoMapper _photoMapper;
 
         /// <summary>
         /// The constructor of the employee controller
         /// </summary>
         /// <param name="authManager"></param>
         /// <param name="employeeService"></param>
-        public EmployeeController(IAuthManager authManager, IEmployeeService employeeService)
+        /// <param name="photoMapper"></param>
+        public EmployeeController(IAuthManager authManager, IEmployeeService employeeService, PhotoMapper photoMapper)
         {
             _authManager = authManager;
             _employeeService = employeeService;
+            _photoMapper = photoMapper;
         }
 
         [HttpDelete, AdminFilter, Route("{userId:int}/photo")]
@@ -52,7 +54,7 @@ namespace API.Controllers
 
             try
             {
-                var photo = ParseBase64Photo(profilePhoto, manager.Organization);
+                var photo = _photoMapper.ParseBase64Photo(profilePhoto, manager.Organization);
 
                 _employeeService.SetPhoto(userId, manager.Organization.Id, photo);
 
@@ -96,7 +98,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    photo = ParseBase64Photo(employeeDto.ProfilePhoto, manager.Organization);
+                    photo = _photoMapper.ParseBase64Photo(employeeDto.ProfilePhoto, manager.Organization);
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
@@ -135,7 +137,7 @@ namespace API.Controllers
             var employees = _employeeService.CreateManyEmployees(employeeDtos, manager);
             if (employees != null)
             {
-                return Created($"/api/employees", Mapper.Map(employees));
+                return Created("/api/employees", Mapper.Map(employees));
             }
             return BadRequest("The employees could not be created!");
         }
@@ -242,7 +244,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    photo = ParseBase64Photo(employeeDto.ProfilePhoto, manager.Organization);
+                    photo = _photoMapper.ParseBase64Photo(employeeDto.ProfilePhoto, manager.Organization);
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
@@ -287,35 +289,6 @@ namespace API.Controllers
                 || string.IsNullOrWhiteSpace(dto.FirstName)
                 || string.IsNullOrWhiteSpace(dto.LastName)) return false;
             return true;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="base64EncodedPhoto"></param>
-        /// <param name="organization"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException">If the encoded string does not contain a media type.</exception>
-        private Photo ParseBase64Photo(string base64EncodedPhoto, Organization organization)
-        {
-            const string pattern = @"^data:([a-z/]+);base64,";
-            var match = Regex.Match(base64EncodedPhoto, pattern);
-
-            if (!match.Success)
-            {
-                throw new ArgumentOutOfRangeException(nameof(base64EncodedPhoto), "Unsupported image type");
-            }
-            
-            var type = match.Groups[0].Value;
-
-            var data = Convert.FromBase64String(Regex.Replace(base64EncodedPhoto, pattern, ""));
-
-            return new Photo
-            {
-                Data = data,
-                Type = type,
-                Organization = organization
-            };
         }
     }
 }
