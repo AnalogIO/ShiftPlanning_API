@@ -26,7 +26,7 @@ namespace Data.Npgsql
                 .HasKey(org => org.Id);
 
             modelBuilder.Entity<Organization>()
-                .HasRequired(org => org.DefaultPhoto);
+                .HasOptional(org => org.DefaultPhoto);
 
             modelBuilder.Entity<Employee>()
                 .HasKey(emp => emp.Id)

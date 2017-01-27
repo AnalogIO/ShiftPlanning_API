@@ -125,6 +125,10 @@
     <Compile Include="Migrations\201611262128048_Default Photo for Organization.Designer.cs">
       <DependentUpon>201611262128048_Default Photo for Organization.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701221717322_Optional default photo.cs" />
+    <Compile Include="Migrations\201701221717322_Optional default photo.Designer.cs">
+      <DependentUpon>201701221717322_Optional default photo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\EmployeeRepository.cs" />
@@ -175,6 +179,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201611262128048_Default Photo for Organization.resx">
       <DependentUpon>201611262128048_Default Photo for Organization.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701221717322_Optional default photo.resx">
+      <DependentUpon>201701221717322_Optional default photo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
