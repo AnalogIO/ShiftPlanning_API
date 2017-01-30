@@ -1,4 +1,5 @@
-﻿using API.Controllers;
+﻿using System;
+using API.Controllers;
 using Data.Models;
 using DataTransferObjects.Employee;
 using DataTransferObjects.EmployeeTitles;
@@ -14,9 +15,9 @@ namespace API.Logic
     {
         public static EmployeeDTO Map(Employee employee)
         {
-            var url = HttpContext.Current.Request.Url;
+            var url = HttpContext.Current.Request.Url.AbsoluteUri;
 
-            var portString = url.IsDefaultPort ? "" : $":{url.Port}";
+            var routeBase = url.Substring(0, url.IndexOf("/api/", StringComparison.Ordinal));
 
             return new EmployeeDTO
             {
@@ -27,7 +28,7 @@ namespace API.Logic
                 Active = employee.Active,
                 EmployeeTitle = employee.EmployeeTitle?.Title,
                 EmployeeTitleId = employee.EmployeeTitle?.Id,
-                PhotoRef = $"{url.Scheme}://{url.Host}{portString}/shiftplanning/{PhotosController.RoutePrefix}/{employee.Photo.Id}/{employee.Organization.Id}" // ugly temp fix for /shiftplanning/
+                PhotoRef = $"{routeBase}/{PhotosController.RoutePrefix}/{employee.Photo.Id}/{employee.Organization.Id}"
             };
         }
 
