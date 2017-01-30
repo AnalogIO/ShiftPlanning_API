@@ -33,7 +33,7 @@ namespace API.Controllers
         /// A response containing the image if found. 
         /// If the provided authorization token is invalid: Http 400 (Bad Request) is returned.
         /// If the photo is not found: Http 404 (Not Found) is returned.</returns>
-        [HttpGet, Route("{photoId}/{organizationId}"), AdminFilter]
+        [HttpGet, Route("{photoId}/{organizationId}")]
         public IHttpActionResult Get(int photoId, int organizationId)
         {
             var photo = _photoService.Read(photoId, organizationId);
