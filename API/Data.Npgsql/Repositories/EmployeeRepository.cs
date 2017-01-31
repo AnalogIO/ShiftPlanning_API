@@ -49,24 +49,27 @@ namespace Data.Npgsql.Repositories
         public IEnumerable<Employee> ReadFromOrganization(int organizationId)
         {
             return _context.Employees
-                .Include(x => x.EmployeeTitle)
-                .Include(x => x.Photo)
+                .Include(employee => employee.EmployeeTitle)
+                .Include(employee => employee.Photo)
+                .Include(employee => employee.CheckIns)
                 .Where(e => e.Organization.Id == organizationId).OrderBy(x => x.Id);
         }
 
         public IEnumerable<Employee> ReadFromOrganization(string shortKey)
         {
             return _context.Employees
-                .Include(emp => emp.EmployeeTitle)
-                .Include(emp => emp.Photo)
+                .Include(employee => employee.EmployeeTitle)
+                .Include(employee => employee.Photo)
+                .Include(employee => employee.CheckIns)
                 .Where(e => e.Organization.ShortKey == shortKey);
         }
 
         public Employee Read(int id, int organizationId)
         {
             return _context.Employees
-                .Include(x => x.EmployeeTitle)
-                .FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
+                .Include(employee => employee.EmployeeTitle)
+                .Include(employee => employee.CheckIns)
+                .FirstOrDefault(employee => employee.Id == id && employee.Organization.Id == organizationId);
         }
 
         public Employee Read(int id, string shortKey)
@@ -74,7 +77,8 @@ namespace Data.Npgsql.Repositories
             return _context.Employees
                 .Include(employee => employee.EmployeeTitle)
                 .Include(employee => employee.Photo)
-                .FirstOrDefault(x => x.Id == id && x.Organization.ShortKey == shortKey);
+                .Include(employee => employee.CheckIns)
+                .FirstOrDefault(employee => employee.Id == id && employee.Organization.ShortKey == shortKey);
         }
 
         public int Update(Employee employee)

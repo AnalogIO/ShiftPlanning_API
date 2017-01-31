@@ -28,7 +28,8 @@ namespace API.Logic
                 Active = employee.Active,
                 EmployeeTitle = employee.EmployeeTitle?.Title,
                 EmployeeTitleId = employee.EmployeeTitle?.Id,
-                PhotoRef = $"{routeBase}/{PhotosController.RoutePrefix}/{employee.Photo.Id}/{employee.Organization.Id}"
+                PhotoRef = $"{routeBase}/{PhotosController.RoutePrefix}/{employee.Photo.Id}/{employee.Organization.Id}",
+                CheckInCount = employee.CheckIns.Count
             };
         }
 

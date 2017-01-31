@@ -43,6 +43,7 @@ namespace Data.Npgsql.Repositories
                 .Include(x => x.ScheduledShifts)
                 .Include(x => x.ScheduledShifts.Select(y => y.Employees))
                 .Include(x => x.ScheduledShifts.Select(y => y.Employees.Select(z => z.EmployeeTitle)))
+                .Include(x => x.ScheduledShifts.Select(y => y.Employees.Select(z => z.CheckIns)))
                 .SingleOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
         }
 
@@ -52,6 +53,7 @@ namespace Data.Npgsql.Repositories
                 .Include(x => x.ScheduledShifts)
                 .Include(x => x.ScheduledShifts.Select(y => y.Employees))
                 .Include(x => x.ScheduledShifts.Select(y => y.Employees.Select(z => z.EmployeeTitle)))
+                .Include(x => x.ScheduledShifts.Select(y => y.Employees.Select(z => z.CheckIns)))
                 .Where(x => x.Organization.Id == organizationId)
                 .ToList();
         }
