@@ -102,8 +102,7 @@ namespace Data.Services
 
         public IEnumerable<Shift> RolloutSchedule(int scheduleId, RolloutScheduleDTO rolloutDto, Manager manager)
         {
-            //var from = DateTime.Parse(fromDate);
-            //var to = DateTime.Parse(toDate);
+            if (rolloutDto.StartFromScheduledWeek == 0) rolloutDto.StartFromScheduledWeek = 1;
 
             var from = DateTimeOffset.Parse(rolloutDto.From).LocalDateTime;
             var to = DateTimeOffset.Parse(rolloutDto.To).LocalDateTime;
@@ -111,14 +110,14 @@ namespace Data.Services
             if(from >= to) throw new BadRequestException("'From' date should be before 'To' date");
 
             var currentDate = from;
-            var currentDay = (int)from.DayOfWeek;
+            var currentDay = (int)from.DayOfWeek + (rolloutDto.StartFromScheduledWeek - 1) * 7;
 
             var schedule = _scheduleRepository.Read(scheduleId, manager.Organization.Id);
 
             if (schedule == null) throw new ObjectNotFoundException("Could not find a schedule corresponding to the given id");
 
             var shifts = new List<Shift>();
-            for(int i = 0; i <= ((to - from).TotalDays / (7*schedule.NumberOfWeeks)); i++)
+            for(var i = 0; i <= ((to - from).TotalDays / (7*schedule.NumberOfWeeks)); i++)
             {
                 foreach (ScheduledShift scheduledShift in schedule.ScheduledShifts.OrderBy(x => x.Day))
                 {
@@ -147,7 +146,9 @@ namespace Data.Services
                 currentDate = currentDate.AddDays((schedule.NumberOfWeeks * 7) - currentDay);
                 currentDay = 0;
             }
-            var shiftsToRemove = schedule.Shifts.Where(x => x.Start > from);
+            var shiftsToRemove = schedule.Shifts.Where(s => s.Start > from && !s.CheckIns.Any());
+            var shiftDaysWithCheckIn = schedule.Shifts.Where(s => s.CheckIns.Any()).Select(ss => ss.Start.DayOfYear); // get which days are protected because of existing check ins
+            shifts = shifts.Where(s => !shiftDaysWithCheckIn.Contains(s.Start.DayOfYear)).ToList(); // remove generated shifts that interferes with protected days
             _shiftRepository.Delete(shiftsToRemove);
             _scheduleRepository.Update(schedule);
             return _shiftRepository.Create(shifts);
