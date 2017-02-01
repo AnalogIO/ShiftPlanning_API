@@ -5,11 +5,14 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http.Filters;
 using Data.Exceptions;
+using NLog;
 
 namespace API
 {
     public class ExceptionToHttpStatusFilterAttribute : ExceptionFilterAttribute
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public override void OnException(HttpActionExecutedContext context)
         {
             if (context.Exception is NotImplementedException)
@@ -31,6 +34,10 @@ namespace API
             else if (context.Exception is ForbiddenException)
             {
                 context.Response = context.Request.CreateErrorResponse(HttpStatusCode.Forbidden, context.Exception.Message);
+            }
+            else
+            {
+                Logger.Error(context.Exception);
             }
         }
     }
