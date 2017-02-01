@@ -52,7 +52,8 @@ namespace Data.Services
                 LastName = employeeDto.LastName,
                 Organization = manager.Organization,
                 Active = true,
-                Photo = photo
+                Photo = photo,
+                CheckIns = new List<CheckIn>()
             };
             var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, manager.Organization.Id);
             if (title == null) throw new ObjectNotFoundException("Could not find a title corresponding to the given id");
