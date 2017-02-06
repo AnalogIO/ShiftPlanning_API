@@ -5,6 +5,7 @@ using API.Logic;
 using DataTransferObjects.Shift;
 using System.Net.Http;
 using System.Net;
+using System.Runtime.Remoting;
 using Data.Services;
 
 namespace API.Controllers

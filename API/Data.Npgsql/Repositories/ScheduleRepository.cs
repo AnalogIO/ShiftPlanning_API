@@ -5,6 +5,7 @@ using System.Linq;
 using Data.Models;
 using Data.Repositories;
 using System.Data.Entity;
+using Data.Exceptions;
 
 namespace Data.Npgsql.Repositories
 {
@@ -25,8 +26,10 @@ namespace Data.Npgsql.Repositories
 
         public void Delete(int id, int organizationId)
         {
-            var schedule = _context.Schedules.SingleOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
+            var schedule = _context.Schedules.Include(ss => ss.ScheduledShifts).Include(s => s.Shifts).SingleOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
             if (schedule == null) throw new ObjectNotFoundException("Could not find a schedule corresponding to the given id");
+
+            if(schedule.Shifts.Any(s => s.CheckIns.Any())) throw new ForbiddenException("You cannot delete a schedule that has been rolled out and contains checkins.");
 
             _context.Schedules.Remove(schedule);
             _context.SaveChanges();
