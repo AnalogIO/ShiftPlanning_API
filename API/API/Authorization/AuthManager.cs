@@ -16,12 +16,6 @@ namespace API.Authorization
             _organizationRepository = organizationRepository;
             _managerRepository = managerRepository;
         }
-        
-        // old implementation not used anymore - now authorizing manager tokens instead
-        public bool AuthenticateToken(string apikey)
-        {
-            return apikey.Equals(ConfigurationManager.AppSettings["ApiKey"]);
-        }
 
         public bool ValidateOrganizationApiKey(string apiKey)
         {
