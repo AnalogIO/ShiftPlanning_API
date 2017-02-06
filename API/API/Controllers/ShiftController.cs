@@ -33,7 +33,7 @@ namespace API.Controllers
         /// Returns all shifts of the specified organization in the 'Authorization' header
         /// </summary>
         /// <returns></returns>
-        [HttpGet, Route(""), AdminFilter]
+        [HttpGet, Route(""), Authorize(Roles = "Manager")]
         public IHttpActionResult Get()
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
@@ -46,7 +46,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet, Route("{id}"), AdminFilter]
+        [HttpGet, Route("{id}"), Authorize(Roles = "Manager")]
         public IHttpActionResult Get(int id)
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
@@ -65,7 +65,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete, Route("{id}"), AdminFilter]
+        [HttpDelete, Route("{id}"), Authorize(Roles = "Manager")]
         public IHttpActionResult Delete(int id)
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
@@ -82,7 +82,7 @@ namespace API.Controllers
         /// <param name="id"></param>
         /// <param name="shiftDto"></param>
         /// <returns></returns>
-        [HttpPut, Route("{id}"), AdminFilter]
+        [HttpPut, Route("{id}"), Authorize(Roles = "Manager")]
         public IHttpActionResult Update(int id, UpdateShiftDTO shiftDto)
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
@@ -103,7 +103,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="shiftDto"></param>
         /// <returns></returns>
-        [HttpPost, Route(""), AdminFilter]
+        [HttpPost, Route(""), Authorize(Roles = "Manager")]
         public IHttpActionResult Create(CreateShiftDTO shiftDto)
         {
             if (!ModelState.IsValid)
@@ -126,7 +126,7 @@ namespace API.Controllers
         /// Gets the shifts for today
         /// </summary>
         /// <returns></returns>
-        [HttpGet, Route("today"), ApiKeyFilter]
+        [HttpGet, Route("today"), Authorize(Roles = "Application")]
         public IHttpActionResult Today()
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
@@ -145,7 +145,7 @@ namespace API.Controllers
         /// Gets the shifts currently ongoing with the corresponding employees planned to be on the shift and the employees checked-in on that shift
         /// </summary>
         /// <returns></returns>
-        [HttpGet, Route("ongoing"), ApiKeyFilter]
+        [HttpGet, Route("ongoing"), Authorize(Roles = "Application")]
         public IHttpActionResult OnGoing()
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
@@ -162,7 +162,7 @@ namespace API.Controllers
         /// <param name="id"></param>
         /// <param name="employeeId"></param>
         /// <returns></returns>
-        [HttpPost, Route("{id}/checkin"), ApiKeyFilter]
+        [HttpPost, Route("{id}/checkin"), Authorize(Roles = "Application")]
         public IHttpActionResult CheckIn(int id, int employeeId)
         {
             if (!ModelState.IsValid)
@@ -186,7 +186,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost, Route("{id}/addEmployees"), ApiKeyFilter]
+        [HttpPost, Route("{id}/addEmployees"), Authorize(Roles = "Application")]
         public IHttpActionResult AddEmployees(int id, AddEmployeesDTO employees)
         {
             if (!ModelState.IsValid)
@@ -210,7 +210,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="shiftDto"></param>
         /// <returns></returns>
-        [HttpPost, Route("createoutsideschedule"), ApiKeyFilter]
+        [HttpPost, Route("createoutsideschedule"), Authorize(Roles = "Application")]
         public IHttpActionResult CreateOutsideSchedule(CreateShiftDTO shiftDto)
         {
             if (!ModelState.IsValid)
