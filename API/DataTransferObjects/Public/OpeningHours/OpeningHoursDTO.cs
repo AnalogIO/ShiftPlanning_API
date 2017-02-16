@@ -26,7 +26,7 @@ namespace DataTransferObjects.Public.OpeningHours
         public DateTime End { get; set; }
 
         /// <summary>
-        /// The attending employees.
+        /// The employees planned for this shift.
         /// </summary>
         public IEnumerable<EmployeeDTO> Employees { get; set; }
 
