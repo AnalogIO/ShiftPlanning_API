@@ -1,7 +1,7 @@
 ﻿namespace DataTransferObjects.Public.Employees
 {
     /// <summary>
-    /// Contains public information about the volunteers in an institution.
+    /// Contains public information about the volunteers in an organization.
     /// </summary>
     public class EmployeeDTO
     {
