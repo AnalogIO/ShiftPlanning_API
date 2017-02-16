@@ -51,6 +51,25 @@ namespace PublicApi.Controllers
         }
 
         /// <summary>
+        /// Fetch shifts for today.
+        /// </summary>
+        /// <param name="shortKey">ShortKey of the organization to fetch today's shifts for.</param>
+        /// <returns>A collection of OpeningHoursDTO. NotFound if organizationRepository was not found.</returns>
+        [HttpGet, Route("today/{shortKey}")]
+        [ResponseType(typeof(IEnumerable<OpeningHoursDTO>))]
+        public IHttpActionResult GetToday(string shortKey)
+        {
+            //var monday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
+            var today = DateTime.Now;
+
+            var shifts = _shiftService.GetByOrganization(shortKey, today);
+
+            if (shifts == null) return NotFound();
+
+            return Ok(_mapper.MapToDto(shifts));
+        }
+
+        /// <summary>
         /// Fetch shifts for the next week for a given organization.
         /// </summary>
         /// <param name="shortKey">ShortKey of the organization to fetch opening hours for.</param>
