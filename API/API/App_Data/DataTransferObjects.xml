@@ -90,17 +90,17 @@
         </member>
         <member name="T:DataTransferObjects.Public.OpeningHours.IsOpenDTO">
             <summary>
-            Contains information used to identify whether or not a given institution is open.
+            Contains information used to identify whether or not a given organization is open.
             </summary>
         </member>
         <member name="P:DataTransferObjects.Public.OpeningHours.IsOpenDTO.Open">
             <summary>
-            States whether or not a given institution is open.
+            States whether or not a given organization is open.
             </summary>
         </member>
         <member name="T:DataTransferObjects.Public.OpeningHours.OpeningHourEmployeeDTO">
             <summary>
-            Containing public information about a single employee in an institution.
+            Containing public information about a single employee in an organization.
             </summary>
         </member>
         <member name="P:DataTransferObjects.Public.OpeningHours.OpeningHourEmployeeDTO.Id">
@@ -135,7 +135,7 @@
         </member>
         <member name="P:DataTransferObjects.Public.OpeningHours.OpeningHoursDTO.Employees">
             <summary>
-            The attending employees.
+            The employees planned for this shift.
             </summary>
         </member>
         <member name="P:DataTransferObjects.Public.OpeningHours.OpeningHoursDTO.CheckedInEmployees">
@@ -145,7 +145,7 @@
         </member>
         <member name="T:DataTransferObjects.Public.Employees.EmployeeDTO">
             <summary>
-            Contains public information about the volunteers in an institution.
+            Contains public information about the volunteers in an organization.
             </summary>
         </member>
         <member name="P:DataTransferObjects.Public.Employees.EmployeeDTO.FirstName">

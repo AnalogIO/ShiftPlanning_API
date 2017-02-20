@@ -146,7 +146,8 @@ namespace Data.Services
                 currentDate = currentDate.AddDays((schedule.NumberOfWeeks * 7) - currentDay);
                 currentDay = 0;
             }
-            var shiftsToRemove = schedule.Shifts.Where(s => s.Start > from && !s.CheckIns.Any());
+            var now = DateTime.Now;
+            var shiftsToRemove = schedule.Shifts.Where(s => s.Start > from && s.End > now && !s.CheckIns.Any()); // delete all previous rolled out shifts that will take place in the future
             var shiftDaysWithCheckIn = schedule.Shifts.Where(s => s.CheckIns.Any()).Select(ss => ss.Start.DayOfYear); // get which days are protected because of existing check ins
             shifts = shifts.Where(s => !shiftDaysWithCheckIn.Contains(s.Start.DayOfYear)).ToList(); // remove generated shifts that interferes with protected days
             _shiftRepository.Delete(shiftsToRemove);
