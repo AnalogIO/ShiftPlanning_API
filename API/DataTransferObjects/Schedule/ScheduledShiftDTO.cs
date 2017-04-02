@@ -8,8 +8,8 @@ namespace DataTransferObjects.Schedule
     {
         public int Id { get; set; }
         public int Day { get; set; }
-        public TimeSpan Start { get; set; }
-        public TimeSpan End { get; set; }
+        public string Start { get; set; }
+        public string End { get; set; }
         public IEnumerable<EmployeeDTO> Employees { get; set; }
     }
 }
