@@ -799,6 +799,15 @@
             Returns 'Created' (201) if the scheduled gets rolled out.
             </returns>
         </member>
+        <member name="M:API.Controllers.ScheduleController.FindOptimalSchedule(System.Int32)">
+            <summary>
+            Find the optimal schedule from the given input CSV file.
+            Requires 'Authorization' header set with the token granted upon manager login.
+            </summary>
+            <returns>
+            Returns 'Ok' (200) if an optimal schedule can be found.
+            </returns>
+        </member>
         <member name="T:API.Controllers.ShiftController">
             <summary>
             Controller to manage shifts

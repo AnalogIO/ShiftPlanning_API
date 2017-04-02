@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Web.Http;
 using API.Authorization;
 using System.Collections.Generic;
+using System.Web;
 using Data.Services;
 using DataTransferObjects.Schedule;
 using DataTransferObjects.ScheduledShift;
@@ -289,6 +290,41 @@ namespace API.Controllers
             }
 
             return BadRequest("The schedule could not be created!");
+        }
+
+
+        // POST api/schedules/{id}/findoptimal
+        /// <summary>
+        /// Find the optimal schedule from the given input CSV file.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
+        /// </summary>
+        /// <returns>
+        /// Returns 'Ok' (200) if an optimal schedule can be found.
+        /// </returns>
+        [HttpPost, AdminFilter, Route("{id}/findoptimal")]
+        public IHttpActionResult FindOptimalSchedule(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            var httpRequest = HttpContext.Current.Request;
+            if (httpRequest.Files.Count < 1)
+            {
+                return BadRequest("Please supply a file");
+            }
+
+            var postedFile = httpRequest.Files[0];
+
+            return Ok(new ScheduleDTO()
+            {
+                ScheduledShifts = new List<ScheduledShiftDTO>(),
+                Name = postedFile.FileName
+            });
         }
 
     }
