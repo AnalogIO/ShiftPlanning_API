@@ -319,6 +319,7 @@ namespace API.Controllers
             }
 
             var postedFile = httpRequest.Files[0];
+            // NOTE: To store in memory use postedFile.InputStream
 
             return Ok(new ScheduleDTO()
             {
