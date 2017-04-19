@@ -701,7 +701,7 @@
             Controller to manage schedule
             </summary>
         </member>
-        <member name="M:API.Controllers.ScheduleController.#ctor(API.Authorization.IAuthManager,Data.Services.IScheduleService)">
+        <member name="M:API.Controllers.ScheduleController.#ctor(API.Authorization.IAuthManager,Data.Services.IScheduleService,Data.Services.IEmployeeService)">
             <summary>
             The constructor of the schedule controller
             </summary>

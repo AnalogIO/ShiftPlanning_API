@@ -1,9 +1,12 @@
-﻿using API.Logic;
+﻿using System;
+using API.Logic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using API.Authorization;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using Data.Services;
 using DataTransferObjects.Schedule;
@@ -19,16 +22,18 @@ namespace API.Controllers
     {
         private readonly IAuthManager _authManager;
         private readonly IScheduleService _scheduleService;
+        private readonly IEmployeeService _employeeService;
 
         /// <summary>
         /// The constructor of the schedule controller
         /// </summary>
         /// <param name="authManager"></param>
         /// <param name="scheduleService"></param>
-        public ScheduleController(IAuthManager authManager, IScheduleService scheduleService)
+        public ScheduleController(IAuthManager authManager, IScheduleService scheduleService, IEmployeeService employeeService)
         {
             _authManager = authManager;
             _scheduleService = scheduleService;
+            _employeeService = employeeService;
         }
 
         // GET api/schedules
@@ -302,7 +307,7 @@ namespace API.Controllers
         /// Returns 'Ok' (200) if an optimal schedule can be found.
         /// </returns>
         [HttpPost, AdminFilter, Route("{id}/findoptimal")]
-        public IHttpActionResult FindOptimalSchedule(int id)
+        public async Task<IHttpActionResult> FindOptimalSchedule(int id)
         {
             if (!ModelState.IsValid)
             {
@@ -313,19 +318,61 @@ namespace API.Controllers
             if (manager == null) return BadRequest("Provided token is invalid!");
 
             var httpRequest = HttpContext.Current.Request;
-            if (httpRequest.Files.Count < 1)
+
+            var preferenceFile = httpRequest.Files["preferences"];
+            var additionalInfoFile = httpRequest.Files["additionalInfo"];
+
+            if (preferenceFile == null || additionalInfoFile == null)
             {
-                return BadRequest("Please supply a file");
+                return BadRequest("Please provide a form with both a file named preferences and a file named additionalInfo");
             }
 
-            var postedFile = httpRequest.Files[0];
-            // NOTE: To store in memory use postedFile.InputStream
+            var schedule = _scheduleService.GetSchedule(id, manager);
+            if (schedule == null) return NotFound();
 
-            return Ok(new ScheduleDTO()
+            var preferenceFileContent = new StreamContent(preferenceFile.InputStream);
+            var additionalInfoFileContent = new StreamContent(additionalInfoFile.InputStream);
+            using (var client = new HttpClient())
+            using (var formData = new MultipartFormDataContent())
             {
-                ScheduledShifts = new List<ScheduledShiftDTO>(),
-                Name = postedFile.FileName
-            });
+                formData.Add(preferenceFileContent, "prefs", "prefs");
+                formData.Add(additionalInfoFileContent, "ai", "ai");
+                var response = client.PostAsync($"http://80.161.174.210/scheduleplanner/api/schedule?weekCount={schedule.NumberOfWeeks}", formData).Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
+
+
+                var shifts = await response.Content.ReadAsAsync<List<OptimalScheduleResponse>>();
+
+                var scheduleDto = new ScheduleDTO()
+                {
+                    ScheduledShifts = new List<ScheduledShiftDTO>(),
+                    NumberOfWeeks = schedule.NumberOfWeeks,
+                    Name = schedule.Name,
+                    Id = schedule.Id
+                };
+                var scheduledShiftList = new List<ScheduledShiftDTO>();
+                var emps = _employeeService.GetEmployees(manager.Organization.Id).ToList();
+                for (var i = 0; i < shifts.Count; i++)
+                {
+                    var scheduledShift = new ScheduledShiftDTO();
+                    scheduledShift.Day = shifts[i].InternalShift.Day + ((shifts[i].InternalShift.MultiplierNum-1)*7);
+                    scheduledShift.Employees =
+                        Mapper.Map(
+                             emps.Where(e => shifts[i].Baristas.Select(b => b.Name).Contains($"{e.FirstName} {e.LastName}"))
+                                .ToList());
+                    scheduledShift.Start = shifts[i].InternalShift.Time.Substring(0, 5).Trim();
+                    scheduledShift.End = shifts[i].InternalShift.Time.Substring(8, 5).Trim();
+                    if (!scheduledShift.Employees.Any()) continue;
+                    scheduledShiftList.Add(scheduledShift);
+                }
+                scheduleDto.ScheduledShifts = scheduledShiftList;
+                
+
+                return Ok(scheduleDto);
+            }
         }
 
     }
