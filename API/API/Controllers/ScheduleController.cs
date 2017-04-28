@@ -321,10 +321,11 @@ namespace API.Controllers
 
             var preferenceFile = httpRequest.Files["preferences"];
             var additionalInfoFile = httpRequest.Files["additionalInfo"];
+            var dislikesFile = httpRequest.Files["dislikes"];
 
-            if (preferenceFile == null || additionalInfoFile == null)
+            if (preferenceFile == null || additionalInfoFile == null || dislikesFile == null)
             {
-                return BadRequest("Please provide a form with both a file named preferences and a file named additionalInfo");
+                return BadRequest("Please provide a form with both a file input named preferences, a file input named additionalInfo and a file input named dislikes");
             }
 
             var schedule = _scheduleService.GetSchedule(id, manager);
@@ -332,11 +333,13 @@ namespace API.Controllers
 
             var preferenceFileContent = new StreamContent(preferenceFile.InputStream);
             var additionalInfoFileContent = new StreamContent(additionalInfoFile.InputStream);
+            var dislikesFileContent = new StreamContent(dislikesFile.InputStream);
             using (var client = new HttpClient())
             using (var formData = new MultipartFormDataContent())
             {
                 formData.Add(preferenceFileContent, "prefs", "prefs");
                 formData.Add(additionalInfoFileContent, "ai", "ai");
+                formData.Add(dislikesFileContent, "dislikes", "dislikes");
                 var response = client.PostAsync($"http://80.161.174.210/scheduleplanner/api/schedule?weekCount={schedule.NumberOfWeeks}", formData).Result;
                 if (!response.IsSuccessStatusCode)
                 {

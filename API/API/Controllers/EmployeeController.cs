@@ -8,6 +8,7 @@ using Data.Models;
 using Data.Services;
 using DataTransferObjects.Employee;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http.Description;
 
 namespace API.Controllers
@@ -211,7 +212,7 @@ namespace API.Controllers
             var institution = _authManager.GetOrganizationByApiKey(apiKey);
             if (institution == null) return BadRequest("No institution found with the given name");
 
-            var employees = _employeeService.GetEmployees(institution.Id);
+            var employees = _employeeService.GetEmployees(institution.Id).OrderBy(e => e.FirstName).ThenBy(e => e.LastName);
             if (employees == null) return NotFound();
             return Ok(Mapper.Map(employees));
         }
