@@ -15,6 +15,7 @@ namespace Data.Services
         IEnumerable<Schedule> GetSchedules(Manager manager);
         IEnumerable<Shift> RolloutSchedule(int scheduleId, RolloutScheduleDTO rolloutDto, Manager manager);
         Schedule UpdateSchedule(int scheduleId, UpdateScheduleDTO scheduleDto, Manager manager);
+        Schedule UpdateSchedule(Schedule schedule, Manager manager);
         ScheduledShift UpdateScheduledShift(int scheduledShiftId, int scheduleId, UpdateScheduledShiftDTO scheduledShiftDto, Manager manager);
         void DeleteScheduledShift(int scheduleId, int scheduledShiftId, Manager manager);
     }

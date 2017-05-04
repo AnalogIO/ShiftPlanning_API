@@ -100,6 +100,12 @@ namespace Data.Services
             return schedule;
         }
 
+        public Schedule UpdateSchedule(Schedule schedule, Manager manager)
+        {
+            _scheduleRepository.Update(schedule);
+            return schedule;
+        }
+
         public IEnumerable<Shift> RolloutSchedule(int scheduleId, RolloutScheduleDTO rolloutDto, Manager manager)
         {
             if (rolloutDto.StartFromScheduledWeek == 0) rolloutDto.StartFromScheduledWeek = 1;

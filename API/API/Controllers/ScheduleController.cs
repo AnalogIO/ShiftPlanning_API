@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Data.Models;
 using Data.Services;
 using DataTransferObjects.Schedule;
 using DataTransferObjects.ScheduledShift;
@@ -349,32 +350,24 @@ namespace API.Controllers
 
                 var shifts = await response.Content.ReadAsAsync<List<OptimalScheduleResponse>>();
 
-                var scheduleDto = new ScheduleDTO()
-                {
-                    ScheduledShifts = new List<ScheduledShiftDTO>(),
-                    NumberOfWeeks = schedule.NumberOfWeeks,
-                    Name = schedule.Name,
-                    Id = schedule.Id
-                };
-                var scheduledShiftList = new List<ScheduledShiftDTO>();
+                var scheduledShiftList = new List<ScheduledShift>();
                 var emps = _employeeService.GetEmployees(manager.Organization.Id).ToList();
                 for (var i = 0; i < shifts.Count; i++)
                 {
-                    var scheduledShift = new ScheduledShiftDTO();
-                    scheduledShift.Day = shifts[i].InternalShift.Day + ((shifts[i].InternalShift.MultiplierNum-1)*7);
+                    var scheduledShift = new ScheduledShift();
+                    scheduledShift.Day = shifts[i].InternalShift.Day + (shifts[i].InternalShift.MultiplierNum-1)*7;
                     scheduledShift.Employees =
-                        Mapper.Map(
                              emps.Where(e => shifts[i].Baristas.Select(b => b.Name).Contains($"{e.FirstName} {e.LastName}"))
-                                .ToList());
-                    scheduledShift.Start = shifts[i].InternalShift.Time.Substring(0, 5).Trim();
-                    scheduledShift.End = shifts[i].InternalShift.Time.Substring(8, 5).Trim();
+                                .ToList();
+                    scheduledShift.Start = TimeSpan.Parse(shifts[i].InternalShift.Time.Substring(0, 5).Trim());
+                    scheduledShift.End = TimeSpan.Parse(shifts[i].InternalShift.Time.Substring(8, 5).Trim());
                     if (!scheduledShift.Employees.Any()) continue;
                     scheduledShiftList.Add(scheduledShift);
+                    schedule.ScheduledShifts.Add(scheduledShift);
                 }
-                scheduleDto.ScheduledShifts = scheduledShiftList;
-                
 
-                return Ok(scheduleDto);
+                return Ok(Mapper.Map(_scheduleService.UpdateSchedule(schedule,manager)));
+                
             }
         }
 
