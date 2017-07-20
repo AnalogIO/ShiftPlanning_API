@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Web.Http;
 using Data.Repositories;
 using System.Linq;
-using API.Authorization;
 using DataTransferObjects.Manager;
 
 namespace API.Controllers
@@ -13,6 +12,7 @@ namespace API.Controllers
     /// <summary>
     /// Controller to validate authority (login etc.)
     /// </summary>
+    [Authorize(Roles = "Manager")]
     [RoutePrefix("api/manager")]
     public class ManagerController : ApiController
     {
@@ -34,6 +34,7 @@ namespace API.Controllers
         /// Returns 'Ok' (200) with a valid token if the provided username and password matches.
         /// If the provided credentials are wrong then the controller will return Unauthorized (401).
         /// </returns>
+        [AllowAnonymous]
         [HttpPost, Route("login")]
         public IHttpActionResult Login(ManagerLoginDTO loginDto)
         {
@@ -64,7 +65,7 @@ namespace API.Controllers
         /// Returns 'Ok' (200) if the token is valid.
         /// If the token is invalid then the controller will return Unauthorized (401).
         /// </returns>
-        [HttpPost, Route("validate"), AdminFilter]
+        [HttpPost, Route("validate")]
         public IHttpActionResult Validate()
         {
             return Ok();
