@@ -100,8 +100,8 @@ namespace API
                         new Claim(ClaimTypes.Role, "Application")
                     };
 
-                    var identity = new ClaimsIdentity(claims);
-                    var user = new ClaimsPrincipal(identity);
+                    var identity = new ClaimsIdentity(claims, "Jwt");
+                    IPrincipal user = new ClaimsPrincipal(identity);
 
                     context.Principal = user;
                 }

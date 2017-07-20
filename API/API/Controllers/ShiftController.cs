@@ -13,7 +13,6 @@ namespace API.Controllers
     /// <summary>
     /// Controller to manage shifts
     /// </summary>
-    [Authorize(Roles = "Manager")]
     [RoutePrefix("api/shifts")]
     public class ShiftController : ApiController
     {
@@ -35,6 +34,7 @@ namespace API.Controllers
         /// Returns all shifts of the specified organization in the 'Authorization' header
         /// </summary>
         /// <returns></returns>
+        [Authorize(Roles = "Manager")]
         [HttpGet, Route("")]
         public IHttpActionResult Get()
         {
@@ -48,6 +48,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [Authorize(Roles = "Manager")]
         [HttpGet, Route("{id}")]
         public IHttpActionResult Get(int id)
         {
@@ -67,6 +68,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [Authorize(Roles = "Manager")]
         [HttpDelete, Route("{id}")]
         public IHttpActionResult Delete(int id)
         {
@@ -84,6 +86,7 @@ namespace API.Controllers
         /// <param name="id"></param>
         /// <param name="shiftDto"></param>
         /// <returns></returns>
+        [Authorize(Roles = "Manager")]
         [HttpPut, Route("{id}")]
         public IHttpActionResult Update(int id, UpdateShiftDTO shiftDto)
         {
@@ -105,6 +108,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="shiftDto"></param>
         /// <returns></returns>
+        [Authorize(Roles = "Manager")]
         [HttpPost, Route("")]
         public IHttpActionResult Create(CreateShiftDTO shiftDto)
         {
