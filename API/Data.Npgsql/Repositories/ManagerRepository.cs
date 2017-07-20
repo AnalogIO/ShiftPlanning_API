@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Web.Http;
 using Data.Exceptions;
 using Data.Models;
 using Data.Repositories;

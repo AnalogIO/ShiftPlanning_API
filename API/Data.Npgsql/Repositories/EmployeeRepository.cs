@@ -103,6 +103,7 @@ namespace Data.Npgsql.Repositories
                 .Include(employee => employee.Photo)
                 .Include(employee => employee.CheckIns)
                 .Include(employee => employee.Roles)
+                .Include(employee => employee.Organization)
                 .FirstOrDefault(employee => employee.Tokens.Any(t => t.TokenHash == token));
         }
 
