@@ -6,6 +6,7 @@ using Data.Repositories;
 using System.Data.Entity;
 using Data.Exceptions;
 using System.Data;
+using Data.Token;
 
 namespace Data.Npgsql.Repositories
 {
@@ -103,6 +104,24 @@ namespace Data.Npgsql.Repositories
                 .Include(employee => employee.CheckIns)
                 .Include(employee => employee.Roles)
                 .FirstOrDefault(employee => employee.Tokens.Any(t => t.TokenHash == token));
+        }
+
+        public Employee Login(string email, string password)
+        {
+            var employee = _context.Employees.FirstOrDefault(m => m.Email == email);
+
+            if (employee != null)
+            {
+                var hashPassword = HashManager.Hash(password + employee.Salt);
+                if (employee.Password.Equals(hashPassword))
+                {
+                    var token = new Models.Token(TokenManager.GenerateLoginToken());
+                    employee.Tokens.Add(token);
+                    _context.SaveChanges();
+                    return employee;
+                }
+            }
+            throw new UnauthorizedAccessException("You entered an incorrect username or password!");
         }
 
         public void Dispose()

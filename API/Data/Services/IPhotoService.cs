@@ -6,6 +6,6 @@ namespace Data.Services
     {
         Photo Read(int photoId, string organizationShortKey);
         Photo Read(int photoId, int organizationId);
-        Photo CreatePhoto(Photo photo, Manager manager);
+        Photo CreatePhoto(Photo photo, Employee employee);
     }
 }

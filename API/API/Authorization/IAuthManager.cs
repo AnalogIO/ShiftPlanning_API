@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Collections.Generic;
+using System.Net.Http.Headers;
 using Data.Models;
 
 namespace API.Authorization
@@ -7,8 +8,8 @@ namespace API.Authorization
     {
         Organization GetOrganizationByApiKey(string apiKey);
         Organization GetOrganizationByHeader(HttpRequestHeaders headers);
-        Manager GetManagerByHeader(HttpRequestHeaders headers);
+        Employee GetEmployeeByHeader(HttpRequestHeaders headers);
         bool ValidateOrganizationApiKey(string apiKey);
-        bool ValidateRole(string token, string[] roles);
+        IEnumerable<Role> GetRoles(string token);
     }
 }

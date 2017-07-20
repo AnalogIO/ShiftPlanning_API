@@ -13,6 +13,7 @@ namespace API.Controllers
     /// <summary>
     /// Controller to validate authority (login etc.)
     /// </summary>
+    [Authorize(Roles = "Manager")]
     [RoutePrefix("api/manager")]
     public class ManagerController : ApiController
     {
@@ -34,6 +35,7 @@ namespace API.Controllers
         /// Returns 'Ok' (200) with a valid token if the provided username and password matches.
         /// If the provided credentials are wrong then the controller will return Unauthorized (401).
         /// </returns>
+        [AllowAnonymous]
         [HttpPost, Route("login")]
         public IHttpActionResult Login(ManagerLoginDTO loginDto)
         {

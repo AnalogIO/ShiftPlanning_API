@@ -14,5 +14,6 @@ namespace Data.Repositories
         int Update(Employee employee);
         void Delete(int id, int organizationId);
         Employee Read(string token);
+        Employee Login(string email, string password);
     }
 }

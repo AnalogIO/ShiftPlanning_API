@@ -13,7 +13,7 @@ namespace API.Controllers
     /// <summary>
     /// Controller to manage shifts
     /// </summary>
-    [AuthorizeFilter("Manager")]
+    [Authorize(Roles = "Manager")]
     [RoutePrefix("api/shifts")]
     public class ShiftController : ApiController
     {
@@ -38,9 +38,9 @@ namespace API.Controllers
         [HttpGet, Route("")]
         public IHttpActionResult Get()
         {
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("No manager found with the given name");
-            return Ok(Mapper.Map(_shiftService.GetByOrganization(manager.Organization.Id)));
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("No manager found with the given name");
+            return Ok(Mapper.Map(_shiftService.GetByOrganization(employee.Organization.Id)));
         }
 
         /// <summary>
@@ -70,10 +70,10 @@ namespace API.Controllers
         [HttpDelete, Route("{id}")]
         public IHttpActionResult Delete(int id)
         {
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("No manager found with the given token");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("No manager found with the given token");
 
-            _shiftService.DeleteShift(id, manager.Organization.Id);
+            _shiftService.DeleteShift(id, employee.Organization.Id);
             
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
         }
@@ -87,10 +87,10 @@ namespace API.Controllers
         [HttpPut, Route("{id}")]
         public IHttpActionResult Update(int id, UpdateShiftDTO shiftDto)
         {
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("No manager found with the given token");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("No manager found with the given token");
 
-            var shift = _shiftService.UpdateShift(id, manager.Organization.Id, shiftDto);
+            var shift = _shiftService.UpdateShift(id, employee.Organization.Id, shiftDto);
 
             if(shift != null)
             {
@@ -113,10 +113,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("No manager found with the given token");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("No manager found with the given token");
 
-            var shift = _shiftService.CreateShift(manager.Organization, shiftDto);
+            var shift = _shiftService.CreateShift(employee.Organization, shiftDto);
             if (shift != null)
             {
                 return Ok(Mapper.Map(shift));
@@ -128,7 +128,8 @@ namespace API.Controllers
         /// Gets the shifts for today
         /// </summary>
         /// <returns></returns>
-        [HttpGet, Route("today"), ApiKeyFilter]
+        [Authorize(Roles = "Application")]
+        [HttpGet, Route("today")]
         public IHttpActionResult Today()
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
@@ -147,7 +148,8 @@ namespace API.Controllers
         /// Gets the shifts currently ongoing with the corresponding employees planned to be on the shift and the employees checked-in on that shift
         /// </summary>
         /// <returns></returns>
-        [HttpGet, Route("ongoing"), ApiKeyFilter]
+        [Authorize(Roles = "Application")]
+        [HttpGet, Route("ongoing")]
         public IHttpActionResult OnGoing()
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
@@ -164,7 +166,8 @@ namespace API.Controllers
         /// <param name="id"></param>
         /// <param name="employeeId"></param>
         /// <returns></returns>
-        [HttpPost, Route("{id}/checkin"), ApiKeyFilter]
+        [Authorize(Roles = "Application")]
+        [HttpPost, Route("{id}/checkin")]
         public IHttpActionResult CheckIn(int id, int employeeId)
         {
             if (!ModelState.IsValid)
@@ -188,7 +191,8 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost, Route("{id}/addEmployees"), ApiKeyFilter]
+        [Authorize(Roles = "Application")]
+        [HttpPost, Route("{id}/addEmployees")]
         public IHttpActionResult AddEmployees(int id, AddEmployeesDTO employees)
         {
             if (!ModelState.IsValid)
@@ -212,7 +216,8 @@ namespace API.Controllers
         /// </summary>
         /// <param name="shiftDto"></param>
         /// <returns></returns>
-        [HttpPost, Route("createoutsideschedule"), ApiKeyFilter]
+        [Authorize(Roles = "Application")]
+        [HttpPost, Route("createoutsideschedule")]
         public IHttpActionResult CreateOutsideSchedule(CreateShiftDTO shiftDto)
         {
             if (!ModelState.IsValid)

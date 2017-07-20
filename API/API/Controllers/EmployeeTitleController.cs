@@ -11,7 +11,7 @@ namespace API.Controllers
     /// <summary>
     /// Controller to manipulate with the employee titles.
     /// </summary>
-    [AuthorizeFilter("Manager")]
+    [Authorize(Roles = "Manager")]
     [RoutePrefix("api/employeetitles")]
     public class EmployeeTitleController : ApiController
     {
@@ -45,10 +45,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
 
-            var employeeTitle = _employeeTitleService.CreateEmployeeTitle(employeeTitleDto, manager);
+            var employeeTitle = _employeeTitleService.CreateEmployeeTitle(employeeTitleDto, employee);
             if (employeeTitle != null)
             {
                 return Created($"/api/employeetitles/{employeeTitle.Id}", Mapper.Map(employeeTitle));
@@ -68,10 +68,10 @@ namespace API.Controllers
         [HttpGet, Route("")]
         public IHttpActionResult Get()
         {
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
 
-            var employeeTitles = _employeeTitleService.GetEmployeeTitles(manager);
+            var employeeTitles = _employeeTitleService.GetEmployeeTitles(employee);
             return Ok(Mapper.Map(employeeTitles));
         }
 
@@ -94,10 +94,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
 
-            var employeeTitle = _employeeTitleService.GetEmployeeTitle(id, manager);
+            var employeeTitle = _employeeTitleService.GetEmployeeTitle(id, employee);
             if (employeeTitle != null)
             {
                 return Ok(Mapper.Map(employeeTitle));
@@ -129,10 +129,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
 
-            var employeeTitle = _employeeTitleService.UpdateEmployeeTitle(id, employeeTitleDto, manager);
+            var employeeTitle = _employeeTitleService.UpdateEmployeeTitle(id, employeeTitleDto, employee);
             if (employeeTitle != null)
             {
                     return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
@@ -157,10 +157,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
 
-            _employeeTitleService.DeleteEmployeeTitle(id, manager);
+            _employeeTitleService.DeleteEmployeeTitle(id, employee);
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
         }
 

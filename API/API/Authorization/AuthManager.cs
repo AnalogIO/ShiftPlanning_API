@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using Data.Repositories;
@@ -37,17 +38,17 @@ namespace API.Authorization
             return GetOrganizationByApiKey(apiKey);
         }
 
-        public Manager GetManagerByHeader(HttpRequestHeaders headers)
+        public Employee GetEmployeeByHeader(HttpRequestHeaders headers)
         {
             var token = headers.Authorization.ToString();
             if (token == null) throw new ObjectNotFoundException("Could not find a manager corresponding to the given 'Authorization' header");
-            return _managerRepository.Read(token);
+            return _employeeRepository.Read(token);
         }
 
-        public bool ValidateRole(string token, string[] roles)
+        public IEnumerable<Role> GetRoles(string token)
         {
             var employee = _employeeRepository.Read(token);
-            return roles.Any(role => employee.Roles.Any(r => r.Name == role));
+            return employee.Roles;
         }
     }
 }
