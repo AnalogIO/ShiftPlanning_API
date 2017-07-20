@@ -9,7 +9,7 @@ namespace Data.Models
         public string Name { get; set; }
         public int NumberOfWeeks { get; set; }
         public virtual ICollection<ScheduledShift> ScheduledShifts { get; set; }
-        public virtual Institution Institution { get; set; }
+        public virtual Organization Organization { get; set; }
         public virtual ICollection<Shift> Shifts { get; set; }
     }
 }

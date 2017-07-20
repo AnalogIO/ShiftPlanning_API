@@ -8,12 +8,12 @@ namespace Data.Repositories
     {
         Shift Create(Shift shift);
         IEnumerable<Shift> Create(IEnumerable<Shift> shifts);
-        IEnumerable<Shift> ReadFromInstitution(int institutionId);
-        IEnumerable<Shift> ReadFromInstitution(string institutionShortKey);
-        Shift Read(int id, int institutionId);
+        IEnumerable<Shift> ReadFromOrganization(int organizationId);
+        IEnumerable<Shift> ReadFromOrganization(string organizationShortKey);
+        Shift Read(int id, int organizationId);
         int Update(Shift shift);
-        void Delete(int id, int institutionId);
+        void Delete(int id, int organizationId);
         void Delete(IEnumerable<Shift> shifts);
-        IEnumerable<Shift> GetOngoingShifts(int institutionId, DateTime currentTime);
+        IEnumerable<Shift> GetOngoingShifts(int organizationId, DateTime currentTime);
     }
 }

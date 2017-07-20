@@ -9,7 +9,7 @@ namespace Data.Models
         public string Username { get; set; }
         public string Password { get; set; }
         public string Salt { get; set; }
-        public virtual Institution Institution { get; set; }
+        public virtual Organization Organization { get; set; }
         public virtual ICollection<Token> Tokens { get; set; }
     }
 }

@@ -6,9 +6,9 @@ namespace Data.Repositories
     public interface IEmployeeTitleRepository
     {
         EmployeeTitle Create(EmployeeTitle employeeTitle);
-        IEnumerable<EmployeeTitle> ReadFromInstitution(int institutionId);
-        EmployeeTitle Read(int id, int institutionId);
+        IEnumerable<EmployeeTitle> ReadFromOrganization(int organizationId);
+        EmployeeTitle Read(int id, int organizationId);
         int Update(EmployeeTitle employeeTitle);
-        void Delete(int id, int institutionId);
+        void Delete(int id, int organizationId);
     }
 }

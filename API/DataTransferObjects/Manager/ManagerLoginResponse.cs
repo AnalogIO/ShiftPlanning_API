@@ -1,9 +1,12 @@
-﻿namespace DataTransferObjects.Manager
+﻿using System;
+
+namespace DataTransferObjects.Manager
 {
     public class ManagerLoginResponse
     {
-        public string InstitutionName { get; set; }
-        public int InstitutionId { get; set; }
+        public string OrganizationName { get; set; }
+        public int OrganizationId { get; set; }
         public string Token { get; set; }
+        public int Expires { get; set; }
     }
 }

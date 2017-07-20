@@ -6,11 +6,12 @@ namespace Data.Repositories
     public interface IEmployeeRepository
     {
         Employee Create(Employee employee);
-        IEnumerable<Employee> ReadFromInstitution(int institutionId);
-        IEnumerable<Employee> ReadFromInstitution(string shortKey);
-        Employee Read(int id, int institutionId);
+        IEnumerable<Employee> CreateMany(IEnumerable<Employee> employees);
+        IEnumerable<Employee> ReadFromOrganization(int organizationId);
+        IEnumerable<Employee> ReadFromOrganization(string shortKey);
+        Employee Read(int id, int organizationId);
         Employee Read(int id, string shortKey);
         int Update(Employee employee);
-        void Delete(int id, int institutionId);
+        void Delete(int id, int organizationId);
     }
 }

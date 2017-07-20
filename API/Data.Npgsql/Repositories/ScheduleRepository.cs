@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Data.Models;
 using Data.Repositories;
 using System.Data.Entity;
+using Data.Exceptions;
 
 namespace Data.Npgsql.Repositories
 {
@@ -22,14 +24,15 @@ namespace Data.Npgsql.Repositories
             return _context.SaveChanges() > 0 ? schedule : null;
         }
 
-        public void Delete(int id, int institutionId)
+        public void Delete(int id, int organizationId)
         {
-            var schedule = _context.Schedules.SingleOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
-            if(schedule != null)
-            {
-                _context.Schedules.Remove(schedule);
-                _context.SaveChanges();
-            }
+            var schedule = _context.Schedules.Include(ss => ss.ScheduledShifts).Include(s => s.Shifts).SingleOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
+            if (schedule == null) throw new ObjectNotFoundException("Could not find a schedule corresponding to the given id");
+
+            if(schedule.Shifts.Any(s => s.CheckIns.Any())) throw new ForbiddenException("You cannot delete a schedule that has been rolled out and contains checkins.");
+
+            _context.Schedules.Remove(schedule);
+            _context.SaveChanges();
         }
 
         public void Dispose()
@@ -37,22 +40,24 @@ namespace Data.Npgsql.Repositories
             _context.Dispose();
         }
 
-        public Schedule Read(int id, int institutionId)
+        public Schedule Read(int id, int organizationId)
         {
             return _context.Schedules
                 .Include(x => x.ScheduledShifts)
                 .Include(x => x.ScheduledShifts.Select(y => y.Employees))
                 .Include(x => x.ScheduledShifts.Select(y => y.Employees.Select(z => z.EmployeeTitle)))
-                .SingleOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
+                .Include(x => x.ScheduledShifts.Select(y => y.Employees.Select(z => z.CheckIns)))
+                .SingleOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
         }
 
-        public IEnumerable<Schedule> ReadFromInstitution(int institutionId)
+        public IEnumerable<Schedule> ReadFromOrganization(int organizationId)
         {
             return _context.Schedules
                 .Include(x => x.ScheduledShifts)
                 .Include(x => x.ScheduledShifts.Select(y => y.Employees))
                 .Include(x => x.ScheduledShifts.Select(y => y.Employees.Select(z => z.EmployeeTitle)))
-                .Where(x => x.Institution.Id == institutionId)
+                .Include(x => x.ScheduledShifts.Select(y => y.Employees.Select(z => z.CheckIns)))
+                .Where(x => x.Organization.Id == organizationId)
                 .ToList();
         }
 
@@ -65,6 +70,20 @@ namespace Data.Npgsql.Repositories
             pgSchedule.ScheduledShifts = schedule.ScheduledShifts;
             
             return _context.SaveChanges();
+        }
+
+        public void DeleteScheduledShift(int scheduleId, int scheduledShiftId, int organizationId)
+        {
+            var schedule = _context.Schedules.SingleOrDefault(x => x.Id == scheduleId && x.Organization.Id == organizationId);
+            if (schedule == null) throw new ObjectNotFoundException("Could not find a schedule corresponding to the given id");
+
+            var scheduledShift = schedule.ScheduledShifts.SingleOrDefault(x => x.Id == scheduledShiftId);
+            if(scheduledShift == null) throw new ObjectNotFoundException("Could not find a scheduledshift corresponding to the given id of the given schedule");
+
+            schedule.ScheduledShifts.Remove(scheduledShift);
+
+            _context.SaveChanges();
+
         }
     }
 }

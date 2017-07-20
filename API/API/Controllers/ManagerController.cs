@@ -1,8 +1,10 @@
-﻿using System.Net;
+﻿using System.Configuration;
+using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Data.Repositories;
 using System.Linq;
+using API.Authorization;
 using DataTransferObjects.Manager;
 
 namespace API.Controllers
@@ -40,14 +42,32 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = _managerRepository.Login(loginDto.Username, loginDto.Password);
-            if(manager != null)
+            var manager = _managerRepository.Login(loginDto.Username.Trim(), loginDto.Password);
+            if (manager != null)
             {
-                var responseDto = new ManagerLoginResponse { Token = manager.Tokens.LastOrDefault().TokenHash, InstitutionId = manager.Institution.Id, InstitutionName = manager.Institution.Name };
+                var responseDto = new ManagerLoginResponse
+                {
+                    Token = manager.Tokens.LastOrDefault()?.TokenHash, OrganizationId = manager.Organization.Id, OrganizationName = manager.Organization.Name, Expires = int.Parse(ConfigurationManager.AppSettings["TokenAgeHour"])*60*60 // from hours to seconds 
+                };
                 return Ok(responseDto);
             }
+
             HttpResponseMessage response = Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "You entered an incorrect username or password!" });
             return ResponseMessage(response);
+        }
+
+        // POST api/manager/validate
+        /// <summary>
+        /// Validates the token set in the 'Authorization' header.
+        /// </summary>
+        /// <returns>
+        /// Returns 'Ok' (200) if the token is valid.
+        /// If the token is invalid then the controller will return Unauthorized (401).
+        /// </returns>
+        [HttpPost, Route("validate"), AdminFilter]
+        public IHttpActionResult Validate()
+        {
+            return Ok();
         }
     }
 }

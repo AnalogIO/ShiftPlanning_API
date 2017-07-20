@@ -501,7 +501,7 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="M:API.Authorization.AdminFilter.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
+        <member name="M:API.Authorization.AdminFilterAttribute.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
             <summary>
             OnAuthorization is called whenever a method has the data annotation "[AdminFilter]".
             Checks if the manager is authorized.
@@ -520,6 +520,14 @@
             Controller to manipulate with the employees.
             </summary>
         </member>
+        <member name="M:API.Controllers.EmployeeController.#ctor(API.Authorization.IAuthManager,Data.Services.IEmployeeService,API.Logic.PhotoMapper)">
+            <summary>
+            The constructor of the employee controller
+            </summary>
+            <param name="authManager"></param>
+            <param name="employeeService"></param>
+            <param name="photoMapper"></param>
+        </member>
         <member name="M:API.Controllers.EmployeeController.Register(DataTransferObjects.Employee.CreateEmployeeDTO)">
             <summary>
             Creates the employee from the content in the body.
@@ -528,6 +536,15 @@
             <returns>
             Returns 'Created' (201) if the employee gets created.
             If an employee already exist with the given email, the controller will return BadRequest (400).
+            </returns>
+        </member>
+        <member name="M:API.Controllers.EmployeeController.RegisterMany(DataTransferObjects.Employee.CreateEmployeeDTO[])">
+            <summary>
+            Creates the employees from the content in the body.
+            Requires 'Authorization' header set with the token granted upon manager login.
+            </summary>
+            <returns>
+            Returns 'Created' (201) if the employees gets created.
             </returns>
         </member>
         <member name="M:API.Controllers.EmployeeController.Get">
@@ -565,6 +582,7 @@
             Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <param name="id">The id of the employee.</param>
+            <param name="employeeDto">The dto of the employee</param>
             <returns>
             Returns 'No Content' (204) if the employee gets updated.
             If no employee is found with the given id, the controller will return NotFound (404)
@@ -582,6 +600,13 @@
             <summary>
             Controller to manipulate with the employee titles.
             </summary>
+        </member>
+        <member name="M:API.Controllers.EmployeeTitleController.#ctor(API.Authorization.IAuthManager,Data.Services.IEmployeeTitleService)">
+            <summary>
+            Employee title controller constructor
+            </summary>
+            <param name="authManager"></param>
+            <param name="employeeTitleService"></param>
         </member>
         <member name="M:API.Controllers.EmployeeTitleController.Register(DataTransferObjects.EmployeeTitles.CreateEmployeeTitleDTO)">
             <summary>
@@ -618,6 +643,7 @@
             Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <param name="id">The id of the employee title.</param>
+            <param name="employeeTitleDto">The employee title dto</param>
             <returns>
             Returns 'No Content' (204) if the employee title gets updated.
             If no employee title is found with the given id, the controller will return NotFound (404)
@@ -630,25 +656,6 @@
             </summary>
             <param name="id">The id of the employee title.</param>
             <returns>Returns 'No Content' (204) if the employee title gets deleted.</returns>
-        </member>
-        <member name="T:API.Controllers.IsOpenController">
-            <summary>
-            The IsOpenController is the public interface that can tell whether or not
-            a given institution is open.
-            </summary>
-        </member>
-        <member name="M:API.Controllers.IsOpenController.#ctor(API.Services.IShiftService)">
-            <summary>
-            Dependency injection constructor of IsOpenController
-            </summary>
-            <param name="shiftService">An IShiftService implementation</param>
-        </member>
-        <member name="M:API.Controllers.IsOpenController.IsOpen(System.String)">
-            <summary>
-            Find out whether or not the institution identified by short key is open.
-            </summary>
-            <param name="shortKey">The short key of the institution.</param>
-            <returns></returns>
         </member>
         <member name="T:API.Controllers.ManagerController">
             <summary>
@@ -669,37 +676,37 @@
             If the provided credentials are wrong then the controller will return Unauthorized (401).
             </returns>
         </member>
-        <member name="T:API.Controllers.OpeningHoursController">
+        <member name="M:API.Controllers.ManagerController.Validate">
             <summary>
-            The OpeningHoursController is the public entrance to get opening hour and shift information.
+            Validates the token set in the 'Authorization' header.
             </summary>
+            <returns>
+            Returns 'Ok' (200) if the token is valid.
+            If the token is invalid then the controller will return Unauthorized (401).
+            </returns>
         </member>
-        <member name="M:API.Controllers.OpeningHoursController.#ctor(API.Services.IShiftService,API.Mapping.IOpeningHoursMapper)">
+        <member name="M:API.Controllers.PhotosController.Get(System.Int32,System.Int32)">
             <summary>
-            Dependency injection constructor.
+            Retrieves a photo from an organization.
             </summary>
-            <param name="shiftService"></param>
-            <param name="mapper"></param>
-        </member>
-        <member name="M:API.Controllers.OpeningHoursController.Get(System.String)">
-            <summary>
-            Fetch shifts for the next week for a given institution.
-            </summary>
-            <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
-            <returns>A collection of OpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
-        </member>
-        <member name="M:API.Controllers.OpeningHoursController.GetIntervals(System.String,System.Int32)">
-            <summary>
-            Fetch shifts for the next week for a given institution.
-            </summary>
-            <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
-            <param name="interval">The number of minutes an interval should span.</param>
-            <returns>A collection of OpeningHoursDTO. NotFound if institutionRepository was not found.</returns>
+            <param name="photoId">Id of the photo.</param>
+            <param name="organizationId">Id of the organization.</param>
+            <returns>
+            A response containing the image if found. 
+            If the provided authorization token is invalid: Http 400 (Bad Request) is returned.
+            If the photo is not found: Http 404 (Not Found) is returned.</returns>
         </member>
         <member name="T:API.Controllers.ScheduleController">
             <summary>
             Controller to manage schedule
             </summary>
+        </member>
+        <member name="M:API.Controllers.ScheduleController.#ctor(API.Authorization.IAuthManager,Data.Services.IScheduleService,Data.Services.IEmployeeService)">
+            <summary>
+            The constructor of the schedule controller
+            </summary>
+            <param name="authManager"></param>
+            <param name="scheduleService"></param>
         </member>
         <member name="M:API.Controllers.ScheduleController.Get">
             <summary>
@@ -765,6 +772,15 @@
             Returns 'No Content' (204) if the scheduled shift gets updated.
             </returns>
         </member>
+        <member name="M:API.Controllers.ScheduleController.DeleteScheduledShift(System.Int32,System.Int32)">
+            <summary>
+            Deletes the scheduled shift with the given id.
+            Requires 'Authorization' header set with the token granted upon manager login.
+            </summary>
+            <returns>
+            Returns 'No Content' (204) if the scheduled shift gets deleted.
+            </returns>
+        </member>
         <member name="M:API.Controllers.ScheduleController.CreateMultipleScheduledShift(System.Int32,System.Collections.Generic.IEnumerable{DataTransferObjects.ScheduledShift.CreateScheduledShiftDTO})">
             <summary>
             Creates the scheduled shifts to the schedule with the given id from the content in the body.
@@ -783,137 +799,104 @@
             Returns 'Created' (201) if the scheduled gets rolled out.
             </returns>
         </member>
+        <member name="M:API.Controllers.ScheduleController.FindOptimalSchedule(System.Int32)">
+            <summary>
+            Find the optimal schedule from the given input CSV file.
+            Requires 'Authorization' header set with the token granted upon manager login.
+            </summary>
+            <returns>
+            Returns 'Ok' (200) if an optimal schedule can be found.
+            </returns>
+        </member>
         <member name="T:API.Controllers.ShiftController">
             <summary>
             Controller to manage shifts
             </summary>
         </member>
-        <member name="T:API.Mapping.IOpeningHoursMapper">
+        <member name="M:API.Controllers.ShiftController.#ctor(API.Authorization.IAuthManager,Data.Services.IShiftService)">
             <summary>
-            Mapper interface for opening hour classes and DTOs.
+            The constructor of the shift controller
             </summary>
+            <param name="authManager"></param>
+            <param name="shiftService"></param>
         </member>
-        <member name="M:API.Mapping.IOpeningHoursMapper.MapToDto(System.Collections.Generic.IEnumerable{Data.Models.Shift})">
+        <member name="M:API.Controllers.ShiftController.Get">
             <summary>
-            Maps a collection of Shifts into a collection of OpeningHoursDTOs.
+            Returns all shifts of the specified organization in the 'Authorization' header
             </summary>
-            <param name="source">The input collection.</param>
-            <returns>The mapped collection.</returns>
+            <returns></returns>
         </member>
-        <member name="T:API.Mapping.OpeningHoursMapper">
-            <inheritdoc cref="T:API.Mapping.IOpeningHoursMapper"/>
-        </member>
-        <member name="M:API.Mapping.OpeningHoursMapper.MapToDto(System.Collections.Generic.IEnumerable{Data.Models.Shift})">
-            <inheritdoc cref="M:API.Mapping.OpeningHoursMapper.MapToDto(System.Collections.Generic.IEnumerable{Data.Models.Shift})"/>
-        </member>
-        <member name="T:API.Services.IShiftService">
+        <member name="M:API.Controllers.ShiftController.Get(System.Int32)">
             <summary>
-            Interaction logic for shifts.
+            Returns the shift for the given id in the parameter
             </summary>
+            <param name="id"></param>
+            <returns></returns>
         </member>
-        <member name="M:API.Services.IShiftService.GetByInstitution(System.String)">
+        <member name="M:API.Controllers.ShiftController.Delete(System.Int32)">
             <summary>
-            Returns all shifts from an institution.
+            Deletes the shift with the given id in the parameter
             </summary>
-            <param name="shortKey">The short key of the institution</param>
-            <returns>A collection of shifts. null if the institution was not found.</returns>
+            <param name="id"></param>
+            <returns></returns>
         </member>
-        <member name="M:API.Services.IShiftService.GetByInstitution(System.Int32)">
+        <member name="M:API.Controllers.ShiftController.Update(System.Int32,DataTransferObjects.Shift.UpdateShiftDTO)">
             <summary>
-            Returns all shifts from an institution.
+            Updates the shift with the id in the parameter with the content in the body
             </summary>
-            <param name="id">The ID of the institution</param>
-            <returns>A collection of shifts. null if the institution was not found.</returns>
+            <param name="id"></param>
+            <param name="shiftDto"></param>
+            <returns></returns>
         </member>
-        <member name="M:API.Services.IShiftService.GetByInstitution(System.String,System.DateTime)">
+        <member name="M:API.Controllers.ShiftController.Create(DataTransferObjects.Shift.CreateShiftDTO)">
             <summary>
-            Returns all shifts that crosses or are inside the date denoted by <paramref name="date"/>
+            Creates a shift with the given employees for the given time defined in the body
             </summary>
-            <param name="shortKey">The short key of the institution</param>
-            <param name="date">The date of interesting shifts.</param>
-            <returns>A collection of shifts. null if the institution was not found.</returns>
+            <param name="shiftDto"></param>
+            <returns></returns>
         </member>
-        <member name="M:API.Services.IShiftService.GetByInstitution(System.Int32,System.DateTime)">
+        <member name="M:API.Controllers.ShiftController.Today">
             <summary>
-            Returns all shifts that crosses or are inside the date denoted by <paramref name="date"/>
+            Gets the shifts for today
             </summary>
-            <param name="id">The ID of the institution</param>
-            <param name="date">The date of interesting shifts.</param>
-            <returns>A collection of shifts. null if the institution was not found.</returns>
+            <returns></returns>
         </member>
-        <member name="M:API.Services.IShiftService.GetByInstitution(System.String,System.DateTime,System.DateTime)">
+        <member name="M:API.Controllers.ShiftController.OnGoing">
             <summary>
-            Returns all shifts that crosses or are inside the range denoted by <paramref name="from"/> and <paramref name="to"/>
+            Gets the shifts currently ongoing with the corresponding employees planned to be on the shift and the employees checked-in on that shift
             </summary>
-            <param name="shortKey">The short key of the institution</param>
-            <param name="from">Beginning of range.</param>
-            <param name="to">End of range.</param>
-            <returns>A collection of shifts. null if the institution was not found.</returns>
+            <returns></returns>
         </member>
-        <member name="M:API.Services.IShiftService.GetByInstitution(System.Int32,System.DateTime,System.DateTime)">
+        <member name="M:API.Controllers.ShiftController.CheckIn(System.Int32,System.Int32)">
             <summary>
-            Returns all shifts that crosses or are inside the range denoted by <paramref name="from"/> and <paramref name="to"/>
+            Checks in the employee with the given employee id in the parameters for the given shift id in the parameters
             </summary>
-            <param name="id">The ID of the institution</param>
-            <param name="from">Beginning of range.</param>
-            <param name="to">End of range.</param>
-            <returns>A collection of shifts. null if the institution was not found.</returns>
+            <param name="id"></param>
+            <param name="employeeId"></param>
+            <returns></returns>
         </member>
-        <member name="M:API.Services.IShiftService.GetOngoingShiftsByInstitution(System.String)">
+        <member name="M:API.Controllers.ShiftController.AddEmployees(System.Int32,DataTransferObjects.Shift.AddEmployeesDTO)">
             <summary>
-            Retrieve ongoing shifts for the given institution.
+            Adds the employees from the body to the given shift
             </summary>
-            <param name="shortKey">The short key of the institution.</param>
-            <returns>
-            A collection of shifts, mostly (hopefully) containing only a single element.
-            null if the institution was not found.
-            </returns>
+            <param name="id"></param>
+            <returns></returns>
         </member>
-        <member name="M:API.Services.IShiftService.GetOngoingShiftsByInstitution(System.Int32)">
+        <member name="M:API.Controllers.ShiftController.CreateOutsideSchedule(DataTransferObjects.Shift.CreateShiftDTO)">
             <summary>
-            Retrieve ongoing shifts for the given institution.
+            Creates a shift with the given employees from now (rounded up to nearest 15 minutes) and for the next xx minutes defined in the body
             </summary>
-            <param name="id">The ID of the institution.</param>
-            <returns>
-            A collection of shifts, mostly (hopefully) containing only a single element.
-            null if the institution was not found.
-            </returns>
+            <param name="shiftDto"></param>
+            <returns></returns>
         </member>
-        <member name="T:API.Services.ShiftService">
+        <member name="M:API.Logic.PhotoMapper.ParseBase64Photo(System.String,Data.Models.Organization)">
             <summary>
-            Implementation of IShiftService that uses Repositories for data access.
+            
             </summary>
-        </member>
-        <member name="M:API.Services.ShiftService.#ctor(Data.Repositories.IShiftRepository,Data.Repositories.IInstitutionRepository,Data.Repositories.IEmployeeRepository)">
-            <summary>
-            Injection constructor.
-            </summary>
-            <param name="shiftRepository">An IShiftRepository implementation.</param>
-            <param name="institutionRepository">An IInstitution implementation.</param>
-        </member>
-        <member name="M:API.Services.ShiftService.GetByInstitution(System.String)">
-            <inheritdoc cref="M:API.Services.IShiftService.GetByInstitution(System.String)"/>
-        </member>
-        <member name="M:API.Services.ShiftService.GetByInstitution(System.Int32)">
-            <inheritdoc cref="M:API.Services.IShiftService.GetByInstitution(System.Int32)"/>
-        </member>
-        <member name="M:API.Services.ShiftService.GetByInstitution(System.String,System.DateTime,System.DateTime)">
-            <inheritdoc cref="M:API.Services.IShiftService.GetByInstitution(System.String,System.DateTime,System.DateTime)"/>
-        </member>
-        <member name="M:API.Services.ShiftService.GetByInstitution(System.Int32,System.DateTime,System.DateTime)">
-            <inheritdoc cref="M:API.Services.IShiftService.GetByInstitution(System.Int32,System.DateTime,System.DateTime)"/>
-        </member>
-        <member name="M:API.Services.ShiftService.GetByInstitution(System.String,System.DateTime)">
-            <inheritdoc cref="M:API.Services.IShiftService.GetByInstitution(System.String,System.DateTime)"/>
-        </member>
-        <member name="M:API.Services.ShiftService.GetByInstitution(System.Int32,System.DateTime)">
-            <inheritdoc cref="M:API.Services.IShiftService.GetByInstitution(System.Int32,System.DateTime)"/>
-        </member>
-        <member name="M:API.Services.ShiftService.GetOngoingShiftsByInstitution(System.String)">
-            <inheritdoc cref="M:API.Services.IShiftService.GetOngoingShiftsByInstitution(System.String)"/>
-        </member>
-        <member name="M:API.Services.ShiftService.GetOngoingShiftsByInstitution(System.Int32)">
-            <inheritdoc cref="M:API.Services.IShiftService.GetOngoingShiftsByInstitution(System.Int32)"/>
+            <param name="base64EncodedPhoto"></param>
+            <param name="organization"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">If the encoded string does not contain a media type.</exception>
         </member>
     </members>
 </doc>

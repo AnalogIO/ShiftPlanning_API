@@ -1,10 +1,15 @@
 ﻿using API.Logic;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using API.Authorization;
-using API.Services;
+using Data.Models;
+using Data.Services;
 using DataTransferObjects.Employee;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http.Description;
 
 namespace API.Controllers
 {
@@ -16,11 +21,50 @@ namespace API.Controllers
     {
         private readonly IAuthManager _authManager;
         private readonly IEmployeeService _employeeService;
+        private readonly PhotoMapper _photoMapper;
 
-        public EmployeeController(IAuthManager authManager, IEmployeeService employeeService)
+        /// <summary>
+        /// The constructor of the employee controller
+        /// </summary>
+        /// <param name="authManager"></param>
+        /// <param name="employeeService"></param>
+        /// <param name="photoMapper"></param>
+        public EmployeeController(IAuthManager authManager, IEmployeeService employeeService, PhotoMapper photoMapper)
         {
             _authManager = authManager;
             _employeeService = employeeService;
+            _photoMapper = photoMapper;
+        }
+
+        [HttpDelete, AdminFilter, Route("{userId:int}/photo")]
+        public IHttpActionResult DeletePhoto([FromUri] int userId)
+        {
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+
+            // Todo: Make sure to remove old photo from database.
+            _employeeService.SetPhoto(userId, manager.Organization.Id, manager.Organization.DefaultPhoto);
+
+            return Ok();
+        }
+
+        [HttpPut, AdminFilter, Route("{userId:int}/photo")]
+        public IHttpActionResult UpdatePhoto([FromUri] int userId, [FromBody] string profilePhoto)
+        {
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            try
+            {
+                var photo = _photoMapper.ParseBase64Photo(profilePhoto, manager.Organization);
+
+                _employeeService.SetPhoto(userId, manager.Organization.Id, photo);
+
+                return Ok();
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST api/employees
@@ -33,7 +77,55 @@ namespace API.Controllers
         /// If an employee already exist with the given email, the controller will return BadRequest (400).
         /// </returns>
         [HttpPost, AdminFilter, Route("")]
+        [ResponseType(typeof(EmployeeDTO))]
         public IHttpActionResult Register(CreateEmployeeDTO employeeDto)
+        {
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("Provided token is invalid!");
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!IsCreateEmployeeDtoAlright(employeeDto))
+            {
+                return BadRequest("An employee must contain an email, a first name, a last name and an employee title.");
+            }
+            
+            var photo = manager.Organization.DefaultPhoto;
+
+            if (!string.IsNullOrWhiteSpace(employeeDto.ProfilePhoto))
+            {
+                try
+                {
+                    photo = _photoMapper.ParseBase64Photo(employeeDto.ProfilePhoto, manager.Organization);
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+
+            var employee = _employeeService.CreateEmployee(employeeDto, manager, photo);
+            if (employee != null)
+            {
+                return Created($"/api/employees/{employee.Id}", Mapper.Map(employee));
+            }
+            return BadRequest("The user could not be created!");
+        }
+
+        // POST api/employees/createmany
+        /// <summary>
+        /// Creates the employees from the content in the body.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
+        /// </summary>
+        /// <returns>
+        /// Returns 'Created' (201) if the employees gets created.
+        /// </returns>
+        [HttpPost, AdminFilter, Route("createmany")]
+        [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
+        public IHttpActionResult RegisterMany(CreateEmployeeDTO[] employeeDtos)
         {
             if (!ModelState.IsValid)
             {
@@ -43,12 +135,12 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var employee = _employeeService.CreateEmployee(employeeDto, manager);
-            if (employee != null)
+            var employees = _employeeService.CreateManyEmployees(employeeDtos, manager);
+            if (employees != null)
             {
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Created));
+                return Created("/api/employees", Mapper.Map(employees));
             }
-            return BadRequest("The user could not be created!");
+            return BadRequest("The employees could not be created!");
         }
 
         // GET api/employees
@@ -60,12 +152,13 @@ namespace API.Controllers
         /// Returns an array of employees.
         /// </returns>
         [HttpGet, AdminFilter, Route("")]
+        [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
         public IHttpActionResult Get()
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var employees = _employeeService.GetEmployees(manager.Institution.Id);
+            var employees = _employeeService.GetEmployees(manager.Organization.Id);
             if (employees == null) return NotFound();
             return Ok(Mapper.Map(employees));
         }
@@ -81,6 +174,7 @@ namespace API.Controllers
         /// If no employee is found with the corresponding id, the controller will return NotFound (404)
         /// </returns>
         [HttpGet, AdminFilter, Route("{id}")]
+        [ResponseType(typeof(EmployeeDTO))]
         public IHttpActionResult Get(int id)
         {
             if (!ModelState.IsValid)
@@ -91,7 +185,7 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var employee = _employeeService.GetEmployee(id, manager.Institution.Id);
+            var employee = _employeeService.GetEmployee(id, manager.Organization.Id);
             if (employee != null)
             {
                 return Ok(Mapper.Map(employee));
@@ -112,12 +206,13 @@ namespace API.Controllers
         /// Returns an array of employees.
         /// </returns>
         [HttpGet, Route("")]
+        [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
         public IHttpActionResult Get(string apiKey)
         {
-            var institution = _authManager.GetInstitutionByApiKey(apiKey);
+            var institution = _authManager.GetOrganizationByApiKey(apiKey);
             if (institution == null) return BadRequest("No institution found with the given name");
 
-            var employees = _employeeService.GetEmployees(institution.Id);
+            var employees = _employeeService.GetEmployees(institution.Id).OrderBy(e => e.FirstName).ThenBy(e => e.LastName);
             if (employees == null) return NotFound();
             return Ok(Mapper.Map(employees));
         }
@@ -128,6 +223,7 @@ namespace API.Controllers
         /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
         /// <param name="id">The id of the employee.</param>
+        /// <param name="employeeDto">The dto of the employee</param>
         /// <returns>
         /// Returns 'No Content' (204) if the employee gets updated.
         /// If no employee is found with the given id, the controller will return NotFound (404)
@@ -143,7 +239,21 @@ namespace API.Controllers
             var manager = _authManager.GetManagerByHeader(Request.Headers);
             if (manager == null) return BadRequest("Provided token is invalid!");
 
-            var employee = _employeeService.UpdateEmployee(id, employeeDto, manager);
+            Photo photo = null;
+
+            if (!string.IsNullOrWhiteSpace(employeeDto.ProfilePhoto))
+            {
+                try
+                {
+                    photo = _photoMapper.ParseBase64Photo(employeeDto.ProfilePhoto, manager.Organization);
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+
+            var employee = _employeeService.UpdateEmployee(id, employeeDto, manager, photo);
             if (employee != null)
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
@@ -171,6 +281,15 @@ namespace API.Controllers
 
             _employeeService.DeleteEmployee(id, manager);
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+        }
+
+        private static bool IsCreateEmployeeDtoAlright(CreateEmployeeDTO dto)
+        {
+            if (dto == null
+                || string.IsNullOrWhiteSpace(dto.Email)
+                || string.IsNullOrWhiteSpace(dto.FirstName)
+                || string.IsNullOrWhiteSpace(dto.LastName)) return false;
+            return true;
         }
     }
 }

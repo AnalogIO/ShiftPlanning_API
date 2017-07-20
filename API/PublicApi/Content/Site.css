@@ -1,0 +1,25 @@
+﻿body {
+    height: 100%;
+
+    padding-top: 50px;
+    padding-bottom: 71px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  min-height: 71px;
+}

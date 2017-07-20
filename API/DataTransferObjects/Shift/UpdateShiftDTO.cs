@@ -11,6 +11,5 @@ namespace DataTransferObjects.Shift
         public string Start { get; set; }
         public string End { get; set; }
         public int[] EmployeeIds { get; set; }
-        public int[] CheckInIds { get; set; }
     }
 }

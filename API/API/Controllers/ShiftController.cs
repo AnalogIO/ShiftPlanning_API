@@ -1,15 +1,12 @@
-﻿using System.Web.Http;
-using Data.Repositories;
+﻿using System;
+using System.Web.Http;
 using API.Authorization;
-using System;
-using DataTransferObjects;
-using System.Collections.Generic;
-using Microsoft.Practices.Unity;
-using API.Services;
 using API.Logic;
 using DataTransferObjects.Shift;
 using System.Net.Http;
 using System.Net;
+using System.Runtime.Remoting;
+using Data.Services;
 
 namespace API.Controllers
 {
@@ -22,27 +19,41 @@ namespace API.Controllers
         private readonly IShiftService _shiftService;
         private readonly IAuthManager _authManager;
 
+        /// <summary>
+        /// The constructor of the shift controller
+        /// </summary>
+        /// <param name="authManager"></param>
+        /// <param name="shiftService"></param>
         public ShiftController(IAuthManager authManager, IShiftService shiftService)
         {
             _authManager = authManager;
             _shiftService = shiftService;
         }
 
-        [HttpGet, Route("")]
+        /// <summary>
+        /// Returns all shifts of the specified organization in the 'Authorization' header
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet, Route(""), AdminFilter]
         public IHttpActionResult Get()
         {
-            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
-            if (institution == null) return BadRequest("No institution found with the given name");
-            return Ok(_shiftService.GetByInstitution(institution.Id));
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("No manager found with the given name");
+            return Ok(Mapper.Map(_shiftService.GetByOrganization(manager.Organization.Id)));
         }
 
-        [HttpGet, Route("{id}")]
+        /// <summary>
+        /// Returns the shift for the given id in the parameter
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet, Route("{id}"), AdminFilter]
         public IHttpActionResult Get(int id)
         {
-            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
-            if (institution == null) return BadRequest("No institution found with the given name");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No institution found with the given name");
 
-            var shift = _shiftService.GetShift(id, institution.Id);
+            var shift = _shiftService.GetShift(id, organization.Id);
             if(shift != null)
             {
                 return Ok(Mapper.Map(shift));
@@ -50,24 +61,35 @@ namespace API.Controllers
             return NotFound();
         }
 
-        [HttpDelete, Route("{id}")]
+        /// <summary>
+        /// Deletes the shift with the given id in the parameter
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete, Route("{id}"), AdminFilter]
         public IHttpActionResult Delete(int id)
         {
-            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
-            if (institution == null) return BadRequest("No institution found with the given name");
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("No manager found with the given token");
 
-            _shiftService.DeleteShift(id, institution.Id);
+            _shiftService.DeleteShift(id, manager.Organization.Id);
             
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
         }
 
-        [HttpPut, Route("{id}")]
+        /// <summary>
+        /// Updates the shift with the id in the parameter with the content in the body
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="shiftDto"></param>
+        /// <returns></returns>
+        [HttpPut, Route("{id}"), AdminFilter]
         public IHttpActionResult Update(int id, UpdateShiftDTO shiftDto)
         {
-            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
-            if (institution == null) return BadRequest("No institution found with the given name");
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("No manager found with the given token");
 
-            var shift = _shiftService.UpdateShift(id, institution.Id, shiftDto);
+            var shift = _shiftService.UpdateShift(id, manager.Organization.Id, shiftDto);
 
             if(shift != null)
             {
@@ -77,18 +99,70 @@ namespace API.Controllers
             return BadRequest("The shift could not be updated!");
         }
 
+        /// <summary>
+        /// Creates a shift with the given employees for the given time defined in the body
+        /// </summary>
+        /// <param name="shiftDto"></param>
+        /// <returns></returns>
+        [HttpPost, Route(""), AdminFilter]
+        public IHttpActionResult Create(CreateShiftDTO shiftDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            if (manager == null) return BadRequest("No manager found with the given token");
+
+            var shift = _shiftService.CreateShift(manager.Organization, shiftDto);
+            if (shift != null)
+            {
+                return Ok(Mapper.Map(shift));
+            }
+            return BadRequest("Could not create shift!");
+        }
+
+        /// <summary>
+        /// Gets the shifts for today
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet, Route("today"), ApiKeyFilter]
+        public IHttpActionResult Today()
+        {
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No institution found with the given name");
+
+            var now = DateTime.Now.Date;
+            var end = now.AddDays(1).AddTicks(-1);
+
+            var shifts = Mapper.Map(_shiftService.GetByOrganization(organization.Id,now,end));
+
+            return Ok(shifts);
+        }
+
+
+        /// <summary>
+        /// Gets the shifts currently ongoing with the corresponding employees planned to be on the shift and the employees checked-in on that shift
+        /// </summary>
+        /// <returns></returns>
         [HttpGet, Route("ongoing"), ApiKeyFilter]
         public IHttpActionResult OnGoing()
         {
-            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
-            if (institution == null) return BadRequest("No institution found with the given name");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No institution found with the given name");
 
-            var shifts = Mapper.Map(_shiftService.GetOngoingShiftsByInstitution(institution.Id));
+            var shifts = Mapper.Map(_shiftService.GetOngoingShiftsByOrganization(organization.Id));
 
             return Ok(new { Shifts = shifts });
         }
 
+        /// <summary>
+        /// Checks in the employee with the given employee id in the parameters for the given shift id in the parameters
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="employeeId"></param>
+        /// <returns></returns>
         [HttpPost, Route("{id}/checkin"), ApiKeyFilter]
         public IHttpActionResult CheckIn(int id, int employeeId)
         {
@@ -97,34 +171,63 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
-            if (institution == null) return BadRequest("No institution found with the given name");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No institution found with the given name");
 
-            var checkIn = _shiftService.CheckInEmployee(id, employeeId, institution.Id);
+            var checkIn = _shiftService.CheckInEmployee(id, employeeId, organization.Id);
             if (checkIn != null)
             {
-                return Ok(new { Message = "The employee was successfully checked in!" });
+                return Ok(Mapper.Map(checkIn));
             }
             return BadRequest("Could not check-in the employee - try again!");
         }
 
-        [HttpPost, Route("createoutsideschedule"), ApiKeyFilter]
-        public IHttpActionResult CreateOutsideSchedule(CreateShiftOutsideScheduleDTO shiftDto)
+        /// <summary>
+        /// Adds the employees from the body to the given shift
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost, Route("{id}/addEmployees"), ApiKeyFilter]
+        public IHttpActionResult AddEmployees(int id, AddEmployeesDTO employees)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var institution = _authManager.GetInstitutionByHeader(Request.Headers);
-            if (institution == null) return BadRequest("No institution found with the given name");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No institution found with the given name");
 
-            var shift = _shiftService.CreateShiftOutsideSchedule(shiftDto, institution);
-            if(shift != null)
+            var shift = _shiftService.AddEmployeesToShift(id, organization.Id, employees);
+            if (shift != null)
             {
                 return Ok(Mapper.Map(shift));
             }
-            return BadRequest("Could not create shift outside of schedule!");
+            return BadRequest("Could not add the employees");
+        }
+
+        /// <summary>
+        /// Creates a shift with the given employees from now (rounded up to nearest 15 minutes) and for the next xx minutes defined in the body
+        /// </summary>
+        /// <param name="shiftDto"></param>
+        /// <returns></returns>
+        [HttpPost, Route("createoutsideschedule"), ApiKeyFilter]
+        public IHttpActionResult CreateOutsideSchedule(CreateShiftDTO shiftDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No institution found with the given name");
+
+            var shift = _shiftService.CreateLimitedShift(organization, shiftDto, 300); // Create shift if it doesnt exceed a duration of 5 hours
+            if (shift != null)
+            {
+                return Ok(Mapper.Map(shift));
+            }
+            return BadRequest("Could not create shift!");
         }
     }
 }

@@ -21,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\API\App_Data\DataTransferObjects.xml</DocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,25 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>..\API\App_Data\DataTransferObjects.xml</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />
@@ -46,7 +66,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Manager\ManagerValidateTokenDTO.cs" />
+    <Compile Include="Schedule\OptimalScheduleResponse.cs" />
     <Compile Include="Schedule\RolloutScheduleDTO.cs" />
+    <Compile Include="Shift\AddEmployeesDTO.cs" />
     <Compile Include="Shift\CheckInDTO.cs" />
     <Compile Include="Employee\CreateEmployeeDTO.cs" />
     <Compile Include="EmployeeTitles\CreateEmployeeTitleDTO.cs" />
@@ -55,11 +78,12 @@
     <Compile Include="EmployeeTitles\EmployeeTitleDTO.cs" />
     <Compile Include="Manager\ManagerLoginDTO.cs" />
     <Compile Include="Manager\ManagerLoginResponse.cs" />
-    <Compile Include="OpeningHours\IntervalOpeningHourDTO.cs" />
-    <Compile Include="OpeningHours\IntervalOpeningHoursDTO.cs" />
-    <Compile Include="OpeningHours\IsOpenDTO.cs" />
-    <Compile Include="OpeningHours\OpeningHourEmployeeDTO.cs" />
-    <Compile Include="OpeningHours\OpeningHoursDTO.cs" />
+    <Compile Include="Public\OpeningHours\IntervalOpeningHourDTO.cs" />
+    <Compile Include="Public\OpeningHours\IntervalOpeningHoursDTO.cs" />
+    <Compile Include="Public\OpeningHours\IsOpenDTO.cs" />
+    <Compile Include="Public\OpeningHours\OpeningHourEmployeeDTO.cs" />
+    <Compile Include="Public\OpeningHours\OpeningHoursDTO.cs" />
+    <Compile Include="Shift\CreateShiftDTO.cs" />
     <Compile Include="Shift\CreateShiftOutsideScheduleDTO.cs" />
     <Compile Include="Shift\ShiftDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,16 +95,10 @@
     <Compile Include="ScheduledShift\UpdateScheduledShiftDTO.cs" />
     <Compile Include="Schedule\UpdateScheduleDTO.cs" />
     <Compile Include="Shift\UpdateShiftDTO.cs" />
-    <Compile Include="Volunteers\VolunteerDTO.cs" />
+    <Compile Include="Public\Employees\EmployeeDTO.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Data\Data.csproj">
-      <Project>{65C4B72F-3368-439E-BEB5-EBD575953FC3}</Project>
-      <Name>Data</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

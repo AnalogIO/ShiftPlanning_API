@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
@@ -25,11 +26,13 @@ namespace API.Authorization
             var apiKey = actionContext.Request.Headers.Authorization;
             if (apiKey == null)
             {
-                actionContext.Response = actionContext.Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "Please set the 'Authorization' header to the api key of the institution!" });
+                throw new UnauthorizedAccessException("Please set the 'Authorization' header to the api key of the institution!");
+                //actionContext.Response = actionContext.Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "Please set the 'Authorization' header to the api key of the institution!" });
             }
-            else if (!_authManager.ValidateInstitutionApiKey(apiKey.ToString()))
+            else if (!_authManager.ValidateOrganizationApiKey(apiKey.ToString()))
             {
-                actionContext.Response = actionContext.Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "The provided api key is not valid!" });
+                throw new UnauthorizedAccessException("The provided api key is not valid!");
+                //actionContext.Response = actionContext.Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "The provided api key is not valid!" });
             }
         }
     }

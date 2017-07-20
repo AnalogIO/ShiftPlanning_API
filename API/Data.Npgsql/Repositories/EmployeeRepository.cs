@@ -4,6 +4,8 @@ using System.Linq;
 using Data.Models;
 using Data.Repositories;
 using System.Data.Entity;
+using Data.Exceptions;
+using System.Data;
 
 namespace Data.Npgsql.Repositories
 {
@@ -18,44 +20,56 @@ namespace Data.Npgsql.Repositories
 
         public Employee Create(Employee employee)
         {
-            if (!_context.Employees.Any(x => x.Email == employee.Email))
-            {
-                _context.Employees.Add(employee);
-                return _context.SaveChanges() > 0 ? employee : null;
-            }
-            return null;
+            if (_context.Employees.Any(x => x.Email == employee.Email && x.Organization.Id == employee.Organization.Id)) throw new ForbiddenException("An employee already exist with the given email");
+
+            _context.Employees.Add(employee);
+            return _context.SaveChanges() > 0 ? employee : null;
         }
 
-        public void Delete(int id, int institutionId)
+        public IEnumerable<Employee> CreateMany(IEnumerable<Employee> employees)
         {
-            var employee = _context.Employees.FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
-            if(employee != null)
-            {
-                _context.Employees.Remove(employee);
-                _context.SaveChanges();
-            }
+            var employeeDict = _context.Employees.ToDictionary(e => e.Email, e => e);
+            var existingEmployees = employees.Where(e => employeeDict.ContainsKey(e.Email)).Select(e => e.Email);
+
+            if(existingEmployees.Any()) throw new ForbiddenException($"The following emails do already exist: {String.Join(", ", existingEmployees)}");
+
+            _context.Employees.AddRange(employees);
+            return _context.SaveChanges() > 0 ? employees : null;
         }
 
-        public IEnumerable<Employee> ReadFromInstitution(int institutionId)
+        public void Delete(int id, int organizationId)
         {
-            return _context.Employees
-                .Include(x => x.EmployeeTitle)
-                .Where(e => e.Institution.Id == institutionId).OrderBy(x => x.Id);
+            var employee = _context.Employees.FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
+            if (employee == null) throw new ObjectNotFoundException("Could not find an employee corresponding to the given id");
+ 
+            _context.Employees.Remove(employee);
+            _context.SaveChanges();
         }
 
-        public IEnumerable<Employee> ReadFromInstitution(string shortKey)
-        {
-            return _context.Employees
-                .Include(emp => emp.EmployeeTitle)
-                .Include(emp => emp.Photo)
-                .Where(e => e.Institution.ShortKey == shortKey);
-        }
-
-        public Employee Read(int id, int institutionId)
+        public IEnumerable<Employee> ReadFromOrganization(int organizationId)
         {
             return _context.Employees
-                .Include(x => x.EmployeeTitle)
-                .FirstOrDefault(x => x.Id == id && x.Institution.Id == institutionId);
+                .Include(employee => employee.EmployeeTitle)
+                .Include(employee => employee.Photo)
+                .Include(employee => employee.CheckIns)
+                .Where(e => e.Organization.Id == organizationId).OrderBy(x => x.Id);
+        }
+
+        public IEnumerable<Employee> ReadFromOrganization(string shortKey)
+        {
+            return _context.Employees
+                .Include(employee => employee.EmployeeTitle)
+                .Include(employee => employee.Photo)
+                .Include(employee => employee.CheckIns)
+                .Where(e => e.Organization.ShortKey == shortKey);
+        }
+
+        public Employee Read(int id, int organizationId)
+        {
+            return _context.Employees
+                .Include(employee => employee.EmployeeTitle)
+                .Include(employee => employee.CheckIns)
+                .FirstOrDefault(employee => employee.Id == id && employee.Organization.Id == organizationId);
         }
 
         public Employee Read(int id, string shortKey)
@@ -63,11 +77,14 @@ namespace Data.Npgsql.Repositories
             return _context.Employees
                 .Include(employee => employee.EmployeeTitle)
                 .Include(employee => employee.Photo)
-                .FirstOrDefault(x => x.Id == id && x.Institution.ShortKey == shortKey);
+                .Include(employee => employee.CheckIns)
+                .FirstOrDefault(employee => employee.Id == id && employee.Organization.ShortKey == shortKey);
         }
 
         public int Update(Employee employee)
         {
+            if(_context.Employees.Any(e => e.Email == employee.Email && e.Organization.Id == employee.Organization.Id && e.Id != employee.Id)) throw new ForbiddenException("An employee already exist with the given email");
+
             var dbEmployee = _context.Employees.Single(e => e.Id == employee.Id);
 
             dbEmployee.Email = employee.Email;

@@ -15,5 +15,7 @@ namespace DataTransferObjects.Employee
         public bool Active { get; set; }
         public string EmployeeTitle { get; set; }
         public int? EmployeeTitleId { get; set; }
+        public string PhotoRef { get; set; }
+        public int? CheckInCount { get; set; }
     }
 }

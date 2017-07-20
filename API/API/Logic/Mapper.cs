@@ -1,9 +1,13 @@
-﻿using Data.Models;
+﻿using System;
+using API.Controllers;
+using Data.Models;
 using DataTransferObjects.Employee;
 using DataTransferObjects.EmployeeTitles;
 using DataTransferObjects.Schedule;
 using DataTransferObjects.Shift;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace API.Logic
 {
@@ -11,41 +15,47 @@ namespace API.Logic
     {
         public static EmployeeDTO Map(Employee employee)
         {
-            return new EmployeeDTO { Id = employee.Id, FirstName = employee.FirstName, LastName = employee.LastName, Email = employee.Email, Active = employee.Active, EmployeeTitle = employee.EmployeeTitle?.Title, EmployeeTitleId = employee.EmployeeTitle?.Id };
+            var url = HttpContext.Current.Request.Url.AbsoluteUri;
+
+            var routeBase = url.Substring(0, url.IndexOf("/api/", StringComparison.Ordinal));
+
+            return new EmployeeDTO
+            {
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Email = employee.Email,
+                Active = employee.Active,
+                EmployeeTitle = employee.EmployeeTitle?.Title,
+                EmployeeTitleId = employee.EmployeeTitle?.Id,
+                PhotoRef = $"{routeBase}/{PhotosController.RoutePrefix}/{employee.Photo.Id}/{employee.Organization.Id}",
+                CheckInCount = employee.CheckIns?.Count
+            };
         }
 
         public static IEnumerable<EmployeeDTO> Map(IEnumerable<Employee> employees)
         {
-            foreach(Employee employee in employees)
-            {
-                yield return Map(employee);
-            }
+            return employees.Select(Map);
         }
 
         public static ScheduledShiftDTO Map(ScheduledShift scheduledShift)
         {
-            return new ScheduledShiftDTO { Id = scheduledShift.Id, Day = scheduledShift.Day, Start = scheduledShift.Start, End = scheduledShift.End, Employees = Map(scheduledShift.Employees) };
+            return new ScheduledShiftDTO { Id = scheduledShift.Id, Day = scheduledShift.Day, Start = scheduledShift.Start.ToString(@"hh\:mm"), End = scheduledShift.End.ToString(@"hh\:mm"), Employees = Map(scheduledShift.Employees) };
         }
 
         public static IEnumerable<ScheduledShiftDTO> Map(IEnumerable<ScheduledShift> scheduledShifts)
         {
-            foreach (ScheduledShift scheduledShift in scheduledShifts)
-            {
-                yield return Map(scheduledShift);
-            }
+            return scheduledShifts.Select(Map);
         }
 
         public static ScheduleDTO Map(Schedule schedule)
         {
-            return new ScheduleDTO { Id = schedule.Id, Name = schedule.Name, NumberOfWeeks = schedule.NumberOfWeeks, SchedulesShifts = Map(schedule.ScheduledShifts) };
+            return new ScheduleDTO { Id = schedule.Id, Name = schedule.Name, NumberOfWeeks = schedule.NumberOfWeeks, ScheduledShifts = Map(schedule.ScheduledShifts) };
         }
 
         public static IEnumerable<ScheduleDTO> Map(IEnumerable<Schedule> schedules)
         {
-            foreach (Schedule schedule in schedules)
-            {
-                yield return Map(schedule);
-            }
+            return schedules.Select(Map);
         }
 
         public static CheckInDTO Map(CheckIn checkIn)
@@ -55,10 +65,7 @@ namespace API.Logic
 
         public static IEnumerable<CheckInDTO> Map(IEnumerable<CheckIn> checkIns)
         {
-            foreach (CheckIn checkIn in checkIns)
-            {
-                yield return Map(checkIn);
-            }
+            return checkIns.Select(Map);
         }
 
         public static ShiftDTO Map(Shift shift)
@@ -68,10 +75,7 @@ namespace API.Logic
 
         public static IEnumerable<ShiftDTO> Map(IEnumerable<Shift> shifts)
         {
-            foreach (Shift shift in shifts)
-            {
-                yield return Map(shift);
-            }
+            return shifts.Select(Map);
         }
 
         public static EmployeeTitleDTO Map(EmployeeTitle employeeTitle)
@@ -81,10 +85,7 @@ namespace API.Logic
 
         public static IEnumerable<EmployeeTitleDTO> Map(IEnumerable<EmployeeTitle> employeeTitles)
         {
-            foreach (EmployeeTitle employeeTitle in employeeTitles)
-            {
-                yield return Map(employeeTitle);
-            }
+            return employeeTitles.Select(Map);
         }
     }
 }
