@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.Data;
+using System.Linq;
 using Data.Repositories;
 using Data.Models;
 using System.Net.Http.Headers;
@@ -10,11 +11,13 @@ namespace API.Authorization
     {
         private readonly IOrganizationRepository _organizationRepository;
         private readonly IManagerRepository _managerRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public AuthManager(IOrganizationRepository organizationRepository, IManagerRepository managerRepository)
+        public AuthManager(IOrganizationRepository organizationRepository, IManagerRepository managerRepository, IEmployeeRepository employeeRepository)
         {
             _organizationRepository = organizationRepository;
             _managerRepository = managerRepository;
+            _employeeRepository = employeeRepository;
         }
 
         public bool ValidateOrganizationApiKey(string apiKey)
@@ -39,6 +42,12 @@ namespace API.Authorization
             var token = headers.Authorization.ToString();
             if (token == null) throw new ObjectNotFoundException("Could not find a manager corresponding to the given 'Authorization' header");
             return _managerRepository.Read(token);
+        }
+
+        public bool ValidateRole(string token, string[] roles)
+        {
+            var employee = _employeeRepository.Read(token);
+            return roles.Any(role => employee.Roles.Any(r => r.Name == role));
         }
     }
 }

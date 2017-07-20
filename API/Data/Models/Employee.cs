@@ -15,5 +15,7 @@ namespace Data.Models
         public virtual ICollection<ScheduledShift> ScheduledShifts { get; set; }
         public virtual Organization Organization { get; set; }
         public virtual Photo Photo { get; set; }
+        public virtual ICollection<Role> Roles { get; set; }
+        public virtual ICollection<Token> Tokens { get; set; }
     }
 }

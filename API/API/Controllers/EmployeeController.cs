@@ -16,6 +16,7 @@ namespace API.Controllers
     /// <summary>
     /// Controller to manipulate with the employees.
     /// </summary>
+    [AuthorizeFilter("Manager")]
     [RoutePrefix("api/employees")]
     public class EmployeeController : ApiController
     {
@@ -36,7 +37,7 @@ namespace API.Controllers
             _photoMapper = photoMapper;
         }
 
-        [HttpDelete, AdminFilter, Route("{userId:int}/photo")]
+        [HttpDelete, Route("{userId:int}/photo")]
         public IHttpActionResult DeletePhoto([FromUri] int userId)
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
@@ -47,7 +48,7 @@ namespace API.Controllers
             return Ok();
         }
 
-        [HttpPut, AdminFilter, Route("{userId:int}/photo")]
+        [HttpPut, Route("{userId:int}/photo")]
         public IHttpActionResult UpdatePhoto([FromUri] int userId, [FromBody] string profilePhoto)
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
@@ -76,7 +77,7 @@ namespace API.Controllers
         /// Returns 'Created' (201) if the employee gets created.
         /// If an employee already exist with the given email, the controller will return BadRequest (400).
         /// </returns>
-        [HttpPost, AdminFilter, Route("")]
+        [HttpPost, Route("")]
         [ResponseType(typeof(EmployeeDTO))]
         public IHttpActionResult Register(CreateEmployeeDTO employeeDto)
         {
@@ -123,7 +124,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Created' (201) if the employees gets created.
         /// </returns>
-        [HttpPost, AdminFilter, Route("createmany")]
+        [HttpPost, Route("createmany")]
         [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
         public IHttpActionResult RegisterMany(CreateEmployeeDTO[] employeeDtos)
         {
@@ -151,7 +152,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns an array of employees.
         /// </returns>
-        [HttpGet, AdminFilter, Route("")]
+        [HttpGet, Route("")]
         [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
         public IHttpActionResult Get()
         {
@@ -173,7 +174,7 @@ namespace API.Controllers
         /// Returns the employee with the given id. 
         /// If no employee is found with the corresponding id, the controller will return NotFound (404)
         /// </returns>
-        [HttpGet, AdminFilter, Route("{id}")]
+        [HttpGet, Route("{id}")]
         [ResponseType(typeof(EmployeeDTO))]
         public IHttpActionResult Get(int id)
         {
@@ -228,7 +229,7 @@ namespace API.Controllers
         /// Returns 'No Content' (204) if the employee gets updated.
         /// If no employee is found with the given id, the controller will return NotFound (404)
         /// </returns>
-        [HttpPut, AdminFilter, Route("{id}")]
+        [HttpPut, Route("{id}")]
         public IHttpActionResult Put(int id, UpdateEmployeeDTO employeeDto)
         {
             if (!ModelState.IsValid)
@@ -268,7 +269,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id">The id of the employee.</param>
         /// <returns>Returns 'No Content' (204) if the employee gets deleted.</returns>
-        [HttpDelete, AdminFilter, Route("{id}")]
+        [HttpDelete, Route("{id}")]
         public IHttpActionResult Delete(int id)
         {
             if (!ModelState.IsValid)

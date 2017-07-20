@@ -95,6 +95,16 @@ namespace Data.Npgsql.Repositories
             return _context.SaveChanges();
         }
 
+        public Employee Read(string token)
+        {
+            return _context.Employees
+                .Include(employee => employee.EmployeeTitle)
+                .Include(employee => employee.Photo)
+                .Include(employee => employee.CheckIns)
+                .Include(employee => employee.Roles)
+                .FirstOrDefault(employee => employee.Tokens.Any(t => t.TokenHash == token));
+        }
+
         public void Dispose()
         {
             _context.Dispose();

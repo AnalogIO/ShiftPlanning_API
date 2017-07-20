@@ -13,5 +13,6 @@ namespace Data.Repositories
         Employee Read(int id, string shortKey);
         int Update(Employee employee);
         void Delete(int id, int organizationId);
+        Employee Read(string token);
     }
 }

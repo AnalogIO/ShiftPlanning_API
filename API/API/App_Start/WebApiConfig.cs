@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using API.Authorization;
 
 namespace API
 {

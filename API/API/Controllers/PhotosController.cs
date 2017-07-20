@@ -9,6 +9,7 @@ using Data.Services;
 
 namespace API.Controllers
 {
+    [AuthorizeFilter("Manager")]
     [RoutePrefix(RoutePrefix)]
     public class PhotosController : ApiController
     {
@@ -50,7 +51,7 @@ namespace API.Controllers
             return ResponseMessage(message);
         }
 
-        [HttpPost, AdminFilter]
+        [HttpPost]
         public IHttpActionResult Post([FromBody] string base64EncodedPhoto)
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);

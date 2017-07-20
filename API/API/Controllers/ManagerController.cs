@@ -64,7 +64,7 @@ namespace API.Controllers
         /// Returns 'Ok' (200) if the token is valid.
         /// If the token is invalid then the controller will return Unauthorized (401).
         /// </returns>
-        [HttpPost, Route("validate"), AdminFilter]
+        [HttpPost, Route("validate")]
         public IHttpActionResult Validate()
         {
             return Ok();

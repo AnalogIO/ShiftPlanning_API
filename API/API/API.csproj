@@ -260,7 +260,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Authorization\AdminFilterAttribute.cs" />
+    <Compile Include="Authorization\AuthorizeFilterAttribute.cs" />
     <Compile Include="Authorization\ApiKeyFilter.cs" />
     <Compile Include="Authorization\AuthManager.cs" />
     <Compile Include="Logic\Mapper.cs" />

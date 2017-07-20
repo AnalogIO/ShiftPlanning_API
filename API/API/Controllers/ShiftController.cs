@@ -13,6 +13,7 @@ namespace API.Controllers
     /// <summary>
     /// Controller to manage shifts
     /// </summary>
+    [AuthorizeFilter("Manager")]
     [RoutePrefix("api/shifts")]
     public class ShiftController : ApiController
     {
@@ -34,7 +35,7 @@ namespace API.Controllers
         /// Returns all shifts of the specified organization in the 'Authorization' header
         /// </summary>
         /// <returns></returns>
-        [HttpGet, Route(""), AdminFilter]
+        [HttpGet, Route("")]
         public IHttpActionResult Get()
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
@@ -47,7 +48,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet, Route("{id}"), AdminFilter]
+        [HttpGet, Route("{id}")]
         public IHttpActionResult Get(int id)
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
@@ -66,7 +67,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete, Route("{id}"), AdminFilter]
+        [HttpDelete, Route("{id}")]
         public IHttpActionResult Delete(int id)
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
@@ -83,7 +84,7 @@ namespace API.Controllers
         /// <param name="id"></param>
         /// <param name="shiftDto"></param>
         /// <returns></returns>
-        [HttpPut, Route("{id}"), AdminFilter]
+        [HttpPut, Route("{id}")]
         public IHttpActionResult Update(int id, UpdateShiftDTO shiftDto)
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
@@ -104,7 +105,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="shiftDto"></param>
         /// <returns></returns>
-        [HttpPost, Route(""), AdminFilter]
+        [HttpPost, Route("")]
         public IHttpActionResult Create(CreateShiftDTO shiftDto)
         {
             if (!ModelState.IsValid)

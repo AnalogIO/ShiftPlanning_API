@@ -96,6 +96,7 @@
     <Compile Include="Models\Organization.cs" />
     <Compile Include="Models\Manager.cs" />
     <Compile Include="Models\Photo.cs" />
+    <Compile Include="Models\Role.cs" />
     <Compile Include="Models\Schedule.cs" />
     <Compile Include="Models\ScheduledShift.cs" />
     <Compile Include="Models\Shift.cs" />

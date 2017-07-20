@@ -18,6 +18,7 @@ namespace API.Controllers
     /// <summary>
     /// Controller to manage schedule
     /// </summary>
+    [AuthorizeFilter("Manager")]
     [RoutePrefix("api/schedules")]
     public class ScheduleController : ApiController
     {
@@ -45,7 +46,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns an array of schedules.
         /// </returns>
-        [HttpGet, AdminFilter, Route("")]
+        [HttpGet, Route("")]
         public IHttpActionResult Get()
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
@@ -65,7 +66,7 @@ namespace API.Controllers
         /// Returns the schedule with the given id. 
         /// If no schedule is found with the corresponding id, the controller will return NotFound (404)
         /// </returns>
-        [HttpGet, AdminFilter, Route("{id}")]
+        [HttpGet, Route("{id}")]
         public IHttpActionResult Get(int id)
         {
             if (!ModelState.IsValid)
@@ -95,7 +96,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Created' (201) if the schedule gets created.
         /// </returns>
-        [HttpPost, AdminFilter, Route("")]
+        [HttpPost, Route("")]
         public IHttpActionResult Register(CreateScheduleDTO scheduleDto)
         {
             if (!ModelState.IsValid)
@@ -121,7 +122,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id">The id of the schedule.</param>
         /// <returns>Returns 'No Content' (204) if the schedule gets deleted.</returns>
-        [HttpDelete, AdminFilter, Route("{id}")]
+        [HttpDelete, Route("{id}")]
         public IHttpActionResult Delete(int id)
         {
             if (!ModelState.IsValid)
@@ -144,7 +145,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'No Content' (204) if the schedule gets updated.
         /// </returns>
-        [HttpPut, AdminFilter, Route("{id}")]
+        [HttpPut, Route("{id}")]
         public IHttpActionResult UpdateSchedule(int id, UpdateScheduleDTO scheduleDto)
         {
             if (!ModelState.IsValid)
@@ -173,7 +174,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Created' (201) if the scheduled shift gets created.
         /// </returns>
-        [HttpPost, AdminFilter, Route("{id}")]
+        [HttpPost, Route("{id}")]
         public IHttpActionResult CreateScheduledShift(int id, CreateScheduledShiftDTO scheduledShiftDto)
         {
             if (!ModelState.IsValid)
@@ -201,7 +202,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'No Content' (204) if the scheduled shift gets updated.
         /// </returns>
-        [HttpPut, AdminFilter, Route("{scheduleId}/{scheduledShiftId}")]
+        [HttpPut, Route("{scheduleId}/{scheduledShiftId}")]
         public IHttpActionResult UpdateScheduledShift(int scheduleId, int scheduledShiftId, UpdateScheduledShiftDTO scheduledShiftDto)
         {
             if (!ModelState.IsValid)
@@ -230,7 +231,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'No Content' (204) if the scheduled shift gets deleted.
         /// </returns>
-        [HttpDelete, AdminFilter, Route("{scheduleId}/{scheduledShiftId}")]
+        [HttpDelete, Route("{scheduleId}/{scheduledShiftId}")]
         public IHttpActionResult DeleteScheduledShift(int scheduleId, int scheduledShiftId)
         {
             var manager = _authManager.GetManagerByHeader(Request.Headers);
@@ -248,7 +249,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Created' (201) if the scheduled shifts gets created.
         /// </returns>
-        [HttpPost, AdminFilter, Route("{id}/createmultiple")]
+        [HttpPost, Route("{id}/createmultiple")]
         public IHttpActionResult CreateMultipleScheduledShift(int id, IEnumerable<CreateScheduledShiftDTO> scheduledShiftsDto)
         {
             if (!ModelState.IsValid)
@@ -277,7 +278,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Created' (201) if the scheduled gets rolled out.
         /// </returns>
-        [HttpPost, AdminFilter, Route("{id}/rollout")]
+        [HttpPost, Route("{id}/rollout")]
         public IHttpActionResult RolloutSchedule(int id, RolloutScheduleDTO rolloutDto)
         {
             if (!ModelState.IsValid)
@@ -307,7 +308,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Ok' (200) if an optimal schedule can be found.
         /// </returns>
-        [HttpPost, AdminFilter, Route("{id}/findoptimal")]
+        [HttpPost, Route("{id}/findoptimal")]
         public async Task<IHttpActionResult> FindOptimalSchedule(int id)
         {
             if (!ModelState.IsValid)

@@ -9,5 +9,6 @@ namespace API.Authorization
         Organization GetOrganizationByHeader(HttpRequestHeaders headers);
         Manager GetManagerByHeader(HttpRequestHeaders headers);
         bool ValidateOrganizationApiKey(string apiKey);
+        bool ValidateRole(string token, string[] roles);
     }
 }
