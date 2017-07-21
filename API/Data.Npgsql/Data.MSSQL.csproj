@@ -57,10 +57,6 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EntityFramework6.Npgsql, Version=3.1.1.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework6.Npgsql.3.1.1\lib\net45\EntityFramework6.Npgsql.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
@@ -79,10 +75,6 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Npgsql, Version=3.2.4.1, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Npgsql.3.2.4.1\lib\net451\Npgsql.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -112,53 +104,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\IoCConfig.cs" />
-    <Compile Include="Migrations\201611031249305_initial migration.cs" />
-    <Compile Include="Migrations\201611031249305_initial migration.Designer.cs">
-      <DependentUpon>201611031249305_initial migration.cs</DependentUpon>
+    <Compile Include="Migrations\201707211036507_initial migration for mssql.cs" />
+    <Compile Include="Migrations\201707211036507_initial migration for mssql.Designer.cs">
+      <DependentUpon>201707211036507_initial migration for mssql.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201611051849081_added schedule to a shift and a list of shifts to schedule.cs" />
-    <Compile Include="Migrations\201611051849081_added schedule to a shift and a list of shifts to schedule.Designer.cs">
-      <DependentUpon>201611051849081_added schedule to a shift and a list of shifts to schedule.cs</DependentUpon>
+    <Compile Include="Migrations\201707211149105_added roles to context.cs" />
+    <Compile Include="Migrations\201707211149105_added roles to context.Designer.cs">
+      <DependentUpon>201707211149105_added roles to context.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201611051942168_added foreign key contraint between shift and schedule.cs" />
-    <Compile Include="Migrations\201611051942168_added foreign key contraint between shift and schedule.Designer.cs">
-      <DependentUpon>201611051942168_added foreign key contraint between shift and schedule.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611051954103_removed explicit contraint.cs" />
-    <Compile Include="Migrations\201611051954103_removed explicit contraint.Designer.cs">
-      <DependentUpon>201611051954103_removed explicit contraint.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611060920577_active flag for employees.cs" />
-    <Compile Include="Migrations\201611060920577_active flag for employees.Designer.cs">
-      <DependentUpon>201611060920577_active flag for employees.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611081903378_Added photo to employee.cs" />
-    <Compile Include="Migrations\201611081903378_Added photo to employee.Designer.cs">
-      <DependentUpon>201611081903378_Added photo to employee.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611261728168_Institution is now Organization.cs" />
-    <Compile Include="Migrations\201611261728168_Institution is now Organization.Designer.cs">
-      <DependentUpon>201611261728168_Institution is now Organization.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611262023131_Photo with Organization.cs" />
-    <Compile Include="Migrations\201611262023131_Photo with Organization.Designer.cs">
-      <DependentUpon>201611262023131_Photo with Organization.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611262128048_Default Photo for Organization.cs" />
-    <Compile Include="Migrations\201611262128048_Default Photo for Organization.Designer.cs">
-      <DependentUpon>201611262128048_Default Photo for Organization.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201701221717322_Optional default photo.cs" />
-    <Compile Include="Migrations\201701221717322_Optional default photo.Designer.cs">
-      <DependentUpon>201701221717322_Optional default photo.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707201458161_tokens and roles for employees.cs" />
-    <Compile Include="Migrations\201707201458161_tokens and roles for employees.Designer.cs">
-      <DependentUpon>201707201458161_tokens and roles for employees.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707201751146_password and salt on employees.cs" />
-    <Compile Include="Migrations\201707201751146_password and salt on employees.Designer.cs">
-      <DependentUpon>201707201751146_password and salt on employees.cs</DependentUpon>
+    <Compile Include="Migrations\201707211154221_many to many for roles.cs" />
+    <Compile Include="Migrations\201707211154221_many to many for roles.Designer.cs">
+      <DependentUpon>201707211154221_many to many for roles.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -184,41 +140,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201611031249305_initial migration.resx">
-      <DependentUpon>201611031249305_initial migration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201707211036507_initial migration for mssql.resx">
+      <DependentUpon>201707211036507_initial migration for mssql.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611051849081_added schedule to a shift and a list of shifts to schedule.resx">
-      <DependentUpon>201611051849081_added schedule to a shift and a list of shifts to schedule.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201707211149105_added roles to context.resx">
+      <DependentUpon>201707211149105_added roles to context.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611051942168_added foreign key contraint between shift and schedule.resx">
-      <DependentUpon>201611051942168_added foreign key contraint between shift and schedule.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611051954103_removed explicit contraint.resx">
-      <DependentUpon>201611051954103_removed explicit contraint.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611060920577_active flag for employees.resx">
-      <DependentUpon>201611060920577_active flag for employees.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611081903378_Added photo to employee.resx">
-      <DependentUpon>201611081903378_Added photo to employee.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611261728168_Institution is now Organization.resx">
-      <DependentUpon>201611261728168_Institution is now Organization.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611262023131_Photo with Organization.resx">
-      <DependentUpon>201611262023131_Photo with Organization.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611262128048_Default Photo for Organization.resx">
-      <DependentUpon>201611262128048_Default Photo for Organization.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201701221717322_Optional default photo.resx">
-      <DependentUpon>201701221717322_Optional default photo.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707201458161_tokens and roles for employees.resx">
-      <DependentUpon>201707201458161_tokens and roles for employees.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707201751146_password and salt on employees.resx">
-      <DependentUpon>201707201751146_password and salt on employees.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201707211154221_many to many for roles.resx">
+      <DependentUpon>201707211154221_many to many for roles.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

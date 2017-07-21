@@ -2,7 +2,7 @@
 using System.Data.Entity;
 using Data.Models;
 
-namespace Data.Npgsql
+namespace Data.MSSQL
 {
     public interface IShiftPlannerDataContext : IDisposable
     {
@@ -14,6 +14,8 @@ namespace Data.Npgsql
         DbSet<Manager> Managers { get; set; }
         DbSet<Shift> Shifts { get; set; }
         DbSet<CheckIn> CheckIns { get; set; }
+        DbSet<Role> Roles { get; set; }
+
         int SaveChanges();
     }
 }

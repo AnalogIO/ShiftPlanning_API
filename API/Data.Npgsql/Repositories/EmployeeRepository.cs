@@ -8,7 +8,7 @@ using Data.Exceptions;
 using System.Data;
 using Data.Token;
 
-namespace Data.Npgsql.Repositories
+namespace Data.MSSQL.Repositories
 {
     public class EmployeeRepository : IEmployeeRepository, IDisposable
     {

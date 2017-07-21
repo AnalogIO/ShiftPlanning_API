@@ -7,7 +7,7 @@ using Data.Models;
 using Data.Repositories;
 using Data.Token;
 
-namespace Data.Npgsql.Repositories
+namespace Data.MSSQL.Repositories
 {
     public class ManagerRepository : IManagerRepository, IDisposable
     {
