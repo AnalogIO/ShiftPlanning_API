@@ -524,7 +524,7 @@
             If an employee already exist with the given email, the controller will return BadRequest (400).
             </returns>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Login(DataTransferObjects.Manager.ManagerLoginDTO)">
+        <member name="M:API.Controllers.EmployeeController.Login(DataTransferObjects.Employee.EmployeeLoginDTO)">
             <summary>
             Login as the manager with the given credentials in the body
             </summary>
@@ -662,15 +662,6 @@
             The controller constructor.
             </summary>
         </member>
-        <member name="M:API.Controllers.ManagerController.Login(DataTransferObjects.Manager.ManagerLoginDTO)">
-            <summary>
-            Login as the manager with the given credentials in the body
-            </summary>
-            <returns>
-            Returns 'Ok' (200) with a valid token if the provided username and password matches.
-            If the provided credentials are wrong then the controller will return Unauthorized (401).
-            </returns>
-        </member>
         <member name="M:API.Controllers.ManagerController.Validate">
             <summary>
             Validates the token set in the 'Authorization' header.
@@ -739,6 +730,15 @@
             </summary>
             <param name="id">The id of the schedule.</param>
             <returns>Returns 'No Content' (204) if the schedule gets deleted.</returns>
+        </member>
+        <member name="M:API.Controllers.ScheduleController.SetPreferences(System.Int32,System.Collections.Generic.IEnumerable{DataTransferObjects.Employee.PreferenceDTO})">
+            <summary>
+            Creates or updates the preferences from the content in the body.
+            Requires 'Authorization' header set with the token granted upon login.
+            </summary>
+            <returns>
+            Returns 'Ok' (200) if the preferences get saved.
+            </returns>
         </member>
         <member name="M:API.Controllers.ScheduleController.UpdateSchedule(System.Int32,DataTransferObjects.Schedule.UpdateScheduleDTO)">
             <summary>
