@@ -114,6 +114,27 @@ namespace Data.Services
             return _employeeRepository.Login(email, password);
         }
 
-        
+        public Friendship CreateFriendship(Employee employee, int friendId)
+        {
+            if(employee.Friendships.Any(f => f.Friend.Id == friendId)) throw new BadRequestException("A friendship already exist!");
+
+            var friend = _employeeRepository.Read(friendId, employee.Organization.Id);
+            if (friend == null) throw new ObjectNotFoundException("The given id of the friend does not exist!");
+
+            var friendship = new Friendship { Employee = employee, Friend = friend };
+            employee.Friendships.Add(friendship);
+
+            _employeeRepository.Update(employee);
+            return friendship;
+        }
+
+        public void DeleteFriendship(Employee employee, int friendId)
+        {
+            var friendship = employee.Friendships.SingleOrDefault(f => f.Friend.Id == friendId);
+            _employeeRepository.DeleteFriendship(friendship);
+        }
+
+
+
     }
 }

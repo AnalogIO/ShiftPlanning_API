@@ -17,6 +17,7 @@ namespace Data.MSSQL
         DbSet<ScheduledShift> ScheduledShifts { get; set; }
         DbSet<Role> Roles { get; set; }
         DbSet<Preference> Preferences { get; set; }
+        DbSet<Friendship> Friendships { get; set; }
 
         int SaveChanges();
     }

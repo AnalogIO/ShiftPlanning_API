@@ -125,6 +125,12 @@ namespace Data.MSSQL.Repositories
             throw new UnauthorizedAccessException("You entered an incorrect username or password!");
         }
 
+        public void DeleteFriendship(Friendship friendship)
+        {
+            _context.Friendships.Remove(friendship);
+            _context.SaveChanges();
+        }
+
         public void Dispose()
         {
             _context.Dispose();

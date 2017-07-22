@@ -19,6 +19,7 @@ namespace Data.MSSQL
         public DbSet<ScheduledShift> ScheduledShifts { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Preference> Preferences { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
 
         //protected override void OnModelCreating(DbModelBuilder modelBuilder)
         //{

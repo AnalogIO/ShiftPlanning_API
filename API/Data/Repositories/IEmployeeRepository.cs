@@ -15,5 +15,6 @@ namespace Data.Repositories
         void Delete(int id, int organizationId);
         Employee Read(string token);
         Employee Login(string email, string password);
+        void DeleteFriendship(Friendship friendship);
     }
 }

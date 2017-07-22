@@ -16,5 +16,7 @@ namespace Data.Services
         Employee UpdateEmployee(int employeeId, UpdateEmployeeDTO employeeDto, Employee employee, Photo photo);
         void SetPhoto(int employeeId, int organizationId, Photo photo);
         Employee Login(string email, string password);
+        Friendship CreateFriendship(Employee employee, int friendId);
+        void DeleteFriendship(Employee employee, int friendId);
     }
 }
