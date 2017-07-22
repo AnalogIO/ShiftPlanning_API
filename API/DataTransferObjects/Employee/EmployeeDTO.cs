@@ -17,5 +17,7 @@ namespace DataTransferObjects.Employee
         public int? EmployeeTitleId { get; set; }
         public string PhotoRef { get; set; }
         public int? CheckInCount { get; set; }
+        public int WantShifts { get; set; }
+        public string[] Roles { get; set; }
     }
 }

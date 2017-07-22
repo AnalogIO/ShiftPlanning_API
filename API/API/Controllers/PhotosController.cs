@@ -9,6 +9,7 @@ using Data.Services;
 
 namespace API.Controllers
 {
+    [Authorize(Roles = "Manager")]
     [RoutePrefix(RoutePrefix)]
     public class PhotosController : ApiController
     {
@@ -50,16 +51,16 @@ namespace API.Controllers
             return ResponseMessage(message);
         }
 
-        [HttpPost, AdminFilter]
+        [HttpPost]
         public IHttpActionResult Post([FromBody] string base64EncodedPhoto)
         {
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
 
-            var photo = _photoMapper.ParseBase64Photo(base64EncodedPhoto, manager.Organization);
+            var photo = _photoMapper.ParseBase64Photo(base64EncodedPhoto, employee.Organization);
 
-            photo = _photoService.CreatePhoto(photo, manager);
+            photo = _photoService.CreatePhoto(photo, employee);
 
-            return Created($"{Request.RequestUri}/{photo.Id}/{manager.Organization.Id}", photo.Data);
+            return Created($"{Request.RequestUri}/{photo.Id}/{employee.Organization.Id}", photo.Data);
         }
     }
 }

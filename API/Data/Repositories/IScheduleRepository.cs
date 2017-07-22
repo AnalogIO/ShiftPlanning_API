@@ -11,5 +11,7 @@ namespace Data.Repositories
         int Update(Schedule schedule);
         void Delete(int id, int organizationId);
         void DeleteScheduledShift(int scheduleId, int scheduledShiftId, int organizationId);
+        IEnumerable<ScheduledShift> GetScheduledShifts(IEnumerable<int> scheduledShiftIds);
+        void DeletePreferences(IEnumerable<Preference> prefences);
     }
 }

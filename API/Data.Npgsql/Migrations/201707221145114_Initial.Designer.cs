@@ -7,13 +7,13 @@ namespace Data.Npgsql.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class addedscheduletoashiftandalistofshiftstoschedule : IMigrationMetadata
+    public sealed partial class Initial : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(addedscheduletoashiftandalistofshiftstoschedule));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
         
         string IMigrationMetadata.Id
         {
-            get { return "201611051849081_added schedule to a shift and a list of shifts to schedule"; }
+            get { return "201707221145114_Initial"; }
         }
         
         string IMigrationMetadata.Source

@@ -7,7 +7,7 @@ using Data.Repositories;
 using System.Data.Entity;
 using Data.Exceptions;
 
-namespace Data.Npgsql.Repositories
+namespace Data.MSSQL.Repositories
 {
     public class ShiftRepository : IShiftRepository, IDisposable
     {

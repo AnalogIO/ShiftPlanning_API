@@ -52,8 +52,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -66,7 +66,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Employee\PreferenceDTO.cs" />
     <Compile Include="Manager\ManagerValidateTokenDTO.cs" />
+    <Compile Include="Schedule\FindOptimalScheduleDTO.cs" />
     <Compile Include="Schedule\OptimalScheduleResponse.cs" />
     <Compile Include="Schedule\RolloutScheduleDTO.cs" />
     <Compile Include="Shift\AddEmployeesDTO.cs" />
@@ -76,8 +78,8 @@
     <Compile Include="Schedule\CreateScheduleDTO.cs" />
     <Compile Include="Employee\EmployeeDTO.cs" />
     <Compile Include="EmployeeTitles\EmployeeTitleDTO.cs" />
-    <Compile Include="Manager\ManagerLoginDTO.cs" />
-    <Compile Include="Manager\ManagerLoginResponse.cs" />
+    <Compile Include="Employee\EmployeeLoginDTO.cs" />
+    <Compile Include="Employee\EmployeeLoginResponse.cs" />
     <Compile Include="Public\OpeningHours\IntervalOpeningHourDTO.cs" />
     <Compile Include="Public\OpeningHours\IntervalOpeningHoursDTO.cs" />
     <Compile Include="Public\OpeningHours\IsOpenDTO.cs" />

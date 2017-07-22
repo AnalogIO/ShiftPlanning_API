@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Data.Models;
 
-namespace Data.Npgsql.Repositories
+namespace Data.MSSQL.Repositories
 {
     public class PhotoRepository : IPhotoRepository
     {

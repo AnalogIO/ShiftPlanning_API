@@ -23,11 +23,11 @@ namespace Data.Services
             return _photoRepository.Read(photoId, organizationShortKey);
         }
 
-        public Photo CreatePhoto(Photo photo, Manager manager)
+        public Photo CreatePhoto(Photo photo, Employee employee)
         {
-            if (photo.Organization != manager.Organization)
+            if (photo.Organization != employee.Organization)
             {
-                photo.Organization = manager.Organization;
+                photo.Organization = employee.Organization;
             }
 
             return _photoRepository.Create(photo);

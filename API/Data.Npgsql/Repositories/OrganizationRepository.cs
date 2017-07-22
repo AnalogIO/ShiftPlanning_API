@@ -2,7 +2,7 @@
 using Data.Repositories;
 using Data.Models;
 
-namespace Data.Npgsql.Repositories
+namespace Data.MSSQL.Repositories
 {
     public class OrganizationRepository : IOrganizationRepository
     {
