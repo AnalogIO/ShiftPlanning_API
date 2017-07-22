@@ -1,4 +1,4 @@
-namespace Data.MSSQL.Migrations
+namespace Data.Npgsql.Migrations
 {
     using System;
     using System.Data.Entity;

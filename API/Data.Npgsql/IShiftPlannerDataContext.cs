@@ -14,7 +14,9 @@ namespace Data.MSSQL
         DbSet<Manager> Managers { get; set; }
         DbSet<Shift> Shifts { get; set; }
         DbSet<CheckIn> CheckIns { get; set; }
+        DbSet<ScheduledShift> ScheduledShifts { get; set; }
         DbSet<Role> Roles { get; set; }
+        DbSet<Preference> Preferences { get; set; }
 
         int SaveChanges();
     }

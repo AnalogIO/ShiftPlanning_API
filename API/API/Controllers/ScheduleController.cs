@@ -8,8 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Http.Description;
 using Data.Models;
 using Data.Services;
+using DataTransferObjects.Employee;
 using DataTransferObjects.Schedule;
 using DataTransferObjects.ScheduledShift;
 
@@ -135,6 +137,35 @@ namespace API.Controllers
 
             _scheduleService.DeleteSchedule(id, employee);
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+        }
+
+        // POST api/schedules/{id}/preferences
+        /// <summary>
+        /// Creates or updates the preferences from the content in the body.
+        /// Requires 'Authorization' header set with the token granted upon login.
+        /// </summary>
+        /// <returns>
+        /// Returns 'Ok' (200) if the preferences get saved.
+        /// </returns>
+        [Authorize(Roles = "Employee")]
+        [HttpPost, Route("{id}/setpreferences")]
+        [ResponseType(typeof(IEnumerable<PreferenceDTO>))]
+        public IHttpActionResult SetPreferences(int id, IEnumerable<PreferenceDTO> preferencesDtos)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
+
+            var preferences = _scheduleService.CreateOrUpdatePreferences(employee, id, preferencesDtos);
+            if (preferences != null)
+            {
+                return Ok(Mapper.Map(preferences));
+            }
+            return BadRequest("The preferences could not be created or updated!");
         }
 
         // PUT api/schedules/{id}
@@ -319,30 +350,11 @@ namespace API.Controllers
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
             if (employee == null) return BadRequest("Provided token is invalid!");
 
-            var httpRequest = HttpContext.Current.Request;
-
-            var preferenceFile = httpRequest.Files["preferences"];
-            var additionalInfoFile = httpRequest.Files["additionalInfo"];
-            var dislikesFile = httpRequest.Files["dislikes"];
-
-            if (preferenceFile == null || additionalInfoFile == null || dislikesFile == null)
-            {
-                return BadRequest("Please provide a form with both a file input named preferences, a file input named additionalInfo and a file input named dislikes");
-            }
-
             var schedule = _scheduleService.GetSchedule(id, employee);
             if (schedule == null) return NotFound();
 
-            var preferenceFileContent = new StreamContent(preferenceFile.InputStream);
-            var additionalInfoFileContent = new StreamContent(additionalInfoFile.InputStream);
-            var dislikesFileContent = new StreamContent(dislikesFile.InputStream);
-            using (var client = new HttpClient())
-            using (var formData = new MultipartFormDataContent())
-            {
-                formData.Add(preferenceFileContent, "prefs", "prefs");
-                formData.Add(additionalInfoFileContent, "ai", "ai");
-                formData.Add(dislikesFileContent, "dislikes", "dislikes");
-                var response = client.PostAsync($"http://80.161.174.210/scheduleplanner/api/schedule?weekCount={schedule.NumberOfWeeks}", formData).Result;
+            using (var client = new HttpClient()) {
+                var response = client.PostAsJsonAsync($"http://80.161.174.210/scheduleplanner/api/schedule/findoptimalschedule", Mapper.MapToFindOptimalScheduleDto(schedule)).Result;
                 if (!response.IsSuccessStatusCode)
                 {
                     return null;

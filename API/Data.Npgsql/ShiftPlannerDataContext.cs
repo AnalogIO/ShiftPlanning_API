@@ -16,7 +16,9 @@ namespace Data.MSSQL
         public DbSet<Manager> Managers { get; set; }
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<CheckIn> CheckIns { get; set; }
+        public DbSet<ScheduledShift> ScheduledShifts { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Preference> Preferences { get; set; }
 
         //protected override void OnModelCreating(DbModelBuilder modelBuilder)
         //{

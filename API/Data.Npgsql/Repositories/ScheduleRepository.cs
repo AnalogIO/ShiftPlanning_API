@@ -85,5 +85,16 @@ namespace Data.MSSQL.Repositories
             _context.SaveChanges();
 
         }
+
+        public IEnumerable<ScheduledShift> GetScheduledShifts(IEnumerable<int> scheduledShiftIds)
+        {
+            return _context.ScheduledShifts.Where(x => scheduledShiftIds.Contains(x.Id));
+        }
+
+        public void DeletePreferences(IEnumerable<Preference> preferences)
+        {
+            _context.Preferences.RemoveRange(preferences);
+            _context.SaveChanges();
+        }
     }
 }

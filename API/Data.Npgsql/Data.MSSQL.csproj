@@ -104,17 +104,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\IoCConfig.cs" />
-    <Compile Include="Migrations\201707211036507_initial migration for mssql.cs" />
-    <Compile Include="Migrations\201707211036507_initial migration for mssql.Designer.cs">
-      <DependentUpon>201707211036507_initial migration for mssql.cs</DependentUpon>
+    <Compile Include="Migrations\201707221145114_Initial.cs" />
+    <Compile Include="Migrations\201707221145114_Initial.Designer.cs">
+      <DependentUpon>201707221145114_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201707211149105_added roles to context.cs" />
-    <Compile Include="Migrations\201707211149105_added roles to context.Designer.cs">
-      <DependentUpon>201707211149105_added roles to context.cs</DependentUpon>
+    <Compile Include="Migrations\201707221548020_added wantshifts to employees.cs" />
+    <Compile Include="Migrations\201707221548020_added wantshifts to employees.Designer.cs">
+      <DependentUpon>201707221548020_added wantshifts to employees.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201707211154221_many to many for roles.cs" />
-    <Compile Include="Migrations\201707211154221_many to many for roles.Designer.cs">
-      <DependentUpon>201707211154221_many to many for roles.cs</DependentUpon>
+    <Compile Include="Migrations\201707221737058_added friendship table as relation between employees.cs" />
+    <Compile Include="Migrations\201707221737058_added friendship table as relation between employees.Designer.cs">
+      <DependentUpon>201707221737058_added friendship table as relation between employees.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -140,14 +140,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201707211036507_initial migration for mssql.resx">
-      <DependentUpon>201707211036507_initial migration for mssql.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201707221145114_Initial.resx">
+      <DependentUpon>201707221145114_Initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707211149105_added roles to context.resx">
-      <DependentUpon>201707211149105_added roles to context.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201707221548020_added wantshifts to employees.resx">
+      <DependentUpon>201707221548020_added wantshifts to employees.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707211154221_many to many for roles.resx">
-      <DependentUpon>201707211154221_many to many for roles.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201707221737058_added friendship table as relation between employees.resx">
+      <DependentUpon>201707221737058_added friendship table as relation between employees.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

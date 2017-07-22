@@ -15,12 +15,14 @@ namespace Data.Services
         private readonly IOrganizationRepository _organizationRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmployeeTitleRepository _employeeTitleRepository;
+        private readonly IScheduleRepository _scheduleRepository;
 
-        public EmployeeService(IOrganizationRepository organizationRepository, IEmployeeRepository employeeRepository, IEmployeeTitleRepository employeeTitleRepository)
+        public EmployeeService(IOrganizationRepository organizationRepository, IEmployeeRepository employeeRepository, IEmployeeTitleRepository employeeTitleRepository, IScheduleRepository scheduleRepository)
         {
             _organizationRepository = organizationRepository;
             _employeeRepository = employeeRepository;
             _employeeTitleRepository = employeeTitleRepository;
+            _scheduleRepository = scheduleRepository;
         }
 
         public IEnumerable<Employee> GetEmployees(int organizationId)
@@ -111,5 +113,7 @@ namespace Data.Services
         {
             return _employeeRepository.Login(email, password);
         }
+
+        
     }
 }

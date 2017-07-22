@@ -12,10 +12,12 @@ namespace Data.Models
         public string LastName { get; set; }
         public virtual EmployeeTitle EmployeeTitle { get; set; }
         public bool Active { get; set; }
+        public int WantShifts { get; set; }
         public virtual ICollection<Shift> Shifts { get; set; }
         public virtual ICollection<CheckIn> CheckIns { get; set; }
         public virtual ICollection<ScheduledShift> ScheduledShifts { get; set; }
         public virtual ICollection<Preference> Preferences { get; set; }
+        public virtual ICollection<Friendship> Friendships { get; set; }
         public virtual Organization Organization { get; set; }
         public virtual Photo Photo { get; set; }
         public virtual ICollection<Role> Roles { get; set; }

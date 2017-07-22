@@ -18,7 +18,6 @@ namespace API.Controllers
     /// <summary>
     /// Controller to manipulate with the employees.
     /// </summary>
-    [Authorize(Roles = "Manager")]
     [RoutePrefix("api/employees")]
     public class EmployeeController : ApiController
     {
@@ -39,6 +38,7 @@ namespace API.Controllers
             _photoMapper = photoMapper;
         }
 
+        [Authorize(Roles = "Employee")]
         [HttpDelete, Route("{userId:int}/photo")]
         public IHttpActionResult DeletePhoto([FromUri] int userId)
         {
@@ -50,6 +50,7 @@ namespace API.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "Employee")]
         [HttpPut, Route("{userId:int}/photo")]
         public IHttpActionResult UpdatePhoto([FromUri] int userId, [FromBody] string profilePhoto)
         {
@@ -79,6 +80,7 @@ namespace API.Controllers
         /// Returns 'Created' (201) if the employee gets created.
         /// If an employee already exist with the given email, the controller will return BadRequest (400).
         /// </returns>
+        [Authorize(Roles = "Manager")]
         [HttpPost, Route("")]
         [ResponseType(typeof(EmployeeDTO))]
         public IHttpActionResult Register(CreateEmployeeDTO employeeDto)
@@ -128,7 +130,7 @@ namespace API.Controllers
         /// </returns>
         [AllowAnonymous]
         [HttpPost, Route("login")]
-        public IHttpActionResult Login(ManagerLoginDTO loginDto)
+        public IHttpActionResult Login(EmployeeLoginDTO loginDto)
         {
             if (!ModelState.IsValid)
             {
@@ -138,12 +140,13 @@ namespace API.Controllers
             var employee = _employeeService.Login(loginDto.Username.Trim(), loginDto.Password);
             if (employee != null)
             {
-                var responseDto = new ManagerLoginResponse
+                var responseDto = new EmployeeLoginResponse
                 {
                     Token = employee.Tokens.LastOrDefault()?.TokenHash,
                     OrganizationId = employee.Organization.Id,
                     OrganizationName = employee.Organization.Name,
-                    Expires = int.Parse(ConfigurationManager.AppSettings["TokenAgeHour"]) * 60 * 60 // from hours to seconds 
+                    Expires = int.Parse(ConfigurationManager.AppSettings["TokenAgeHour"]) * 60 * 60, // from hours to seconds 
+                    Employee = Mapper.Map(employee)
                 };
                 return Ok(responseDto);
             }
@@ -160,6 +163,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Created' (201) if the employees gets created.
         /// </returns>
+        [Authorize(Roles = "Manager")]
         [HttpPost, Route("createmany")]
         [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
         public IHttpActionResult RegisterMany(CreateEmployeeDTO[] employeeDtos)
@@ -188,6 +192,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns an array of employees.
         /// </returns>
+        [Authorize(Roles = "Manager, Employee")]
         [HttpGet, Route("")]
         [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
         public IHttpActionResult Get()
@@ -210,6 +215,7 @@ namespace API.Controllers
         /// Returns the employee with the given id. 
         /// If no employee is found with the corresponding id, the controller will return NotFound (404)
         /// </returns>
+        [Authorize(Roles = "Manager")]
         [HttpGet, Route("{id}")]
         [ResponseType(typeof(EmployeeDTO))]
         public IHttpActionResult Get(int id)
@@ -242,6 +248,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns an array of employees.
         /// </returns>
+        [Authorize(Roles = "Application")]
         [HttpGet, Route("")]
         [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
         public IHttpActionResult Get(string apiKey)
@@ -265,6 +272,7 @@ namespace API.Controllers
         /// Returns 'No Content' (204) if the employee gets updated.
         /// If no employee is found with the given id, the controller will return NotFound (404)
         /// </returns>
+        [Authorize(Roles = "Manager")]
         [HttpPut, Route("{id}")]
         public IHttpActionResult Put(int id, UpdateEmployeeDTO employeeDto)
         {
@@ -305,6 +313,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id">The id of the employee.</param>
         /// <returns>Returns 'No Content' (204) if the employee gets deleted.</returns>
+        [Authorize(Roles = "Manager")]
         [HttpDelete, Route("{id}")]
         public IHttpActionResult Delete(int id)
         {

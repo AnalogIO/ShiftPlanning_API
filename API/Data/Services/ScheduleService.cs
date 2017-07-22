@@ -5,6 +5,7 @@ using System.IdentityModel;
 using System.Linq;
 using Data.Models;
 using Data.Repositories;
+using DataTransferObjects.Employee;
 using DataTransferObjects.Schedule;
 using DataTransferObjects.ScheduledShift;
 
@@ -164,6 +165,32 @@ namespace Data.Services
         public void DeleteScheduledShift(int scheduleId, int scheduledShiftId, Employee employee)
         {
             _scheduleRepository.DeleteScheduledShift(scheduleId, scheduledShiftId, employee.Organization.Id);
+        }
+
+        public IEnumerable<ScheduledShift> GetScheduledShifts(IEnumerable<int> scheduledShiftIds)
+        {
+            return _scheduleRepository.GetScheduledShifts(scheduledShiftIds);
+        }
+
+        public IEnumerable<Preference> CreateOrUpdatePreferences(Employee employee, int scheduleId, IEnumerable<PreferenceDTO> preferences)
+        {
+            var scheduledShifts = _scheduleRepository.Read(scheduleId, employee.Organization.Id).ScheduledShifts.Where(s => preferences.Select(p => p.ScheduledShiftId).Contains(s.Id)).ToList();
+            var prefsToRemove = employee.Preferences.Where(p => p.ScheduledShift.Schedule.Id == scheduleId).ToList();
+
+            _scheduleRepository.DeletePreferences(prefsToRemove);
+
+            foreach (var p in preferences)
+            {
+                var newPref = new Preference
+                {
+                    Employee = employee,
+                    Priority = p.Priority,
+                    ScheduledShift = scheduledShifts.Single(s => s.Id == p.ScheduledShiftId)
+                };
+                employee.Preferences.Add(newPref);   
+            }
+            _employeeRepository.Update(employee);
+            return employee.Preferences;
         }
 
     }

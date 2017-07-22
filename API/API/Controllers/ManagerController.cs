@@ -27,37 +27,6 @@ namespace API.Controllers
             _managerRepository = managerRepository;
         }
 
-        // POST api/manager/login
-        /// <summary>
-        /// Login as the manager with the given credentials in the body
-        /// </summary>
-        /// <returns>
-        /// Returns 'Ok' (200) with a valid token if the provided username and password matches.
-        /// If the provided credentials are wrong then the controller will return Unauthorized (401).
-        /// </returns>
-        [AllowAnonymous]
-        [HttpPost, Route("login")]
-        public IHttpActionResult Login(ManagerLoginDTO loginDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var manager = _managerRepository.Login(loginDto.Username.Trim(), loginDto.Password);
-            if (manager != null)
-            {
-                var responseDto = new ManagerLoginResponse
-                {
-                    Token = manager.Tokens.LastOrDefault()?.TokenHash, OrganizationId = manager.Organization.Id, OrganizationName = manager.Organization.Name, Expires = int.Parse(ConfigurationManager.AppSettings["TokenAgeHour"])*60*60 // from hours to seconds 
-                };
-                return Ok(responseDto);
-            }
-
-            HttpResponseMessage response = Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "You entered an incorrect username or password!" });
-            return ResponseMessage(response);
-        }
-
         // POST api/manager/validate
         /// <summary>
         /// Validates the token set in the 'Authorization' header.
