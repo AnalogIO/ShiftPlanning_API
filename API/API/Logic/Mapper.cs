@@ -52,6 +52,17 @@ namespace API.Logic
             return scheduledShifts.Select(Map);
         }
 
+        public static ScheduledShiftDTOSimple MapSimple(ScheduledShift scheduledShift)
+        {
+            return new ScheduledShiftDTOSimple { Id = scheduledShift.Id, Day = scheduledShift.Day, Start = scheduledShift.Start.ToString(@"hh\:mm"), End = scheduledShift.End.ToString(@"hh\:mm") };
+
+        }
+
+        public static IEnumerable<ScheduledShiftDTOSimple> MapSimple(IEnumerable<ScheduledShift> scheduledShifts)
+        {
+            return scheduledShifts.Select(MapSimple);
+        }
+
         public static ScheduleDTO Map(Schedule schedule)
         {
             return new ScheduleDTO { Id = schedule.Id, Name = schedule.Name, NumberOfWeeks = schedule.NumberOfWeeks, ScheduledShifts = Map(schedule.ScheduledShifts) };
@@ -60,6 +71,16 @@ namespace API.Logic
         public static IEnumerable<ScheduleDTO> Map(IEnumerable<Schedule> schedules)
         {
             return schedules.Select(Map);
+        }
+
+        public static ScheduleDTOSimple MapSimple(Schedule schedule)
+        {
+            return new ScheduleDTOSimple { Id = schedule.Id, Name = schedule.Name, NumberOfWeeks = schedule.NumberOfWeeks, ScheduledShifts = MapSimple(schedule.ScheduledShifts) };
+        }
+
+        public static IEnumerable<ScheduleDTOSimple> MapSimple(IEnumerable<Schedule> schedules)
+        {
+            return schedules.Select(MapSimple);
         }
 
         public static CheckInDTO Map(CheckIn checkIn)

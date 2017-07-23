@@ -73,6 +73,8 @@
     <Compile Include="Schedule\FindOptimalScheduleDTO.cs" />
     <Compile Include="Schedule\OptimalScheduleResponse.cs" />
     <Compile Include="Schedule\RolloutScheduleDTO.cs" />
+    <Compile Include="Schedule\ScheduledShiftDTOSimple.cs" />
+    <Compile Include="Schedule\ScheduleDTOSimple.cs" />
     <Compile Include="Shift\AddEmployeesDTO.cs" />
     <Compile Include="Shift\CheckInDTO.cs" />
     <Compile Include="Employee\CreateEmployeeDTO.cs" />

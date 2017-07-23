@@ -20,7 +20,6 @@ namespace API.Controllers
     /// <summary>
     /// Controller to manage schedule
     /// </summary>
-    [Authorize(Roles = "Manager")]
     [RoutePrefix("api/schedules")]
     public class ScheduleController : ApiController
     {
@@ -48,6 +47,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns an array of schedules.
         /// </returns>
+        [Authorize(Roles = "Manager, Employee")]
         [HttpGet, Route("")]
         public IHttpActionResult Get()
         {
@@ -68,6 +68,7 @@ namespace API.Controllers
         /// Returns the schedule with the given id. 
         /// If no schedule is found with the corresponding id, the controller will return NotFound (404)
         /// </returns>
+        [Authorize(Roles = "Manager, Employee")]
         [HttpGet, Route("{id}")]
         public IHttpActionResult Get(int id)
         {
@@ -82,7 +83,47 @@ namespace API.Controllers
             var schedule = _scheduleService.GetSchedule(id, employee);
             if (schedule != null)
             {
-                return Ok(Mapper.Map(schedule));
+                if (employee.Roles.Any(r => r.Name == "Manager"))
+                {
+                    return Ok(Mapper.Map(schedule));
+                }
+                else
+                {
+                    return Ok(Mapper.MapSimple(schedule));
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        // GET api/schedules/{id}/preferences
+        /// <summary>
+        /// Gets the preferences for the schedule with the given id.
+        /// Requires 'Authorization' header set with the token granted upon login.
+        /// </summary>
+        /// <param name="id">The id of the schedule.</param>
+        /// <returns>
+        /// Returns the preferences of the schedule with the given id. 
+        /// If no schedule is found with the corresponding id, the controller will return NotFound (404)
+        /// </returns>
+        [Authorize(Roles = "Employee")]
+        [HttpGet, Route("{id}/preferences")]
+        public IHttpActionResult GetPreferences(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
+
+            var schedule = _scheduleService.GetSchedule(id, employee);
+            if (schedule != null)
+            {
+                return Ok(Mapper.Map(employee.Preferences.Where(p => p.ScheduledShift.Schedule.Id == schedule.Id)));
             }
             else
             {
@@ -98,6 +139,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Created' (201) if the schedule gets created.
         /// </returns>
+        [Authorize(Roles = "Manager")]
         [HttpPost, Route("")]
         public IHttpActionResult Register(CreateScheduleDTO scheduleDto)
         {
@@ -124,6 +166,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id">The id of the schedule.</param>
         /// <returns>Returns 'No Content' (204) if the schedule gets deleted.</returns>
+        [Authorize(Roles = "Manager")]
         [HttpDelete, Route("{id}")]
         public IHttpActionResult Delete(int id)
         {
@@ -176,6 +219,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'No Content' (204) if the schedule gets updated.
         /// </returns>
+        [Authorize(Roles = "Manager")]
         [HttpPut, Route("{id}")]
         public IHttpActionResult UpdateSchedule(int id, UpdateScheduleDTO scheduleDto)
         {
@@ -205,6 +249,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Created' (201) if the scheduled shift gets created.
         /// </returns>
+        [Authorize(Roles = "Manager")]
         [HttpPost, Route("{id}")]
         public IHttpActionResult CreateScheduledShift(int id, CreateScheduledShiftDTO scheduledShiftDto)
         {
@@ -233,6 +278,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'No Content' (204) if the scheduled shift gets updated.
         /// </returns>
+        [Authorize(Roles = "Manager")]
         [HttpPut, Route("{scheduleId}/{scheduledShiftId}")]
         public IHttpActionResult UpdateScheduledShift(int scheduleId, int scheduledShiftId, UpdateScheduledShiftDTO scheduledShiftDto)
         {
@@ -262,6 +308,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'No Content' (204) if the scheduled shift gets deleted.
         /// </returns>
+        [Authorize(Roles = "Manager")]
         [HttpDelete, Route("{scheduleId}/{scheduledShiftId}")]
         public IHttpActionResult DeleteScheduledShift(int scheduleId, int scheduledShiftId)
         {
@@ -280,6 +327,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Created' (201) if the scheduled shifts gets created.
         /// </returns>
+        [Authorize(Roles = "Manager")]
         [HttpPost, Route("{id}/createmultiple")]
         public IHttpActionResult CreateMultipleScheduledShift(int id, IEnumerable<CreateScheduledShiftDTO> scheduledShiftsDto)
         {
@@ -309,6 +357,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Created' (201) if the scheduled gets rolled out.
         /// </returns>
+        [Authorize(Roles = "Manager")]
         [HttpPost, Route("{id}/rollout")]
         public IHttpActionResult RolloutSchedule(int id, RolloutScheduleDTO rolloutDto)
         {
@@ -339,6 +388,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Ok' (200) if an optimal schedule can be found.
         /// </returns>
+        [Authorize(Roles = "Manager")]
         [HttpPost, Route("{id}/findoptimal")]
         public async Task<IHttpActionResult> FindOptimalSchedule(int id)
         {
