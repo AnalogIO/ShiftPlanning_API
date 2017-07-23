@@ -116,12 +116,12 @@ namespace Data.Services
 
         public Friendship CreateFriendship(Employee employee, int friendId)
         {
-            if(employee.Friendships.Any(f => f.Friend.Id == friendId)) throw new BadRequestException("A friendship already exist!");
+            if(employee.Friendships.Any(f => f.Friend_Id == friendId)) throw new BadRequestException("A friendship already exist!");
 
             var friend = _employeeRepository.Read(friendId, employee.Organization.Id);
             if (friend == null) throw new ObjectNotFoundException("The given id of the friend does not exist!");
 
-            var friendship = new Friendship { Employee = employee, Friend = friend };
+            var friendship = new Friendship { Friend_Id = friend.Id };
             employee.Friendships.Add(friendship);
 
             _employeeRepository.Update(employee);
@@ -130,7 +130,7 @@ namespace Data.Services
 
         public void DeleteFriendship(Employee employee, int friendId)
         {
-            var friendship = employee.Friendships.SingleOrDefault(f => f.Friend.Id == friendId);
+            var friendship = employee.Friendships.SingleOrDefault(f => f.Friend_Id == friendId);
             _employeeRepository.DeleteFriendship(friendship);
         }
 

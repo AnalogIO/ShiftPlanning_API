@@ -354,29 +354,23 @@ namespace API.Controllers
             if (schedule == null) return NotFound();
 
             using (var client = new HttpClient()) {
-                var response = client.PostAsJsonAsync($"http://80.161.174.210/scheduleplanner/api/schedule/findoptimalschedule", Mapper.MapToFindOptimalScheduleDto(schedule)).Result;
+                var dto = Mapper.MapToFindOptimalScheduleDto(schedule);
+                var response = client.PostAsJsonAsync($"http://80.161.174.210/scheduleplanner/api/schedule/findoptimalschedule", dto).Result;
                 if (!response.IsSuccessStatusCode)
                 {
-                    return null;
+                    return BadRequest();
                 }
 
+                var assignments = await response.Content.ReadAsAsync<List<AssignmentDTO>>();
 
-                var shifts = await response.Content.ReadAsAsync<List<OptimalScheduleResponse>>();
-
-                var scheduledShiftList = new List<ScheduledShift>();
                 var emps = _employeeService.GetEmployees(employee.Organization.Id).ToList();
-                for (var i = 0; i < shifts.Count; i++)
+
+                foreach(var ss in schedule.ScheduledShifts) ss.Employees.Clear();
+
+                foreach(var ass in assignments)
                 {
-                    var scheduledShift = new ScheduledShift();
-                    scheduledShift.Day = shifts[i].InternalShift.Day + (shifts[i].InternalShift.MultiplierNum-1)*7;
-                    scheduledShift.Employees =
-                             emps.Where(e => shifts[i].Baristas.Select(b => b.Name).Contains($"{e.FirstName} {e.LastName}"))
-                                .ToList();
-                    scheduledShift.Start = TimeSpan.Parse(shifts[i].InternalShift.Time.Substring(0, 5).Trim());
-                    scheduledShift.End = TimeSpan.Parse(shifts[i].InternalShift.Time.Substring(8, 5).Trim());
-                    if (!scheduledShift.Employees.Any()) continue;
-                    scheduledShiftList.Add(scheduledShift);
-                    schedule.ScheduledShifts.Add(scheduledShift);
+                    var ss = schedule.ScheduledShifts.FirstOrDefault(s => s.Id == ass.ShiftId);
+                    ss.Employees.Add(emps.SingleOrDefault(e => e.Id == ass.BaristaId));
                 }
 
                 return Ok(Mapper.Map(_scheduleService.UpdateSchedule(schedule, employee)));

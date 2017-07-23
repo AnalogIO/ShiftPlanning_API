@@ -7,13 +7,13 @@ namespace Data.Npgsql.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class addedfriendshiptableasrelationbetweenemployees : IMigrationMetadata
+    public sealed partial class friendships : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(addedfriendshiptableasrelationbetweenemployees));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(friendships));
         
         string IMigrationMetadata.Id
         {
-            get { return "201707221737058_added friendship table as relation between employees"; }
+            get { return "201707231053399_friendships"; }
         }
         
         string IMigrationMetadata.Source

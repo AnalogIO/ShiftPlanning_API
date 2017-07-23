@@ -103,7 +103,7 @@ namespace API.Logic
 
         public static FindOptimalScheduleDTO MapToFindOptimalScheduleDto(Schedule schedule)
         {
-            var employees = schedule.ScheduledShifts.SelectMany(ss => ss.Preferences.Select(p => p.Employee));
+            var employees = schedule.ScheduledShifts.SelectMany(ss => ss.Preferences.Select(p => p.Employee)).Distinct();
             var preferences = new List<FindOptimalSchedulePreferencesDTO>();
             foreach (var employee in employees)
             {
@@ -120,7 +120,7 @@ namespace API.Logic
                 {
                     BaristaId = employee.Id,
                     Preferences = prefs,
-                    Friendships = employee.Friendships.Select(f => f.Friend.Id).ToArray(),
+                    Friendships = employee.Friendships.Select(f => f.Friend_Id).ToArray(),
                     WantShifts = employee.WantShifts
                 };
                 preferences.Add(baristaPrefs);

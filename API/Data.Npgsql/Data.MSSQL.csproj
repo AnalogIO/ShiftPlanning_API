@@ -112,9 +112,9 @@
     <Compile Include="Migrations\201707221548020_added wantshifts to employees.Designer.cs">
       <DependentUpon>201707221548020_added wantshifts to employees.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201707221737058_added friendship table as relation between employees.cs" />
-    <Compile Include="Migrations\201707221737058_added friendship table as relation between employees.Designer.cs">
-      <DependentUpon>201707221737058_added friendship table as relation between employees.cs</DependentUpon>
+    <Compile Include="Migrations\201707231053399_friendships.cs" />
+    <Compile Include="Migrations\201707231053399_friendships.Designer.cs">
+      <DependentUpon>201707231053399_friendships.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -146,8 +146,8 @@
     <EmbeddedResource Include="Migrations\201707221548020_added wantshifts to employees.resx">
       <DependentUpon>201707221548020_added wantshifts to employees.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707221737058_added friendship table as relation between employees.resx">
-      <DependentUpon>201707221737058_added friendship table as relation between employees.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201707231053399_friendships.resx">
+      <DependentUpon>201707231053399_friendships.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

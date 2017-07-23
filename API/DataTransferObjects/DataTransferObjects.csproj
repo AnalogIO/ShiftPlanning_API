@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Employee\PreferenceDTO.cs" />
     <Compile Include="Manager\ManagerValidateTokenDTO.cs" />
+    <Compile Include="Schedule\AssignmentDTO.cs" />
     <Compile Include="Schedule\FindOptimalScheduleDTO.cs" />
     <Compile Include="Schedule\OptimalScheduleResponse.cs" />
     <Compile Include="Schedule\RolloutScheduleDTO.cs" />
