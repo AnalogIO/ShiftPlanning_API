@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Models
+namespace Data.DTOModels
 {
-    public class Assignment
+    public class AssignmentDTO
     {
         public int ShiftId { get; set; }
         public int BaristaId { get; set; }

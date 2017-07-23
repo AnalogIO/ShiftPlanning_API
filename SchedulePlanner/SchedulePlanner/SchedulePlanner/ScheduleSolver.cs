@@ -28,7 +28,7 @@ namespace SchedulePlanner
             _likeMap = new List<int>[preferences.ToList().Count];
         }
 
-        public IEnumerable<Assignment> Solve()
+        public IEnumerable<AssignmentDTO> Solve()
         {
             var solver = new Solver("AnalogSchedulePlanner", Solver.CBC_MIXED_INTEGER_PROGRAMMING);
 
@@ -118,7 +118,7 @@ namespace SchedulePlanner
 
             var status = solver.Solve();
 
-            var schedule = new List<Assignment>();
+            var schedule = new List<AssignmentDTO>();
 
             if (status != Solver.OPTIMAL)
             {
@@ -131,7 +131,7 @@ namespace SchedulePlanner
                 for (var j = 0; j < _preferences.ToList().Count; j++)
                 {
                     if (employeeMatrix[i, j].SolutionValue() == 0.0) continue;
-                    schedule.Add(new Assignment { ShiftId = _shifts.ElementAt(i).Id, BaristaId = _preferences.ElementAt(j).Id });
+                    schedule.Add(new AssignmentDTO { ShiftId = _shifts.ElementAt(i).Id, BaristaId = _preferences.ElementAt(j).Id });
                 }
             }
             return schedule;

@@ -44,9 +44,8 @@
     <Compile Include="DTOModels\PreferenceDTO.cs" />
     <Compile Include="DTOModels\ScheduleDTO.cs" />
     <Compile Include="DTOModels\ShiftDTO.cs" />
-    <Compile Include="Models\Assignment.cs" />
+    <Compile Include="DTOModels\AssignmentDTO.cs" />
     <Compile Include="Models\Barista.cs" />
-    <Compile Include="Models\InternalShift.cs" />
     <Compile Include="Models\Preference.cs" />
     <Compile Include="Models\Shift.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
