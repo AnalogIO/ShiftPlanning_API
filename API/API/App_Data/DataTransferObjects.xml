@@ -63,6 +63,21 @@
             May be left empty.
             </summary>
         </member>
+        <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.FriendshipIds">
+            <summary>
+            An array stating the ids of the user's friends
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.OldPassword">
+            <summary>
+            The old password of the employee.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.NewPassword">
+            <summary>
+            The new password of the employee.
+            </summary>
+        </member>
         <member name="P:DataTransferObjects.Shift.CreateShiftDTO.EmployeeIds">
             <summary>
             Array of employee ids

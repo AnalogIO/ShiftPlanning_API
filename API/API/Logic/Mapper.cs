@@ -32,7 +32,8 @@ namespace API.Logic
                 PhotoRef = $"{routeBase}/{PhotosController.RoutePrefix}/{employee.Photo.Id}/{employee.Organization.Id}",
                 CheckInCount = employee.CheckIns?.Count,
                 Roles = employee.Roles.Select(r => r.Name).ToArray(),
-                WantShifts = employee.WantShifts
+                WantShifts = employee.WantShifts,
+                FriendshipIds = employee.Friendships.Select(f => f.Friend_Id).ToArray()
             };
         }
 
@@ -99,6 +100,16 @@ namespace API.Logic
         public static IEnumerable<PreferenceDTO> Map(IEnumerable<Preference> preferences)
         {
             return preferences.Select(Map);
+        }
+
+        public static EmployeeDTOSimple MapSimple(Employee employee)
+        {
+            return new EmployeeDTOSimple { Id = employee.Id, FirstName = employee.FirstName, LastName = employee.LastName };
+        }
+
+        public static IEnumerable<EmployeeDTOSimple> MapSimple(IEnumerable<Employee> employees)
+        {
+            return employees.Select(MapSimple);
         }
 
         public static FindOptimalScheduleDTO MapToFindOptimalScheduleDto(Schedule schedule)

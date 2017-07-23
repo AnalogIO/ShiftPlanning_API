@@ -7,6 +7,7 @@ using System;
 using System.Data;
 using System.IdentityModel;
 using Data.Exceptions;
+using Data.Token;
 
 namespace Data.Services
 {
@@ -67,11 +68,36 @@ namespace Data.Services
         {
             var updateEmployee = _employeeRepository.Read(employeeId, employee.Organization.Id);
             if (updateEmployee == null) throw new ObjectNotFoundException("Could not find an employee corresponding to the given id");
+            
+            if(employeeDto.OldPassword != null && employeeDto.NewPassword != null)
+            {
+                if(Login(updateEmployee.Email, employeeDto.OldPassword) != null)
+                {
+                    var salt = HashManager.GenerateSalt();
+                    var hashedPw = HashManager.Hash(employeeDto.NewPassword + salt);
+                    updateEmployee.Salt = salt;
+                    updateEmployee.Password = hashedPw;
+                }
+            }
 
             updateEmployee.Email = employeeDto.Email;
             updateEmployee.FirstName = employeeDto.FirstName;
             updateEmployee.LastName = employeeDto.LastName;
             updateEmployee.Active = employeeDto.Active;
+
+            var friendshipsToRemove = updateEmployee.Friendships.Where(f => !employeeDto.FriendshipIds.Contains(f.Friend_Id)).Select(f => f.Friend_Id).ToList();
+
+            foreach(var f in friendshipsToRemove)
+            {
+                DeleteFriendship(updateEmployee, f);
+            }
+
+            foreach (var id in employeeDto.FriendshipIds)
+            {
+                if (updateEmployee.Friendships.Any(f => f.Friend_Id == id)) continue;
+                if (_employeeRepository.Read(id, employee.Organization.Id) == null) continue;
+                updateEmployee.Friendships.Add(new Friendship { Friend_Id = id });
+            }
 
             if (photo != null)
             {

@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Employee\EmployeeDTOSimple.cs" />
     <Compile Include="Employee\PreferenceDTO.cs" />
     <Compile Include="Manager\ManagerValidateTokenDTO.cs" />
     <Compile Include="Schedule\AssignmentDTO.cs" />
