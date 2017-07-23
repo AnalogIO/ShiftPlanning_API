@@ -8,8 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Http.Description;
 using Data.Models;
 using Data.Services;
+using DataTransferObjects.Employee;
 using DataTransferObjects.Schedule;
 using DataTransferObjects.ScheduledShift;
 
@@ -18,6 +20,7 @@ namespace API.Controllers
     /// <summary>
     /// Controller to manage schedule
     /// </summary>
+    [Authorize(Roles = "Manager")]
     [RoutePrefix("api/schedules")]
     public class ScheduleController : ApiController
     {
@@ -45,13 +48,13 @@ namespace API.Controllers
         /// <returns>
         /// Returns an array of schedules.
         /// </returns>
-        [HttpGet, AdminFilter, Route("")]
+        [HttpGet, Route("")]
         public IHttpActionResult Get()
         {
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
 
-            var schedules = _scheduleService.GetSchedules(manager);
+            var schedules = _scheduleService.GetSchedules(employee);
             return Ok(Mapper.Map(schedules));
         }
 
@@ -65,7 +68,7 @@ namespace API.Controllers
         /// Returns the schedule with the given id. 
         /// If no schedule is found with the corresponding id, the controller will return NotFound (404)
         /// </returns>
-        [HttpGet, AdminFilter, Route("{id}")]
+        [HttpGet, Route("{id}")]
         public IHttpActionResult Get(int id)
         {
             if (!ModelState.IsValid)
@@ -73,10 +76,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
 
-            var schedule = _scheduleService.GetSchedule(id, manager);
+            var schedule = _scheduleService.GetSchedule(id, employee);
             if (schedule != null)
             {
                 return Ok(Mapper.Map(schedule));
@@ -95,7 +98,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Created' (201) if the schedule gets created.
         /// </returns>
-        [HttpPost, AdminFilter, Route("")]
+        [HttpPost, Route("")]
         public IHttpActionResult Register(CreateScheduleDTO scheduleDto)
         {
             if (!ModelState.IsValid)
@@ -103,10 +106,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
 
-            var schedule = _scheduleService.CreateSchedule(scheduleDto, manager);
+            var schedule = _scheduleService.CreateSchedule(scheduleDto, employee);
             if (schedule != null)
             {
                 return Created($"/api/schedules/{schedule.Id}", Mapper.Map(schedule));
@@ -121,7 +124,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id">The id of the schedule.</param>
         /// <returns>Returns 'No Content' (204) if the schedule gets deleted.</returns>
-        [HttpDelete, AdminFilter, Route("{id}")]
+        [HttpDelete, Route("{id}")]
         public IHttpActionResult Delete(int id)
         {
             if (!ModelState.IsValid)
@@ -129,11 +132,40 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
 
-            _scheduleService.DeleteSchedule(id, manager);
+            _scheduleService.DeleteSchedule(id, employee);
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+        }
+
+        // POST api/schedules/{id}/preferences
+        /// <summary>
+        /// Creates or updates the preferences from the content in the body.
+        /// Requires 'Authorization' header set with the token granted upon login.
+        /// </summary>
+        /// <returns>
+        /// Returns 'Ok' (200) if the preferences get saved.
+        /// </returns>
+        [Authorize(Roles = "Employee")]
+        [HttpPost, Route("{id}/setpreferences")]
+        [ResponseType(typeof(IEnumerable<PreferenceDTO>))]
+        public IHttpActionResult SetPreferences(int id, IEnumerable<PreferenceDTO> preferencesDtos)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
+
+            var preferences = _scheduleService.CreateOrUpdatePreferences(employee, id, preferencesDtos);
+            if (preferences != null)
+            {
+                return Ok(Mapper.Map(preferences));
+            }
+            return BadRequest("The preferences could not be created or updated!");
         }
 
         // PUT api/schedules/{id}
@@ -144,7 +176,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'No Content' (204) if the schedule gets updated.
         /// </returns>
-        [HttpPut, AdminFilter, Route("{id}")]
+        [HttpPut, Route("{id}")]
         public IHttpActionResult UpdateSchedule(int id, UpdateScheduleDTO scheduleDto)
         {
             if (!ModelState.IsValid)
@@ -152,10 +184,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
 
-            var schedule = _scheduleService.UpdateSchedule(id, scheduleDto, manager);
+            var schedule = _scheduleService.UpdateSchedule(id, scheduleDto, employee);
 
             if (schedule != null)
             {
@@ -173,7 +205,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Created' (201) if the scheduled shift gets created.
         /// </returns>
-        [HttpPost, AdminFilter, Route("{id}")]
+        [HttpPost, Route("{id}")]
         public IHttpActionResult CreateScheduledShift(int id, CreateScheduledShiftDTO scheduledShiftDto)
         {
             if (!ModelState.IsValid)
@@ -181,10 +213,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
 
-            var scheduledShift = _scheduleService.CreateScheduledShift(scheduledShiftDto, manager, id);
+            var scheduledShift = _scheduleService.CreateScheduledShift(scheduledShiftDto, employee, id);
 
             if (scheduledShift != null) {
                 return Created($"/api/schedules/{id}", Mapper.Map(scheduledShift));
@@ -201,7 +233,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'No Content' (204) if the scheduled shift gets updated.
         /// </returns>
-        [HttpPut, AdminFilter, Route("{scheduleId}/{scheduledShiftId}")]
+        [HttpPut, Route("{scheduleId}/{scheduledShiftId}")]
         public IHttpActionResult UpdateScheduledShift(int scheduleId, int scheduledShiftId, UpdateScheduledShiftDTO scheduledShiftDto)
         {
             if (!ModelState.IsValid)
@@ -209,10 +241,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
 
-            var scheduledShift = _scheduleService.UpdateScheduledShift(scheduledShiftId, scheduleId, scheduledShiftDto, manager);
+            var scheduledShift = _scheduleService.UpdateScheduledShift(scheduledShiftId, scheduleId, scheduledShiftDto, employee);
 
             if (scheduledShift != null)
             {
@@ -230,12 +262,12 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'No Content' (204) if the scheduled shift gets deleted.
         /// </returns>
-        [HttpDelete, AdminFilter, Route("{scheduleId}/{scheduledShiftId}")]
+        [HttpDelete, Route("{scheduleId}/{scheduledShiftId}")]
         public IHttpActionResult DeleteScheduledShift(int scheduleId, int scheduledShiftId)
         {
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
 
-            _scheduleService.DeleteScheduledShift(scheduleId, scheduledShiftId, manager);
+            _scheduleService.DeleteScheduledShift(scheduleId, scheduledShiftId, employee);
 
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
         }
@@ -248,7 +280,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Created' (201) if the scheduled shifts gets created.
         /// </returns>
-        [HttpPost, AdminFilter, Route("{id}/createmultiple")]
+        [HttpPost, Route("{id}/createmultiple")]
         public IHttpActionResult CreateMultipleScheduledShift(int id, IEnumerable<CreateScheduledShiftDTO> scheduledShiftsDto)
         {
             if (!ModelState.IsValid)
@@ -256,10 +288,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
 
-            var scheduledShifts = _scheduleService.CreateScheduledShifts(scheduledShiftsDto, manager, id);
+            var scheduledShifts = _scheduleService.CreateScheduledShifts(scheduledShiftsDto, employee, id);
 
             if (scheduledShifts != null)
             {
@@ -277,7 +309,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Created' (201) if the scheduled gets rolled out.
         /// </returns>
-        [HttpPost, AdminFilter, Route("{id}/rollout")]
+        [HttpPost, Route("{id}/rollout")]
         public IHttpActionResult RolloutSchedule(int id, RolloutScheduleDTO rolloutDto)
         {
             if (!ModelState.IsValid)
@@ -285,10 +317,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
 
-            var shifts = _scheduleService.RolloutSchedule(id, rolloutDto, manager);
+            var shifts = _scheduleService.RolloutSchedule(id, rolloutDto, employee);
 
             if (shifts != null)
             {
@@ -307,7 +339,7 @@ namespace API.Controllers
         /// <returns>
         /// Returns 'Ok' (200) if an optimal schedule can be found.
         /// </returns>
-        [HttpPost, AdminFilter, Route("{id}/findoptimal")]
+        [HttpPost, Route("{id}/findoptimal")]
         public async Task<IHttpActionResult> FindOptimalSchedule(int id)
         {
             if (!ModelState.IsValid)
@@ -315,33 +347,14 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var manager = _authManager.GetManagerByHeader(Request.Headers);
-            if (manager == null) return BadRequest("Provided token is invalid!");
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
 
-            var httpRequest = HttpContext.Current.Request;
-
-            var preferenceFile = httpRequest.Files["preferences"];
-            var additionalInfoFile = httpRequest.Files["additionalInfo"];
-            var dislikesFile = httpRequest.Files["dislikes"];
-
-            if (preferenceFile == null || additionalInfoFile == null || dislikesFile == null)
-            {
-                return BadRequest("Please provide a form with both a file input named preferences, a file input named additionalInfo and a file input named dislikes");
-            }
-
-            var schedule = _scheduleService.GetSchedule(id, manager);
+            var schedule = _scheduleService.GetSchedule(id, employee);
             if (schedule == null) return NotFound();
 
-            var preferenceFileContent = new StreamContent(preferenceFile.InputStream);
-            var additionalInfoFileContent = new StreamContent(additionalInfoFile.InputStream);
-            var dislikesFileContent = new StreamContent(dislikesFile.InputStream);
-            using (var client = new HttpClient())
-            using (var formData = new MultipartFormDataContent())
-            {
-                formData.Add(preferenceFileContent, "prefs", "prefs");
-                formData.Add(additionalInfoFileContent, "ai", "ai");
-                formData.Add(dislikesFileContent, "dislikes", "dislikes");
-                var response = client.PostAsync($"http://80.161.174.210/scheduleplanner/api/schedule?weekCount={schedule.NumberOfWeeks}", formData).Result;
+            using (var client = new HttpClient()) {
+                var response = client.PostAsJsonAsync($"http://80.161.174.210/scheduleplanner/api/schedule/findoptimalschedule", Mapper.MapToFindOptimalScheduleDto(schedule)).Result;
                 if (!response.IsSuccessStatusCode)
                 {
                     return null;
@@ -351,7 +364,7 @@ namespace API.Controllers
                 var shifts = await response.Content.ReadAsAsync<List<OptimalScheduleResponse>>();
 
                 var scheduledShiftList = new List<ScheduledShift>();
-                var emps = _employeeService.GetEmployees(manager.Organization.Id).ToList();
+                var emps = _employeeService.GetEmployees(employee.Organization.Id).ToList();
                 for (var i = 0; i < shifts.Count; i++)
                 {
                     var scheduledShift = new ScheduledShift();
@@ -366,7 +379,7 @@ namespace API.Controllers
                     schedule.ScheduledShifts.Add(scheduledShift);
                 }
 
-                return Ok(Mapper.Map(_scheduleService.UpdateSchedule(schedule,manager)));
+                return Ok(Mapper.Map(_scheduleService.UpdateSchedule(schedule, employee)));
                 
             }
         }

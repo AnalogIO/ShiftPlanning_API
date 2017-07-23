@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Web.Http;
 using Data.Exceptions;
 using Data.Models;
 using Data.Repositories;
 using Data.Token;
 
-namespace Data.Npgsql.Repositories
+namespace Data.MSSQL.Repositories
 {
     public class ManagerRepository : IManagerRepository, IDisposable
     {

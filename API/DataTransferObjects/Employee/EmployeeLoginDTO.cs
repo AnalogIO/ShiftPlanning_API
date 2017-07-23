@@ -1,8 +1,8 @@
 ﻿using Microsoft.Build.Framework;
 
-namespace DataTransferObjects.Manager
+namespace DataTransferObjects.Employee
 {
-    public class ManagerLoginDTO
+    public class EmployeeLoginDTO
     {
         [Required]
         public string Username { get; set; }

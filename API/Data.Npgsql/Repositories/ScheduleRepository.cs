@@ -7,7 +7,7 @@ using Data.Repositories;
 using System.Data.Entity;
 using Data.Exceptions;
 
-namespace Data.Npgsql.Repositories
+namespace Data.MSSQL.Repositories
 {
     public class ScheduleRepository : IScheduleRepository, IDisposable
     {
@@ -84,6 +84,17 @@ namespace Data.Npgsql.Repositories
 
             _context.SaveChanges();
 
+        }
+
+        public IEnumerable<ScheduledShift> GetScheduledShifts(IEnumerable<int> scheduledShiftIds)
+        {
+            return _context.ScheduledShifts.Where(x => scheduledShiftIds.Contains(x.Id));
+        }
+
+        public void DeletePreferences(IEnumerable<Preference> preferences)
+        {
+            _context.Preferences.RemoveRange(preferences);
+            _context.SaveChanges();
         }
     }
 }

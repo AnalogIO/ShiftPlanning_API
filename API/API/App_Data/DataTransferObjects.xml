@@ -160,7 +160,7 @@
         </member>
         <member name="P:DataTransferObjects.Public.Employees.EmployeeDTO.Title">
             <summary>
-            The title of the volunteer. This can for instance be "Barista".
+            The title of the volunteer. This can for instance be "Employee".
             </summary>
         </member>
         <member name="P:DataTransferObjects.Public.Employees.EmployeeDTO.PhotoRef">

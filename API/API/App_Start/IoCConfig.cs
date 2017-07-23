@@ -15,7 +15,7 @@ namespace API
         /// <param name="container">The Microsoft Unity container to register types on.</param>
         public static void ConfigureIoC(IUnityContainer container)
         {
-            Data.Npgsql.Configuration.IoCConfig.ConfigureIoC(container);
+            Data.MSSQL.Configuration.IoCConfig.ConfigureIoC(container);
             Data.IoCConfig.ConfigureIoC(container);
 
             container

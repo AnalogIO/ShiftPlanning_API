@@ -6,6 +6,7 @@ using DataTransferObjects.EmployeeTitles;
 using DataTransferObjects.Schedule;
 using DataTransferObjects.Shift;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web;
 
@@ -29,7 +30,9 @@ namespace API.Logic
                 EmployeeTitle = employee.EmployeeTitle?.Title,
                 EmployeeTitleId = employee.EmployeeTitle?.Id,
                 PhotoRef = $"{routeBase}/{PhotosController.RoutePrefix}/{employee.Photo.Id}/{employee.Organization.Id}",
-                CheckInCount = employee.CheckIns?.Count
+                CheckInCount = employee.CheckIns?.Count,
+                Roles = employee.Roles.Select(r => r.Name).ToArray(),
+                WantShifts = employee.WantShifts
             };
         }
 
@@ -86,6 +89,50 @@ namespace API.Logic
         public static IEnumerable<EmployeeTitleDTO> Map(IEnumerable<EmployeeTitle> employeeTitles)
         {
             return employeeTitles.Select(Map);
+        }
+
+        public static PreferenceDTO Map(Preference preference)
+        {
+            return new PreferenceDTO {Priority = preference.Priority, ScheduledShiftId = preference.ScheduledShift.Id};
+        }
+
+        public static IEnumerable<PreferenceDTO> Map(IEnumerable<Preference> preferences)
+        {
+            return preferences.Select(Map);
+        }
+
+        public static FindOptimalScheduleDTO MapToFindOptimalScheduleDto(Schedule schedule)
+        {
+            var employees = schedule.ScheduledShifts.SelectMany(ss => ss.Preferences.Select(p => p.Employee));
+            var preferences = new List<FindOptimalSchedulePreferencesDTO>();
+            foreach (var employee in employees)
+            {
+                var prefs =
+                    employee.Preferences.Where(p => p.ScheduledShift.Schedule.Id == schedule.Id)
+                        .Select(
+                            p =>
+                                new FindOptimalSchedulePreferencesDTO.FindOptimalSchedulePreference
+                                {
+                                    ScheduledShiftId = p.ScheduledShift.Id,
+                                    Priority = p.Priority
+                                });
+                var baristaPrefs = new FindOptimalSchedulePreferencesDTO()
+                {
+                    BaristaId = employee.Id,
+                    Preferences = prefs,
+                    Friendships = employee.Friendships.Select(f => f.Friend.Id).ToArray(),
+                    WantShifts = employee.WantShifts
+                };
+                preferences.Add(baristaPrefs);
+            }
+            var dto = new FindOptimalScheduleDTO
+            {
+                Preferences = preferences,
+                Shifts =
+                    schedule.ScheduledShifts.Select(
+                        ss => new FindOptimalScheduleShiftDTO {Id = ss.Id, MaxOnShift = ss.MaxOnShift})
+            };
+            return dto;
         }
     }
 }

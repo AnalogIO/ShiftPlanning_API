@@ -7,13 +7,13 @@ namespace Data.Npgsql.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class removedexplicitcontraint : IMigrationMetadata
+    public sealed partial class addedwantshiftstoemployees : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(removedexplicitcontraint));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(addedwantshiftstoemployees));
         
         string IMigrationMetadata.Id
         {
-            get { return "201611051954103_removed explicit contraint"; }
+            get { return "201707221548020_added wantshifts to employees"; }
         }
         
         string IMigrationMetadata.Source

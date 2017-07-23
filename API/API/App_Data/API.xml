@@ -501,20 +501,6 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="M:API.Authorization.AdminFilterAttribute.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
-            <summary>
-            OnAuthorization is called whenever a method has the data annotation "[AdminFilter]".
-            Checks if the manager is authorized.
-            </summary>
-            <param name="actionContext"></param>
-        </member>
-        <member name="M:API.Authorization.ApiKeyFilter.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
-            <summary>
-            OnAuthorization is called whenever a method has the data annotation "[ApiKeyFilter]".
-            Checks if the user is authorized.
-            </summary>
-            <param name="actionContext"></param>
-        </member>
         <member name="T:API.Controllers.EmployeeController">
             <summary>
             Controller to manipulate with the employees.
@@ -536,6 +522,15 @@
             <returns>
             Returns 'Created' (201) if the employee gets created.
             If an employee already exist with the given email, the controller will return BadRequest (400).
+            </returns>
+        </member>
+        <member name="M:API.Controllers.EmployeeController.Login(DataTransferObjects.Manager.ManagerLoginDTO)">
+            <summary>
+            Login as the manager with the given credentials in the body
+            </summary>
+            <returns>
+            Returns 'Ok' (200) with a valid token if the provided username and password matches.
+            If the provided credentials are wrong then the controller will return Unauthorized (401).
             </returns>
         </member>
         <member name="M:API.Controllers.EmployeeController.RegisterMany(DataTransferObjects.Employee.CreateEmployeeDTO[])">

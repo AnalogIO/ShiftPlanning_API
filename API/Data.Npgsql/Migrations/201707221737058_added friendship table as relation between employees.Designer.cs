@@ -7,13 +7,13 @@ namespace Data.Npgsql.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class activeflagforemployees : IMigrationMetadata
+    public sealed partial class addedfriendshiptableasrelationbetweenemployees : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(activeflagforemployees));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(addedfriendshiptableasrelationbetweenemployees));
         
         string IMigrationMetadata.Id
         {
-            get { return "201611060920577_active flag for employees"; }
+            get { return "201707221737058_added friendship table as relation between employees"; }
         }
         
         string IMigrationMetadata.Source

@@ -15,30 +15,30 @@ namespace Data.Services
             _employeeTitleRepository = employeeTitleRepository;
         }
 
-        public EmployeeTitle CreateEmployeeTitle(CreateEmployeeTitleDTO employeeTitleDto, Manager manager)
+        public EmployeeTitle CreateEmployeeTitle(CreateEmployeeTitleDTO employeeTitleDto, Employee employee)
         {
-            var employeeTitle = new EmployeeTitle { Title = employeeTitleDto.Title, Organization = manager.Organization };
+            var employeeTitle = new EmployeeTitle { Title = employeeTitleDto.Title, Organization = employee.Organization };
             return _employeeTitleRepository.Create(employeeTitle);
         }
 
-        public void DeleteEmployeeTitle(int employeeTitleId, Manager manager)
+        public void DeleteEmployeeTitle(int employeeTitleId, Employee employee)
         {
-            _employeeTitleRepository.Delete(employeeTitleId, manager.Organization.Id);
+            _employeeTitleRepository.Delete(employeeTitleId, employee.Organization.Id);
         }
 
-        public EmployeeTitle GetEmployeeTitle(int id, Manager manager)
+        public EmployeeTitle GetEmployeeTitle(int id, Employee employee)
         {
-            return _employeeTitleRepository.Read(id, manager.Organization.Id);
+            return _employeeTitleRepository.Read(id, employee.Organization.Id);
         }
 
-        public IEnumerable<EmployeeTitle> GetEmployeeTitles(Manager manager)
+        public IEnumerable<EmployeeTitle> GetEmployeeTitles(Employee employee)
         {
-            return _employeeTitleRepository.ReadFromOrganization(manager.Organization.Id);
+            return _employeeTitleRepository.ReadFromOrganization(employee.Organization.Id);
         }
 
-        public EmployeeTitle UpdateEmployeeTitle(int employeeTitleId, UpdateEmployeeTitleDTO employeeTitleDto, Manager manager)
+        public EmployeeTitle UpdateEmployeeTitle(int employeeTitleId, UpdateEmployeeTitleDTO employeeTitleDto, Employee employee)
         {
-            var employeeTitle = _employeeTitleRepository.Read(employeeTitleId, manager.Organization.Id);
+            var employeeTitle = _employeeTitleRepository.Read(employeeTitleId, employee.Organization.Id);
             if (employeeTitle == null) throw new ObjectNotFoundException("Could not find a title corresponding to the given id");
 
             employeeTitle.Title = employeeTitleDto.Title;

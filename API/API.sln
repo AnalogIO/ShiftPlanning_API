@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{65C4B72F-3368-439E-BEB5-EBD575953FC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Npgsql", "Data.Npgsql\Data.Npgsql.csproj", "{76F9D8E9-FAB7-428E-8C60-A3C71A6D813B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.MSSQL", "Data.Npgsql\Data.MSSQL.csproj", "{76F9D8E9-FAB7-428E-8C60-A3C71A6D813B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTransferObjects", "DataTransferObjects\DataTransferObjects.csproj", "{678CD23A-DEC4-4130-9F90-A0D7F760B004}"
 EndProject

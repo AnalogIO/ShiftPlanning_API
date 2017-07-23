@@ -6,10 +6,10 @@ namespace Data.Services
 {
     public interface IEmployeeTitleService
     {
-        EmployeeTitle CreateEmployeeTitle(CreateEmployeeTitleDTO employeeTitleDto, Manager manager);
-        void DeleteEmployeeTitle(int employeeTitleId, Manager manager);
-        EmployeeTitle GetEmployeeTitle(int id, Manager manager);
-        IEnumerable<EmployeeTitle> GetEmployeeTitles(Manager manager);
-        EmployeeTitle UpdateEmployeeTitle(int employeeTitleId, UpdateEmployeeTitleDTO employeeTitleDto, Manager manager);
+        EmployeeTitle CreateEmployeeTitle(CreateEmployeeTitleDTO employeeTitleDto, Employee employee);
+        void DeleteEmployeeTitle(int employeeTitleId, Employee employee);
+        EmployeeTitle GetEmployeeTitle(int id, Employee employee);
+        IEnumerable<EmployeeTitle> GetEmployeeTitles(Employee employee);
+        EmployeeTitle UpdateEmployeeTitle(int employeeTitleId, UpdateEmployeeTitleDTO employeeTitleDto, Employee employee);
     }
 }

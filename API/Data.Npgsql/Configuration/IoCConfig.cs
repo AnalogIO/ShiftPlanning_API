@@ -1,8 +1,8 @@
-﻿using Data.Npgsql.Repositories;
+﻿using Data.MSSQL.Repositories;
 using Data.Repositories;
 using Microsoft.Practices.Unity;
 
-namespace Data.Npgsql.Configuration
+namespace Data.MSSQL.Configuration
 {
     public static class IoCConfig
     {

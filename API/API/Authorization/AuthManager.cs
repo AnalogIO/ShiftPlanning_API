@@ -1,5 +1,7 @@
-﻿using System.Configuration;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
+using System.Linq;
 using Data.Repositories;
 using Data.Models;
 using System.Net.Http.Headers;
@@ -10,11 +12,13 @@ namespace API.Authorization
     {
         private readonly IOrganizationRepository _organizationRepository;
         private readonly IManagerRepository _managerRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public AuthManager(IOrganizationRepository organizationRepository, IManagerRepository managerRepository)
+        public AuthManager(IOrganizationRepository organizationRepository, IManagerRepository managerRepository, IEmployeeRepository employeeRepository)
         {
             _organizationRepository = organizationRepository;
             _managerRepository = managerRepository;
+            _employeeRepository = employeeRepository;
         }
 
         public bool ValidateOrganizationApiKey(string apiKey)
@@ -34,11 +38,17 @@ namespace API.Authorization
             return GetOrganizationByApiKey(apiKey);
         }
 
-        public Manager GetManagerByHeader(HttpRequestHeaders headers)
+        public Employee GetEmployeeByHeader(HttpRequestHeaders headers)
         {
             var token = headers.Authorization.ToString();
             if (token == null) throw new ObjectNotFoundException("Could not find a manager corresponding to the given 'Authorization' header");
-            return _managerRepository.Read(token);
+            return _employeeRepository.Read(token);
+        }
+
+        public IEnumerable<Role> GetRoles(string token)
+        {
+            var employee = _employeeRepository.Read(token);
+            return employee.Roles;
         }
     }
 }
