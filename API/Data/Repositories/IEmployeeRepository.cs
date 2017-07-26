@@ -16,5 +16,6 @@ namespace Data.Repositories
         Employee Read(string token);
         Employee Login(string email, string password);
         void DeleteFriendship(Friendship friendship);
+        IEnumerable<Role> GetRoles();
     }
 }

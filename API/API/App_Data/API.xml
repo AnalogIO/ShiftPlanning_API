@@ -514,7 +514,7 @@
             <param name="employeeService"></param>
             <param name="photoMapper"></param>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Register(DataTransferObjects.Employee.CreateEmployeeDTO)">
+        <member name="M:API.Controllers.EmployeeController.Create(DataTransferObjects.Employee.CreateEmployeeDTO)">
             <summary>
             Creates the employee from the content in the body.
             Requires 'Authorization' header set with the token granted upon manager login.
@@ -533,7 +533,7 @@
             If the provided credentials are wrong then the controller will return Unauthorized (401).
             </returns>
         </member>
-        <member name="M:API.Controllers.EmployeeController.RegisterMany(DataTransferObjects.Employee.CreateEmployeeDTO[])">
+        <member name="M:API.Controllers.EmployeeController.CreateMany(DataTransferObjects.Employee.CreateEmployeeDTO[])">
             <summary>
             Creates the employees from the content in the body.
             Requires 'Authorization' header set with the token granted upon manager login.
@@ -571,7 +571,17 @@
             Returns an array of employees.
             </returns>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Put(System.Int32,DataTransferObjects.Employee.UpdateEmployeeDTO)">
+        <member name="M:API.Controllers.EmployeeController.Put(DataTransferObjects.Employee.UpdateEmployeeDTO)">
+            <summary>
+            Updates the employee currently logged in by token.
+            Requires 'Authorization' header set with the token granted upon manager login.
+            </summary>
+            <param name="employeeDto">The dto of the employee</param>
+            <returns>
+            Returns 'No Content' (204) if the employee gets updated.
+            </returns>
+        </member>
+        <member name="M:API.Controllers.EmployeeController.UpdateEmployee(System.Int32,DataTransferObjects.Employee.UpdateEmployeeDTO)">
             <summary>
             Updates the employee with the specified id.
             Requires 'Authorization' header set with the token granted upon manager login.
@@ -711,6 +721,17 @@
             <param name="id">The id of the schedule.</param>
             <returns>
             Returns the schedule with the given id. 
+            If no schedule is found with the corresponding id, the controller will return NotFound (404)
+            </returns>
+        </member>
+        <member name="M:API.Controllers.ScheduleController.GetPreferences(System.Int32)">
+            <summary>
+            Gets the preferences for the schedule with the given id.
+            Requires 'Authorization' header set with the token granted upon login.
+            </summary>
+            <param name="id">The id of the schedule.</param>
+            <returns>
+            Returns the preferences of the schedule with the given id. 
             If no schedule is found with the corresponding id, the controller will return NotFound (404)
             </returns>
         </member>

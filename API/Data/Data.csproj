@@ -83,6 +83,9 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PasswordGenerator, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PasswordGenerator.1.1.2\lib\net45\PasswordGenerator.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -105,6 +108,7 @@
     <Compile Include="App_Start\IoCConfig.cs" />
     <Compile Include="Exceptions\ForbiddenException.cs" />
     <Compile Include="Models\CheckIn.cs" />
+    <Compile Include="Models\EmailSettings.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\EmployeeTitle.cs" />
     <Compile Include="Models\Friendship.cs" />
@@ -125,13 +129,16 @@
     <Compile Include="Repositories\IPhotoRepository.cs" />
     <Compile Include="Repositories\IScheduleRepository.cs" />
     <Compile Include="Repositories\IShiftRepository.cs" />
+    <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\EmployeeService.cs" />
     <Compile Include="Services\EmployeeTitleService.cs" />
     <Compile Include="Services\IEmployeeService.cs" />
+    <Compile Include="Services\IEmailService.cs" />
     <Compile Include="Services\IEmployeeTitleService.cs" />
     <Compile Include="Services\IPhotoService.cs" />
     <Compile Include="Services\IScheduleService.cs" />
     <Compile Include="Services\IShiftService.cs" />
+    <Compile Include="Services\MailDefinition.cs" />
     <Compile Include="Services\PhotoService.cs" />
     <Compile Include="Services\ScheduleService.cs" />
     <Compile Include="Services\ShiftService.cs" />

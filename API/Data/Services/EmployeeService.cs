@@ -56,12 +56,32 @@ namespace Data.Services
                 Organization = employee.Organization,
                 Active = true,
                 Photo = photo,
-                CheckIns = new List<CheckIn>()
+                CheckIns = new List<CheckIn>(),
+                Roles = new List<Role>(),
+                Friendships = new List<Friendship>()
             };
+
             var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, employee.Organization.Id);
             if (title == null) throw new ObjectNotFoundException("Could not find a title corresponding to the given id");
             newEmployee.EmployeeTitle = title;
-            return _employeeRepository.Create(newEmployee);
+            var role = _employeeRepository.GetRoles().FirstOrDefault(r => r.Name == "Employee");
+            newEmployee.Roles.Add(role);
+
+            var pwgen = new PasswordGenerator();
+            var emailService = new EmailService();
+
+            var pw = pwgen.Next();
+            var hashedPw = HashManager.Hash(pw);
+            var salt = HashManager.GenerateSalt();
+            var saltedPw = HashManager.Hash(hashedPw + salt);
+
+            newEmployee.Salt = salt;
+            newEmployee.Password = saltedPw;
+
+            var createdEmployee = _employeeRepository.Create(newEmployee);
+            if (createdEmployee == null) throw new BadRequestException("Please check your input again - the employee could not be created!");
+            emailService.SendNewPassword($"{createdEmployee.FirstName} {createdEmployee.LastName}", createdEmployee.Email, pw, employee.Organization);
+            return createdEmployee;
         }
 
         public Employee UpdateEmployee(int employeeId, UpdateEmployeeDTO employeeDto, Employee employee, Photo photo)

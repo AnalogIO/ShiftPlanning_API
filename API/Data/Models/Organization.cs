@@ -18,5 +18,6 @@ namespace Data.Models
         public virtual ICollection<EmployeeTitle> EmployeeTitles { get; set; }
         public virtual ICollection<Schedule> Schedules { get; set; }
         public virtual ICollection<Shift> Shifts { get; set; }
+        public virtual EmailSettings EmailSettings { get; set; }
     }
 }

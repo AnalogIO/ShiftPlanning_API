@@ -131,6 +131,11 @@ namespace Data.MSSQL.Repositories
             _context.SaveChanges();
         }
 
+        public IEnumerable<Role> GetRoles()
+        {
+            return _context.Roles.ToList();
+        }
+
         public void Dispose()
         {
             _context.Dispose();

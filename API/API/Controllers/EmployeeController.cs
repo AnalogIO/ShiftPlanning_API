@@ -83,7 +83,7 @@ namespace API.Controllers
         [Authorize(Roles = "Manager")]
         [HttpPost, Route("")]
         [ResponseType(typeof(EmployeeDTO))]
-        public IHttpActionResult Register(CreateEmployeeDTO employeeDto)
+        public IHttpActionResult Create(CreateEmployeeDTO employeeDto)
         {
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
             if (employee == null) return BadRequest("Provided token is invalid!");
@@ -166,7 +166,7 @@ namespace API.Controllers
         [Authorize(Roles = "Manager")]
         [HttpPost, Route("createmany")]
         [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
-        public IHttpActionResult RegisterMany(CreateEmployeeDTO[] employeeDtos)
+        public IHttpActionResult CreateMany(CreateEmployeeDTO[] employeeDtos)
         {
             if (!ModelState.IsValid)
             {
@@ -267,16 +267,14 @@ namespace API.Controllers
             return Ok(Mapper.Map(employees));
         }
 
-        // PUT api/employees/5
+        // PUT api/employees
         /// <summary>
-        /// Updates the employee with the specified id.
+        /// Updates the employee currently logged in by token.
         /// Requires 'Authorization' header set with the token granted upon manager login.
         /// </summary>
-        /// <param name="id">The id of the employee.</param>
         /// <param name="employeeDto">The dto of the employee</param>
         /// <returns>
         /// Returns 'No Content' (204) if the employee gets updated.
-        /// If no employee is found with the given id, the controller will return NotFound (404)
         /// </returns>
         [Authorize(Roles = "Employee")]
         [HttpPut, Route("")]
