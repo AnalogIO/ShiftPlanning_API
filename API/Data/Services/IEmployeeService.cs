@@ -18,5 +18,6 @@ namespace Data.Services
         Employee Login(string email, string password);
         Friendship CreateFriendship(Employee employee, int friendId);
         void DeleteFriendship(Employee employee, int friendId);
+        void ResetPassword(int id, int organizationId);
     }
 }

@@ -13,10 +13,18 @@ namespace Data.Services
 {
     public class EmailService : IEmailService
     {
-        public void SendNewPassword(string fullname, string email, string password, Organization organization)
+        public void SendNewAccountEmail(string fullname, string email, string password, Organization organization)
         {
             MailMessage message = new MailMessage(organization.EmailSettings.EmailUsername, email);
-            message.Subject = $"Shiftplanning: Your new password for {organization.Name}";
+            message.Subject = $"Shiftplanning: Your new account for {organization.Name}";
+            message.Body = $"Dear {fullname}!<br>An account has been created for you with the given password:<br>{password}<br><br>Use this next time you log in!";
+            SendEmail(message, organization);
+        }
+
+        public void SendNewPasswordEmail(string fullname, string email, string password, Organization organization)
+        {
+            MailMessage message = new MailMessage(organization.EmailSettings.EmailUsername, email);
+            message.Subject = $"Shiftplanning: Your updated account for {organization.Name}";
             message.Body = $"Dear {fullname}!<br>You have been assigned a new password:<br>{password}<br><br>Use this next time you log in!";
             SendEmail(message, organization);
         }

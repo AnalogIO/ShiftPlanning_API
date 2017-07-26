@@ -7,6 +7,7 @@ namespace Data.Services
 {
     public interface IEmailService
     {
-        void SendNewPassword(string fullname, string email, string password, Organization organization);
+        void SendNewAccountEmail(string fullname, string email, string password, Organization organization);
+        void SendNewPasswordEmail(string fullname, string email, string password, Organization organization);
     }
 }

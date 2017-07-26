@@ -184,6 +184,31 @@ namespace API.Controllers
             return BadRequest("The employees could not be created!");
         }
 
+        // POST api/employees/5/resetpassword
+        /// <summary>
+        /// Resets the password of the employee given in the url.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
+        /// </summary>
+        /// <returns>
+        /// Returns 'Ok' (200) if the employee's password gets reset.
+        /// </returns>
+        [Authorize(Roles = "Manager")]
+        [HttpPost, Route("{id}/resetpassword")]
+        public IHttpActionResult ResetPassword(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
+
+            _employeeService.ResetPassword(id, employee.Organization.Id);
+
+            return Ok("The password was reset - an email has been sent to the employee!");
+        }
+
         // GET api/employees
         /// <summary>
         /// Gets all the employees.

@@ -80,8 +80,28 @@ namespace Data.Services
 
             var createdEmployee = _employeeRepository.Create(newEmployee);
             if (createdEmployee == null) throw new BadRequestException("Please check your input again - the employee could not be created!");
-            emailService.SendNewPassword($"{createdEmployee.FirstName} {createdEmployee.LastName}", createdEmployee.Email, pw, employee.Organization);
+            emailService.SendNewAccountEmail($"{createdEmployee.FirstName} {createdEmployee.LastName}", createdEmployee.Email, pw, employee.Organization);
             return createdEmployee;
+        }
+
+        public void ResetPassword(int id, int organizationId)
+        {
+            var employee = _employeeRepository.Read(id, organizationId);
+            if (employee == null) throw new ObjectNotFoundException("Could not find the given employee!");
+
+            var pwgen = new PasswordGenerator();
+            var emailService = new EmailService();
+
+            var pw = pwgen.Next();
+            var hashedPw = HashManager.Hash(pw);
+            var salt = HashManager.GenerateSalt();
+            var saltedPw = HashManager.Hash(hashedPw + salt);
+
+            employee.Salt = salt;
+            employee.Password = saltedPw;
+
+            _employeeRepository.Update(employee);
+            emailService.SendNewPasswordEmail($"{employee.FirstName} {employee.LastName}", employee.Email, pw, employee.Organization);
         }
 
         public Employee UpdateEmployee(int employeeId, UpdateEmployeeDTO employeeDto, Employee employee, Photo photo)
