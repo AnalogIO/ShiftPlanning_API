@@ -542,6 +542,15 @@
             Returns 'Created' (201) if the employees gets created.
             </returns>
         </member>
+        <member name="M:API.Controllers.EmployeeController.ResetPassword(System.Int32)">
+            <summary>
+            Resets the password of the employee given in the url.
+            Requires 'Authorization' header set with the token granted upon manager login.
+            </summary>
+            <returns>
+            Returns 'Ok' (200) if the employee's password gets reset.
+            </returns>
+        </member>
         <member name="M:API.Controllers.EmployeeController.Get">
             <summary>
             Gets all the employees.
@@ -817,8 +826,8 @@
         </member>
         <member name="M:API.Controllers.ScheduleController.FindOptimalSchedule(System.Int32)">
             <summary>
-            Find the optimal schedule from the given input CSV file.
-            Requires 'Authorization' header set with the token granted upon manager login.
+            Generate the optimal schedule from the preferences set by the baristas.
+            Requires 'Authorization' header set with the token granted upon login.
             </summary>
             <returns>
             Returns 'Ok' (200) if an optimal schedule can be found.

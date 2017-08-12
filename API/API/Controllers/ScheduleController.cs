@@ -382,8 +382,8 @@ namespace API.Controllers
 
         // POST api/schedules/{id}/findoptimal
         /// <summary>
-        /// Find the optimal schedule from the given input CSV file.
-        /// Requires 'Authorization' header set with the token granted upon manager login.
+        /// Generate the optimal schedule from the preferences set by the baristas.
+        /// Requires 'Authorization' header set with the token granted upon login.
         /// </summary>
         /// <returns>
         /// Returns 'Ok' (200) if an optimal schedule can be found.
