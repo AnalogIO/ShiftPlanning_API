@@ -7,13 +7,13 @@ namespace Data.Npgsql.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class addedporttoorganization : IMigrationMetadata
+    public sealed partial class initialprodmigration : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(addedporttoorganization));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(initialprodmigration));
         
         string IMigrationMetadata.Id
         {
-            get { return "201707260902168_added port to organization"; }
+            get { return "201708141032311_initial prod migration"; }
         }
         
         string IMigrationMetadata.Source

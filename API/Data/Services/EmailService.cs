@@ -17,7 +17,7 @@ namespace Data.Services
         {
             MailMessage message = new MailMessage(organization.EmailSettings.EmailUsername, email);
             message.Subject = $"Shiftplanning: Your new account for {organization.Name}";
-            message.Body = $"Dear {fullname}!<br>An account has been created for you with the given password:<br>{password}<br><br>Use this next time you log in!";
+            message.Body = $"Dear {fullname}!<br>An account has been created for you with the given password:<br><br>{password}<br><br>Use this next time you log in!";
             SendEmail(message, organization);
         }
 
@@ -25,7 +25,7 @@ namespace Data.Services
         {
             MailMessage message = new MailMessage(organization.EmailSettings.EmailUsername, email);
             message.Subject = $"Shiftplanning: Your updated account for {organization.Name}";
-            message.Body = $"Dear {fullname}!<br>You have been assigned a new password:<br>{password}<br><br>Use this next time you log in!";
+            message.Body = $"Dear {fullname}!<br>You have been assigned a new password:<br><br>{password}<br><br>Use this next time you log in!";
             SendEmail(message, organization);
         }
 

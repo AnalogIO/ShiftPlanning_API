@@ -9,11 +9,17 @@ using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web;
+using DataTransferObjects.General;
 
 namespace API.Logic
 {
     public static class Mapper
     {
+        public static GeneralMessage Map(string message)
+        {
+            return new GeneralMessage { Message = message };
+        }
+
         public static EmployeeDTO Map(Employee employee)
         {
             var url = HttpContext.Current.Request.Url.AbsoluteUri;

@@ -206,7 +206,7 @@ namespace API.Controllers
 
             _employeeService.ResetPassword(id, employee.Organization.Id);
 
-            return Ok("The password was reset - an email has been sent to the employee!");
+            return Ok(Mapper.Map("The password was reset - an email has been sent to the employee!"));
         }
 
         // GET api/employees

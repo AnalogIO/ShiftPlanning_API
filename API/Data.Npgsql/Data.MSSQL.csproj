@@ -104,25 +104,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\IoCConfig.cs" />
-    <Compile Include="Migrations\201707221145114_Initial.cs" />
-    <Compile Include="Migrations\201707221145114_Initial.Designer.cs">
-      <DependentUpon>201707221145114_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707221548020_added wantshifts to employees.cs" />
-    <Compile Include="Migrations\201707221548020_added wantshifts to employees.Designer.cs">
-      <DependentUpon>201707221548020_added wantshifts to employees.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707231053399_friendships.cs" />
-    <Compile Include="Migrations\201707231053399_friendships.Designer.cs">
-      <DependentUpon>201707231053399_friendships.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707260845164_email settings for an organization.cs" />
-    <Compile Include="Migrations\201707260845164_email settings for an organization.Designer.cs">
-      <DependentUpon>201707260845164_email settings for an organization.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707260902168_added port to organization.cs" />
-    <Compile Include="Migrations\201707260902168_added port to organization.Designer.cs">
-      <DependentUpon>201707260902168_added port to organization.cs</DependentUpon>
+    <Compile Include="Migrations\201708141032311_initial prod migration.cs" />
+    <Compile Include="Migrations\201708141032311_initial prod migration.Designer.cs">
+      <DependentUpon>201708141032311_initial prod migration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -148,20 +132,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201707221145114_Initial.resx">
-      <DependentUpon>201707221145114_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707221548020_added wantshifts to employees.resx">
-      <DependentUpon>201707221548020_added wantshifts to employees.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707231053399_friendships.resx">
-      <DependentUpon>201707231053399_friendships.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707260845164_email settings for an organization.resx">
-      <DependentUpon>201707260845164_email settings for an organization.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707260902168_added port to organization.resx">
-      <DependentUpon>201707260902168_added port to organization.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201708141032311_initial prod migration.resx">
+      <DependentUpon>201708141032311_initial prod migration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
