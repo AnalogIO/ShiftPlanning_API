@@ -59,6 +59,7 @@ namespace Data.Services
 
             dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).Start = TimeSpan.Parse(scheduledShiftDto.Start);
             dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).End = TimeSpan.Parse(scheduledShiftDto.End);
+            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).MaxOnShift = scheduledShiftDto.MaxOnShift;
             dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).Day = scheduledShiftDto.Day;
             dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).Employees = employees;
 

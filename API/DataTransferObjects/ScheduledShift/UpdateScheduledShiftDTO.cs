@@ -16,6 +16,8 @@ namespace DataTransferObjects.ScheduledShift
         [Required]
         public string End { get; set; }
         [Required]
+        public int MaxOnShift { get; set; }
+        [Required]
         public int[] EmployeeIds { get; set; }
     }
 }
