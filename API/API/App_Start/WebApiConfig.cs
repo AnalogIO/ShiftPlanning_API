@@ -44,24 +44,18 @@ namespace API
 
     public class AnalogAuthenticationFilter : IAuthenticationFilter
     {
-        private readonly IAuthManager _authManager;
-
-        public AnalogAuthenticationFilter()
-        {
-            _authManager = UnityConfig.GetConfiguredContainer().Resolve<IAuthManager>();
-        }
-
         public bool AllowMultiple => false;
 
         public async Task AuthenticateAsync(HttpAuthenticationContext context, CancellationToken cancellationToken)
         {
-            if (!await AuthenticateRoles(context))
+            var authManager = UnityConfig.GetConfiguredContainer().Resolve<IAuthManager>();
+            if (!await AuthenticateRoles(context, authManager))
             {
-                AuthenticateApp(context);
+                AuthenticateApp(context, authManager);
             }
         }
 
-        private async Task<bool> AuthenticateRoles(HttpAuthenticationContext context)
+        private async Task<bool> AuthenticateRoles(HttpAuthenticationContext context, IAuthManager authManager)
         {
             var token = context.Request.Headers.Authorization?.ToString();
 
@@ -72,7 +66,7 @@ namespace API
 
             try
             {
-                var principal = await AuthenticateJwtToken(token);
+                var principal = await AuthenticateJwtToken(token, authManager);
 
                 if (principal != null)
                 {
@@ -87,13 +81,13 @@ namespace API
             return false;
         }
 
-        private void AuthenticateApp(HttpAuthenticationContext context)
+        private void AuthenticateApp(HttpAuthenticationContext context, IAuthManager authManager)
         {
             var token = context.Request.Headers.Authorization?.ToString();
 
             if (token != null)
             {
-                if (_authManager.ValidateOrganizationApiKey(token))
+                if (authManager.ValidateOrganizationApiKey(token))
                 {
                     var claims = new List<Claim>
                     {
@@ -108,11 +102,11 @@ namespace API
             }
         }
 
-        protected Task<IPrincipal> AuthenticateJwtToken(string token)
+        private Task<IPrincipal> AuthenticateJwtToken(string token, IAuthManager authManager)
         {
             if (TokenManager.ValidateLoginToken(token))
             {
-                var roles = _authManager.GetRoles(token);
+                var roles = authManager.GetRoles(token);
                 var claims = roles.Select(r => new Claim(ClaimTypes.Role, r.Name));
 
                 var identity = new ClaimsIdentity(claims, "Jwt");
