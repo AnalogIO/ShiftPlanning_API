@@ -11,13 +11,11 @@ namespace API.Authorization
     public class AuthManager : IAuthManager
     {
         private readonly IOrganizationRepository _organizationRepository;
-        private readonly IManagerRepository _managerRepository;
         private readonly IEmployeeRepository _employeeRepository;
 
-        public AuthManager(IOrganizationRepository organizationRepository, IManagerRepository managerRepository, IEmployeeRepository employeeRepository)
+        public AuthManager(IOrganizationRepository organizationRepository, IEmployeeRepository employeeRepository)
         {
             _organizationRepository = organizationRepository;
-            _managerRepository = managerRepository;
             _employeeRepository = employeeRepository;
         }
 

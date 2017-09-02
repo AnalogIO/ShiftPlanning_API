@@ -7,13 +7,13 @@ namespace Data.Npgsql.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class initialprodmigration : IMigrationMetadata
+    public sealed partial class initialprod : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(initialprodmigration));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(initialprod));
         
         string IMigrationMetadata.Id
         {
-            get { return "201708141032311_initial prod migration"; }
+            get { return "201708291321001_initial prod"; }
         }
         
         string IMigrationMetadata.Source

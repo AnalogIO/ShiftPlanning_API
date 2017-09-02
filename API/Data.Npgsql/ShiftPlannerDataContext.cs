@@ -13,7 +13,6 @@ namespace Data.MSSQL
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Organization> Organizations { get; set; }
-        public DbSet<Manager> Managers { get; set; }
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<CheckIn> CheckIns { get; set; }
         public DbSet<ScheduledShift> ScheduledShifts { get; set; }

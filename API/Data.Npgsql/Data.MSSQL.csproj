@@ -104,9 +104,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\IoCConfig.cs" />
-    <Compile Include="Migrations\201708141032311_initial prod migration.cs" />
-    <Compile Include="Migrations\201708141032311_initial prod migration.Designer.cs">
-      <DependentUpon>201708141032311_initial prod migration.cs</DependentUpon>
+    <Compile Include="Migrations\201708291321001_initial prod.cs" />
+    <Compile Include="Migrations\201708291321001_initial prod.Designer.cs">
+      <DependentUpon>201708291321001_initial prod.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -114,7 +114,6 @@
     <Compile Include="Repositories\EmployeeTitleRepository.cs" />
     <Compile Include="IShiftPlannerDataContext.cs" />
     <Compile Include="Repositories\OrganizationRepository.cs" />
-    <Compile Include="Repositories\ManagerRepository.cs" />
     <Compile Include="Repositories\PhotoRepository.cs" />
     <Compile Include="Repositories\ScheduleRepository.cs" />
     <Compile Include="ShiftPlannerDataContext.cs" />
@@ -132,8 +131,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201708141032311_initial prod migration.resx">
-      <DependentUpon>201708141032311_initial prod migration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201708291321001_initial prod.resx">
+      <DependentUpon>201708291321001_initial prod.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
