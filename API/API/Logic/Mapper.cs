@@ -49,7 +49,7 @@ namespace API.Logic
 
         public static ScheduledShiftDTO Map(ScheduledShift scheduledShift)
         {
-            return new ScheduledShiftDTO { Id = scheduledShift.Id, Day = scheduledShift.Day, Start = scheduledShift.Start.ToString(@"hh\:mm"), End = scheduledShift.End.ToString(@"hh\:mm"), MaxOnShift = scheduledShift.MaxOnShift, Employees = Map(scheduledShift.Employees) };
+            return new ScheduledShiftDTO { Id = scheduledShift.Id, Day = scheduledShift.Day, Start = scheduledShift.Start.ToString(@"hh\:mm"), End = scheduledShift.End.ToString(@"hh\:mm"), MaxOnShift = scheduledShift.MaxOnShift, MinOnShift = scheduledShift.MinOnShift, Employees = Map(scheduledShift.Employees) };
         }
 
         public static IEnumerable<ScheduledShiftDTO> Map(IEnumerable<ScheduledShift> scheduledShifts)
