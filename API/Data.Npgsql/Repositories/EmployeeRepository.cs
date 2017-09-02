@@ -42,7 +42,15 @@ namespace Data.MSSQL.Repositories
         {
             var employee = _context.Employees.FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
             if (employee == null) throw new ObjectNotFoundException("Could not find an employee corresponding to the given id");
- 
+            
+            employee.Shifts.Clear();
+            employee.Preferences.Clear();
+            employee.CheckIns.Clear();
+            employee.Friendships.Clear();
+            employee.Roles.Clear();
+            employee.ScheduledShifts.Clear();
+            employee.Tokens.Clear();
+
             _context.Employees.Remove(employee);
             _context.SaveChanges();
         }

@@ -11,6 +11,7 @@ namespace Data.Models
         public TimeSpan Start { get; set; }
         public TimeSpan End { get; set; }
         public int MaxOnShift { get; set; }
+        public int MinOnShift { get; set; }
         public virtual ICollection<Employee> Employees { get; set; }
         public virtual ICollection<Preference> Preferences { get; set; }
         public virtual Schedule Schedule { get; set; }

@@ -18,6 +18,10 @@ namespace DataTransferObjects.ScheduledShift
         [Required]
         public int MaxOnShift { get; set; }
         [Required]
+        public int MinOnShift { get; set; }
+        [Required]
         public int[] EmployeeIds { get; set; }
+
+        
     }
 }
