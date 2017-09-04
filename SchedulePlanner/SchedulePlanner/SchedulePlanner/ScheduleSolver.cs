@@ -70,7 +70,10 @@ namespace SchedulePlanner
             for (var j = 0; j < _shifts.ToList().Count; j++)
             {
                 solver.Add(_preferences.Select((e, index) => employeeMatrix[j, index]).ToArray().Sum() <= requiredEmployees[j]);
-                solver.Add(_preferences.Select((e, index) => employeeMatrix[j,index]).ToArray().Sum() >= minEmployees[j]);
+                for (var min = 1; min < minEmployees[j]; min++)
+                {
+                    solver.Add(_preferences.Select((e, index) => employeeMatrix[j, index]).ToArray().Sum() == min);
+                }
                 for (var i = 0; i < _preferences.ToList().Count; i++)
                 {
                     for (var k = 0; k < _preferences.ToList().Count; k++)
