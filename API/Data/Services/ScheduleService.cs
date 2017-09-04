@@ -70,9 +70,10 @@ namespace Data.Services
             dbScheduledShift.MaxOnShift = scheduledShiftDto.MaxOnShift;
             dbScheduledShift.MinOnShift = scheduledShiftDto.MinOnShift;
             dbScheduledShift.Day = scheduledShiftDto.Day;
+            dbScheduledShift.EmployeeAssignments.Clear();
             dbScheduledShift.EmployeeAssignments =
                 employees.Select(
-                    e => new EmployeeAssignment { Employee = e, ScheduledShift = dbScheduledShift, IsLocked = false }).ToList();
+                    e => new EmployeeAssignment { Employee = e, ScheduledShift = dbScheduledShift, IsLocked = scheduledShiftDto.LockedEmployeeIds.Any(lei => lei == e.Id) }).ToList();
 
             _scheduleRepository.Update(dbSchedule);
 
