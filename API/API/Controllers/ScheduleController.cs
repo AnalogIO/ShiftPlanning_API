@@ -415,12 +415,15 @@ namespace API.Controllers
 
                 var emps = _employeeService.GetEmployees(employee.Organization.Id).ToList();
 
-                foreach(var ss in schedule.ScheduledShifts) ss.Employees.Clear();
+                foreach (var ss in schedule.ScheduledShifts)
+                {
+                    ss.EmployeeAssignments = ss.EmployeeAssignments.Where(ea => ea.IsLocked).ToList();
+                }
 
                 foreach(var ass in assignments)
                 {
                     var ss = schedule.ScheduledShifts.FirstOrDefault(s => s.Id == ass.ShiftId);
-                    ss.Employees.Add(emps.SingleOrDefault(e => e.Id == ass.BaristaId));
+                    ss.EmployeeAssignments.Add(new EmployeeAssignment { Employee = emps.SingleOrDefault(e => e.Id == ass.BaristaId), ScheduledShift = ss, IsLocked = false});
                 }
 
                 return Ok(Mapper.Map(_scheduleService.UpdateSchedule(schedule, employee)));

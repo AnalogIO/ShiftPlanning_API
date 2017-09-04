@@ -112,6 +112,10 @@
     <Compile Include="Migrations\201709021728196_added MinOnShift on scheduled shift.Designer.cs">
       <DependentUpon>201709021728196_added MinOnShift on scheduled shift.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709040843319_added locked assignments as relation between employees and scheduled shifts.cs" />
+    <Compile Include="Migrations\201709040843319_added locked assignments as relation between employees and scheduled shifts.Designer.cs">
+      <DependentUpon>201709040843319_added locked assignments as relation between employees and scheduled shifts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\EmployeeRepository.cs" />
@@ -140,6 +144,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709021728196_added MinOnShift on scheduled shift.resx">
       <DependentUpon>201709021728196_added MinOnShift on scheduled shift.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709040843319_added locked assignments as relation between employees and scheduled shifts.resx">
+      <DependentUpon>201709040843319_added locked assignments as relation between employees and scheduled shifts.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

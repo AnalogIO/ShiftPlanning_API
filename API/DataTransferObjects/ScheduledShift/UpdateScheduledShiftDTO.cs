@@ -21,6 +21,8 @@ namespace DataTransferObjects.ScheduledShift
         public int MinOnShift { get; set; }
         [Required]
         public int[] EmployeeIds { get; set; }
+        [Required]
+        public int[] LockedEmployeeIds { get; set; }
 
         
     }

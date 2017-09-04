@@ -48,7 +48,7 @@ namespace Data.MSSQL.Repositories
             employee.CheckIns.Clear();
             employee.Friendships.Clear();
             employee.Roles.Clear();
-            employee.ScheduledShifts.Clear();
+            employee.EmployeeAssignments.Clear();
             employee.Tokens.Clear();
 
             _context.Employees.Remove(employee);

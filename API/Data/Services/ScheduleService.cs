@@ -29,7 +29,10 @@ namespace Data.Services
             var schedule = _scheduleRepository.Read(scheduleId, employee.Organization.Id);
             if (schedule == null) throw new ObjectNotFoundException("Could not find a schedule corresponding to the given id");
             var employees = _employeeRepository.ReadFromOrganization(employee.Organization.Id).Where(x => scheduledShiftDto.EmployeeIds.Contains(x.Id)).ToList();
-            var scheduledShift = new ScheduledShift { Day = scheduledShiftDto.Day, Start = TimeSpan.Parse(scheduledShiftDto.Start), End = TimeSpan.Parse(scheduledShiftDto.End), Schedule = schedule, Employees = employees, MaxOnShift = scheduledShiftDto.MaxOnShift, MinOnShift = scheduledShiftDto.MinOnShift };
+            var scheduledShift = new ScheduledShift { Day = scheduledShiftDto.Day, Start = TimeSpan.Parse(scheduledShiftDto.Start), End = TimeSpan.Parse(scheduledShiftDto.End), Schedule = schedule, MaxOnShift = scheduledShiftDto.MaxOnShift, MinOnShift = scheduledShiftDto.MinOnShift };
+            scheduledShift.EmployeeAssignments =
+                employees.Select(
+                    e => new EmployeeAssignment {Employee = e, ScheduledShift = scheduledShift, IsLocked = false}).ToList();
             schedule.ScheduledShifts.Add(scheduledShift);
             return _scheduleRepository.Update(schedule) > 0 ? scheduledShift : null;
         }
@@ -42,7 +45,10 @@ namespace Data.Services
             foreach(CreateScheduledShiftDTO scheduledShiftDto in scheduledShiftsDto)
             {
                 var employees = _employeeRepository.ReadFromOrganization(employee.Organization.Id).Where(x => scheduledShiftDto.EmployeeIds.Contains(x.Id)).ToList();
-                var scheduledShift = new ScheduledShift { Day = scheduledShiftDto.Day, Start = TimeSpan.Parse(scheduledShiftDto.Start), End = TimeSpan.Parse(scheduledShiftDto.End), Schedule = schedule, Employees = employees, MaxOnShift = scheduledShiftDto.MaxOnShift, MinOnShift = scheduledShiftDto.MinOnShift};
+                var scheduledShift = new ScheduledShift { Day = scheduledShiftDto.Day, Start = TimeSpan.Parse(scheduledShiftDto.Start), End = TimeSpan.Parse(scheduledShiftDto.End), Schedule = schedule, MaxOnShift = scheduledShiftDto.MaxOnShift, MinOnShift = scheduledShiftDto.MinOnShift};
+                scheduledShift.EmployeeAssignments =
+                employees.Select(
+                    e => new EmployeeAssignment { Employee = e, ScheduledShift = scheduledShift, IsLocked = false }).ToList();
                 scheduledShifts.Add(scheduledShift);
                 schedule.ScheduledShifts.Add(scheduledShift);
             }
@@ -55,14 +61,18 @@ namespace Data.Services
 
             var employees = _employeeRepository.ReadFromOrganization(employee.Organization.Id).Where(x => scheduledShiftDto.EmployeeIds.Contains(x.Id)).ToList();
 
-            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).Employees.Clear();
+            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).EmployeeAssignments.Clear();
 
-            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).Start = TimeSpan.Parse(scheduledShiftDto.Start);
-            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).End = TimeSpan.Parse(scheduledShiftDto.End);
-            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).MaxOnShift = scheduledShiftDto.MaxOnShift;
-            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).MinOnShift = scheduledShiftDto.MinOnShift;
-            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).Day = scheduledShiftDto.Day;
-            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).Employees = employees;
+            var dbScheduledShift = dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId);
+
+            dbScheduledShift.Start = TimeSpan.Parse(scheduledShiftDto.Start);
+            dbScheduledShift.End = TimeSpan.Parse(scheduledShiftDto.End);
+            dbScheduledShift.MaxOnShift = scheduledShiftDto.MaxOnShift;
+            dbScheduledShift.MinOnShift = scheduledShiftDto.MinOnShift;
+            dbScheduledShift.Day = scheduledShiftDto.Day;
+            dbScheduledShift.EmployeeAssignments =
+                employees.Select(
+                    e => new EmployeeAssignment { Employee = e, ScheduledShift = dbScheduledShift, IsLocked = false }).ToList();
 
             _scheduleRepository.Update(dbSchedule);
 
@@ -145,7 +155,7 @@ namespace Data.Services
                             Start = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, scheduledShift.Start.Hours, scheduledShift.Start.Minutes, scheduledShift.Start.Seconds),
                             End = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, scheduledShift.End.Hours, scheduledShift.End.Minutes, scheduledShift.End.Seconds),
                             CheckIns = new List<CheckIn>(),
-                            Employees = scheduledShift.Employees,
+                            Employees = scheduledShift.EmployeeAssignments.Select(ea => ea.Employee).ToList(),
                             Organization = employee.Organization,
                             Schedule = schedule
                         };

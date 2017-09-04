@@ -15,7 +15,7 @@ namespace Data.Models
         public int WantShifts { get; set; }
         public virtual ICollection<Shift> Shifts { get; set; }
         public virtual ICollection<CheckIn> CheckIns { get; set; }
-        public virtual ICollection<ScheduledShift> ScheduledShifts { get; set; }
+        public virtual ICollection<EmployeeAssignment> EmployeeAssignments { get; set; }
         public virtual ICollection<Preference> Preferences { get; set; }
         public virtual ICollection<Friendship> Friendships { get; set; }
         public virtual Organization Organization { get; set; }

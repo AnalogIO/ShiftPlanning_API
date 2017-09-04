@@ -49,7 +49,7 @@ namespace API.Logic
 
         public static ScheduledShiftDTO Map(ScheduledShift scheduledShift)
         {
-            return new ScheduledShiftDTO { Id = scheduledShift.Id, Day = scheduledShift.Day, Start = scheduledShift.Start.ToString(@"hh\:mm"), End = scheduledShift.End.ToString(@"hh\:mm"), MaxOnShift = scheduledShift.MaxOnShift, MinOnShift = scheduledShift.MinOnShift, Employees = Map(scheduledShift.Employees) };
+            return new ScheduledShiftDTO { Id = scheduledShift.Id, Day = scheduledShift.Day, Start = scheduledShift.Start.ToString(@"hh\:mm"), End = scheduledShift.End.ToString(@"hh\:mm"), MaxOnShift = scheduledShift.MaxOnShift, MinOnShift = scheduledShift.MinOnShift, Employees = Map(scheduledShift.EmployeeAssignments.Select(ea => ea.Employee)), LockedEmployeeIds = scheduledShift.EmployeeAssignments.Where(ea => ea.IsLocked).Select(ea => ea.Employee.Id).ToArray()};
         }
 
         public static IEnumerable<ScheduledShiftDTO> Map(IEnumerable<ScheduledShift> scheduledShifts)
@@ -142,8 +142,13 @@ namespace API.Logic
         {
             var employees = schedule.ScheduledShifts.SelectMany(ss => ss.Preferences.Select(p => p.Employee)).Distinct();
             var preferences = new List<FindOptimalSchedulePreferencesDTO>();
+            var lockedIds = new List<int>();
             foreach (var employee in employees)
             {
+                var lockedTo = employee.EmployeeAssignments.Where(ea => ea.IsLocked).Select(ea => ea.ScheduledShift.Id).ToList();
+                lockedIds.AddRange(lockedTo);
+                if(lockedTo.Count > 0) continue;
+
                 var prefs =
                     employee.Preferences.Where(p => p.ScheduledShift.Schedule.Id == schedule.Id)
                         .Select(
@@ -169,6 +174,15 @@ namespace API.Logic
                     schedule.ScheduledShifts.Select(
                         ss => new FindOptimalScheduleShiftDTO {Id = ss.Id, MaxOnShift = ss.MaxOnShift})
             };
+
+            // subtract lockedIds from maxOnShift and minOnShift
+            foreach (var t in lockedIds)
+            {
+                var findOptimalScheduleShiftDto = dto.Shifts.FirstOrDefault(s => s.Id == t);
+                if(findOptimalScheduleShiftDto == null) continue;
+                findOptimalScheduleShiftDto.MaxOnShift--;
+                findOptimalScheduleShiftDto.MinOnShift--;
+            }
             return dto;
         }
     }

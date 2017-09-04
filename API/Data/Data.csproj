@@ -110,6 +110,7 @@
     <Compile Include="Models\CheckIn.cs" />
     <Compile Include="Models\EmailSettings.cs" />
     <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\EmployeeAssignment.cs" />
     <Compile Include="Models\EmployeeTitle.cs" />
     <Compile Include="Models\Friendship.cs" />
     <Compile Include="Models\Organization.cs" />
