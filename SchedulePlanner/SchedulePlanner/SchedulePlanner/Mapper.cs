@@ -13,7 +13,7 @@ namespace SchedulePlanner
     {
         public static IEnumerable<Shift> MapShifts(IEnumerable<ShiftDTO> shifts)
         {
-            return shifts.Select((s,i) => new Shift { Id = s.Id, MaxOnShift = s.MaxOnShift, IndexId = i });
+            return shifts.Select((s,i) => new Shift { Id = s.Id, MaxOnShift = s.MaxOnShift, MinOnshift = s.MinOnShift, IndexId = i });
         }
 
         public static IEnumerable<Barista> MapPreferences(IEnumerable<PreferenceDTO> preferences)

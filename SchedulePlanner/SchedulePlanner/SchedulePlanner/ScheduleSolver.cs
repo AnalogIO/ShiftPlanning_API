@@ -54,6 +54,7 @@ namespace SchedulePlanner
             }
 
             var requiredEmployees = _shifts.Select(s => s.MaxOnShift).ToArray();
+            var minEmployees = _shifts.Select(s => s.MinOnshift).ToArray();
 
             var employeeMatrix = solver.MakeIntVarMatrix(_shifts.ToList().Count, _preferences.ToList().Count, 0, 1, "employeeShifts");
 
@@ -65,12 +66,11 @@ namespace SchedulePlanner
                 _togetherList.Add(solver.MakeIntVarMatrix(_preferences.ToList().Count, maxLikes, 0, 1, $"employeeWorkTogether_{i}"));
             }
 
-            var cons = new List<Constraint>();
-
-            // Constraint 1: All shifts doesn't have more than their "Maximum coverage constraint"
+            // Constraint 1: All shifts doesn't have more than their "Maximum coverage constraint" and not less than their "Minimum Coverage Constraint"
             for (var j = 0; j < _shifts.ToList().Count; j++)
             {
-                cons.Add(solver.Add(_preferences.Select((e, index) => employeeMatrix[j, index]).ToArray().Sum() <= requiredEmployees[j]));
+                solver.Add(_preferences.Select((e, index) => employeeMatrix[j, index]).ToArray().Sum() <= requiredEmployees[j]);
+                solver.Add(_preferences.Select((e, index) => employeeMatrix[j,index]).ToArray().Sum() >= minEmployees[j]);
                 for (var i = 0; i < _preferences.ToList().Count; i++)
                 {
                     for (var k = 0; k < _preferences.ToList().Count; k++)
@@ -78,8 +78,8 @@ namespace SchedulePlanner
                         if (i == k) continue;
                         if (likes[i] == null || likes[i][k] == 0) continue;
                         AddLikedEmployee(i, k);
-                        cons.Add(solver.Add(_togetherList[j][i, GetEmployeeIndex(i, k)] <= employeeMatrix[j, i]));
-                        cons.Add(solver.Add(_togetherList[j][i, GetEmployeeIndex(i, k)] <= employeeMatrix[j, k]));
+                        solver.Add(_togetherList[j][i, GetEmployeeIndex(i, k)] <= employeeMatrix[j, i]);
+                        solver.Add(_togetherList[j][i, GetEmployeeIndex(i, k)] <= employeeMatrix[j, k]);
                     }
                 }
             }
@@ -88,14 +88,14 @@ namespace SchedulePlanner
                 for (var j = 0; j < _shifts.ToList().Count; j++)
                 {
                     //Constraint 2: All baristas only gets shifts they prefer
-                    cons.Add(solver.Add(employeeMatrix[j, i] <= pref[i, j]));
+                    solver.Add(employeeMatrix[j, i] <= pref[i, j]);
                 }
 
                 // Constraint 3: All baristas has at least 1 shift
-                cons.Add(solver.Add(_shifts.Select((s, index) => employeeMatrix[index, i]).ToArray().Sum() >= 1));
+                solver.Add(_shifts.Select((s, index) => employeeMatrix[index, i]).ToArray().Sum() >= 1);
 
                 // Constraint 4: All bariastas can have up to their limit of shifts they want
-                cons.Add(solver.Add(_shifts.Select((s, index) => employeeMatrix[index, i]).ToArray().Sum() <= wantShifts[i]));
+                solver.Add(_shifts.Select((s, index) => employeeMatrix[index, i]).ToArray().Sum() <= wantShifts[i]);
             }
 
             //Constraint 5: All baristas is not with a barista they don't like

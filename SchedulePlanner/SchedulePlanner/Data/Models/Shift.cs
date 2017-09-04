@@ -9,6 +9,7 @@ namespace Data.Models
     {
         public int Id { get; set; }
         public int MaxOnShift { get; set; }
+        public int MinOnshift { get; set; }
         public int IndexId { get; set; }
     }
 }
