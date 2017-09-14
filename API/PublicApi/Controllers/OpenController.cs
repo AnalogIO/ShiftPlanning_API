@@ -33,16 +33,11 @@ namespace PublicApi.Controllers
         [HttpGet, Route("{shortKey}")]
         public IHttpActionResult IsOpen(string shortKey)
         {
-            var currentShifts = _shiftService.GetOngoingShiftsByOrganization(shortKey);
-
-            if (currentShifts == null)
-            {
-                return NotFound();
-            }
-
+            var isOpen = _shiftService.IsOrganisationOpen(shortKey);
+            
             return Ok(new IsOpenDTO
             {
-                Open = currentShifts.Any(s => s.CheckIns.Any())
+                Open = isOpen
             });
         }
     }

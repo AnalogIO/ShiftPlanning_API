@@ -139,6 +139,11 @@ namespace Data.Services
             return _shiftRepository.Create(shift);
         }
 
+        public bool IsOrganisationOpen(string shortKey)
+        {
+            return _shiftRepository.IsOrganisationOpen(shortKey);
+        }
+
         public Shift GetShift(int shiftId, int organizationId)
         {
             return _shiftRepository.Read(shiftId, organizationId);

@@ -94,6 +94,14 @@ namespace Data.Npgsql.Repositories
                 .Where(s => s.Organization.Id == organizationId && (s.Start < now && s.End > now || (s.Start > now && s.Start < inOneHour)));
         }
 
+        public bool IsOrganisationOpen(string shortKey)
+        {
+            var now = DateTime.Now;
+
+            return _context.Shifts
+                .Any(shift => shift.Organization.ShortKey == shortKey && shift.Start <= now && now <= shift.End && shift.CheckIns.Any());
+        }
+
         public void Dispose()
         {
             _context.Dispose();
