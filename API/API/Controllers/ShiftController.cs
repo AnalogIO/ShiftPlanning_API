@@ -220,7 +220,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="shiftDto"></param>
         /// <returns></returns>
-        [Authorize(Roles = "Application")]
+        //[Authorize(Roles = "Application")] TODO: FIX AUTHENTICATION HEADER
         [HttpPost, Route("createoutsideschedule")]
         public IHttpActionResult CreateOutsideSchedule(CreateShiftDTO shiftDto)
         {
@@ -230,7 +230,7 @@ namespace API.Controllers
             }
 
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
-            if (organization == null) return BadRequest("No institution found with the given name");
+            if (organization == null) return BadRequest("No organization found with the given name");
 
             var shift = _shiftService.CreateLimitedShift(organization, shiftDto, 300); // Create shift if it doesnt exceed a duration of 5 hours
             if (shift != null)

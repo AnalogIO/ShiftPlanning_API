@@ -58,35 +58,24 @@ namespace Data.MSSQL.Repositories
         public IEnumerable<Employee> ReadFromOrganization(int organizationId)
         {
             return _context.Employees
-                .Include(employee => employee.EmployeeTitle)
-                .Include(employee => employee.Photo)
-                .Include(employee => employee.CheckIns)
                 .Where(e => e.Organization.Id == organizationId).OrderBy(x => x.Id);
         }
 
         public IEnumerable<Employee> ReadFromOrganization(string shortKey)
         {
             return _context.Employees
-                .Include(employee => employee.EmployeeTitle)
-                .Include(employee => employee.Photo)
-                .Include(employee => employee.CheckIns)
                 .Where(e => e.Organization.ShortKey == shortKey);
         }
 
         public Employee Read(int id, int organizationId)
         {
             return _context.Employees
-                .Include(employee => employee.EmployeeTitle)
-                .Include(employee => employee.CheckIns)
                 .FirstOrDefault(employee => employee.Id == id && employee.Organization.Id == organizationId);
         }
 
         public Employee Read(int id, string shortKey)
         {
             return _context.Employees
-                .Include(employee => employee.EmployeeTitle)
-                .Include(employee => employee.Photo)
-                .Include(employee => employee.CheckIns)
                 .FirstOrDefault(employee => employee.Id == id && employee.Organization.ShortKey == shortKey);
         }
 
@@ -107,11 +96,6 @@ namespace Data.MSSQL.Repositories
         public Employee Read(string token)
         {
             return _context.Employees
-                .Include(employee => employee.EmployeeTitle)
-                .Include(employee => employee.Photo)
-                .Include(employee => employee.CheckIns)
-                .Include(employee => employee.Roles)
-                .Include(employee => employee.Organization)
                 .FirstOrDefault(employee => employee.Tokens.Any(t => t.TokenHash == token));
         }
 

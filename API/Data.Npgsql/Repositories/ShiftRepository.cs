@@ -49,13 +49,9 @@ namespace Data.MSSQL.Repositories
 
         public IEnumerable<Shift> ReadFromOrganization(string organizationShortKey)
         {
-            return _context.Shifts
-                .Include(x => x.CheckIns)
-                .Include(x => x.CheckIns.Select(y => y.Employee))
-                .Include(x => x.Employees)
-                .Include(x => x.Employees.Select(y => y.EmployeeTitle))
-                .Include(x => x.Employees.Select(y => y.CheckIns))
-                .Where(x => x.Organization.ShortKey == organizationShortKey);
+            var shifts = _context.Shifts
+                .Where(x => x.Organization.ShortKey == organizationShortKey).ToList();
+            return shifts;
         }
 
         public Shift Read(int id, int organizationId)
@@ -66,12 +62,6 @@ namespace Data.MSSQL.Repositories
         public IEnumerable<Shift> ReadFromOrganization(int organizationId)
         {
             return _context.Shifts
-                .Include(x => x.CheckIns)
-                .Include(x => x.CheckIns.Select(y => y.Employee))
-                .Include(x => x.Employees)
-                .Include(x => x.Employees.Select(y => y.EmployeeTitle))
-                .Include(x => x.Employees.Select(y => y.Photo))
-                .Include(x => x.Employees.Select(y => y.CheckIns))
                 .Where(x => x.Organization.Id == organizationId);
         }
 

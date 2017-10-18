@@ -279,15 +279,15 @@ namespace API.Controllers
         /// <returns>
         /// Returns an array of employees.
         /// </returns>
-        [Authorize(Roles = "Application")]
+        //[Authorize(Roles = "Application")] TODO: FIX Authentication of apikey through data annotation
         [HttpGet, Route("")]
         [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
         public IHttpActionResult Get(string apiKey)
         {
-            var institution = _authManager.GetOrganizationByApiKey(apiKey);
-            if (institution == null) return BadRequest("No institution found with the given name");
+            var organization = _authManager.GetOrganizationByApiKey(apiKey);
+            if (organization == null) return BadRequest("No organization found with the given name");
 
-            var employees = _employeeService.GetEmployees(institution.Id).OrderBy(e => e.FirstName).ThenBy(e => e.LastName);
+            var employees = _employeeService.GetEmployees(organization.Id).OrderBy(e => e.FirstName).ThenBy(e => e.LastName);
             if (employees == null) return NotFound();
             return Ok(Mapper.Map(employees));
         }

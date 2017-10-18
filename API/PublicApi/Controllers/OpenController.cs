@@ -33,12 +33,12 @@ namespace PublicApi.Controllers
         [HttpGet, Route("{shortKey}")]
         public IHttpActionResult IsOpen(string shortKey)
         {
-            var isOpen = _shiftService.IsOrganisationOpen(shortKey);
-
-            return Ok(new IsOpenDTO
+            var isOpen = new IsOpenDTO
             {
-                Open = isOpen
-            });
+                Open = _shiftService.IsOrganisationOpen(shortKey)
+            };
+
+            return Ok(isOpen);
         }
     }
 }

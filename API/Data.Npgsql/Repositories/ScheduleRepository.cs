@@ -26,7 +26,7 @@ namespace Data.MSSQL.Repositories
 
         public void Delete(int id, int organizationId)
         {
-            var schedule = _context.Schedules.Include(ss => ss.ScheduledShifts).Include(s => s.Shifts).SingleOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
+            var schedule = _context.Schedules.SingleOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
             if (schedule == null) throw new ObjectNotFoundException("Could not find a schedule corresponding to the given id");
 
             if(schedule.Shifts.Any(s => s.CheckIns.Any())) throw new ForbiddenException("You cannot delete a schedule that has been rolled out and contains checkins.");
@@ -43,18 +43,12 @@ namespace Data.MSSQL.Repositories
         public Schedule Read(int id, int organizationId)
         {
             return _context.Schedules
-                .Include(x => x.ScheduledShifts)
-                .Include(x => x.ScheduledShifts.Select(y => y.EmployeeAssignments))
-                .Include(x => x.ScheduledShifts.Select(y => y.EmployeeAssignments.Select(z => z.Employee)))
                 .SingleOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
         }
 
         public IEnumerable<Schedule> ReadFromOrganization(int organizationId)
         {
             return _context.Schedules
-                .Include(x => x.ScheduledShifts)
-                .Include(x => x.ScheduledShifts.Select(y => y.EmployeeAssignments))
-                .Include(x => x.ScheduledShifts.Select(y => y.EmployeeAssignments.Select(z => z.Employee)))
                 .Where(x => x.Organization.Id == organizationId)
                 .ToList();
         }

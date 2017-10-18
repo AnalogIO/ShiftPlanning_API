@@ -10,7 +10,6 @@ namespace DataTransferObjects.Public.OpeningHours
         /// <summary>
         /// States whether or not a given organization is open.
         /// </summary>
-        [JsonProperty("open")]
         public bool Open { get; set; }
     }
 }
