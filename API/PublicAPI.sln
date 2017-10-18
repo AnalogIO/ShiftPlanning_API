@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTransferObjects", "Data
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublicApi", "PublicApi\PublicApi.csproj", "{14A196B2-F555-4654-AACF-8528DAD81115}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.MSSQL", "Data.Npgsql\Data.MSSQL.csproj", "{69E98BC8-0B45-4FC8-9659-02BC4F65DC3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.MSSQL", "Data.MSSQL\Data.MSSQL.csproj", "{69E98BC8-0B45-4FC8-9659-02BC4F65DC3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

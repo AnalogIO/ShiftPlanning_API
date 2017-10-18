@@ -7,8 +7,8 @@
     <ProjectGuid>{69E98BC8-0B45-4FC8-9659-02BC4F65DC3D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Data.Npgsql</RootNamespace>
-    <AssemblyName>Data.Npgsql</AssemblyName>
+    <RootNamespace>Data.MSSQL</RootNamespace>
+    <AssemblyName>Data.MSSQL</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
