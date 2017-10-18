@@ -116,6 +116,18 @@
     <Compile Include="Migrations\201709040843319_added locked assignments as relation between employees and scheduled shifts.Designer.cs">
       <DependentUpon>201709040843319_added locked assignments as relation between employees and scheduled shifts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709040919039_stuff.cs" />
+    <Compile Include="Migrations\201709040919039_stuff.Designer.cs">
+      <DependentUpon>201709040919039_stuff.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709040927398_added constraints to employee assignment.cs" />
+    <Compile Include="Migrations\201709040927398_added constraints to employee assignment.Designer.cs">
+      <DependentUpon>201709040927398_added constraints to employee assignment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709040950382_removed modelbuilder stuff.cs" />
+    <Compile Include="Migrations\201709040950382_removed modelbuilder stuff.Designer.cs">
+      <DependentUpon>201709040950382_removed modelbuilder stuff.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\EmployeeRepository.cs" />
@@ -147,6 +159,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709040843319_added locked assignments as relation between employees and scheduled shifts.resx">
       <DependentUpon>201709040843319_added locked assignments as relation between employees and scheduled shifts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709040919039_stuff.resx">
+      <DependentUpon>201709040919039_stuff.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709040927398_added constraints to employee assignment.resx">
+      <DependentUpon>201709040927398_added constraints to employee assignment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709040950382_removed modelbuilder stuff.resx">
+      <DependentUpon>201709040950382_removed modelbuilder stuff.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

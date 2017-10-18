@@ -172,7 +172,7 @@ namespace API.Logic
                 Preferences = preferences,
                 Shifts =
                     schedule.ScheduledShifts.Select(
-                        ss => new FindOptimalScheduleShiftDTO {Id = ss.Id, MaxOnShift = ss.MaxOnShift})
+                        ss => new FindOptimalScheduleShiftDTO {Id = ss.Id, MaxOnShift = ss.MaxOnShift, MinOnShift = ss.MinOnShift})
             };
 
             // subtract lockedIds from maxOnShift and minOnShift

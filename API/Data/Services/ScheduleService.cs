@@ -61,16 +61,19 @@ namespace Data.Services
 
             var employees = _employeeRepository.ReadFromOrganization(employee.Organization.Id).Where(x => scheduledShiftDto.EmployeeIds.Contains(x.Id)).ToList();
 
-            dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId).EmployeeAssignments.Clear();
-
             var dbScheduledShift = dbSchedule.ScheduledShifts.Single(s => s.Id == scheduledShiftId);
+
+            foreach(var emp in dbScheduledShift.EmployeeAssignments.Select(e => e.Employee).ToList())
+            {
+                emp.EmployeeAssignments =
+                    emp.EmployeeAssignments.Where(ea => ea.ScheduledShift.Id != dbScheduledShift.Id).ToList();
+            }
 
             dbScheduledShift.Start = TimeSpan.Parse(scheduledShiftDto.Start);
             dbScheduledShift.End = TimeSpan.Parse(scheduledShiftDto.End);
             dbScheduledShift.MaxOnShift = scheduledShiftDto.MaxOnShift;
             dbScheduledShift.MinOnShift = scheduledShiftDto.MinOnShift;
             dbScheduledShift.Day = scheduledShiftDto.Day;
-            dbScheduledShift.EmployeeAssignments.Clear();
             dbScheduledShift.EmployeeAssignments =
                 employees.Select(
                     e => new EmployeeAssignment { Employee = e, ScheduledShift = dbScheduledShift, IsLocked = scheduledShiftDto.LockedEmployeeIds.Any(lei => lei == e.Id) }).ToList();

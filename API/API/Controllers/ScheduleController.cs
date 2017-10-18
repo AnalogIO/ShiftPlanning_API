@@ -411,6 +411,8 @@ namespace API.Controllers
                     return BadRequest();
                 }
 
+                //return Ok(response.RequestMessage.Content);
+
                 var assignments = await response.Content.ReadAsAsync<List<AssignmentDTO>>();
 
                 var emps = _employeeService.GetEmployees(employee.Organization.Id).ToList();
