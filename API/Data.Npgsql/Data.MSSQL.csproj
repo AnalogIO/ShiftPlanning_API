@@ -104,29 +104,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\IoCConfig.cs" />
-    <Compile Include="Migrations\201708291321001_initial prod.cs" />
-    <Compile Include="Migrations\201708291321001_initial prod.Designer.cs">
-      <DependentUpon>201708291321001_initial prod.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709021728196_added MinOnShift on scheduled shift.cs" />
-    <Compile Include="Migrations\201709021728196_added MinOnShift on scheduled shift.Designer.cs">
-      <DependentUpon>201709021728196_added MinOnShift on scheduled shift.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709040843319_added locked assignments as relation between employees and scheduled shifts.cs" />
-    <Compile Include="Migrations\201709040843319_added locked assignments as relation between employees and scheduled shifts.Designer.cs">
-      <DependentUpon>201709040843319_added locked assignments as relation between employees and scheduled shifts.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709040919039_stuff.cs" />
-    <Compile Include="Migrations\201709040919039_stuff.Designer.cs">
-      <DependentUpon>201709040919039_stuff.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709040927398_added constraints to employee assignment.cs" />
-    <Compile Include="Migrations\201709040927398_added constraints to employee assignment.Designer.cs">
-      <DependentUpon>201709040927398_added constraints to employee assignment.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709040950382_removed modelbuilder stuff.cs" />
-    <Compile Include="Migrations\201709040950382_removed modelbuilder stuff.Designer.cs">
-      <DependentUpon>201709040950382_removed modelbuilder stuff.cs</DependentUpon>
+    <Compile Include="Migrations\201710181356303_initial.cs" />
+    <Compile Include="Migrations\201710181356303_initial.Designer.cs">
+      <DependentUpon>201710181356303_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -147,27 +127,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Content Include="connections.config" />
+    <Content Include="connections.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201708291321001_initial prod.resx">
-      <DependentUpon>201708291321001_initial prod.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709021728196_added MinOnShift on scheduled shift.resx">
-      <DependentUpon>201709021728196_added MinOnShift on scheduled shift.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709040843319_added locked assignments as relation between employees and scheduled shifts.resx">
-      <DependentUpon>201709040843319_added locked assignments as relation between employees and scheduled shifts.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709040919039_stuff.resx">
-      <DependentUpon>201709040919039_stuff.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709040927398_added constraints to employee assignment.resx">
-      <DependentUpon>201709040927398_added constraints to employee assignment.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709040950382_removed modelbuilder stuff.resx">
-      <DependentUpon>201709040950382_removed modelbuilder stuff.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201710181356303_initial.resx">
+      <DependentUpon>201710181356303_initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
