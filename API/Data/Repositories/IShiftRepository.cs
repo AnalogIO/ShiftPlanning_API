@@ -15,5 +15,6 @@ namespace Data.Repositories
         void Delete(int id, int organizationId);
         void Delete(IEnumerable<Shift> shifts);
         IEnumerable<Shift> GetOngoingShifts(int organizationId, DateTime currentTime);
+        bool IsOrganisationOpen(string shortKey);
     }
 }
