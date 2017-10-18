@@ -12,6 +12,8 @@ using System.Configuration;
 using System.Linq;
 using System.Web.Http.Description;
 using DataTransferObjects.Manager;
+using System.Web;
+using System.IO;
 
 namespace API.Controllers
 {
@@ -97,7 +99,7 @@ namespace API.Controllers
             {
                 return BadRequest("An employee must contain an email, a first name, a last name and an employee title.");
             }
-            
+
             var photo = employee.Organization.DefaultPhoto;
 
             if (!string.IsNullOrWhiteSpace(employeeDto.ProfilePhoto))
@@ -226,14 +228,14 @@ namespace API.Controllers
 
             var employees = _employeeService.GetEmployees(employee.Organization.Id);
             if (employees == null) return NotFound();
-            if(employee.Roles.Any(r => r.Name == "Manager"))
+            if (employee.Roles.Any(r => r.Name == "Manager"))
             {
                 return Ok(Mapper.Map(employees));
             } else
             {
                 return Ok(Mapper.MapSimple(employees));
             }
-            
+
         }
 
         // GET api/employees/{id}
@@ -411,5 +413,8 @@ namespace API.Controllers
                 || string.IsNullOrWhiteSpace(dto.LastName)) return false;
             return true;
         }
+
+
+        
     }
 }
