@@ -11,12 +11,14 @@ namespace SchedulePlanner
     public class ScheduleSolver
     {
         private List<Variable[,]> _togetherList;
+        private List<Variable[,]> _minList;
         private int _revertByFactor;
         private readonly IEnumerable<Shift> _shifts;
         private readonly IEnumerable<Barista> _preferences;
         private readonly Tuple<int[], int[][]> _additionalInfo;
         private readonly int[][] _dislikes;
         private List<int>[] _likeMap;
+        private bool _enoughEmployees;
 
         public ScheduleSolver(IEnumerable<Shift> shifts, IEnumerable<Barista> preferences,
             Tuple<int[], int[][]> additionalInfo, int[][] dislikes)
@@ -26,6 +28,8 @@ namespace SchedulePlanner
             _additionalInfo = additionalInfo;
             _dislikes = dislikes;
             _likeMap = new List<int>[preferences.ToList().Count];
+
+            _enoughEmployees = preferences.Count() > shifts.Select(s => s.MaxOnShift).Sum();
         }
 
         public IEnumerable<AssignmentDTO> Solve()
@@ -61,8 +65,10 @@ namespace SchedulePlanner
             var maxLikes = (from like in likes where like != null select like.Count(l => l > 0)).Concat(new[] { 0 }).Max(); // gets the largest amount of likes a barista have
 
             _togetherList = new List<Variable[,]>();
+            _minList = new List<Variable[,]>();
             for (var i = 0; i < _shifts.ToList().Count; i++)
             {
+                _minList.Add(solver.MakeIntVarMatrix(_preferences.ToList().Count, _preferences.ToList().Count, 0, 1, $"minAtShift_{i}"));
                 _togetherList.Add(solver.MakeIntVarMatrix(_preferences.ToList().Count, maxLikes, 0, 1, $"employeeWorkTogether_{i}"));
             }
 
@@ -70,15 +76,14 @@ namespace SchedulePlanner
             for (var j = 0; j < _shifts.ToList().Count; j++)
             {
                 solver.Add(_preferences.Select((e, index) => employeeMatrix[j, index]).ToArray().Sum() <= requiredEmployees[j]);
-                for (var min = 1; min < minEmployees[j]; min++)
-                {
-                    solver.Add(_preferences.Select((e, index) => employeeMatrix[j, index]).ToArray().Sum() == min);
-                }
+                
                 for (var i = 0; i < _preferences.ToList().Count; i++)
                 {
                     for (var k = 0; k < _preferences.ToList().Count; k++)
                     {
                         if (i == k) continue;
+                        solver.Add(_minList[j][i,k] <= employeeMatrix[j, i]);
+                        solver.Add(_minList[j][i, k] <= employeeMatrix[j, k]);
                         if (likes[i] == null || likes[i][k] == 0) continue;
                         AddLikedEmployee(i, k);
                         solver.Add(_togetherList[j][i, GetEmployeeIndex(i, k)] <= employeeMatrix[j, i]);
@@ -94,8 +99,12 @@ namespace SchedulePlanner
                     solver.Add(employeeMatrix[j, i] <= pref[i, j]);
                 }
 
-                // Constraint 3: All baristas has at least 1 shift
-                solver.Add(_shifts.Select((s, index) => employeeMatrix[index, i]).ToArray().Sum() >= 1);
+                if (_enoughEmployees)
+                {
+                    // Constraint 3: All baristas has at least 1 shift
+                    solver.Add(_shifts.Select((s, index) => employeeMatrix[index, i]).ToArray().Sum() >= 1);
+                }
+               
 
                 // Constraint 4: All bariastas can have up to their limit of shifts they want
                 solver.Add(_shifts.Select((s, index) => employeeMatrix[index, i]).ToArray().Sum() <= wantShifts[i]);
@@ -177,7 +186,7 @@ namespace SchedulePlanner
                         }
                         else
                         {
-                            yield return employeeMatrix[j, i] * pref[i, j];
+                            yield return (employeeMatrix[j, i] * pref[i, j]) + _minList[j][i,k] * 5;
                         }
                     }
                 }
