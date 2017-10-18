@@ -83,7 +83,7 @@ namespace API.Controllers
         [Authorize(Roles = "Manager")]
         [HttpPost, Route("")]
         [ResponseType(typeof(EmployeeDTO))]
-        public IHttpActionResult Register(CreateEmployeeDTO employeeDto)
+        public IHttpActionResult Create(CreateEmployeeDTO employeeDto)
         {
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
             if (employee == null) return BadRequest("Provided token is invalid!");
@@ -166,7 +166,7 @@ namespace API.Controllers
         [Authorize(Roles = "Manager")]
         [HttpPost, Route("createmany")]
         [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
-        public IHttpActionResult RegisterMany(CreateEmployeeDTO[] employeeDtos)
+        public IHttpActionResult CreateMany(CreateEmployeeDTO[] employeeDtos)
         {
             if (!ModelState.IsValid)
             {
@@ -184,6 +184,31 @@ namespace API.Controllers
             return BadRequest("The employees could not be created!");
         }
 
+        // POST api/employees/5/resetpassword
+        /// <summary>
+        /// Resets the password of the employee given in the url.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
+        /// </summary>
+        /// <returns>
+        /// Returns 'Ok' (200) if the employee's password gets reset.
+        /// </returns>
+        [Authorize(Roles = "Manager")]
+        [HttpPost, Route("{id}/resetpassword")]
+        public IHttpActionResult ResetPassword(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
+
+            _employeeService.ResetPassword(id, employee.Organization.Id);
+
+            return Ok(Mapper.Map("The password was reset - an email has been sent to the employee!"));
+        }
+
         // GET api/employees
         /// <summary>
         /// Gets all the employees.
@@ -194,7 +219,6 @@ namespace API.Controllers
         /// </returns>
         [Authorize(Roles = "Manager, Employee")]
         [HttpGet, Route("")]
-        [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
         public IHttpActionResult Get()
         {
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
@@ -202,7 +226,14 @@ namespace API.Controllers
 
             var employees = _employeeService.GetEmployees(employee.Organization.Id);
             if (employees == null) return NotFound();
-            return Ok(Mapper.Map(employees));
+            if(employee.Roles.Any(r => r.Name == "Manager"))
+            {
+                return Ok(Mapper.Map(employees));
+            } else
+            {
+                return Ok(Mapper.MapSimple(employees));
+            }
+            
         }
 
         // GET api/employees/{id}
@@ -261,6 +292,49 @@ namespace API.Controllers
             return Ok(Mapper.Map(employees));
         }
 
+        // PUT api/employees
+        /// <summary>
+        /// Updates the employee currently logged in by token.
+        /// Requires 'Authorization' header set with the token granted upon manager login.
+        /// </summary>
+        /// <param name="employeeDto">The dto of the employee</param>
+        /// <returns>
+        /// Returns 'No Content' (204) if the employee gets updated.
+        /// </returns>
+        [Authorize(Roles = "Employee")]
+        [HttpPut, Route("")]
+        public IHttpActionResult Put(UpdateEmployeeDTO employeeDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
+
+            Photo photo = null;
+
+            if (!string.IsNullOrWhiteSpace(employeeDto.ProfilePhoto))
+            {
+                try
+                {
+                    photo = _photoMapper.ParseBase64Photo(employeeDto.ProfilePhoto, employee.Organization);
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+
+            var updatedEmployee = _employeeService.UpdateEmployee(employee.Id, employeeDto, employee, photo);
+            if (updatedEmployee != null)
+            {
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+            }
+            return BadRequest("Could not update the employee!");
+        }
+
         // PUT api/employees/5
         /// <summary>
         /// Updates the employee with the specified id.
@@ -274,7 +348,7 @@ namespace API.Controllers
         /// </returns>
         [Authorize(Roles = "Manager")]
         [HttpPut, Route("{id}")]
-        public IHttpActionResult Put(int id, UpdateEmployeeDTO employeeDto)
+        public IHttpActionResult UpdateEmployee(int id, UpdateEmployeeDTO employeeDto)
         {
             if (!ModelState.IsValid)
             {

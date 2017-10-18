@@ -6,14 +6,19 @@ using DataTransferObjects.EmployeeTitles;
 using DataTransferObjects.Schedule;
 using DataTransferObjects.Shift;
 using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web;
+using DataTransferObjects.General;
 
 namespace API.Logic
 {
     public static class Mapper
     {
+        public static GeneralMessage Map(string message)
+        {
+            return new GeneralMessage { Message = message };
+        }
+
         public static EmployeeDTO Map(Employee employee)
         {
             var url = HttpContext.Current.Request.Url.AbsoluteUri;
@@ -32,7 +37,8 @@ namespace API.Logic
                 PhotoRef = $"{routeBase}/{PhotosController.RoutePrefix}/{employee.Photo.Id}/{employee.Organization.Id}",
                 CheckInCount = employee.CheckIns?.Count,
                 Roles = employee.Roles.Select(r => r.Name).ToArray(),
-                WantShifts = employee.WantShifts
+                WantShifts = employee.WantShifts,
+                FriendshipIds = employee.Friendships.Select(f => f.Friend_Id).ToArray()
             };
         }
 
@@ -43,12 +49,23 @@ namespace API.Logic
 
         public static ScheduledShiftDTO Map(ScheduledShift scheduledShift)
         {
-            return new ScheduledShiftDTO { Id = scheduledShift.Id, Day = scheduledShift.Day, Start = scheduledShift.Start.ToString(@"hh\:mm"), End = scheduledShift.End.ToString(@"hh\:mm"), Employees = Map(scheduledShift.Employees) };
+            return new ScheduledShiftDTO { Id = scheduledShift.Id, Day = scheduledShift.Day, Start = scheduledShift.Start.ToString(@"hh\:mm"), End = scheduledShift.End.ToString(@"hh\:mm"), MaxOnShift = scheduledShift.MaxOnShift, MinOnShift = scheduledShift.MinOnShift, Employees = Map(scheduledShift.EmployeeAssignments.Select(ea => ea.Employee)), LockedEmployeeIds = scheduledShift.EmployeeAssignments.Where(ea => ea.IsLocked).Select(ea => ea.Employee.Id).ToArray()};
         }
 
         public static IEnumerable<ScheduledShiftDTO> Map(IEnumerable<ScheduledShift> scheduledShifts)
         {
             return scheduledShifts.Select(Map);
+        }
+
+        public static ScheduledShiftDTOSimple MapSimple(ScheduledShift scheduledShift)
+        {
+            return new ScheduledShiftDTOSimple { Id = scheduledShift.Id, Day = scheduledShift.Day, Start = scheduledShift.Start.ToString(@"hh\:mm"), End = scheduledShift.End.ToString(@"hh\:mm") };
+
+        }
+
+        public static IEnumerable<ScheduledShiftDTOSimple> MapSimple(IEnumerable<ScheduledShift> scheduledShifts)
+        {
+            return scheduledShifts.Select(MapSimple);
         }
 
         public static ScheduleDTO Map(Schedule schedule)
@@ -59,6 +76,16 @@ namespace API.Logic
         public static IEnumerable<ScheduleDTO> Map(IEnumerable<Schedule> schedules)
         {
             return schedules.Select(Map);
+        }
+
+        public static ScheduleDTOSimple MapSimple(Schedule schedule)
+        {
+            return new ScheduleDTOSimple { Id = schedule.Id, Name = schedule.Name, NumberOfWeeks = schedule.NumberOfWeeks, ScheduledShifts = MapSimple(schedule.ScheduledShifts) };
+        }
+
+        public static IEnumerable<ScheduleDTOSimple> MapSimple(IEnumerable<Schedule> schedules)
+        {
+            return schedules.Select(MapSimple);
         }
 
         public static CheckInDTO Map(CheckIn checkIn)
@@ -101,12 +128,27 @@ namespace API.Logic
             return preferences.Select(Map);
         }
 
+        public static EmployeeDTOSimple MapSimple(Employee employee)
+        {
+            return new EmployeeDTOSimple { Id = employee.Id, FirstName = employee.FirstName, LastName = employee.LastName };
+        }
+
+        public static IEnumerable<EmployeeDTOSimple> MapSimple(IEnumerable<Employee> employees)
+        {
+            return employees.Select(MapSimple);
+        }
+
         public static FindOptimalScheduleDTO MapToFindOptimalScheduleDto(Schedule schedule)
         {
-            var employees = schedule.ScheduledShifts.SelectMany(ss => ss.Preferences.Select(p => p.Employee));
+            var employees = schedule.ScheduledShifts.SelectMany(ss => ss.Preferences.Select(p => p.Employee)).Distinct();
             var preferences = new List<FindOptimalSchedulePreferencesDTO>();
+            var lockedIds = new List<int>();
             foreach (var employee in employees)
             {
+                var lockedTo = employee.EmployeeAssignments.Where(ea => ea.IsLocked).Select(ea => ea.ScheduledShift.Id).ToList();
+                lockedIds.AddRange(lockedTo);
+                if(lockedTo.Count > 0) continue;
+
                 var prefs =
                     employee.Preferences.Where(p => p.ScheduledShift.Schedule.Id == schedule.Id)
                         .Select(
@@ -120,7 +162,7 @@ namespace API.Logic
                 {
                     BaristaId = employee.Id,
                     Preferences = prefs,
-                    Friendships = employee.Friendships.Select(f => f.Friend.Id).ToArray(),
+                    Friendships = employee.Friendships.Select(f => f.Friend_Id).ToArray(),
                     WantShifts = employee.WantShifts
                 };
                 preferences.Add(baristaPrefs);
@@ -130,8 +172,17 @@ namespace API.Logic
                 Preferences = preferences,
                 Shifts =
                     schedule.ScheduledShifts.Select(
-                        ss => new FindOptimalScheduleShiftDTO {Id = ss.Id, MaxOnShift = ss.MaxOnShift})
+                        ss => new FindOptimalScheduleShiftDTO {Id = ss.Id, MaxOnShift = ss.MaxOnShift, MinOnShift = ss.MinOnShift})
             };
+
+            // subtract lockedIds from maxOnShift and minOnShift
+            foreach (var t in lockedIds)
+            {
+                var findOptimalScheduleShiftDto = dto.Shifts.FirstOrDefault(s => s.Id == t);
+                if(findOptimalScheduleShiftDto == null) continue;
+                findOptimalScheduleShiftDto.MaxOnShift--;
+                findOptimalScheduleShiftDto.MinOnShift--;
+            }
             return dto;
         }
     }

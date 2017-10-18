@@ -327,9 +327,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Data.Npgsql\Data.Npgsql.csproj">
-      <Project>{76f9d8e9-fab7-428e-8c60-a3c71a6d813b}</Project>
-      <Name>Data.Npgsql</Name>
+    <ProjectReference Include="..\Data.Npgsql\Data.MSSQL.csproj">
+      <Project>{69e98bc8-0b45-4fc8-9659-02bc4f65dc3d}</Project>
+      <Name>Data.MSSQL</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataTransferObjects\DataTransferObjects.csproj">
       <Project>{678cd23a-dec4-4130-9f90-a0d7f760b004}</Project>

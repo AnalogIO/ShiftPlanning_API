@@ -13,12 +13,12 @@ namespace Data.MSSQL
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Organization> Organizations { get; set; }
-        public DbSet<Manager> Managers { get; set; }
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<CheckIn> CheckIns { get; set; }
         public DbSet<ScheduledShift> ScheduledShifts { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Preference> Preferences { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
 
         //protected override void OnModelCreating(DbModelBuilder modelBuilder)
         //{

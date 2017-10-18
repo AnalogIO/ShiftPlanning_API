@@ -514,7 +514,7 @@
             <param name="employeeService"></param>
             <param name="photoMapper"></param>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Register(DataTransferObjects.Employee.CreateEmployeeDTO)">
+        <member name="M:API.Controllers.EmployeeController.Create(DataTransferObjects.Employee.CreateEmployeeDTO)">
             <summary>
             Creates the employee from the content in the body.
             Requires 'Authorization' header set with the token granted upon manager login.
@@ -524,7 +524,7 @@
             If an employee already exist with the given email, the controller will return BadRequest (400).
             </returns>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Login(DataTransferObjects.Manager.ManagerLoginDTO)">
+        <member name="M:API.Controllers.EmployeeController.Login(DataTransferObjects.Employee.EmployeeLoginDTO)">
             <summary>
             Login as the manager with the given credentials in the body
             </summary>
@@ -533,13 +533,22 @@
             If the provided credentials are wrong then the controller will return Unauthorized (401).
             </returns>
         </member>
-        <member name="M:API.Controllers.EmployeeController.RegisterMany(DataTransferObjects.Employee.CreateEmployeeDTO[])">
+        <member name="M:API.Controllers.EmployeeController.CreateMany(DataTransferObjects.Employee.CreateEmployeeDTO[])">
             <summary>
             Creates the employees from the content in the body.
             Requires 'Authorization' header set with the token granted upon manager login.
             </summary>
             <returns>
             Returns 'Created' (201) if the employees gets created.
+            </returns>
+        </member>
+        <member name="M:API.Controllers.EmployeeController.ResetPassword(System.Int32)">
+            <summary>
+            Resets the password of the employee given in the url.
+            Requires 'Authorization' header set with the token granted upon manager login.
+            </summary>
+            <returns>
+            Returns 'Ok' (200) if the employee's password gets reset.
             </returns>
         </member>
         <member name="M:API.Controllers.EmployeeController.Get">
@@ -571,7 +580,17 @@
             Returns an array of employees.
             </returns>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Put(System.Int32,DataTransferObjects.Employee.UpdateEmployeeDTO)">
+        <member name="M:API.Controllers.EmployeeController.Put(DataTransferObjects.Employee.UpdateEmployeeDTO)">
+            <summary>
+            Updates the employee currently logged in by token.
+            Requires 'Authorization' header set with the token granted upon manager login.
+            </summary>
+            <param name="employeeDto">The dto of the employee</param>
+            <returns>
+            Returns 'No Content' (204) if the employee gets updated.
+            </returns>
+        </member>
+        <member name="M:API.Controllers.EmployeeController.UpdateEmployee(System.Int32,DataTransferObjects.Employee.UpdateEmployeeDTO)">
             <summary>
             Updates the employee with the specified id.
             Requires 'Authorization' header set with the token granted upon manager login.
@@ -652,34 +671,6 @@
             <param name="id">The id of the employee title.</param>
             <returns>Returns 'No Content' (204) if the employee title gets deleted.</returns>
         </member>
-        <member name="T:API.Controllers.ManagerController">
-            <summary>
-            Controller to validate authority (login etc.)
-            </summary>
-        </member>
-        <member name="M:API.Controllers.ManagerController.#ctor(Data.Repositories.IManagerRepository)">
-            <summary>
-            The controller constructor.
-            </summary>
-        </member>
-        <member name="M:API.Controllers.ManagerController.Login(DataTransferObjects.Manager.ManagerLoginDTO)">
-            <summary>
-            Login as the manager with the given credentials in the body
-            </summary>
-            <returns>
-            Returns 'Ok' (200) with a valid token if the provided username and password matches.
-            If the provided credentials are wrong then the controller will return Unauthorized (401).
-            </returns>
-        </member>
-        <member name="M:API.Controllers.ManagerController.Validate">
-            <summary>
-            Validates the token set in the 'Authorization' header.
-            </summary>
-            <returns>
-            Returns 'Ok' (200) if the token is valid.
-            If the token is invalid then the controller will return Unauthorized (401).
-            </returns>
-        </member>
         <member name="M:API.Controllers.PhotosController.Get(System.Int32,System.Int32)">
             <summary>
             Retrieves a photo from an organization.
@@ -723,6 +714,17 @@
             If no schedule is found with the corresponding id, the controller will return NotFound (404)
             </returns>
         </member>
+        <member name="M:API.Controllers.ScheduleController.GetPreferences(System.Int32)">
+            <summary>
+            Gets the preferences for the schedule with the given id.
+            Requires 'Authorization' header set with the token granted upon login.
+            </summary>
+            <param name="id">The id of the schedule.</param>
+            <returns>
+            Returns the preferences of the schedule with the given id. 
+            If no schedule is found with the corresponding id, the controller will return NotFound (404)
+            </returns>
+        </member>
         <member name="M:API.Controllers.ScheduleController.Register(DataTransferObjects.Schedule.CreateScheduleDTO)">
             <summary>
             Creates the schedule from the content in the body.
@@ -739,6 +741,15 @@
             </summary>
             <param name="id">The id of the schedule.</param>
             <returns>Returns 'No Content' (204) if the schedule gets deleted.</returns>
+        </member>
+        <member name="M:API.Controllers.ScheduleController.SetPreferences(System.Int32,System.Collections.Generic.IEnumerable{DataTransferObjects.Employee.PreferenceDTO})">
+            <summary>
+            Creates or updates the preferences from the content in the body.
+            Requires 'Authorization' header set with the token granted upon login.
+            </summary>
+            <returns>
+            Returns 'Ok' (200) if the preferences get saved.
+            </returns>
         </member>
         <member name="M:API.Controllers.ScheduleController.UpdateSchedule(System.Int32,DataTransferObjects.Schedule.UpdateScheduleDTO)">
             <summary>
@@ -796,8 +807,8 @@
         </member>
         <member name="M:API.Controllers.ScheduleController.FindOptimalSchedule(System.Int32)">
             <summary>
-            Find the optimal schedule from the given input CSV file.
-            Requires 'Authorization' header set with the token granted upon manager login.
+            Generate the optimal schedule from the preferences set by the baristas.
+            Requires 'Authorization' header set with the token granted upon login.
             </summary>
             <returns>
             Returns 'Ok' (200) if an optimal schedule can be found.

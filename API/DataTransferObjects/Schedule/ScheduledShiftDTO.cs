@@ -10,6 +10,10 @@ namespace DataTransferObjects.Schedule
         public int Day { get; set; }
         public string Start { get; set; }
         public string End { get; set; }
+        public int MaxOnShift { get; set; }
+        public int MinOnShift { get; set; }
         public IEnumerable<EmployeeDTO> Employees { get; set; }
+        public int[] LockedEmployeeIds { get; set; }
+        
     }
 }

@@ -87,5 +87,6 @@ namespace Data.Services
         CheckIn CheckInEmployee(int shiftId, int employeeId, int organizationId);
         Shift AddEmployeesToShift(int shiftId, int organizationId, AddEmployeesDTO employees);
         Shift CreateShiftOutsideSchedule(CreateShiftOutsideScheduleDTO shiftDto, Organization organization);
+        bool IsOrganisationOpen(string shortKey);
     }
 }

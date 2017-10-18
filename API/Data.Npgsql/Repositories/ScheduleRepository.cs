@@ -44,9 +44,8 @@ namespace Data.MSSQL.Repositories
         {
             return _context.Schedules
                 .Include(x => x.ScheduledShifts)
-                .Include(x => x.ScheduledShifts.Select(y => y.Employees))
-                .Include(x => x.ScheduledShifts.Select(y => y.Employees.Select(z => z.EmployeeTitle)))
-                .Include(x => x.ScheduledShifts.Select(y => y.Employees.Select(z => z.CheckIns)))
+                .Include(x => x.ScheduledShifts.Select(y => y.EmployeeAssignments))
+                .Include(x => x.ScheduledShifts.Select(y => y.EmployeeAssignments.Select(z => z.Employee)))
                 .SingleOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
         }
 
@@ -54,9 +53,8 @@ namespace Data.MSSQL.Repositories
         {
             return _context.Schedules
                 .Include(x => x.ScheduledShifts)
-                .Include(x => x.ScheduledShifts.Select(y => y.Employees))
-                .Include(x => x.ScheduledShifts.Select(y => y.Employees.Select(z => z.EmployeeTitle)))
-                .Include(x => x.ScheduledShifts.Select(y => y.Employees.Select(z => z.CheckIns)))
+                .Include(x => x.ScheduledShifts.Select(y => y.EmployeeAssignments))
+                .Include(x => x.ScheduledShifts.Select(y => y.EmployeeAssignments.Select(z => z.Employee)))
                 .Where(x => x.Organization.Id == organizationId)
                 .ToList();
         }

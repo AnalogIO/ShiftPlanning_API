@@ -7,13 +7,13 @@ namespace Data.Npgsql.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Initial : IMigrationMetadata
+    public sealed partial class removedmodelbuilderstuff : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(removedmodelbuilderstuff));
         
         string IMigrationMetadata.Id
         {
-            get { return "201707221145114_Initial"; }
+            get { return "201709040950382_removed modelbuilder stuff"; }
         }
         
         string IMigrationMetadata.Source

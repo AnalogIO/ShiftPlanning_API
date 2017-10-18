@@ -7,13 +7,13 @@ namespace Data.Npgsql.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class addedwantshiftstoemployees : IMigrationMetadata
+    public sealed partial class addedlockedassignmentsasrelationbetweenemployeesandscheduledshifts : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(addedwantshiftstoemployees));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(addedlockedassignmentsasrelationbetweenemployeesandscheduledshifts));
         
         string IMigrationMetadata.Id
         {
-            get { return "201707221548020_added wantshifts to employees"; }
+            get { return "201709040843319_added locked assignments as relation between employees and scheduled shifts"; }
         }
         
         string IMigrationMetadata.Source

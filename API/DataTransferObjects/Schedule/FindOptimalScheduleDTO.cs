@@ -16,6 +16,7 @@ namespace DataTransferObjects.Schedule
     {
         public int Id { get; set; }
         public int MaxOnShift { get; set; }
+        public int MinOnShift { get; set; }
     }
 
     public class FindOptimalSchedulePreferencesDTO

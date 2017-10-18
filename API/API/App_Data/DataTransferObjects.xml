@@ -4,21 +4,6 @@
         <name>DataTransferObjects</name>
     </assembly>
     <members>
-        <member name="P:DataTransferObjects.Shift.CreateShiftDTO.EmployeeIds">
-            <summary>
-            Array of employee ids
-            </summary>
-        </member>
-        <member name="P:DataTransferObjects.Shift.CreateShiftDTO.Start">
-            <summary>
-            Time the shift will start. ISO 8601 format.
-            </summary>
-        </member>
-        <member name="P:DataTransferObjects.Shift.CreateShiftDTO.End">
-            <summary>
-            Time the shift will end. ISO 8601 format.
-            </summary>
-        </member>
         <member name="P:DataTransferObjects.Employee.CreateEmployeeDTO.Email">
             <summary>
             The email of the employee to be created
@@ -76,6 +61,36 @@
             A base64 encoding of the profile picture.
             
             May be left empty.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.FriendshipIds">
+            <summary>
+            An array stating the ids of the user's friends
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.OldPassword">
+            <summary>
+            The old password of the employee.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.NewPassword">
+            <summary>
+            The new password of the employee.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.Shift.CreateShiftDTO.EmployeeIds">
+            <summary>
+            Array of employee ids
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.Shift.CreateShiftDTO.Start">
+            <summary>
+            Time the shift will start. ISO 8601 format.
+            </summary>
+        </member>
+        <member name="P:DataTransferObjects.Shift.CreateShiftDTO.End">
+            <summary>
+            Time the shift will end. ISO 8601 format.
             </summary>
         </member>
         <member name="P:DataTransferObjects.EmployeeTitles.CreateEmployeeTitleDTO.Title">
@@ -160,7 +175,7 @@
         </member>
         <member name="P:DataTransferObjects.Public.Employees.EmployeeDTO.Title">
             <summary>
-            The title of the volunteer. This can for instance be "Employee".
+            The title of the volunteer. This can for instance be "Barista".
             </summary>
         </member>
         <member name="P:DataTransferObjects.Public.Employees.EmployeeDTO.PhotoRef">

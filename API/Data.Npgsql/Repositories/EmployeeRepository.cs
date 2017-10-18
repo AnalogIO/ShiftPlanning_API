@@ -42,7 +42,15 @@ namespace Data.MSSQL.Repositories
         {
             var employee = _context.Employees.FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
             if (employee == null) throw new ObjectNotFoundException("Could not find an employee corresponding to the given id");
- 
+            
+            employee.Shifts.Clear();
+            employee.Preferences.Clear();
+            employee.CheckIns.Clear();
+            employee.Friendships.Clear();
+            employee.Roles.Clear();
+            employee.EmployeeAssignments.Clear();
+            employee.Tokens.Clear();
+
             _context.Employees.Remove(employee);
             _context.SaveChanges();
         }
@@ -123,6 +131,17 @@ namespace Data.MSSQL.Repositories
                 }
             }
             throw new UnauthorizedAccessException("You entered an incorrect username or password!");
+        }
+
+        public void DeleteFriendship(Friendship friendship)
+        {
+            _context.Friendships.Remove(friendship);
+            _context.SaveChanges();
+        }
+
+        public IEnumerable<Role> GetRoles()
+        {
+            return _context.Roles.ToList();
         }
 
         public void Dispose()
