@@ -51,13 +51,13 @@ namespace Data.Services
         /// <inheritdoc cref="IShiftService.GetByOrganization(string, DateTime, DateTime)"/>
         public IEnumerable<Shift> GetByOrganization(string shortKey, DateTime from, DateTime to)
         {
-            return GetByOrganization(shortKey).Where(shift => shift.End >= from && shift.Start <= to);
+            return GetByOrganization(shortKey).AsQueryable().Where(shift => shift.End >= from && shift.Start <= to);
         }
 
         /// <inheritdoc cref="IShiftService.GetByOrganization(int, DateTime, DateTime)"/>
         public IEnumerable<Shift> GetByOrganization(int id, DateTime from, DateTime to)
         {
-            return GetByOrganization(id).Where(shift => shift.End >= from && shift.Start <= to);
+            return GetByOrganization(id).AsQueryable().Where(shift => shift.End >= from && shift.Start <= to);
         }
 
         /// <inheritdoc cref="IShiftService.GetByOrganization(string, DateTime)"/>
@@ -76,7 +76,7 @@ namespace Data.Services
         public IEnumerable<Shift> GetOngoingShiftsByOrganization(string shortKey)
         {
             var now = DateTime.Now;
-            return GetByOrganization(shortKey).Where(shift => shift.Start <= now && now <= shift.End);
+            return GetByOrganization(shortKey).AsQueryable().Where(shift => shift.Start <= now && now <= shift.End);
         }
 
         /// <inheritdoc cref="IShiftService.GetOngoingShiftsByOrganization(int)"/>
@@ -84,13 +84,13 @@ namespace Data.Services
         {
             var now = DateTime.Now;
             var nextHour = now.AddHours(1);
-            return GetByOrganization(id).Where(shift => (shift.Start <= now || shift.Start <= nextHour) && now <= shift.End);
+            return GetByOrganization(id).AsQueryable().Where(shift => (shift.Start <= now || shift.Start <= nextHour) && now <= shift.End);
         }
 
         public IEnumerable<Shift> GetIntersectingShifts(int organizationId, DateTime start, DateTime end)
         {
             var existingShifts =
-                _shiftRepository.ReadFromOrganization(organizationId)
+                _shiftRepository.ReadFromOrganization(organizationId).AsQueryable()
                     .Where(s => start == s.Start || end == s.End
                     || (s.Start < start && ((s.End > start && s.End < end) || (s.End > end)))
                     || (s.Start > start && ((end > s.Start && end < s.End) || end > s.End)));
@@ -137,6 +137,11 @@ namespace Data.Services
 
             var shift = new Shift { Start = start, End = end, CheckIns = new List<CheckIn>(), Employees = employees, Organization = organization };
             return _shiftRepository.Create(shift);
+        }
+
+        public bool IsOrganisationOpen(string shortKey)
+        {
+            return _shiftRepository.IsOrganisationOpen(shortKey);
         }
 
         public Shift GetShift(int shiftId, int organizationId)

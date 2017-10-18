@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{76F9D8E9-FAB7-428E-8C60-A3C71A6D813B}</ProjectGuid>
+    <ProjectGuid>{69E98BC8-0B45-4FC8-9659-02BC4F65DC3D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Data.Npgsql</RootNamespace>
