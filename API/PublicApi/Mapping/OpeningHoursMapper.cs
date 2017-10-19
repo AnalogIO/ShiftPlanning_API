@@ -80,7 +80,7 @@ namespace PublicApi.Mapping
                     if(!shifts.Any(s => s.Start.DayOfYear == currentDate.DayOfYear || s.End.DayOfYear == currentDate.DayOfYear)) continue;
                 }
                 //if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday) continue;
-                while (currentDate.Hour < end)
+                while (currentDate.Hour < end && currentDate.Date <= latestShift.End.Date)
                 {
                     var openingHourShift = new IntervalOpeningHourDTO { ShiftStart = currentDate, Employees = new List<OpeningHourEmployeeDTO>() };
 
