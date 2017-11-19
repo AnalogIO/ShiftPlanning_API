@@ -206,7 +206,7 @@ namespace API.Controllers
             var preferences = _scheduleService.CreateOrUpdatePreferences(employee, id, preferencesDtos);
             if (preferences != null)
             {
-                return Ok(Mapper.Map(preferences));
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
             }
             return BadRequest("The preferences could not be created or updated!");
         }
