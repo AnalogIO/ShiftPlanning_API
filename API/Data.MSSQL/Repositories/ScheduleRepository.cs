@@ -88,5 +88,11 @@ namespace Data.MSSQL.Repositories
             _context.Preferences.RemoveRange(preferences);
             _context.SaveChanges();
         }
+
+        public void DeletePreference(Preference preference)
+        {
+            _context.Preferences.Remove(preference);
+            _context.SaveChanges();
+        }
     }
 }

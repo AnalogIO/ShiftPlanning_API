@@ -123,7 +123,7 @@ namespace API.Controllers
             var schedule = _scheduleService.GetSchedule(id, employee);
             if (schedule != null)
             {
-                return Ok(Mapper.Map(employee.Preferences.Where(p => p.ScheduledShift.Schedule.Id == schedule.Id)));
+                return Ok(Mapper.Map(employee.Preferences.Where(p => p.ScheduledShift.Schedule?.Id == schedule.Id)));
             }
             else
             {
@@ -191,7 +191,7 @@ namespace API.Controllers
         /// Returns 'Ok' (200) if the preferences get saved.
         /// </returns>
         [Authorize(Roles = "Employee")]
-        [HttpPost, Route("{id}/setpreferences")]
+        [HttpPut, Route("{id}/setpreferences")]
         [ResponseType(typeof(IEnumerable<PreferenceDTO>))]
         public IHttpActionResult SetPreferences(int id, IEnumerable<PreferenceDTO> preferencesDtos)
         {

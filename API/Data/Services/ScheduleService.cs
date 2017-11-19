@@ -191,7 +191,17 @@ namespace Data.Services
         public IEnumerable<Preference> CreateOrUpdatePreferences(Employee employee, int scheduleId, IEnumerable<PreferenceDTO> preferences)
         {
             var scheduledShifts = _scheduleRepository.Read(scheduleId, employee.Organization.Id).ScheduledShifts.Where(s => preferences.Select(p => p.ScheduledShiftId).Contains(s.Id)).ToList();
-            var prefsToRemove = employee.Preferences.Where(p => p.ScheduledShift.Schedule.Id == scheduleId).ToList();
+
+            //update existing prefs
+            foreach(Preference pref in employee.Preferences.ToList())
+            {
+                if (preferences.Any(p => p.ScheduledShiftId == pref.ScheduledShift.Id))
+                {
+                    pref.Priority = preferences.Single(p => p.ScheduledShiftId == pref.ScheduledShift.Id).Priority;
+                }
+            }
+
+            var prefsToRemove = employee.Preferences.Where(p => !preferences.Any(x => x.ScheduledShiftId == p.Id));
 
             _scheduleRepository.DeletePreferences(prefsToRemove);
 

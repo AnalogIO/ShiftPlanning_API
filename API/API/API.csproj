@@ -317,8 +317,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Data.Npgsql\Data.MSSQL.csproj">
-      <Project>{76f9d8e9-fab7-428e-8c60-a3c71a6d813b}</Project>
+    <ProjectReference Include="..\Data.MSSQL\Data.MSSQL.csproj">
+      <Project>{69e98bc8-0b45-4fc8-9659-02bc4f65dc3d}</Project>
       <Name>Data.MSSQL</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataTransferObjects\DataTransferObjects.csproj">
