@@ -255,3 +255,4 @@ paket-files/
 /API/Data.MSSQL/connections.config
 /API/PublicApi/connections.config
 /API/PublicApi/appSettings.config
+API/Data.MSSQL/connections.config
