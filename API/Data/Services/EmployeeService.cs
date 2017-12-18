@@ -89,6 +89,13 @@ namespace Data.Services
             var employee = _employeeRepository.Read(id, organizationId);
             if (employee == null) throw new ObjectNotFoundException("Could not find the given employee!");
 
+            var role = _employeeRepository.GetRoles().FirstOrDefault(r => r.Name == "Employee");
+
+            if(!employee.Roles.Contains(role))
+            {
+                employee.Roles.Add(role);
+            }
+
             var pwgen = new PasswordGenerator();
             var emailService = new EmailService();
 
