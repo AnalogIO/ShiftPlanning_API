@@ -182,7 +182,7 @@ namespace API.Controllers
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
         }
 
-        // POST api/schedules/{id}/preferences
+        // PUT api/schedules/{id}/preferences
         /// <summary>
         /// Creates or updates the preferences from the content in the body.
         /// Requires 'Authorization' header set with the token granted upon login.
@@ -191,7 +191,7 @@ namespace API.Controllers
         /// Returns 'Ok' (200) if the preferences get saved.
         /// </returns>
         [Authorize(Roles = "Employee")]
-        [HttpPut, Route("{id}/setpreferences")]
+        [HttpPut, Route("{id}/preferences")]
         [ResponseType(typeof(IEnumerable<PreferenceDTO>))]
         public IHttpActionResult SetPreferences(int id, IEnumerable<PreferenceDTO> preferencesDtos)
         {
