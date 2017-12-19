@@ -6,6 +6,7 @@ using Data.Models;
 using Data.Repositories;
 using System.Data.Entity;
 using Data.Exceptions;
+using System.Data.Entity.Core;
 
 namespace Data.MSSQL.Repositories
 {

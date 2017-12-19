@@ -7,6 +7,7 @@ using System.Data.Entity;
 using Data.Exceptions;
 using System.Data;
 using Data.Token;
+using System.Data.Entity.Core;
 
 namespace Data.MSSQL.Repositories
 {
