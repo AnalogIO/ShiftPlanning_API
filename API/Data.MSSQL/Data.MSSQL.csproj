@@ -102,6 +102,7 @@
     <Compile Include="Repositories\EmployeeRepository.cs" />
     <Compile Include="Repositories\EmployeeTitleRepository.cs" />
     <Compile Include="IShiftPlannerDataContext.cs" />
+    <Compile Include="Repositories\FriendshipRepository.cs" />
     <Compile Include="Repositories\OrganizationRepository.cs" />
     <Compile Include="Repositories\PhotoRepository.cs" />
     <Compile Include="Repositories\ScheduleRepository.cs" />

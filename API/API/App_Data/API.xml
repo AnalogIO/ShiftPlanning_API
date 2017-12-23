@@ -501,6 +501,18 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:API.Controllers.AccountController">
+            <summary>
+            Controller to manipulate with the logged in account.
+            </summary>
+        </member>
+        <member name="M:API.Controllers.AccountController.#ctor(API.Authorization.IAuthManager,Data.Services.IFriendshipService)">
+            <summary>
+            The constructor of the account controller
+            </summary>
+            <param name="authManager"></param>
+            <param name="friendshipService"></param>
+        </member>
         <member name="T:API.Controllers.EmployeeController">
             <summary>
             Controller to manipulate with the employees.

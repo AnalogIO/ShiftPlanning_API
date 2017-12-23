@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using DataTransferObjects.General;
+using DataTransferObjects.Friendship;
 
 namespace API.Logic
 {
@@ -136,6 +137,16 @@ namespace API.Logic
         public static IEnumerable<EmployeeDTOSimple> MapSimple(IEnumerable<Employee> employees)
         {
             return employees.Select(MapSimple);
+        }
+
+        public static IEnumerable<FriendshipDTO> Map(IEnumerable<Friendship> friendships)
+        {
+            return friendships.Select(Map);
+        }
+
+        public static FriendshipDTO Map(Friendship friendship)
+        {
+            return new FriendshipDTO { Id = friendship.Id, EmployeeId = friendship.Employee_Id, FriendId = friendship.Friend_Id };
         }
 
         public static FindOptimalScheduleDTO MapToFindOptimalScheduleDto(Schedule schedule)

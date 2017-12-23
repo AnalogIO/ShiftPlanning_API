@@ -56,6 +56,7 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -67,6 +68,8 @@
   <ItemGroup>
     <Compile Include="Employee\EmployeeDTOSimple.cs" />
     <Compile Include="Employee\PreferenceDTO.cs" />
+    <Compile Include="Friendship\CreateFriendshipDTO.cs" />
+    <Compile Include="Friendship\FriendshipDTO.cs" />
     <Compile Include="General\GeneralMessage.cs" />
     <Compile Include="Manager\ManagerValidateTokenDTO.cs" />
     <Compile Include="Schedule\AssignmentDTO.cs" />

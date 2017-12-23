@@ -12,7 +12,8 @@ namespace Data
                 .RegisterType<IEmployeeTitleService, EmployeeTitleService>(new PerResolveLifetimeManager())
                 .RegisterType<IPhotoService, PhotoService>(new PerResolveLifetimeManager())
                 .RegisterType<IScheduleService, ScheduleService>(new PerResolveLifetimeManager())
-                .RegisterType<IShiftService, ShiftService>(new PerResolveLifetimeManager());
+                .RegisterType<IShiftService, ShiftService>(new PerResolveLifetimeManager())
+                .RegisterType<IFriendshipService, FriendshipService>(new PerResolveLifetimeManager());
         }
     }
 }

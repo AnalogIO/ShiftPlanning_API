@@ -78,6 +78,11 @@
             The new password of the employee.
             </summary>
         </member>
+        <member name="P:DataTransferObjects.Friendship.CreateFriendshipDTO.FriendEmployeeId">
+            <summary>
+            The employee id of the employee to add as a friend
+            </summary>
+        </member>
         <member name="P:DataTransferObjects.Shift.CreateShiftDTO.EmployeeIds">
             <summary>
             Array of employee ids
