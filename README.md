@@ -5,8 +5,8 @@ The project requires a configuration file `connections.config` and `appSettings.
 ```xml
 <connectionStrings>
   <add name="ShiftPlannerDataContext"
-       connectionString="Server=HOST;port=PORT;Database=DBNAME;User Id=USERNAME;Password=PASSWORD;"
-       providerName="Npgsql" />
+   providerName="System.Data.SqlClient"
+   connectionString="Data Source=HOST;Initial Catalog=DBNAME;User ID=USERNAME;Password=PASSWORD;MultipleActiveResultSets=True;Context Connection=False;" />
 </connectionStrings>
 ```
 ```xml
