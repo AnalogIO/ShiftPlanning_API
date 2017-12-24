@@ -38,8 +38,7 @@ namespace API.Logic
                 PhotoRef = $"{routeBase}/{PhotosController.RoutePrefix}/{employee.Photo?.Id}/{employee.Organization.Id}",
                 CheckInCount = employee.CheckIns?.Count,
                 Roles = employee.Roles.Select(r => r.Name).ToArray(),
-                WantShifts = employee.WantShifts,
-                FriendshipIds = employee.Friendships.Select(f => f.Friend_Id).ToArray()
+                WantShifts = employee.WantShifts
             };
         }
 

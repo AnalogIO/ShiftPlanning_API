@@ -120,40 +120,6 @@ namespace API.Controllers
             return BadRequest("The user could not be created!");
         }
 
-        // POST api/manager/login
-        /// <summary>
-        /// Login as the manager with the given credentials in the body
-        /// </summary>
-        /// <returns>
-        /// Returns 'Ok' (200) with a valid token if the provided username and password matches.
-        /// If the provided credentials are wrong then the controller will return Unauthorized (401).
-        /// </returns>
-        [AllowAnonymous]
-        [HttpPost, Route("login")]
-        public IHttpActionResult Login(EmployeeLoginDTO loginDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var employee = _employeeService.Login(loginDto.Username.Trim(), loginDto.Password);
-            if (employee != null)
-            {
-                var responseDto = new EmployeeLoginResponse
-                {
-                    Token = employee.Tokens.LastOrDefault()?.TokenHash,
-                    OrganizationId = employee.Organization.Id,
-                    OrganizationName = employee.Organization.Name,
-                    Expires = int.Parse(ConfigurationManager.AppSettings["TokenAgeHour"]) * 60 * 60, // from hours to seconds 
-                    Employee = Mapper.Map(employee)
-                };
-                return Ok(responseDto);
-            }
-
-            HttpResponseMessage response = Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "You entered an incorrect username or password!" });
-            return ResponseMessage(response);
-        }
 
         // POST api/employees/createmany
         /// <summary>

@@ -5,6 +5,9 @@ using Data.Services;
 using DataTransferObjects.Friendship;
 using System.Net.Http;
 using System.Net;
+using DataTransferObjects.Employee;
+using System.Configuration;
+using System.Linq;
 
 namespace API.Controllers
 {
@@ -16,16 +19,19 @@ namespace API.Controllers
     {
         private readonly IAuthManager _authManager;
         private readonly IFriendshipService _friendshipService;
+        private readonly IEmployeeService _employeeService;
 
         /// <summary>
         /// The constructor of the account controller
         /// </summary>
         /// <param name="authManager"></param>
         /// <param name="friendshipService"></param>
-        public AccountController(IAuthManager authManager, IFriendshipService friendshipService)
+        /// <param name="ëmployeeService"></param>
+        public AccountController(IAuthManager authManager, IFriendshipService friendshipService, IEmployeeService employeeService)
         {
             _authManager = authManager;
             _friendshipService = friendshipService;
+            _employeeService = employeeService;
         }
 
         [Authorize(Roles = "Employee")]
@@ -60,6 +66,41 @@ namespace API.Controllers
             var friendships = _friendshipService.GetFriendships(employee);
 
             return Ok(Mapper.Map(friendships));
+        }
+
+        // POST api/account/login
+        /// <summary>
+        /// Login as the employee with the given credentials in the body
+        /// </summary>
+        /// <returns>
+        /// Returns 'Ok' (200) with a valid token if the provided username and password matches.
+        /// If the provided credentials are wrong then the controller will return Unauthorized (401).
+        /// </returns>
+        [AllowAnonymous]
+        [HttpPost, Route("login")]
+        public IHttpActionResult Login(EmployeeLoginDTO loginDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var employee = _employeeService.Login(loginDto.Username.Trim(), loginDto.Password);
+            if (employee != null)
+            {
+                var responseDto = new EmployeeLoginResponse
+                {
+                    Token = employee.Tokens.LastOrDefault()?.TokenHash,
+                    OrganizationId = employee.Organization.Id,
+                    OrganizationName = employee.Organization.Name,
+                    Expires = int.Parse(ConfigurationManager.AppSettings["TokenAgeHour"]) * 60 * 60, // from hours to seconds 
+                    Employee = Mapper.Map(employee)
+                };
+                return Ok(responseDto);
+            }
+
+            HttpResponseMessage response = Request.CreateResponse<object>(HttpStatusCode.Unauthorized, new { Message = "You entered an incorrect username or password!" });
+            return ResponseMessage(response);
         }
     }   
 }
