@@ -546,15 +546,6 @@
             If an employee already exist with the given email, the controller will return BadRequest (400).
             </returns>
         </member>
-        <member name="M:API.Controllers.EmployeeController.Login(DataTransferObjects.Employee.EmployeeLoginDTO)">
-            <summary>
-            Login as the manager with the given credentials in the body
-            </summary>
-            <returns>
-            Returns 'Ok' (200) with a valid token if the provided username and password matches.
-            If the provided credentials are wrong then the controller will return Unauthorized (401).
-            </returns>
-        </member>
         <member name="M:API.Controllers.EmployeeController.CreateMany(DataTransferObjects.Employee.CreateEmployeeDTO[])">
             <summary>
             Creates the employees from the content in the body.

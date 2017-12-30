@@ -41,12 +41,6 @@ namespace DataTransferObjects.Employee
         public string ProfilePhoto { get; set; }
 
         /// <summary>
-        /// An array stating the ids of the user's friends
-        /// </summary>
-        [Required]
-        public int[] FriendshipIds { get; set; }
-
-        /// <summary>
         /// The old password of the employee.
         /// </summary>
         public string OldPassword { get; set; }

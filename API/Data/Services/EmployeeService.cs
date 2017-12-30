@@ -132,6 +132,7 @@ namespace Data.Services
             updateEmployee.LastName = employeeDto.LastName;
             updateEmployee.Active = employeeDto.Active;
 
+            /* removed because friendships are handled through its own endpoint
             var friendshipsToRemove = updateEmployee.Friendships.Where(f => !employeeDto.FriendshipIds.Contains(f.Friend_Id)).Select(f => f.Friend_Id).ToList();
 
             foreach(var f in friendshipsToRemove)
@@ -145,6 +146,7 @@ namespace Data.Services
                 if (_employeeRepository.Read(id, employee.Organization.Id) == null) continue;
                 updateEmployee.Friendships.Add(new Friendship { Friend_Id = id });
             }
+            */
 
             if (photo != null)
             {
