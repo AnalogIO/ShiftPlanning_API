@@ -8,6 +8,8 @@ using System.Net;
 using DataTransferObjects.Employee;
 using System.Configuration;
 using System.Linq;
+using Data.Models;
+using System;
 
 namespace API.Controllers
 {
@@ -20,6 +22,7 @@ namespace API.Controllers
         private readonly IAuthManager _authManager;
         private readonly IFriendshipService _friendshipService;
         private readonly IEmployeeService _employeeService;
+        private readonly PhotoMapper _photoMapper;
 
         /// <summary>
         /// The constructor of the account controller
@@ -27,11 +30,12 @@ namespace API.Controllers
         /// <param name="authManager"></param>
         /// <param name="friendshipService"></param>
         /// <param name="ëmployeeService"></param>
-        public AccountController(IAuthManager authManager, IFriendshipService friendshipService, IEmployeeService employeeService)
+        public AccountController(IAuthManager authManager, IFriendshipService friendshipService, IEmployeeService employeeService, PhotoMapper photoMapper)
         {
             _authManager = authManager;
             _friendshipService = friendshipService;
             _employeeService = employeeService;
+            _photoMapper = photoMapper;
         }
 
         [Authorize(Roles = "Employee")]
@@ -66,6 +70,49 @@ namespace API.Controllers
             var friendships = _friendshipService.GetFriendships(employee);
 
             return Ok(Mapper.Map(friendships));
+        }
+
+        // PUT api/account
+        /// <summary>
+        /// Update the account with the given token in the `authorization` header
+        /// If `OldPassword` and `NewPassword` is specified, the service will update the password if `OldPassword` matches the current password and if the length of `NewPassword` is minimum 8.
+        /// </summary>
+        /// <returns>
+        /// Returns 'NoContent' (204) if the update succeeds.
+        /// If the provided `Authorization` token is invalid the controller will return Unauthorized (401).
+        /// </returns>
+        [Authorize(Roles = "Employee")]
+        [HttpPut, Route("")]
+        public IHttpActionResult Update([FromBody] UpdateEmployeeDTO dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("Provided token is invalid!");
+
+            Photo photo = null;
+
+            if (!string.IsNullOrWhiteSpace(dto.ProfilePhoto))
+            {
+                try
+                {
+                    photo = _photoMapper.ParseBase64Photo(dto.ProfilePhoto, employee.Organization);
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+
+            var updatedEmployee = _employeeService.UpdateEmployee(dto, employee, photo);
+            if (updatedEmployee != null)
+            {
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+            }
+            return BadRequest("Could not update the employee!");
         }
 
         // POST api/account/login

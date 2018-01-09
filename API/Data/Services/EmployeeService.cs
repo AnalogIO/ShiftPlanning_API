@@ -111,14 +111,15 @@ namespace Data.Services
             emailService.SendNewPasswordEmail($"{employee.FirstName} {employee.LastName}", employee.Email, pw, employee.Organization);
         }
 
-        public Employee UpdateEmployee(int employeeId, UpdateEmployeeDTO employeeDto, Employee employee, Photo photo)
+        public Employee UpdateEmployee(UpdateEmployeeDTO employeeDto, Employee updateEmployee, Photo photo)
         {
-            var updateEmployee = _employeeRepository.Read(employeeId, employee.Organization.Id);
+            //var updateEmployee = _employeeRepository.Read(employeeId, employee.Organization.Id);
             if (updateEmployee == null) throw new ObjectNotFoundException("Could not find an employee corresponding to the given id");
             
-            if(employeeDto.OldPassword != null && employeeDto.NewPassword != null)
+            if(!string.IsNullOrWhiteSpace(employeeDto.OldPassword) && !string.IsNullOrWhiteSpace(employeeDto.NewPassword))
             {
-                if(Login(updateEmployee.Email, employeeDto.OldPassword) != null)
+                if (employeeDto.NewPassword.Length < 8) throw new BadRequestException("Please specify a password with a minimum length of 8 characters");
+                if (Login(updateEmployee.Email, employeeDto.OldPassword) != null)
                 {
                     var salt = HashManager.GenerateSalt();
                     var hashedPw = HashManager.Hash(employeeDto.NewPassword + salt);
@@ -131,29 +132,14 @@ namespace Data.Services
             updateEmployee.FirstName = employeeDto.FirstName;
             updateEmployee.LastName = employeeDto.LastName;
             updateEmployee.Active = employeeDto.Active;
-
-            /* removed because friendships are handled through its own endpoint
-            var friendshipsToRemove = updateEmployee.Friendships.Where(f => !employeeDto.FriendshipIds.Contains(f.Friend_Id)).Select(f => f.Friend_Id).ToList();
-
-            foreach(var f in friendshipsToRemove)
-            {
-                DeleteFriendship(updateEmployee, f);
-            }
-
-            foreach (var id in employeeDto.FriendshipIds)
-            {
-                if (updateEmployee.Friendships.Any(f => f.Friend_Id == id)) continue;
-                if (_employeeRepository.Read(id, employee.Organization.Id) == null) continue;
-                updateEmployee.Friendships.Add(new Friendship { Friend_Id = id });
-            }
-            */
+            updateEmployee.WantShifts = employeeDto.WantShifts;
 
             if (photo != null)
             {
                 updateEmployee.Photo = photo;
             }
 
-            var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, employee.Organization.Id);
+            var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, updateEmployee.Organization.Id);
             if (title != null) updateEmployee.EmployeeTitle = title;
             _employeeRepository.Update(updateEmployee);
             return updateEmployee;

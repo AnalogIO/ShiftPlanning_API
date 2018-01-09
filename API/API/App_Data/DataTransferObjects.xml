@@ -63,9 +63,9 @@
             May be left empty.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.FriendshipIds">
+        <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.WantShifts">
             <summary>
-            An array stating the ids of the user's friends
+            The amount of shifts you want to take on a schedule
             </summary>
         </member>
         <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.OldPassword">

@@ -12,6 +12,7 @@ using System.Configuration;
 using System.Linq;
 using System.Web.Http.Description;
 using DataTransferObjects.Manager;
+using System.Data;
 
 namespace API.Controllers
 {
@@ -293,7 +294,7 @@ namespace API.Controllers
                 }
             }
 
-            var updatedEmployee = _employeeService.UpdateEmployee(employee.Id, employeeDto, employee, photo);
+            var updatedEmployee = _employeeService.UpdateEmployee(employeeDto, employee, photo);
             if (updatedEmployee != null)
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
@@ -324,6 +325,9 @@ namespace API.Controllers
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
             if (employee == null) return BadRequest("Provided token is invalid!");
 
+            var updateEmployee = _employeeService.GetEmployee(id, employee.Organization.Id);
+            if (employee == null) throw new ObjectNotFoundException("The employee to update could not be found");
+
             Photo photo = null;
 
             if (!string.IsNullOrWhiteSpace(employeeDto.ProfilePhoto))
@@ -338,7 +342,7 @@ namespace API.Controllers
                 }
             }
 
-            var updatedEmployee = _employeeService.UpdateEmployee(id, employeeDto, employee, photo);
+            var updatedEmployee = _employeeService.UpdateEmployee(employeeDto, employee, photo);
             if (updatedEmployee != null)
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));

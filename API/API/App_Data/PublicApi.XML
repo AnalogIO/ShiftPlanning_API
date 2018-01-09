@@ -506,13 +506,23 @@
             Controller to manipulate with the logged in account.
             </summary>
         </member>
-        <member name="M:API.Controllers.AccountController.#ctor(API.Authorization.IAuthManager,Data.Services.IFriendshipService,Data.Services.IEmployeeService)">
+        <member name="M:API.Controllers.AccountController.#ctor(API.Authorization.IAuthManager,Data.Services.IFriendshipService,Data.Services.IEmployeeService,API.Logic.PhotoMapper)">
             <summary>
             The constructor of the account controller
             </summary>
             <param name="authManager"></param>
             <param name="friendshipService"></param>
             <param name="ëmployeeService"></param>
+        </member>
+        <member name="M:API.Controllers.AccountController.Update(DataTransferObjects.Employee.UpdateEmployeeDTO)">
+            <summary>
+            Update the account with the given token in the `authorization` header
+            If `OldPassword` and `NewPassword` is specified, the service will update the password if `OldPassword` matches the current password and if the length of `NewPassword` is minimum 8.
+            </summary>
+            <returns>
+            Returns 'NoContent' (204) if the update succeeds.
+            If the provided `Authorization` token is invalid the controller will return Unauthorized (401).
+            </returns>
         </member>
         <member name="M:API.Controllers.AccountController.Login(DataTransferObjects.Employee.EmployeeLoginDTO)">
             <summary>

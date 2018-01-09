@@ -1,4 +1,4 @@
-﻿using Microsoft.Build.Framework;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DataTransferObjects.Employee
 {
@@ -39,6 +39,13 @@ namespace DataTransferObjects.Employee
         /// May be left empty.
         /// </summary>
         public string ProfilePhoto { get; set; }
+
+
+        /// <summary>
+        /// The amount of shifts you want to take on a schedule
+        /// </summary>
+        [Required]
+        public int WantShifts { get; set; }
 
         /// <summary>
         /// The old password of the employee.
