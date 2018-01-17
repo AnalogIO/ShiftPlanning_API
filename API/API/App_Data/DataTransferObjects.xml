@@ -63,11 +63,6 @@
             May be left empty.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.FriendshipIds">
-            <summary>
-            An array stating the ids of the user's friends
-            </summary>
-        </member>
         <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.OldPassword">
             <summary>
             The old password of the employee.
