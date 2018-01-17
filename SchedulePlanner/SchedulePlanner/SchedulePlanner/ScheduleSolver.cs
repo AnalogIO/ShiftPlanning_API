@@ -82,8 +82,8 @@ namespace SchedulePlanner
                     for (var k = 0; k < _preferences.ToList().Count; k++)
                     {
                         if (i == k) continue;
-                        solver.Add(_minList[j][i,k] <= employeeMatrix[j, i]);
-                        solver.Add(_minList[j][i, k] <= employeeMatrix[j, k]);
+                        //solver.Add(_minList[j][i,k] <= employeeMatrix[j, i]);
+                        //solver.Add(_minList[j][i, k] <= employeeMatrix[j, k]);
                         if (likes[i] == null || likes[i][k] == 0) continue;
                         AddLikedEmployee(i, k);
                         solver.Add(_togetherList[j][i, GetEmployeeIndex(i, k)] <= employeeMatrix[j, i]);
