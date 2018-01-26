@@ -160,7 +160,7 @@ namespace API.Logic
                 if(lockedTo.Count > 0) continue;
 
                 var prefs =
-                    employee.Preferences.Where(p => p.ScheduledShift.Schedule.Id == schedule.Id)
+                    employee.Preferences.Where(p => p.ScheduledShift.Schedule.Id == schedule.Id && p.Priority > 0)
                         .Select(
                             p =>
                                 new FindOptimalSchedulePreferencesDTO.FindOptimalSchedulePreference
