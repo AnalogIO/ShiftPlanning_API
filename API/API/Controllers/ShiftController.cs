@@ -191,6 +191,29 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Checks out the employee with the given employee id in the parameters for the given shift id in the parameters
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="employeeId"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Application")]
+        [HttpPost, Route("{id}/checkout")]
+        public IHttpActionResult CheckOut(int id, int employeeId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No institution found with the given name");
+
+            _shiftService.CheckOutEmployee(id, employeeId, organization.Id);
+
+            return Ok();
+        }
+
+        /// <summary>
         /// Adds the employees from the body to the given shift
         /// </summary>
         /// <param name="id"></param>

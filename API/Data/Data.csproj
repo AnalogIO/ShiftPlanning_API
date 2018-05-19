@@ -118,6 +118,7 @@
     <Compile Include="Repositories\IEmployeeRepository.cs" />
     <Compile Include="Repositories\IEmployeeTitleRepository.cs" />
     <Compile Include="Repositories\IOrganizationRepository.cs" />
+    <Compile Include="Repositories\ICheckInRepository.cs" />
     <Compile Include="Repositories\IPhotoRepository.cs" />
     <Compile Include="Repositories\IScheduleRepository.cs" />
     <Compile Include="Repositories\IShiftRepository.cs" />

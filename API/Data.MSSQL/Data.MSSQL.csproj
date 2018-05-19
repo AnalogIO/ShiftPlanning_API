@@ -104,6 +104,7 @@
     <Compile Include="IShiftPlannerDataContext.cs" />
     <Compile Include="Repositories\FriendshipRepository.cs" />
     <Compile Include="Repositories\OrganizationRepository.cs" />
+    <Compile Include="Repositories\CheckInRepository.cs" />
     <Compile Include="Repositories\PhotoRepository.cs" />
     <Compile Include="Repositories\ScheduleRepository.cs" />
     <Compile Include="ShiftPlannerDataContext.cs" />

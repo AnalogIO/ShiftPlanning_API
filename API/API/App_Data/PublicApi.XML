@@ -904,6 +904,14 @@
             <param name="employeeId"></param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.ShiftController.CheckOut(System.Int32,System.Int32)">
+            <summary>
+            Checks out the employee with the given employee id in the parameters for the given shift id in the parameters
+            </summary>
+            <param name="id"></param>
+            <param name="employeeId"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.ShiftController.AddEmployees(System.Int32,DataTransferObjects.Shift.AddEmployeesDTO)">
             <summary>
             Adds the employees from the body to the given shift

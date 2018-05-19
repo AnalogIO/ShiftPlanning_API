@@ -5,7 +5,6 @@ using Data.Models;
 using Data.Repositories;
 using DataTransferObjects.Shift;
 using System.Data;
-using System.Runtime.CompilerServices;
 using Data.Exceptions;
 using Microsoft.Practices.ObjectBuilder2;
 
@@ -19,17 +18,19 @@ namespace Data.Services
         private readonly IShiftRepository _shiftRepository;
         private readonly IOrganizationRepository _organizationRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly ICheckInRepository _checkInRepository;
 
         /// <summary>
         /// Injection constructor.
         /// </summary>
         /// <param name="shiftRepository">An IShiftRepository implementation.</param>
         /// <param name="institutionRepository">An IInstitution implementation.</param>
-        public ShiftService(IShiftRepository shiftRepository, IOrganizationRepository organizationRepository, IEmployeeRepository employeeRepository)
+        public ShiftService(IShiftRepository shiftRepository, IOrganizationRepository organizationRepository, IEmployeeRepository employeeRepository, ICheckInRepository checkInRepository)
         {
             _shiftRepository = shiftRepository;
             _organizationRepository = organizationRepository;
             _employeeRepository = employeeRepository;
+            _checkInRepository = checkInRepository;
         }
 
         /// <inheritdoc cref="IShiftService.GetByOrganization(string)"/>
@@ -109,6 +110,19 @@ namespace Data.Services
             var checkIn = new CheckIn { Employee = employee, Time = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second) };
             shift.CheckIns.Add(checkIn);
             return _shiftRepository.Update(shift) > 0 ? shift.CheckIns.LastOrDefault() : null;
+        }
+
+        public void CheckOutEmployee(int shiftId, int employeeId, int organizationId)
+        {
+            var shift = _shiftRepository.Read(shiftId, organizationId);
+            if (shift == null) throw new ObjectNotFoundException("Could not find a shift corresponding to the given id");
+            var checkin = shift.CheckIns.FirstOrDefault(x => x.Employee.Id == employeeId);
+            if (checkin == null) throw new ForbiddenException("Could not check out because the given employee is not checked in");
+            var employee = _employeeRepository.Read(employeeId, organizationId);
+            if (employee == null) throw new ObjectNotFoundException("Could not find an employee corresponding to the given id");
+            var now = DateTime.Now;
+            if (now > shift.End) throw new ForbiddenException("You cannot check out from a shift that has ended");
+            _checkInRepository.Delete(checkin);
         }
 
         public Shift AddEmployeesToShift(int shiftId, int organizationId, AddEmployeesDTO employeesDto)

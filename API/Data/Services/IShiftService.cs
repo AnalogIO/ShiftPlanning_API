@@ -85,6 +85,7 @@ namespace Data.Services
         Shift CreateShift(Organization organization, CreateShiftDTO shiftDto);
         Shift CreateLimitedShift(Organization organization, CreateShiftDTO shiftDto, int maxLengthMinutes);
         CheckIn CheckInEmployee(int shiftId, int employeeId, int organizationId);
+        void CheckOutEmployee(int shiftId, int employeeId, int organizationId);
         Shift AddEmployeesToShift(int shiftId, int organizationId, AddEmployeesDTO employees);
         Shift CreateShiftOutsideSchedule(CreateShiftOutsideScheduleDTO shiftDto, Organization organization);
         bool IsOrganisationOpen(string shortKey);

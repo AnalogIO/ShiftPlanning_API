@@ -27,6 +27,7 @@
     <ApplicationInsightsResourceId>/subscriptions/c5d84be0-8944-408e-bd75-640a5f854897/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/API</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>
     </ApplicationInsightsAnnotationResourceId>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -284,9 +285,6 @@
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="connections.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="appSettings.config" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -315,6 +313,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Connected Services\Application Insights\ConnectedService.json" />
+    <Content Include="connections.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
