@@ -210,7 +210,7 @@ namespace API.Controllers
 
             _shiftService.CheckOutEmployee(id, employeeId, organization.Id);
 
-            return Ok();
+            return Ok(Mapper.Map("Checked out with success!"));
         }
 
         /// <summary>
