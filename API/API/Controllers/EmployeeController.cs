@@ -179,21 +179,21 @@ namespace API.Controllers
         // GET api/employees
         /// <summary>
         /// Gets all the employees.
-        /// Requires 'Authorization' header set with the token granted upon manager login.
+        /// Requires 'Authorization' header set with the token granted upon manager login or by apikey.
         /// </summary>
         /// <returns>
         /// Returns an array of employees.
         /// </returns>
-        [Authorize(Roles = "Manager, Employee")]
+        [Authorize(Roles = "Manager, Employee, Application")]
         [HttpGet, Route("")]
         public IHttpActionResult Get()
         {
-            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
-            if (employee == null) return BadRequest("Provided token is invalid!");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("Provided token is invalid!");
 
-            var employees = _employeeService.GetEmployees(employee.Organization.Id);
+            var employees = _employeeService.GetEmployees(organization.Id);
             if (employees == null) return NotFound();
-            if(employee.Roles.Any(r => r.Name == "Manager"))
+            if(_authManager.IsManager(Request.Headers))
             {
                 return Ok(Mapper.Map(employees));
             } else
@@ -236,27 +236,6 @@ namespace API.Controllers
                 return NotFound();
             }
 
-        }
-
-        // GET api/employees
-        /// <summary>
-        /// Gets all the employees.
-        /// Requires 'apiKey' parameter set with the api key of the institution.
-        /// </summary>
-        /// <returns>
-        /// Returns an array of employees.
-        /// </returns>
-        //[Authorize(Roles = "Application")] TODO: FIX Authentication of apikey through data annotation
-        [HttpGet, Route("")]
-        [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
-        public IHttpActionResult Get(string apiKey)
-        {
-            var organization = _authManager.GetOrganizationByApiKey(apiKey);
-            if (organization == null) return BadRequest("No organization found with the given name");
-
-            var employees = _employeeService.GetEmployees(organization.Id).OrderBy(e => e.FirstName).ThenBy(e => e.LastName);
-            if (employees == null) return NotFound();
-            return Ok(Mapper.Map(employees));
         }
 
         // PUT api/employees

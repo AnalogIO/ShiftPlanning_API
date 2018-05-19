@@ -33,7 +33,8 @@ namespace API.Authorization
         {
             var apiKey = headers.Authorization.ToString();
             if (apiKey == null) throw new ObjectNotFoundException("Could not find a organization corresponding to the given 'Authorization' header");
-            return GetOrganizationByApiKey(apiKey);
+            var organization = GetOrganizationByApiKey(apiKey) ?? GetEmployeeByHeader(headers).Organization;
+            return organization;
         }
 
         public Employee GetEmployeeByHeader(HttpRequestHeaders headers)
@@ -41,6 +42,16 @@ namespace API.Authorization
             var token = headers.Authorization.ToString();
             if (token == null) throw new ObjectNotFoundException("Could not find a manager corresponding to the given 'Authorization' header");
             return _employeeRepository.Read(token);
+        }
+
+        public bool IsManager(HttpRequestHeaders headers)
+        {
+            var token = headers.Authorization.ToString();
+            if (token == null) throw new ObjectNotFoundException("Could not find a manager corresponding to the given 'Authorization' header");
+            var employee = _employeeRepository.Read(token);
+            if (employee == null) return false;
+            if (employee.Roles.Any(r => r.Name == "Manager")) return true;
+            return false;
         }
 
         public IEnumerable<Role> GetRoles(string token)

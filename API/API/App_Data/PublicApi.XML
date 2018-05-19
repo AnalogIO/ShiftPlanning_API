@@ -577,7 +577,7 @@
         <member name="M:API.Controllers.EmployeeController.Get">
             <summary>
             Gets all the employees.
-            Requires 'Authorization' header set with the token granted upon manager login.
+            Requires 'Authorization' header set with the token granted upon manager login or by apikey.
             </summary>
             <returns>
             Returns an array of employees.
@@ -592,15 +592,6 @@
             <returns>
             Returns the employee with the given id. 
             If no employee is found with the corresponding id, the controller will return NotFound (404)
-            </returns>
-        </member>
-        <member name="M:API.Controllers.EmployeeController.Get(System.String)">
-            <summary>
-            Gets all the employees.
-            Requires 'apiKey' parameter set with the api key of the institution.
-            </summary>
-            <returns>
-            Returns an array of employees.
             </returns>
         </member>
         <member name="M:API.Controllers.EmployeeController.Put(DataTransferObjects.Employee.UpdateEmployeeDTO)">

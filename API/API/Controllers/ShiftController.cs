@@ -48,7 +48,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Application")]
         [HttpGet, Route("{id}")]
         public IHttpActionResult Get(int id)
         {

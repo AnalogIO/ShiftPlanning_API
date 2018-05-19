@@ -11,5 +11,6 @@ namespace API.Authorization
         Employee GetEmployeeByHeader(HttpRequestHeaders headers);
         bool ValidateOrganizationApiKey(string apiKey);
         IEnumerable<Role> GetRoles(string token);
+        bool IsManager(HttpRequestHeaders headers);
     }
 }
