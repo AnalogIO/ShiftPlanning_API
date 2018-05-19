@@ -86,14 +86,14 @@ namespace API.Controllers
         /// <param name="id"></param>
         /// <param name="shiftDto"></param>
         /// <returns></returns>
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Application")]
         [HttpPut, Route("{id}")]
         public IHttpActionResult Update(int id, UpdateShiftDTO shiftDto)
         {
-            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
-            if (employee == null) return BadRequest("No manager found with the given token");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No manager found with the given token");
 
-            var shift = _shiftService.UpdateShift(id, employee.Organization.Id, shiftDto);
+            var shift = _shiftService.UpdateShift(id, organization.Id, shiftDto);
 
             if(shift != null)
             {
@@ -108,7 +108,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="shiftDto"></param>
         /// <returns></returns>
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Application")]
         [HttpPost, Route("")]
         public IHttpActionResult Create(CreateShiftDTO shiftDto)
         {
@@ -117,10 +117,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
-            if (employee == null) return BadRequest("No manager found with the given token");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("Token/apikey is not assigned any organization");
 
-            var shift = _shiftService.CreateShift(employee.Organization, shiftDto);
+            var shift = _shiftService.CreateShift(organization, shiftDto);
             if (shift != null)
             {
                 return Ok(Mapper.Map(shift));
@@ -211,56 +211,6 @@ namespace API.Controllers
             _shiftService.CheckOutEmployee(id, employeeId, organization.Id);
 
             return Ok(Mapper.Map("Checked out with success!"));
-        }
-
-        /// <summary>
-        /// Adds the employees from the body to the given shift
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [Authorize(Roles = "Application")]
-        [HttpPost, Route("{id}/addEmployees")]
-        public IHttpActionResult AddEmployees(int id, AddEmployeesDTO employees)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
-            if (organization == null) return BadRequest("No institution found with the given name");
-
-            var shift = _shiftService.AddEmployeesToShift(id, organization.Id, employees);
-            if (shift != null)
-            {
-                return Ok(Mapper.Map(shift));
-            }
-            return BadRequest("Could not add the employees");
-        }
-
-        /// <summary>
-        /// Creates a shift with the given employees from now (rounded up to nearest 15 minutes) and for the next xx minutes defined in the body
-        /// </summary>
-        /// <param name="shiftDto"></param>
-        /// <returns></returns>
-        //[Authorize(Roles = "Application")] TODO: FIX AUTHENTICATION HEADER
-        [HttpPost, Route("createoutsideschedule")]
-        public IHttpActionResult CreateOutsideSchedule(CreateShiftDTO shiftDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
-            if (organization == null) return BadRequest("No organization found with the given name");
-
-            var shift = _shiftService.CreateLimitedShift(organization, shiftDto, 300); // Create shift if it doesnt exceed a duration of 5 hours
-            if (shift != null)
-            {
-                return Ok(Mapper.Map(shift));
-            }
-            return BadRequest("Could not create shift!");
         }
     }
 }

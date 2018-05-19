@@ -903,20 +903,6 @@
             <param name="employeeId"></param>
             <returns></returns>
         </member>
-        <member name="M:API.Controllers.ShiftController.AddEmployees(System.Int32,DataTransferObjects.Shift.AddEmployeesDTO)">
-            <summary>
-            Adds the employees from the body to the given shift
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:API.Controllers.ShiftController.CreateOutsideSchedule(DataTransferObjects.Shift.CreateShiftDTO)">
-            <summary>
-            Creates a shift with the given employees from now (rounded up to nearest 15 minutes) and for the next xx minutes defined in the body
-            </summary>
-            <param name="shiftDto"></param>
-            <returns></returns>
-        </member>
         <member name="M:API.Logic.PhotoMapper.ParseBase64Photo(System.String,Data.Models.Organization)">
             <summary>
             

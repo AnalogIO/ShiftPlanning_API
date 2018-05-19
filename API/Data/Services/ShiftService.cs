@@ -175,22 +175,35 @@ namespace Data.Services
             var shift = _shiftRepository.Read(shiftId, organizationId);
             if (shift == null) throw new ObjectNotFoundException("Could not find a shift corresponding to the given id");
 
-            var start = DateTimeOffset.Parse(updateShiftDto.Start).LocalDateTime;
-            var end = DateTimeOffset.Parse(updateShiftDto.End).LocalDateTime;
+            if (!String.IsNullOrEmpty(updateShiftDto.End))
+            {
+                var end = DateTimeOffset.Parse(updateShiftDto.End).LocalDateTime;
+                if (end < now) throw new ForbiddenException("The end of the shift should be in the future");
 
-            if (start > end) throw new ForbiddenException("The shift cannot end before it has started");
-            if (end < now) throw new ForbiddenException("The end of the shift should be in the future");
+                var intersectingShifts = GetIntersectingShifts(organizationId, shift.Start, end);
+                if (intersectingShifts.Any(s => s.Id != shift.Id)) throw new ForbiddenException("You cannot update a shift that will intersect other shifts");
 
-            var intersectingShifts = GetIntersectingShifts(organizationId, start, end);
+                shift.End = end;
+            }
 
-            if (intersectingShifts.Any(s => s.Id != shift.Id)) throw new ForbiddenException("You cannot update a shift that will intersect other shifts");
+            if (!String.IsNullOrEmpty(updateShiftDto.Start))
+            {
+                var start = DateTimeOffset.Parse(updateShiftDto.Start).LocalDateTime;
+                if (start > shift.End) throw new ForbiddenException("The shift cannot end before it has started");
+                 
+                var intersectingShifts = GetIntersectingShifts(organizationId, start, shift.End);
+                if (intersectingShifts.Any(s => s.Id != shift.Id)) throw new ForbiddenException("You cannot update a shift that will intersect other shifts");
 
-            var employees = _employeeRepository.ReadFromOrganization(organizationId).Where(x => updateShiftDto.EmployeeIds.Contains(x.Id)).ToList();
+                shift.Start = start;
+            }
 
-            shift.Employees.Where(e => !updateShiftDto.EmployeeIds.Contains(e.Id)).ForEach(e => e.Shifts.Remove(shift));
-            shift.Employees = employees;
-            shift.Start = start;
-            shift.End = end;
+            if(updateShiftDto.EmployeeIds.Length > 0)
+            {
+                var employees = _employeeRepository.ReadFromOrganization(organizationId).Where(x => updateShiftDto.EmployeeIds.Contains(x.Id)).ToList();
+
+                shift.Employees.Where(e => !updateShiftDto.EmployeeIds.Contains(e.Id)).ForEach(e => e.Shifts.Remove(shift));
+                shift.Employees = employees;
+            }
 
             _shiftRepository.Update(shift);
 
