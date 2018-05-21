@@ -100,7 +100,7 @@ namespace API.Logic
 
         public static ShiftDTO Map(Shift shift)
         {
-            return new ShiftDTO { Id = shift.Id, Start = shift.Start, End = shift.End, CheckIns = Map(shift.CheckIns), Employees = Map(shift.Employees) };
+            return new ShiftDTO { Id = shift.Id, Start = shift.Start, End = shift.End, CheckIns = Map(shift.CheckIns), Employees = Map(shift.Employees), ScheduleId = shift.Schedule?.Id };
         }
 
         public static IEnumerable<ShiftDTO> Map(IEnumerable<Shift> shifts)
