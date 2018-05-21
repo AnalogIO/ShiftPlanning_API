@@ -14,6 +14,7 @@ using API.Authorization;
 using Data.Token;
 using Microsoft.Practices.Unity;
 using System.Web.Mvc;
+using System.Web;
 
 namespace API
 {
@@ -100,6 +101,7 @@ namespace API
                     IPrincipal user = new ClaimsPrincipal(identity);
 
                     context.Principal = user;
+                    HttpContext.Current.Items["Audit"] = "Application";
                 }
             }
         }
@@ -113,6 +115,8 @@ namespace API
 
                 var identity = new ClaimsIdentity(claims, "Jwt");
                 IPrincipal user = new ClaimsPrincipal(identity);
+
+                HttpContext.Current.Items["Audit"] = "User";
 
                 return Task.FromResult(user);
             }

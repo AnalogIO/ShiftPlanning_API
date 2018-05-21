@@ -68,14 +68,14 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Application")]
         [HttpDelete, Route("{id}")]
         public IHttpActionResult Delete(int id)
         {
-            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
-            if (employee == null) return BadRequest("No manager found with the given token");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No manager found with the given token");
 
-            _shiftService.DeleteShift(id, employee.Organization.Id);
+            _shiftService.DeleteShift(id, organization.Id);
             
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
         }

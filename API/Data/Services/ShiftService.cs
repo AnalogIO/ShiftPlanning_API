@@ -7,6 +7,7 @@ using DataTransferObjects.Shift;
 using System.Data;
 using Data.Exceptions;
 using Microsoft.Practices.ObjectBuilder2;
+using System.Web;
 
 namespace Data.Services
 {
@@ -165,6 +166,10 @@ namespace Data.Services
 
         public void DeleteShift(int shiftId, int organizationId)
         {
+            if(((string)HttpContext.Current.Items["Audit"]).Equals("Application"))
+            {
+                if(_shiftRepository.Read(shiftId, organizationId).Schedule != null) throw new ForbiddenException("Only user-created shifts can be deleted!");
+            }
             _shiftRepository.Delete(shiftId, organizationId);
         }
 
@@ -209,7 +214,6 @@ namespace Data.Services
                     employee.Shifts.Remove(shift);
                 }
 
-                //shift.Employees.Where(e => !updateShiftDto.EmployeeIds.Contains(e.Id)).ForEach(e => e.Shifts.Remove(shift));
                 shift.Employees = employees;
             }
 
