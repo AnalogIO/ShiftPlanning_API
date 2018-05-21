@@ -200,8 +200,16 @@ namespace Data.Services
             if(updateShiftDto.EmployeeIds.Length > 0)
             {
                 var employees = _employeeRepository.ReadFromOrganization(organizationId).Where(x => updateShiftDto.EmployeeIds.Contains(x.Id)).ToList();
+                var employeesToRemove = shift.Employees.Where(e => !updateShiftDto.EmployeeIds.Contains(e.Id));
 
-                shift.Employees.Where(e => !updateShiftDto.EmployeeIds.Contains(e.Id)).ForEach(e => e.Shifts.Remove(shift));
+                foreach(var employee in employeesToRemove)
+                {
+                    var checkin = shift.CheckIns.FirstOrDefault(x => x.Employee.Id == employee.Id);
+                    if (checkin != null) _checkInRepository.Delete(checkin); // if employee is checked in, let's remove that before removing them from the shift
+                    employee.Shifts.Remove(shift);
+                }
+
+                //shift.Employees.Where(e => !updateShiftDto.EmployeeIds.Contains(e.Id)).ForEach(e => e.Shifts.Remove(shift));
                 shift.Employees = employees;
             }
 
