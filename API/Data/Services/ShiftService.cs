@@ -205,7 +205,7 @@ namespace Data.Services
             if(updateShiftDto.EmployeeIds.Length > 0)
             {
                 var employees = _employeeRepository.ReadFromOrganization(organizationId).Where(x => updateShiftDto.EmployeeIds.Contains(x.Id)).ToList();
-                var employeesToRemove = shift.Employees.Where(e => !updateShiftDto.EmployeeIds.Contains(e.Id));
+                var employeesToRemove = shift.Employees.Where(e => !updateShiftDto.EmployeeIds.Contains(e.Id)).ToList();
 
                 foreach(var employee in employeesToRemove)
                 {
