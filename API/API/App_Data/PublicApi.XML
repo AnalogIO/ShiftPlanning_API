@@ -868,6 +868,14 @@
             <param name="shiftDto"></param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.ShiftController.Patch(System.Int32,DataTransferObjects.Shift.PatchShiftDTO)">
+            <summary>
+            Patches the shift with the id in the parameter with the content in the body
+            </summary>
+            <param name="id"></param>
+            <param name="shiftDto"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.ShiftController.Create(DataTransferObjects.Shift.CreateShiftDTO)">
             <summary>
             Creates a shift with the given employees for the given time defined in the body

@@ -104,6 +104,29 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Patches the shift with the id in the parameter with the content in the body
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="shiftDto"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Manager, Application")]
+        [HttpPatch, Route("{id}")]
+        public IHttpActionResult Patch(int id, PatchShiftDTO shiftDto)
+        {
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No manager found with the given token");
+
+            var shift = _shiftService.PatchShift(id, organization.Id, shiftDto);
+
+            if (shift != null)
+            {
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+            }
+
+            return BadRequest("The shift could not be updated!");
+        }
+
+        /// <summary>
         /// Creates a shift with the given employees for the given time defined in the body
         /// </summary>
         /// <param name="shiftDto"></param>

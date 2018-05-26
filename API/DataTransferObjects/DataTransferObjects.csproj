@@ -103,6 +103,7 @@
     <Compile Include="EmployeeTitles\UpdateEmployeeTitleDTO.cs" />
     <Compile Include="ScheduledShift\UpdateScheduledShiftDTO.cs" />
     <Compile Include="Schedule\UpdateScheduleDTO.cs" />
+    <Compile Include="Shift\PatchShiftDTO.cs" />
     <Compile Include="Shift\UpdateShiftDTO.cs" />
     <Compile Include="Public\Employees\EmployeeDTO.cs" />
   </ItemGroup>
