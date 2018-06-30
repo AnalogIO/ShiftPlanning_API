@@ -130,7 +130,7 @@ namespace API.Logic
 
         public static EmployeeDTOSimple MapSimple(Employee employee)
         {
-            return new EmployeeDTOSimple { Id = employee.Id, FirstName = employee.FirstName, LastName = employee.LastName };
+            return new EmployeeDTOSimple { Id = employee.Id, FirstName = employee.FirstName.Trim(), LastName = employee.LastName.Trim() };
         }
 
         public static IEnumerable<EmployeeDTOSimple> MapSimple(IEnumerable<Employee> employees)

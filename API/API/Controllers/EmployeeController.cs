@@ -198,7 +198,7 @@ namespace API.Controllers
                 return Ok(Mapper.Map(employees));
             } else
             {
-                return Ok(Mapper.MapSimple(employees));
+                return Ok(Mapper.MapSimple(employees.OrderBy(e => e.FirstName).ThenBy(e => e.LastName)));
             }
             
         }
