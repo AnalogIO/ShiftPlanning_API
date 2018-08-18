@@ -37,7 +37,7 @@ namespace API.Logic
                 EmployeeTitleId = employee.EmployeeTitle?.Id,
                 PhotoRef = $"{routeBase}/{PhotosController.RoutePrefix}/{employee.Photo?.Id}/{employee.Organization.Id}",
                 CheckInCount = 0,//employee.CheckIns.Count,
-                Roles = new string[0],//employee.Roles.Select(r => r.Name).ToArray(),
+                Roles = employee.Roles.Select(r => r.Name).ToArray(), // new string[0],
                 WantShifts = employee.WantShifts
             };
         }
