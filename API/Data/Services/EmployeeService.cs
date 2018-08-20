@@ -71,9 +71,9 @@ namespace Data.Services
             var emailService = new EmailService();
 
             var pw = pwgen.Next();
-            var hashedPw = HashManager.Hash(pw);
+            //var hashedPw = HashManager.Hash(pw);
             var salt = HashManager.GenerateSalt();
-            var saltedPw = HashManager.Hash(hashedPw + salt);
+            var saltedPw = HashManager.Hash(pw + salt);
 
             newEmployee.Salt = salt;
             newEmployee.Password = saltedPw;
@@ -100,9 +100,9 @@ namespace Data.Services
             var emailService = new EmailService();
 
             var pw = pwgen.Next();
-            var hashedPw = HashManager.Hash(pw);
+            //var hashedPw = HashManager.Hash(pw);
             var salt = HashManager.GenerateSalt();
-            var saltedPw = HashManager.Hash(hashedPw + salt);
+            var saltedPw = HashManager.Hash(pw + salt);
 
             employee.Salt = salt;
             employee.Password = saltedPw;
