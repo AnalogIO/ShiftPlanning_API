@@ -59,13 +59,15 @@ namespace Data.MSSQL.Repositories
         public IEnumerable<Employee> ReadFromOrganization(int organizationId)
         {
             return _context.Employees
-                .Where(e => e.Organization.Id == organizationId).OrderBy(x => x.Id);
+                .Where(e => e.Organization.Id == organizationId).OrderBy(x => x.Id)
+                .Include(x => x.Roles);
         }
 
         public IEnumerable<Employee> ReadFromOrganization(string shortKey)
         {
             return _context.Employees
-                .Where(e => e.Organization.ShortKey == shortKey);
+                .Where(e => e.Organization.ShortKey == shortKey)
+                .Include(x => x.Roles);
         }
 
         public Employee Read(int id, int organizationId)
