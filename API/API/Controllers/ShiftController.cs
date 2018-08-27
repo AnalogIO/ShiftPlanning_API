@@ -44,6 +44,23 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Returns all shifts of the specified organization in the 'Authorization' header
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "Manager")]
+        [HttpGet, Route("")]
+        public IHttpActionResult Get(string from, string to)
+        {
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("No manager found with the given name");
+
+            var dtFrom = Convert.ToDateTime(from);
+            var dtTo = Convert.ToDateTime(to);
+
+            return Ok(Mapper.Map(_shiftService.GetByOrganization(employee.Organization.Id, dtFrom, dtTo)));
+        }
+
+        /// <summary>
         /// Returns the shift for the given id in the parameter
         /// </summary>
         /// <param name="id"></param>

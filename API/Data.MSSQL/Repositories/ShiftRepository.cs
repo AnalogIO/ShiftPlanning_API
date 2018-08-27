@@ -63,7 +63,8 @@ namespace Data.MSSQL.Repositories
         public IEnumerable<Shift> ReadFromOrganization(int organizationId)
         {
             return _context.Shifts
-                .Where(x => x.Organization.Id == organizationId);
+                .Where(x => x.Organization.Id == organizationId)
+                .Include(x => x.Employees.Select(e => e.Roles));
         }
 
         public int Update(Shift shift)
