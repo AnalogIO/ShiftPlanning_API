@@ -195,7 +195,7 @@ namespace API.Controllers
             if (employees == null) return NotFound();
             if(_authManager.IsManager(Request.Headers))
             {
-                return Ok(Mapper.Map(employees));
+                return Ok(Mapper.Map(employees.OrderBy(e => e.FirstName).ThenBy(e => e.LastName)));
             } else
             {
                 return Ok(Mapper.MapSimple(employees.OrderBy(e => e.FirstName).ThenBy(e => e.LastName)));
