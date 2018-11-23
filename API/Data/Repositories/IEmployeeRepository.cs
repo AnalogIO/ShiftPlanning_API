@@ -12,6 +12,7 @@ namespace Data.Repositories
         Employee Read(int id, int organizationId);
         Employee Read(int id, string shortKey);
         int Update(Employee employee);
+        int UpdateMany(IEnumerable<Employee> employees);
         void Delete(int id, int organizationId);
         Employee Read(string token);
         Employee Login(string email, string password);

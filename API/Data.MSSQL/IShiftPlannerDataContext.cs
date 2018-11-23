@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using Data.Models;
 
 namespace Data.MSSQL
@@ -19,5 +20,6 @@ namespace Data.MSSQL
         DbSet<Friendship> Friendships { get; set; }
 
         int SaveChanges();
+        DbEntityEntry Entry(object entity);
     }
 }

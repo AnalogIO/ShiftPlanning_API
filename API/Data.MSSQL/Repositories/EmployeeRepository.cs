@@ -135,5 +135,14 @@ namespace Data.MSSQL.Repositories
         {
             _context.Dispose();
         }
+
+        public int UpdateMany(IEnumerable<Employee> employees)
+        {
+            foreach(var employee in employees)
+            {
+                _context.Entry(employee).State = EntityState.Modified;
+            }
+            return _context.SaveChanges();
+        }
     }
 }

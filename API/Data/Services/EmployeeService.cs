@@ -214,26 +214,30 @@ namespace Data.Services
                 var employee = employees.FirstOrDefault(x => (x.FirstName.ToLower().Equals(firstName) && x.LastName.ToLower().Equals(lastName)) || x.PodioId == item.ItemId);
                 if (employee != null)
                 {
-                    var pItem = item.Fields.FirstOrDefault(x => x.ExternalId.Equals("please-upload-a-picture-of-yourself"));
-                    if(pItem != null)
-                    {
-                        var photoUrl = (string)pItem.Values.First["value"]["thumbnail_link"];
-                        var photoName = (string)pItem.Values.First["value"]["name"];
-                        var fileId = (int)pItem.Values.First["value"]["file_id"];
+                    if (string.IsNullOrEmpty(employee.PhotoUrl)) {
+                        var pItem = item.Fields.FirstOrDefault(x => x.ExternalId.Equals("please-upload-a-picture-of-yourself"));
+                        if (pItem != null)
+                        {
+                            var photoUrl = (string)pItem.Values.First["value"]["thumbnail_link"];
+                            var photoName = (string)pItem.Values.First["value"]["name"];
+                            var fileId = (int)pItem.Values.First["value"]["file_id"];
 
-                        var file = podio.FileService.GetFile(fileId);
-                        var fileResponse = podio.FileService.DownloadFile(file);
-                        var photoMemoryStream = new MemoryStream(fileResponse.FileContents);
+                            var file = podio.FileService.GetFile(fileId);
+                            var fileResponse = podio.FileService.DownloadFile(file);
+                            var photoMemoryStream = new MemoryStream(fileResponse.FileContents);
 
-                        var fileName = $"{item.ItemId}{photoName.Substring(photoName.LastIndexOf('.'))}";
-                        FtpUpload(photoMemoryStream, ftpHost, ftpUsername, ftpPassword, fileName);
+                            var fileName = $"{item.ItemId}{photoName.Substring(photoName.LastIndexOf('.'))}";
+                            FtpUpload(photoMemoryStream, ftpHost, ftpUsername, ftpPassword, fileName);
 
-                        employee.PhotoUrl = $"http://img.cafeanalog.dk/baristas/{fileName}";
+                            employee.PhotoUrl = $"http://img.cafeanalog.dk/baristas/{fileName}";
+                        }
                     }
                     employee.PodioId = item.ItemId;
                     matchedEmployees.Add(employee);
                 }
             }
+
+            _employeeRepository.UpdateMany(matchedEmployees);
 
             return matchedEmployees;
         }
