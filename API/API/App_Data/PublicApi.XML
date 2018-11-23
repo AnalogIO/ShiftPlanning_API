@@ -846,6 +846,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.ShiftController.Get(System.String,System.String)">
+            <summary>
+            Returns all shifts of the specified organization in the 'Authorization' header
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.ShiftController.Get(System.Int32)">
             <summary>
             Returns the shift for the given id in the parameter

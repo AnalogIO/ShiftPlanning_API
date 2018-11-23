@@ -39,39 +39,6 @@ namespace API.Controllers
             _photoMapper = photoMapper;
         }
 
-        [Authorize(Roles = "Employee")]
-        [HttpDelete, Route("{userId:int}/photo")]
-        public IHttpActionResult DeletePhoto([FromUri] int userId)
-        {
-            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
-
-            // Todo: Make sure to remove old photo from database.
-            _employeeService.SetPhoto(userId, employee.Organization.Id, employee.Organization.DefaultPhoto);
-
-            return Ok();
-        }
-
-        [Authorize(Roles = "Employee")]
-        [HttpPut, Route("{userId:int}/photo")]
-        public IHttpActionResult UpdatePhoto([FromUri] int userId, [FromBody] string profilePhoto)
-        {
-            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
-            if (employee == null) return BadRequest("Provided token is invalid!");
-
-            try
-            {
-                var photo = _photoMapper.ParseBase64Photo(profilePhoto, employee.Organization);
-
-                _employeeService.SetPhoto(userId, employee.Organization.Id, photo);
-
-                return Ok();
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         // POST api/employees
         /// <summary>
         /// Creates the employee from the content in the body.

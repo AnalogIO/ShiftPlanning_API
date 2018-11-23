@@ -21,7 +21,7 @@ namespace PublicApi.Mapping
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
                 Title = employee.EmployeeTitle.Title,
-                PhotoRef = $""
+                PhotoRef = employee.PhotoUrl
             };
         }
     }
