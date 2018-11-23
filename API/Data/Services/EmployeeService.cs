@@ -3,17 +3,12 @@ using Data.Models;
 using Data.Repositories;
 using DataTransferObjects.Employee;
 using System.Linq;
-using System;
 using System.Data;
 using System.IdentityModel;
-using Data.Exceptions;
 using Data.Token;
 using System.Configuration;
 using PodioAPI;
-using PodioAPI.Utils;
-using PodioAPI.Models;
 using System.IO;
-using System.Net.Http;
 using System.Net;
 
 namespace Data.Services
@@ -190,8 +185,6 @@ namespace Data.Services
 
         public IEnumerable<Employee> SyncEmployees()
         {
-            var client = new WebClient();
-
             var clientId = ConfigurationManager.AppSettings["podio_client_id"];
             var clientSecret = ConfigurationManager.AppSettings["podio_client_secret"];
 
