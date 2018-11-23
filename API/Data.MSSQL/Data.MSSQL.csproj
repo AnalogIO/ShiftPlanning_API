@@ -101,6 +101,10 @@
     <Compile Include="Migrations\201811231659347_removes photo entity.Designer.cs">
       <DependentUpon>201811231659347_removes photo entity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811231958112_Adds PodioId to employee entity.cs" />
+    <Compile Include="Migrations\201811231958112_Adds PodioId to employee entity.Designer.cs">
+      <DependentUpon>201811231958112_Adds PodioId to employee entity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\EmployeeRepository.cs" />
@@ -133,6 +137,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811231659347_removes photo entity.resx">
       <DependentUpon>201811231659347_removes photo entity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811231958112_Adds PodioId to employee entity.resx">
+      <DependentUpon>201811231958112_Adds PodioId to employee entity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

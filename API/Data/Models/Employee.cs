@@ -22,5 +22,6 @@ namespace Data.Models
         public string PhotoUrl { get; set; }
         public virtual ICollection<Role> Roles { get; set; }
         public virtual ICollection<Token> Tokens { get; set; }
+        public int PodioId { get; set; }
     }
 }

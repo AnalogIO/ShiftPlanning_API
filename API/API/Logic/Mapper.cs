@@ -22,10 +22,6 @@ namespace API.Logic
 
         public static EmployeeDTO Map(Employee employee)
         {
-            var url = HttpContext.Current.Request.Url.AbsoluteUri;
-
-            var routeBase = url.Substring(0, url.IndexOf("/api/", StringComparison.Ordinal));
-
             return new EmployeeDTO
             {
                 Id = employee.Id,
@@ -38,7 +34,8 @@ namespace API.Logic
                 PhotoRef = employee.PhotoUrl,
                 CheckInCount = 0,//employee.CheckIns.Count,
                 Roles = employee.Roles.Select(r => r.Name).ToArray(), // new string[0],
-                WantShifts = employee.WantShifts
+                WantShifts = employee.WantShifts,
+                PodioId = employee.PodioId
             };
         }
 

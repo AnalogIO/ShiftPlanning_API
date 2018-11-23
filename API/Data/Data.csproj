@@ -79,6 +79,9 @@
     <Reference Include="PasswordGenerator, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PasswordGenerator.1.1.2\lib\net45\PasswordGenerator.dll</HintPath>
     </Reference>
+    <Reference Include="Podio.NET, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Podio.1.5.9\lib\net40\Podio.NET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />

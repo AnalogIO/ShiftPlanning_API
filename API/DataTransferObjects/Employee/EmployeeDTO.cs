@@ -19,5 +19,6 @@ namespace DataTransferObjects.Employee
         public int? CheckInCount { get; set; }
         public int WantShifts { get; set; }
         public string[] Roles { get; set; }
+        public int PodioId { get; set; }
     }
 }

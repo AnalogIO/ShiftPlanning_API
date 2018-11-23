@@ -319,6 +319,19 @@ namespace API.Controllers
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
         }
 
+        [AllowAnonymous]
+        [HttpGet, Route("podiosync")]
+        public IHttpActionResult PodioSync()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var employees = _employeeService.SyncEmployees();
+            return Ok(Mapper.Map(employees));
+        }
+
         private static bool IsCreateEmployeeDtoAlright(CreateEmployeeDTO dto)
         {
             if (dto == null

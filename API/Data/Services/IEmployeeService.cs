@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Data.Models;
 using DataTransferObjects.Employee;
+using PodioAPI.Models;
+using PodioAPI.Utils;
 
 namespace Data.Services
 {
@@ -18,5 +20,6 @@ namespace Data.Services
         Friendship CreateFriendship(Employee employee, int friendId);
         void DeleteFriendship(Employee employee, int friendId);
         void ResetPassword(int id, int organizationId);
+        IEnumerable<Employee> SyncEmployees();
     }
 }

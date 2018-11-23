@@ -8,6 +8,13 @@ using System.Data;
 using System.IdentityModel;
 using Data.Exceptions;
 using Data.Token;
+using System.Configuration;
+using PodioAPI;
+using PodioAPI.Utils;
+using PodioAPI.Models;
+using System.IO;
+using System.Net.Http;
+using System.Net;
 
 namespace Data.Services
 {
@@ -181,7 +188,78 @@ namespace Data.Services
             _employeeRepository.DeleteFriendship(friendship);
         }
 
+        public IEnumerable<Employee> SyncEmployees()
+        {
+            var client = new WebClient();
 
+            var clientId = ConfigurationManager.AppSettings["podio_client_id"];
+            var clientSecret = ConfigurationManager.AppSettings["podio_client_secret"];
+
+            var appId = int.Parse(ConfigurationManager.AppSettings["podio_app_id"]);
+            var appToken = ConfigurationManager.AppSettings["podio_app_token"];
+
+            var ftpHost = ConfigurationManager.AppSettings["ftpHost"];
+            var ftpUsername = ConfigurationManager.AppSettings["ftpUsername"];
+            var ftpPassword = ConfigurationManager.AppSettings["ftpPassword"];
+
+            var podio = new Podio(clientId, clientSecret);
+
+            podio.AuthenticateWithApp(appId, appToken);
+
+            var matchedEmployees = new List<Employee>();
+
+            var filteredItems = podio.ItemService.FilterItems(appId: 3999665, sortBy: "last_edit_on", sortDesc: true, limit: 500);
+            var employees = _employeeRepository.ReadFromOrganization(1);
+
+            foreach(var item in filteredItems.Items)
+            {
+                var index = item.Title.IndexOf(' ');
+                if (index == -1) continue;
+                var firstName = item.Title.Substring(0, index).Trim().ToLower();
+                var lastName = item.Title.Substring(index).Trim().ToLower();
+
+                var employee = employees.FirstOrDefault(x => (x.FirstName.ToLower().Equals(firstName) && x.LastName.ToLower().Equals(lastName)) || x.PodioId == item.ItemId);
+                if (employee != null)
+                {
+                    var pItem = item.Fields.FirstOrDefault(x => x.ExternalId.Equals("please-upload-a-picture-of-yourself"));
+                    if(pItem != null)
+                    {
+                        var photoUrl = (string)pItem.Values.First["value"]["thumbnail_link"];
+                        var photoName = (string)pItem.Values.First["value"]["name"];
+                        var fileId = (int)pItem.Values.First["value"]["file_id"];
+
+                        var file = podio.FileService.GetFile(fileId);
+                        var fileResponse = podio.FileService.DownloadFile(file);
+                        var photoMemoryStream = new MemoryStream(fileResponse.FileContents);
+
+                        var fileName = $"{item.ItemId}{photoName.Substring(photoName.LastIndexOf('.'))}";
+                        FtpUpload(photoMemoryStream, ftpHost, ftpUsername, ftpPassword, fileName);
+
+                        employee.PhotoUrl = $"http://img.cafeanalog.dk/baristas/{fileName}";
+                    }
+                    employee.PodioId = item.ItemId;
+                    matchedEmployees.Add(employee);
+                }
+            }
+
+            return matchedEmployees;
+        }
+
+        private static string FtpUpload(MemoryStream memStream, string to_uri, string user_name, string password, string fileName)
+        {
+            var request = (FtpWebRequest)WebRequest.Create(to_uri + fileName);
+            request.Method = WebRequestMethods.Ftp.UploadFile;
+            request.Credentials = new NetworkCredential(user_name, password);
+            request.UseBinary = true;
+            var buffer = new byte[memStream.Length];
+            memStream.Read(buffer, 0, buffer.Length);
+            memStream.Close();
+            using (var reqStream = request.GetRequestStream())
+            {
+                reqStream.Write(buffer, 0, buffer.Length);
+            }
+            return string.Empty;
+        }
 
     }
 }
