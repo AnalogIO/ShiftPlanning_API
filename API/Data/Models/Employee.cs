@@ -19,7 +19,7 @@ namespace Data.Models
         public virtual ICollection<Preference> Preferences { get; set; }
         public virtual ICollection<Friendship> Friendships { get; set; }
         public virtual Organization Organization { get; set; }
-        public virtual Photo Photo { get; set; }
+        public string PhotoUrl { get; set; }
         public virtual ICollection<Role> Roles { get; set; }
         public virtual ICollection<Token> Tokens { get; set; }
     }

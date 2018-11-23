@@ -14,7 +14,6 @@ namespace Data.Services
         IEnumerable<Employee> GetEmployees(int organizationId);
         IEnumerable<Employee> GetEmployees(string shortKey);
         Employee UpdateEmployee(UpdateEmployeeDTO employeeDto, Employee employee, Photo photo);
-        void SetPhoto(int employeeId, int organizationId, Photo photo);
         Employee Login(string email, string password);
         Friendship CreateFriendship(Employee employee, int friendId);
         void DeleteFriendship(Employee employee, int friendId);

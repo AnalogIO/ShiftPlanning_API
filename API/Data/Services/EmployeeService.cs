@@ -55,7 +55,7 @@ namespace Data.Services
                 LastName = employeeDto.LastName,
                 Organization = employee.Organization,
                 Active = true,
-                Photo = photo,
+                PhotoUrl = "",
                 CheckIns = new List<CheckIn>(),
                 Roles = new List<Role>(),
                 Friendships = new List<Friendship>()
@@ -134,11 +134,6 @@ namespace Data.Services
             updateEmployee.Active = employeeDto.Active;
             updateEmployee.WantShifts = employeeDto.WantShifts;
 
-            if (photo != null)
-            {
-                updateEmployee.Photo = photo;
-            }
-
             var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, updateEmployee.Organization.Id);
             if (title != null) updateEmployee.EmployeeTitle = title;
             _employeeRepository.Update(updateEmployee);
@@ -159,15 +154,6 @@ namespace Data.Services
         public void DeleteEmployee(int employeeId, Employee employee)
         {
             _employeeRepository.Delete(employeeId, employee.Organization.Id);
-        }
-
-        public void SetPhoto(int employeeId, int organizationId, Photo photo)
-        {
-            var employee = _employeeRepository.Read(employeeId, organizationId);
-
-            employee.Photo = photo;
-
-            _employeeRepository.Update(employee);
         }
 
         public Employee Login(string email, string password)

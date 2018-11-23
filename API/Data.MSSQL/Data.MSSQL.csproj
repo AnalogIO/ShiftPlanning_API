@@ -97,6 +97,10 @@
     <Compile Include="Migrations\201710181356303_initial.Designer.cs">
       <DependentUpon>201710181356303_initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811231659347_removes photo entity.cs" />
+    <Compile Include="Migrations\201811231659347_removes photo entity.Designer.cs">
+      <DependentUpon>201811231659347_removes photo entity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\EmployeeRepository.cs" />
@@ -126,6 +130,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201710181356303_initial.resx">
       <DependentUpon>201710181356303_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811231659347_removes photo entity.resx">
+      <DependentUpon>201811231659347_removes photo entity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
