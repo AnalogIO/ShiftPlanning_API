@@ -14,5 +14,6 @@ namespace Data.Repositories
         bool HasApiKey(string apiKey);
         Organization Read(int id);
         Organization Read(string apiKey);
+        Organization ReadByShortKey(string shortKey);
     }
 }

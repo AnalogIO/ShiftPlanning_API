@@ -553,7 +553,7 @@
             The public API to access employee information for organizations.
             </summary>
         </member>
-        <member name="M:PublicApi.Controllers.EmployeesController.Get(System.String)">
+        <member name="M:PublicApi.Controllers.EmployeesController.Get(System.String,System.Boolean)">
             <summary>
             Retrive all employees for a given organization.
             </summary>

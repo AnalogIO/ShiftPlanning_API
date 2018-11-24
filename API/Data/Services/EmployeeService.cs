@@ -30,12 +30,22 @@ namespace Data.Services
             _scheduleRepository = scheduleRepository;
         }
 
-        public IEnumerable<Employee> GetEmployees(int organizationId, bool active = true)
+        public IEnumerable<Employee> GetEmployees(int organizationId)
+        {
+            return _employeeRepository.ReadFromOrganization(organizationId);
+        }
+
+        public IEnumerable<Employee> GetEmployees(string shortKey)
+        {
+            return _employeeRepository.ReadFromOrganization(shortKey);
+        }
+
+        public IEnumerable<Employee> GetEmployeesByActivity(int organizationId, bool active = true)
         {
             return _employeeRepository.ReadFromOrganization(organizationId).Where(x => x.Active == active);
         }
 
-        public IEnumerable<Employee> GetEmployees(string shortKey, bool active = true)
+        public IEnumerable<Employee> GetEmployeesByActivity(string shortKey, bool active = true)
         {
             return _employeeRepository.ReadFromOrganization(shortKey).Where(x => x.Active == active);
         }
@@ -50,7 +60,7 @@ namespace Data.Services
             return _employeeRepository.Read(id, shortKey);
         }
 
-        public Employee CreateEmployee(CreateEmployeeDTO employeeDto, Employee employee, Photo photo)
+        public Employee CreateEmployee(CreateEmployeeDTO employeeDto, Employee employee)
         {
             var newEmployee = new Employee
             {
@@ -185,7 +195,30 @@ namespace Data.Services
             _employeeRepository.DeleteFriendship(friendship);
         }
 
-        public IEnumerable<Employee> SyncEmployees()
+        public Employee CreateEmployeeFromPodio(CreateEmployeeDTO employeeDto, Models.Organization organization)
+        {
+            var newEmployee = new Employee
+            {
+                Email = employeeDto.Email,
+                FirstName = employeeDto.FirstName,
+                LastName = employeeDto.LastName,
+                Organization = organization,
+                Active = false,
+                PhotoUrl = "",
+                CheckIns = new List<CheckIn>(),
+                Roles = new List<Role>(),
+                Friendships = new List<Friendship>()
+            };
+
+            var role = _employeeRepository.GetRoles().FirstOrDefault(r => r.Name == "Employee");
+            newEmployee.Roles.Add(role);
+
+            var createdEmployee = _employeeRepository.Create(newEmployee);
+            if (createdEmployee == null) throw new BadRequestException("Please check your input again - the employee could not be created!");
+            return createdEmployee;
+        }
+
+        public int SyncEmployees(string shortKey)
         {
             var clientId = ConfigurationManager.AppSettings["podio_client_id"];
             var clientSecret = ConfigurationManager.AppSettings["podio_client_secret"];
@@ -208,14 +241,15 @@ namespace Data.Services
             var matchedEmployees = new List<Employee>();
 
             var filteredItems = podio.ItemService.FilterItems(appId: 3999665, sortBy: "last_edit_on", sortDesc: true, limit: 500);
-            var employees = _employeeRepository.ReadFromOrganization(1);
+            var employees = _employeeRepository.ReadFromOrganization(shortKey);
 
             foreach(var item in filteredItems.Items)
             {
                 var index = item.Title.IndexOf(' ');
                 if (index == -1) continue;
-                var firstName = item.Title.Substring(0, index).Trim().ToLower();
-                var lastName = item.Title.Substring(index).Trim().ToLower();
+                var firstName = item.Title.Substring(0, index).Trim();
+                var lastName = item.Title.Substring(index).Trim();
+
                 var email = "";
 
                 var emailItem = item.Fields.FirstOrDefault(x => x.FieldId.Equals(emailFieldId));
@@ -233,7 +267,40 @@ namespace Data.Services
                     active = text.Equals("Yes");
                 }
 
-                var employee = employees.FirstOrDefault(x => (x.FirstName.ToLower().Equals(firstName) && x.LastName.ToLower().Equals(lastName)) || x.PodioId == item.ItemId || x.Email.Equals(email));
+                var employee = employees.FirstOrDefault(x => (x.FirstName.ToLower().Equals(firstName.ToLower()) && x.LastName.ToLower().Equals(lastName.ToLower())) || x.PodioId == item.ItemId || x.Email.ToLower().Equals(email.ToLower()));
+                if(employee == null)
+                {
+                    // ADVANCED SEARCH FOR EXISTING EMPLOYEES
+                    /*
+                    var separator = lastName.IndexOf('-');
+                    if (separator == -1) separator = lastName.IndexOf(" ");
+                    if (separator != -1)
+                    {
+                        var alternativeLastName = lastName.Substring(0, separator);
+                        var alternativeEmployee = employees.FirstOrDefault(x => x.FirstName.ToLower().Equals(firstName.ToLower()) && x.LastName.ToLower().Contains(alternativeLastName.ToLower()));
+                        if (alternativeEmployee == null)
+                        {
+                            alternativeLastName = lastName.Substring(separator + 1);
+                            alternativeEmployee = employees.FirstOrDefault(x => x.FirstName.ToLower().Equals(firstName.ToLower()) && x.LastName.ToLower().Contains(alternativeLastName.ToLower()));
+                        }
+
+                        if (alternativeEmployee != null) employee = alternativeEmployee;
+                    }
+
+                    if(employee == null) //employee is unknown and needs to be created
+                    {
+                        var newEmployeeDto = new CreateEmployeeDTO { Email = email, FirstName = firstName, LastName = lastName };
+                        var analogOrganization = _organizationRepository.ReadByShortKey("analog");
+                        employee = CreateEmployeeFromPodio(newEmployeeDto, analogOrganization);
+                    }*/
+
+
+                    //create employee if they do not exist in database
+                    var newEmployeeDto = new CreateEmployeeDTO { Email = email, FirstName = firstName, LastName = lastName };
+                    var analogOrganization = _organizationRepository.ReadByShortKey(shortKey);
+                    employee = CreateEmployeeFromPodio(newEmployeeDto, analogOrganization);
+                }
+
                 if (employee != null)
                 {
                     if (string.IsNullOrEmpty(employee.PhotoUrl)) {
@@ -260,9 +327,7 @@ namespace Data.Services
                 }
             }
 
-            _employeeRepository.UpdateMany(matchedEmployees);
-
-            return matchedEmployees;
+            return _employeeRepository.UpdateMany(matchedEmployees);
         }
 
         private static string GetFieldStringValue(ItemField item, string fieldKey)

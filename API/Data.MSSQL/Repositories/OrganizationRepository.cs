@@ -37,5 +37,10 @@ namespace Data.MSSQL.Repositories
         {
             return _context.Organizations.FirstOrDefault(x => x.ApiKey == apiKey);
         }
+
+        public Organization ReadByShortKey(string shortKey)
+        {
+            return _context.Organizations.FirstOrDefault(x => x.ShortKey.Equals(shortKey));
+        }
     }
 }

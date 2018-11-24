@@ -35,7 +35,7 @@ namespace PublicApi.Controllers
         [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
         public IHttpActionResult Get(string shortKey, bool active = true)
         {
-            var employees = _employeeService.GetEmployees(shortKey, active)?.ToList();
+            var employees = _employeeService.GetEmployeesByActivity(shortKey, active)?.ToList();
 
             if (employees == null)
             {

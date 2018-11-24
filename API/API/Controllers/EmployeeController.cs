@@ -65,22 +65,8 @@ namespace API.Controllers
             {
                 return BadRequest("An employee must contain an email, a first name, a last name and an employee title.");
             }
-            
-            var photo = employee.Organization.DefaultPhoto;
 
-            if (!string.IsNullOrWhiteSpace(employeeDto.ProfilePhoto))
-            {
-                try
-                {
-                    photo = _photoMapper.ParseBase64Photo(employeeDto.ProfilePhoto, employee.Organization);
-                }
-                catch (ArgumentOutOfRangeException ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-
-            var newEmployee = _employeeService.CreateEmployee(employeeDto, employee, photo);
+            var newEmployee = _employeeService.CreateEmployee(employeeDto, employee);
             if (newEmployee != null)
             {
                 return Created($"/api/employees/{newEmployee.Id}", Mapper.Map(newEmployee));
@@ -321,15 +307,15 @@ namespace API.Controllers
 
         [AllowAnonymous]
         [HttpGet, Route("podiosync")]
-        public IHttpActionResult PodioSync()
+        public IHttpActionResult PodioSync(string shortKey = "analog")
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var employees = _employeeService.SyncEmployees();
-            return Ok(Mapper.Map(employees));
+            var updatedCount = _employeeService.SyncEmployees(shortKey);
+            return Ok(new { SyncCount = updatedCount });
         }
 
         private static bool IsCreateEmployeeDtoAlright(CreateEmployeeDTO dto)

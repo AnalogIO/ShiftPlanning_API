@@ -24,13 +24,6 @@
             The title id of the employee.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.Employee.CreateEmployeeDTO.ProfilePhoto">
-            <summary>
-            A base64 encoding of the profile picture.
-            
-            May be left empty.
-            </summary>
-        </member>
         <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.Email">
             <summary>
             The email of the employee.
