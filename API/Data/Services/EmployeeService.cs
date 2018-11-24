@@ -10,6 +10,8 @@ using System.Configuration;
 using PodioAPI;
 using System.IO;
 using System.Net;
+using Newtonsoft.Json.Linq;
+using PodioAPI.Models;
 
 namespace Data.Services
 {
@@ -195,6 +197,10 @@ namespace Data.Services
             var ftpUsername = ConfigurationManager.AppSettings["ftpUsername"];
             var ftpPassword = ConfigurationManager.AppSettings["ftpPassword"];
 
+            var imageFieldId = 30905042;
+            var emailFieldId = 30905031;
+            var activeFieldId = 176776679;
+
             var podio = new Podio(clientId, clientSecret);
 
             podio.AuthenticateWithApp(appId, appToken);
@@ -210,17 +216,33 @@ namespace Data.Services
                 if (index == -1) continue;
                 var firstName = item.Title.Substring(0, index).Trim().ToLower();
                 var lastName = item.Title.Substring(index).Trim().ToLower();
+                var email = "";
 
-                var employee = employees.FirstOrDefault(x => (x.FirstName.ToLower().Equals(firstName) && x.LastName.ToLower().Equals(lastName)) || x.PodioId == item.ItemId);
+                var emailItem = item.Fields.FirstOrDefault(x => x.FieldId.Equals(emailFieldId));
+                if(emailItem != null)
+                {
+                    email = (string)emailItem.Values.First["value"];
+                }
+
+                var active = false;
+                var activeItem = item.Fields.FirstOrDefault(x => x.FieldId.Equals(activeFieldId));
+                if (activeItem != null)
+                {
+                    var status = GetFieldStringValue(activeItem, "status");
+                    var text = GetFieldStringValue(activeItem, "text");
+                    active = text.Equals("Yes");
+                }
+
+                var employee = employees.FirstOrDefault(x => (x.FirstName.ToLower().Equals(firstName) && x.LastName.ToLower().Equals(lastName)) || x.PodioId == item.ItemId || x.Email.Equals(email));
                 if (employee != null)
                 {
                     if (string.IsNullOrEmpty(employee.PhotoUrl)) {
-                        var pItem = item.Fields.FirstOrDefault(x => x.ExternalId.Equals("please-upload-a-picture-of-yourself"));
+                        var pItem = item.Fields.FirstOrDefault(x => x.FieldId.Equals(imageFieldId));
                         if (pItem != null)
                         {
-                            var photoUrl = (string)pItem.Values.First["value"]["thumbnail_link"];
-                            var photoName = (string)pItem.Values.First["value"]["name"];
-                            var fileId = (int)pItem.Values.First["value"]["file_id"];
+                            var photoUrl = GetFieldStringValue(pItem, "thumbnail_link");
+                            var photoName = GetFieldStringValue(pItem, "name");
+                            var fileId = GetFieldIntValue(pItem, "file_id");
 
                             var file = podio.FileService.GetFile(fileId);
                             var fileResponse = podio.FileService.DownloadFile(file);
@@ -233,6 +255,7 @@ namespace Data.Services
                         }
                     }
                     employee.PodioId = item.ItemId;
+                    employee.Active = active;
                     matchedEmployees.Add(employee);
                 }
             }
@@ -240,6 +263,16 @@ namespace Data.Services
             _employeeRepository.UpdateMany(matchedEmployees);
 
             return matchedEmployees;
+        }
+
+        private static string GetFieldStringValue(ItemField item, string fieldKey)
+        {
+            return (string)item.Values.First["value"][fieldKey];
+        }
+
+        private static int GetFieldIntValue(ItemField item, string fieldKey)
+        {
+            return (int)item.Values.First["value"][fieldKey];
         }
 
         private static string FtpUpload(MemoryStream memStream, string to_uri, string user_name, string password, string fileName)
