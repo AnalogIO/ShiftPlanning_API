@@ -30,14 +30,14 @@ namespace Data.Services
             _scheduleRepository = scheduleRepository;
         }
 
-        public IEnumerable<Employee> GetEmployees(int organizationId)
+        public IEnumerable<Employee> GetEmployees(int organizationId, bool active = true)
         {
-            return _employeeRepository.ReadFromOrganization(organizationId);
+            return _employeeRepository.ReadFromOrganization(organizationId).Where(x => x.Active == active);
         }
 
-        public IEnumerable<Employee> GetEmployees(string shortKey)
+        public IEnumerable<Employee> GetEmployees(string shortKey, bool active = true)
         {
-            return _employeeRepository.ReadFromOrganization(shortKey);
+            return _employeeRepository.ReadFromOrganization(shortKey).Where(x => x.Active == active);
         }
 
         public Employee GetEmployee(int id, int institutionId)

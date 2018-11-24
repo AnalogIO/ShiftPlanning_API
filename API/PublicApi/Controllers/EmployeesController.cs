@@ -33,16 +33,16 @@ namespace PublicApi.Controllers
         /// <returns>A collection of employees, if the organization was found. Http 404 otherwise.</returns>
         [HttpGet, Route("{shortKey}")]
         [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
-        public IHttpActionResult Get(string shortKey)
+        public IHttpActionResult Get(string shortKey, bool active = true)
         {
-            var employees = _employeeService.GetEmployees(shortKey)?.ToList();
+            var employees = _employeeService.GetEmployees(shortKey, active)?.ToList();
 
             if (employees == null)
             {
                 return NotFound();
             }
 
-            return Ok(_volunteerMapper.Map(employees));
+            return Ok(_volunteerMapper.Map(employees.OrderBy(x => x.FirstName).ThenBy(x => x.LastName)));
         }
 
         /// <summary>
