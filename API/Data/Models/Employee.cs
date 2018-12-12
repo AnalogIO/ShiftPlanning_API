@@ -10,7 +10,7 @@ namespace Data.Models
         public string Salt { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public virtual EmployeeTitle EmployeeTitle { get; set; }
+        public string EmployeeTitle { get; set; }
         public bool Active { get; set; }
         public int WantShifts { get; set; }
         public virtual ICollection<Shift> Shifts { get; set; }

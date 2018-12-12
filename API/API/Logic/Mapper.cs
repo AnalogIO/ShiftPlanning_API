@@ -1,13 +1,9 @@
-﻿using System;
-using API.Controllers;
-using Data.Models;
+﻿using Data.Models;
 using DataTransferObjects.Employee;
-using DataTransferObjects.EmployeeTitles;
 using DataTransferObjects.Schedule;
 using DataTransferObjects.Shift;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using DataTransferObjects.General;
 using DataTransferObjects.Friendship;
 
@@ -29,8 +25,7 @@ namespace API.Logic
                 LastName = employee.LastName,
                 Email = employee.Email,
                 Active = employee.Active,
-                EmployeeTitle = employee.EmployeeTitle?.Title,
-                EmployeeTitleId = employee.EmployeeTitle?.Id,
+                EmployeeTitle = employee.EmployeeTitle,
                 PhotoRef = employee.PhotoUrl,
                 CheckInCount = 0,//employee.CheckIns.Count,
                 Roles = employee.Roles.Select(r => r.Name).ToArray(), // new string[0],
@@ -103,16 +98,6 @@ namespace API.Logic
         public static IEnumerable<ShiftDTO> Map(IEnumerable<Shift> shifts)
         {
             return shifts.Select(Map);
-        }
-
-        public static EmployeeTitleDTO Map(EmployeeTitle employeeTitle)
-        {
-            return new EmployeeTitleDTO { Id = employeeTitle.Id, Title = employeeTitle.Title };
-        }
-
-        public static IEnumerable<EmployeeTitleDTO> Map(IEnumerable<EmployeeTitle> employeeTitles)
-        {
-            return employeeTitles.Select(Map);
         }
 
         public static PreferenceDTO Map(Preference preference)

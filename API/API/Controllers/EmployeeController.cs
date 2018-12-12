@@ -8,10 +8,8 @@ using Data.Models;
 using Data.Services;
 using DataTransferObjects.Employee;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Web.Http.Description;
-using DataTransferObjects.Manager;
 using System.Data;
 
 namespace API.Controllers

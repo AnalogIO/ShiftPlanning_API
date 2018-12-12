@@ -19,14 +19,12 @@ namespace Data.Services
     {
         private readonly IOrganizationRepository _organizationRepository;
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly IEmployeeTitleRepository _employeeTitleRepository;
         private readonly IScheduleRepository _scheduleRepository;
 
-        public EmployeeService(IOrganizationRepository organizationRepository, IEmployeeRepository employeeRepository, IEmployeeTitleRepository employeeTitleRepository, IScheduleRepository scheduleRepository)
+        public EmployeeService(IOrganizationRepository organizationRepository, IEmployeeRepository employeeRepository, IScheduleRepository scheduleRepository)
         {
             _organizationRepository = organizationRepository;
             _employeeRepository = employeeRepository;
-            _employeeTitleRepository = employeeTitleRepository;
             _scheduleRepository = scheduleRepository;
         }
 
@@ -75,9 +73,6 @@ namespace Data.Services
                 Friendships = new List<Friendship>()
             };
 
-            var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, employee.Organization.Id);
-            if (title == null) throw new ObjectNotFoundException("Could not find a title corresponding to the given id");
-            newEmployee.EmployeeTitle = title;
             var role = _employeeRepository.GetRoles().FirstOrDefault(r => r.Name == "Employee");
             newEmployee.Roles.Add(role);
 
@@ -148,8 +143,6 @@ namespace Data.Services
             updateEmployee.Active = employeeDto.Active;
             updateEmployee.WantShifts = employeeDto.WantShifts;
 
-            var title = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, updateEmployee.Organization.Id);
-            if (title != null) updateEmployee.EmployeeTitle = title;
             _employeeRepository.Update(updateEmployee);
             return updateEmployee;
         }
@@ -162,7 +155,7 @@ namespace Data.Services
                 LastName = employeeDto.LastName,
                 Organization = employee.Organization,
                 Active = true,
-                EmployeeTitle = _employeeTitleRepository.Read(employeeDto.EmployeeTitleId, employee.Organization.Id) }));
+                EmployeeTitle = employee.EmployeeTitle }));
         }
 
         public void DeleteEmployee(int employeeId, Employee employee)
@@ -207,7 +200,8 @@ namespace Data.Services
                 PhotoUrl = "",
                 CheckIns = new List<CheckIn>(),
                 Roles = new List<Role>(),
-                Friendships = new List<Friendship>()
+                Friendships = new List<Friendship>(),
+                EmployeeTitle = employeeDto.EmployeeTitle
             };
 
             var role = _employeeRepository.GetRoles().FirstOrDefault(r => r.Name == "Employee");
@@ -267,6 +261,51 @@ namespace Data.Services
                     active = text.Equals("Yes");
                 }
 
+                var titles = new List<string>();
+                var titleItem = item.Fields.FirstOrDefault(x => x.FieldId.Equals(30905027));
+                if(titleItem != null)
+                {
+                    var id = titleItem.Values.Select(x => (int)x["value"]["id"]).ToList();
+
+                    if(id.Any(x => x.Equals(12)))
+                    {
+                        titles.Add("Penguin");
+                    }
+
+                    if(id.Any(x => x.Equals(15)))
+                    {
+                        titles.Add("Board member");
+                    }
+
+                    if(id.Any(x => x.Equals(17)))
+                    {
+                        titles.Add("Kitchen Manager");
+                    }
+
+                    if(id.Any(x => x.Equals(18)))
+                    {
+                        titles.Add("Storage Manager");
+                    }
+
+                    if (id.Any(x => x.Equals(19)))
+                    {
+                        titles.Add("Auditor");
+                    }
+
+                    if (id.Any(x => x.Equals(20)))
+                    {
+                        titles.Add("Shiftplanner");
+                    }
+
+                    if (id.Any(x => x.Equals(14)))
+                    {
+                        titles.Add("Barista");
+                    }
+
+                }
+
+                var employeeTitle = string.Join(", ", titles);
+
                 var employee = employees.FirstOrDefault(x => (x.FirstName.ToLower().Equals(firstName.ToLower()) && x.LastName.ToLower().Equals(lastName.ToLower())) || x.PodioId == item.ItemId || x.Email.ToLower().Equals(email.ToLower()));
                 if(employee == null)
                 {
@@ -296,7 +335,7 @@ namespace Data.Services
 
 
                     //create employee if they do not exist in database
-                    var newEmployeeDto = new CreateEmployeeDTO { Email = email, FirstName = firstName, LastName = lastName };
+                    var newEmployeeDto = new CreateEmployeeDTO { Email = email, FirstName = firstName, LastName = lastName, EmployeeTitle = employeeTitle };
                     var analogOrganization = _organizationRepository.ReadByShortKey(shortKey);
                     employee = CreateEmployeeFromPodio(newEmployeeDto, analogOrganization);
                 }
@@ -323,6 +362,7 @@ namespace Data.Services
                     }
                     employee.PodioId = item.ItemId;
                     employee.Active = active;
+                    employee.EmployeeTitle = employeeTitle;
                     matchedEmployees.Add(employee);
                 }
             }

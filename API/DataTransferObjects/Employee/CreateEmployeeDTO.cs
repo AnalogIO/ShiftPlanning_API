@@ -23,9 +23,9 @@ namespace DataTransferObjects.Employee
         public string LastName { get; set; }
 
         /// <summary>
-        /// The title id of the employee.
+        /// The title of the employee.
         /// </summary>
         [Required]
-        public int EmployeeTitleId { get; set; }
+        public string EmployeeTitle { get; set; }
     }
 }

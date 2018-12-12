@@ -624,67 +624,6 @@
             <param name="id">The id of the employee.</param>
             <returns>Returns 'No Content' (204) if the employee gets deleted.</returns>
         </member>
-        <member name="T:API.Controllers.EmployeeTitleController">
-            <summary>
-            Controller to manipulate with the employee titles.
-            </summary>
-        </member>
-        <member name="M:API.Controllers.EmployeeTitleController.#ctor(API.Authorization.IAuthManager,Data.Services.IEmployeeTitleService)">
-            <summary>
-            Employee title controller constructor
-            </summary>
-            <param name="authManager"></param>
-            <param name="employeeTitleService"></param>
-        </member>
-        <member name="M:API.Controllers.EmployeeTitleController.Register(DataTransferObjects.EmployeeTitles.CreateEmployeeTitleDTO)">
-            <summary>
-            Creates the employee title from the content in the body.
-            Requires 'Authorization' header set with the token granted upon manager login.
-            </summary>
-            <returns>
-            Returns 'Created' (201) if the employee title gets created.
-            </returns>
-        </member>
-        <member name="M:API.Controllers.EmployeeTitleController.Get">
-            <summary>
-            Gets all the employee titles.
-            Requires 'Authorization' header set with the token granted upon manager login.
-            </summary>
-            <returns>
-            Returns an array of employee titles.
-            </returns>
-        </member>
-        <member name="M:API.Controllers.EmployeeTitleController.Get(System.Int32)">
-            <summary>
-            Gets the employee title with the given id.
-            Requires 'Authorization' header set with the token granted upon manager login.
-            </summary>
-            <param name="id">The id of the employee title.</param>
-            <returns>
-            Returns the employee title with the given id. 
-            If no employee title is found with the corresponding id, the controller will return NotFound (404)
-            </returns>
-        </member>
-        <member name="M:API.Controllers.EmployeeTitleController.Put(System.Int32,DataTransferObjects.EmployeeTitles.UpdateEmployeeTitleDTO)">
-            <summary>
-            Updates the employee title with the specified id.
-            Requires 'Authorization' header set with the token granted upon manager login.
-            </summary>
-            <param name="id">The id of the employee title.</param>
-            <param name="employeeTitleDto">The employee title dto</param>
-            <returns>
-            Returns 'No Content' (204) if the employee title gets updated.
-            If no employee title is found with the given id, the controller will return NotFound (404)
-            </returns>
-        </member>
-        <member name="M:API.Controllers.EmployeeTitleController.Delete(System.Int32)">
-            <summary>
-            Deletes the employee title with the specified id.
-            Requires 'Authorization' header set with the token granted upon manager login.
-            </summary>
-            <param name="id">The id of the employee title.</param>
-            <returns>Returns 'No Content' (204) if the employee title gets deleted.</returns>
-        </member>
         <member name="M:API.Controllers.PhotosController.Get(System.Int32,System.Int32)">
             <summary>
             Retrieves a photo from an organization.

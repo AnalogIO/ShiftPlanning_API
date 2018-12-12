@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using Data.Models;
 using Data.Repositories;
-using DataTransferObjects.EmployeeTitles;
 using System.Linq;
 
 namespace Data.Services

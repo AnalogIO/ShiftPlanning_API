@@ -128,11 +128,9 @@
     <Compile Include="Repositories\IShiftRepository.cs" />
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\EmployeeService.cs" />
-    <Compile Include="Services\EmployeeTitleService.cs" />
     <Compile Include="Services\FriendshipService.cs" />
     <Compile Include="Services\IEmployeeService.cs" />
     <Compile Include="Services\IEmailService.cs" />
-    <Compile Include="Services\IEmployeeTitleService.cs" />
     <Compile Include="Services\IFriendshipService.cs" />
     <Compile Include="Services\IPhotoService.cs" />
     <Compile Include="Services\IScheduleService.cs" />

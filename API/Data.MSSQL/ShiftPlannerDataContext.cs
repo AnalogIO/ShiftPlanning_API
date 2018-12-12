@@ -11,7 +11,6 @@ namespace Data.MSSQL
 
         }
         public DbSet<Employee> Employees { get; set; }
-        public DbSet<EmployeeTitle> EmployeeTitles { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Organization> Organizations { get; set; }

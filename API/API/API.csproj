@@ -270,7 +270,6 @@
     <Compile Include="Authorization\IAuthManager.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
-    <Compile Include="Controllers\EmployeeTitleController.cs" />
     <Compile Include="Controllers\PhotosController.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\ShiftController.cs" />

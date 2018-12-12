@@ -91,7 +91,7 @@ namespace Data.MSSQL.Repositories
             dbEmployee.Email = employee.Email;
             dbEmployee.FirstName = employee.FirstName;
             dbEmployee.LastName = employee.LastName;
-            dbEmployee.EmployeeTitle = _context.EmployeeTitles.Single(et => et.Id == employee.EmployeeTitle.Id);
+            dbEmployee.EmployeeTitle = employee.EmployeeTitle;
 
             return _context.SaveChanges();
         }
