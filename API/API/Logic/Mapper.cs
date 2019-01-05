@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DataTransferObjects.General;
 using DataTransferObjects.Friendship;
+using System;
 
 namespace API.Logic
 {
@@ -18,6 +19,8 @@ namespace API.Logic
 
         public static EmployeeDTO Map(Employee employee)
         {
+            var semesterStart = GetSemesterStart(DateTime.UtcNow);
+            var semesterEnd = GetSemesterEnd(DateTime.UtcNow);
             return new EmployeeDTO
             {
                 Id = employee.Id,
@@ -27,7 +30,7 @@ namespace API.Logic
                 Active = employee.Active,
                 EmployeeTitle = employee.EmployeeTitle,
                 PhotoRef = employee.PhotoUrl,
-                CheckInCount = 0,//employee.CheckIns.Count,
+                CheckInCount = employee.CheckIns.Count(x => x.Time > semesterStart && x.Time < semesterEnd),
                 Roles = employee.Roles.Select(r => r.Name).ToArray(), // new string[0],
                 WantShifts = employee.WantShifts,
                 PodioId = employee.PodioId
@@ -176,6 +179,34 @@ namespace API.Logic
                 findOptimalScheduleShiftDto.MinOnShift--;
             }
             return dto;
+        }
+
+        private static DateTime GetSemesterStart(DateTime currentTime)
+        {
+            if (currentTime.Month < 7)
+            {
+                var jan1 = new DateTime(currentTime.Year, 1, 1);
+                var dayOffset = DayOfWeek.Monday - jan1.DayOfWeek;
+                var startDate = 29 - dayOffset;
+
+                return new DateTime(currentTime.Year, 1, startDate);
+            }
+            else
+            {
+                return new DateTime(currentTime.Year, 7, 1);
+            }
+        }
+
+        private static DateTime GetSemesterEnd(DateTime currentTime)
+        {
+            if (currentTime.Month < 7)
+            {
+                return new DateTime(currentTime.Year, 6, 30);
+            }
+            else
+            {
+                return new DateTime(currentTime.Year, 12, 23);
+            }
         }
     }
 }
