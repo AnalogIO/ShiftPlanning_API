@@ -82,9 +82,11 @@ namespace Data.Services
 
         void DeleteShift(int shiftId, int organizationId);
         Shift UpdateShift(int shiftId, int organizationId, UpdateShiftDTO updateShiftDto);
+        Shift PatchShift(int shiftId, int organizationId, PatchShiftDTO patchShiftDto);
         Shift CreateShift(Organization organization, CreateShiftDTO shiftDto);
         Shift CreateLimitedShift(Organization organization, CreateShiftDTO shiftDto, int maxLengthMinutes);
         CheckIn CheckInEmployee(int shiftId, int employeeId, int organizationId);
+        void CheckOutEmployee(int shiftId, int employeeId, int organizationId);
         Shift AddEmployeesToShift(int shiftId, int organizationId, AddEmployeesDTO employees);
         Shift CreateShiftOutsideSchedule(CreateShiftOutsideScheduleDTO shiftDto, Organization organization);
         bool IsOrganisationOpen(string shortKey);

@@ -8,10 +8,8 @@ using Data.Models;
 using Data.Services;
 using DataTransferObjects.Employee;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Web.Http.Description;
-using DataTransferObjects.Manager;
 using System.Data;
 
 namespace API.Controllers
@@ -37,39 +35,6 @@ namespace API.Controllers
             _authManager = authManager;
             _employeeService = employeeService;
             _photoMapper = photoMapper;
-        }
-
-        [Authorize(Roles = "Employee")]
-        [HttpDelete, Route("{userId:int}/photo")]
-        public IHttpActionResult DeletePhoto([FromUri] int userId)
-        {
-            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
-
-            // Todo: Make sure to remove old photo from database.
-            _employeeService.SetPhoto(userId, employee.Organization.Id, employee.Organization.DefaultPhoto);
-
-            return Ok();
-        }
-
-        [Authorize(Roles = "Employee")]
-        [HttpPut, Route("{userId:int}/photo")]
-        public IHttpActionResult UpdatePhoto([FromUri] int userId, [FromBody] string profilePhoto)
-        {
-            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
-            if (employee == null) return BadRequest("Provided token is invalid!");
-
-            try
-            {
-                var photo = _photoMapper.ParseBase64Photo(profilePhoto, employee.Organization);
-
-                _employeeService.SetPhoto(userId, employee.Organization.Id, photo);
-
-                return Ok();
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                return BadRequest(ex.Message);
-            }
         }
 
         // POST api/employees
@@ -98,22 +63,8 @@ namespace API.Controllers
             {
                 return BadRequest("An employee must contain an email, a first name, a last name and an employee title.");
             }
-            
-            var photo = employee.Organization.DefaultPhoto;
 
-            if (!string.IsNullOrWhiteSpace(employeeDto.ProfilePhoto))
-            {
-                try
-                {
-                    photo = _photoMapper.ParseBase64Photo(employeeDto.ProfilePhoto, employee.Organization);
-                }
-                catch (ArgumentOutOfRangeException ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-
-            var newEmployee = _employeeService.CreateEmployee(employeeDto, employee, photo);
+            var newEmployee = _employeeService.CreateEmployee(employeeDto, employee);
             if (newEmployee != null)
             {
                 return Created($"/api/employees/{newEmployee.Id}", Mapper.Map(newEmployee));
@@ -179,26 +130,26 @@ namespace API.Controllers
         // GET api/employees
         /// <summary>
         /// Gets all the employees.
-        /// Requires 'Authorization' header set with the token granted upon manager login.
+        /// Requires 'Authorization' header set with the token granted upon manager login or by apikey.
         /// </summary>
         /// <returns>
         /// Returns an array of employees.
         /// </returns>
-        [Authorize(Roles = "Manager, Employee")]
+        [Authorize(Roles = "Manager, Employee, Application")]
         [HttpGet, Route("")]
         public IHttpActionResult Get()
         {
-            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
-            if (employee == null) return BadRequest("Provided token is invalid!");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("Provided token is invalid!");
 
-            var employees = _employeeService.GetEmployees(employee.Organization.Id);
+            var employees = _employeeService.GetEmployees(organization.Id);
             if (employees == null) return NotFound();
-            if(employee.Roles.Any(r => r.Name == "Manager"))
+            if(_authManager.IsManager(Request.Headers))
             {
-                return Ok(Mapper.Map(employees));
+                return Ok(Mapper.Map(employees.OrderBy(e => e.FirstName).ThenBy(e => e.LastName)));
             } else
             {
-                return Ok(Mapper.MapSimple(employees));
+                return Ok(Mapper.MapSimple(employees.OrderBy(e => e.FirstName).ThenBy(e => e.LastName)));
             }
             
         }
@@ -236,27 +187,6 @@ namespace API.Controllers
                 return NotFound();
             }
 
-        }
-
-        // GET api/employees
-        /// <summary>
-        /// Gets all the employees.
-        /// Requires 'apiKey' parameter set with the api key of the institution.
-        /// </summary>
-        /// <returns>
-        /// Returns an array of employees.
-        /// </returns>
-        //[Authorize(Roles = "Application")] TODO: FIX Authentication of apikey through data annotation
-        [HttpGet, Route("")]
-        [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
-        public IHttpActionResult Get(string apiKey)
-        {
-            var organization = _authManager.GetOrganizationByApiKey(apiKey);
-            if (organization == null) return BadRequest("No organization found with the given name");
-
-            var employees = _employeeService.GetEmployees(organization.Id).OrderBy(e => e.FirstName).ThenBy(e => e.LastName);
-            if (employees == null) return NotFound();
-            return Ok(Mapper.Map(employees));
         }
 
         // PUT api/employees
@@ -371,6 +301,19 @@ namespace API.Controllers
 
             _employeeService.DeleteEmployee(id, employee);
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+        }
+
+        [AllowAnonymous]
+        [HttpGet, Route("podiosync")]
+        public IHttpActionResult PodioSync(string shortKey = "analog")
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var updatedCount = _employeeService.SyncEmployees(shortKey);
+            return Ok(new { SyncCount = updatedCount });
         }
 
         private static bool IsCreateEmployeeDtoAlright(CreateEmployeeDTO dto)

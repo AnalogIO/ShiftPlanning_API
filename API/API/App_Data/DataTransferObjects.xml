@@ -19,16 +19,9 @@
             The last name of the employee
             </summary>
         </member>
-        <member name="P:DataTransferObjects.Employee.CreateEmployeeDTO.EmployeeTitleId">
+        <member name="P:DataTransferObjects.Employee.CreateEmployeeDTO.EmployeeTitle">
             <summary>
-            The title id of the employee.
-            </summary>
-        </member>
-        <member name="P:DataTransferObjects.Employee.CreateEmployeeDTO.ProfilePhoto">
-            <summary>
-            A base64 encoding of the profile picture.
-            
-            May be left empty.
+            The title of the employee.
             </summary>
         </member>
         <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.Email">
@@ -46,9 +39,9 @@
             The last name of the employee.
             </summary>
         </member>
-        <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.EmployeeTitleId">
+        <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.EmployeeTitle">
             <summary>
-            The title id of the employee.
+            The title of the employee.
             </summary>
         </member>
         <member name="P:DataTransferObjects.Employee.UpdateEmployeeDTO.Active">
@@ -96,16 +89,6 @@
         <member name="P:DataTransferObjects.Shift.CreateShiftDTO.End">
             <summary>
             Time the shift will end. ISO 8601 format.
-            </summary>
-        </member>
-        <member name="P:DataTransferObjects.EmployeeTitles.CreateEmployeeTitleDTO.Title">
-            <summary>
-            The employee title.
-            </summary>
-        </member>
-        <member name="P:DataTransferObjects.EmployeeTitles.UpdateEmployeeTitleDTO.Title">
-            <summary>
-            The employee title.
             </summary>
         </member>
         <member name="T:DataTransferObjects.Public.OpeningHours.IsOpenDTO">

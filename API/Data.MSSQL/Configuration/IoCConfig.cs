@@ -13,11 +13,11 @@ namespace Data.MSSQL.Configuration
                 
                 .RegisterType<IPhotoRepository, PhotoRepository>(new PerResolveLifetimeManager())
                 .RegisterType<IEmployeeRepository, EmployeeRepository>(new PerResolveLifetimeManager())
-                .RegisterType<IEmployeeTitleRepository, EmployeeTitleRepository>(new PerResolveLifetimeManager())
                 .RegisterType<IOrganizationRepository, OrganizationRepository>(new PerResolveLifetimeManager())
                 .RegisterType<IScheduleRepository, ScheduleRepository>(new PerResolveLifetimeManager())
                 .RegisterType<IShiftRepository, ShiftRepository>(new PerResolveLifetimeManager())
-                .RegisterType<IFriendshipRepository, FriendshipRepository>(new PerResolveLifetimeManager());
+                .RegisterType<IFriendshipRepository, FriendshipRepository>(new PerResolveLifetimeManager())
+                .RegisterType<ICheckInRepository, CheckInRepository>(new PerResolveLifetimeManager());
         }
     }
 }

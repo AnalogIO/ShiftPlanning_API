@@ -5,9 +5,9 @@ using Data.Models;
 using Data.Repositories;
 using DataTransferObjects.Shift;
 using System.Data;
-using System.Runtime.CompilerServices;
 using Data.Exceptions;
 using Microsoft.Practices.ObjectBuilder2;
+using System.Web;
 
 namespace Data.Services
 {
@@ -19,17 +19,19 @@ namespace Data.Services
         private readonly IShiftRepository _shiftRepository;
         private readonly IOrganizationRepository _organizationRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly ICheckInRepository _checkInRepository;
 
         /// <summary>
         /// Injection constructor.
         /// </summary>
         /// <param name="shiftRepository">An IShiftRepository implementation.</param>
         /// <param name="institutionRepository">An IInstitution implementation.</param>
-        public ShiftService(IShiftRepository shiftRepository, IOrganizationRepository organizationRepository, IEmployeeRepository employeeRepository)
+        public ShiftService(IShiftRepository shiftRepository, IOrganizationRepository organizationRepository, IEmployeeRepository employeeRepository, ICheckInRepository checkInRepository)
         {
             _shiftRepository = shiftRepository;
             _organizationRepository = organizationRepository;
             _employeeRepository = employeeRepository;
+            _checkInRepository = checkInRepository;
         }
 
         /// <inheritdoc cref="IShiftService.GetByOrganization(string)"/>
@@ -111,6 +113,19 @@ namespace Data.Services
             return _shiftRepository.Update(shift) > 0 ? shift.CheckIns.LastOrDefault() : null;
         }
 
+        public void CheckOutEmployee(int shiftId, int employeeId, int organizationId)
+        {
+            var shift = _shiftRepository.Read(shiftId, organizationId);
+            if (shift == null) throw new ObjectNotFoundException("Could not find a shift corresponding to the given id");
+            var checkin = shift.CheckIns.FirstOrDefault(x => x.Employee.Id == employeeId);
+            if (checkin == null) throw new ForbiddenException("Could not check out because the given employee is not checked in");
+            var employee = _employeeRepository.Read(employeeId, organizationId);
+            if (employee == null) throw new ObjectNotFoundException("Could not find an employee corresponding to the given id");
+            var now = DateTime.Now;
+            if (now > shift.End) throw new ForbiddenException("You cannot check out from a shift that has ended");
+            _checkInRepository.Delete(checkin);
+        }
+
         public Shift AddEmployeesToShift(int shiftId, int organizationId, AddEmployeesDTO employeesDto)
         {
             var shift = _shiftRepository.Read(shiftId, organizationId);
@@ -151,6 +166,10 @@ namespace Data.Services
 
         public void DeleteShift(int shiftId, int organizationId)
         {
+            if(((string)HttpContext.Current.Items["Audit"]).Equals("Application"))
+            {
+                if(_shiftRepository.Read(shiftId, organizationId).Schedule != null) throw new ForbiddenException("Only user-created shifts can be deleted!");
+            }
             _shiftRepository.Delete(shiftId, organizationId);
         }
 
@@ -160,6 +179,9 @@ namespace Data.Services
 
             var shift = _shiftRepository.Read(shiftId, organizationId);
             if (shift == null) throw new ObjectNotFoundException("Could not find a shift corresponding to the given id");
+
+            if(String.IsNullOrEmpty(updateShiftDto.Start)) throw new ForbiddenException("A start time is required to update the shift");
+            if(String.IsNullOrEmpty(updateShiftDto.End)) throw new ForbiddenException("An end time is required to update the shift");
 
             var start = DateTimeOffset.Parse(updateShiftDto.Start).LocalDateTime;
             var end = DateTimeOffset.Parse(updateShiftDto.End).LocalDateTime;
@@ -172,11 +194,67 @@ namespace Data.Services
             if (intersectingShifts.Any(s => s.Id != shift.Id)) throw new ForbiddenException("You cannot update a shift that will intersect other shifts");
 
             var employees = _employeeRepository.ReadFromOrganization(organizationId).Where(x => updateShiftDto.EmployeeIds.Contains(x.Id)).ToList();
+            var employeesToRemove = shift.Employees.Where(e => !updateShiftDto.EmployeeIds.Contains(e.Id)).ToList();
 
-            shift.Employees.Where(e => !updateShiftDto.EmployeeIds.Contains(e.Id)).ForEach(e => e.Shifts.Remove(shift));
-            shift.Employees = employees;
+            foreach(var employee in employeesToRemove)
+            {
+                var checkin = shift.CheckIns.FirstOrDefault(x => x.Employee.Id == employee.Id);
+                if (checkin != null) _checkInRepository.Delete(checkin); // if employee is checked in, let's remove that before removing them from the shift
+                employee.Shifts.Remove(shift);
+            }
+
             shift.Start = start;
             shift.End = end;
+            shift.Employees = employees;
+            
+            _shiftRepository.Update(shift);
+
+            return shift;
+        }
+
+        public Shift PatchShift(int shiftId, int organizationId, PatchShiftDTO patchShiftDto)
+        {
+            var now = DateTime.Now;
+
+            var shift = _shiftRepository.Read(shiftId, organizationId);
+            if (shift == null) throw new ObjectNotFoundException("Could not find a shift corresponding to the given id");
+
+            if (!String.IsNullOrEmpty(patchShiftDto.End))
+            {
+                var end = DateTimeOffset.Parse(patchShiftDto.End).LocalDateTime;
+                if (end < now) throw new ForbiddenException("The end of the shift should be in the future");
+
+                var intersectingShifts = GetIntersectingShifts(organizationId, shift.Start, end);
+                if (intersectingShifts.Any(s => s.Id != shift.Id)) throw new ForbiddenException("You cannot update a shift that will intersect other shifts");
+
+                shift.End = end;
+            }
+
+            if (!String.IsNullOrEmpty(patchShiftDto.Start))
+            {
+                var start = DateTimeOffset.Parse(patchShiftDto.Start).LocalDateTime;
+                if (start > shift.End) throw new ForbiddenException("The shift cannot end before it has started");
+
+                var intersectingShifts = GetIntersectingShifts(organizationId, start, shift.End);
+                if (intersectingShifts.Any(s => s.Id != shift.Id)) throw new ForbiddenException("You cannot update a shift that will intersect other shifts");
+
+                shift.Start = start;
+            }
+
+            if (patchShiftDto.EmployeeIds != null)
+            {
+                var employees = _employeeRepository.ReadFromOrganization(organizationId).Where(x => patchShiftDto.EmployeeIds.Contains(x.Id)).ToList();
+                var employeesToRemove = shift.Employees.Where(e => !patchShiftDto.EmployeeIds.Contains(e.Id)).ToList();
+
+                foreach (var employee in employeesToRemove)
+                {
+                    var checkin = shift.CheckIns.FirstOrDefault(x => x.Employee.Id == employee.Id);
+                    if (checkin != null) _checkInRepository.Delete(checkin); // if employee is checked in, let's remove that before removing them from the shift
+                    employee.Shifts.Remove(shift);
+                }
+
+                shift.Employees = employees;
+            }
 
             _shiftRepository.Update(shift);
 

@@ -101,10 +101,8 @@
     <Compile Include="Shift\AddEmployeesDTO.cs" />
     <Compile Include="Shift\CheckInDTO.cs" />
     <Compile Include="Employee\CreateEmployeeDTO.cs" />
-    <Compile Include="EmployeeTitles\CreateEmployeeTitleDTO.cs" />
     <Compile Include="Schedule\CreateScheduleDTO.cs" />
     <Compile Include="Employee\EmployeeDTO.cs" />
-    <Compile Include="EmployeeTitles\EmployeeTitleDTO.cs" />
     <Compile Include="Employee\EmployeeLoginDTO.cs" />
     <Compile Include="Employee\EmployeeLoginResponse.cs" />
     <Compile Include="Public\OpeningHours\IntervalOpeningHourDTO.cs" />
@@ -120,9 +118,9 @@
     <Compile Include="Schedule\ScheduledShiftDTO.cs" />
     <Compile Include="Schedule\ScheduleDTO.cs" />
     <Compile Include="Employee\UpdateEmployeeDTO.cs" />
-    <Compile Include="EmployeeTitles\UpdateEmployeeTitleDTO.cs" />
     <Compile Include="ScheduledShift\UpdateScheduledShiftDTO.cs" />
     <Compile Include="Schedule\UpdateScheduleDTO.cs" />
+    <Compile Include="Shift\PatchShiftDTO.cs" />
     <Compile Include="Shift\UpdateShiftDTO.cs" />
     <Compile Include="Public\Employees\EmployeeDTO.cs" />
   </ItemGroup>

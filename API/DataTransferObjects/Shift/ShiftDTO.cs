@@ -9,6 +9,7 @@ namespace DataTransferObjects.Shift
         public int Id { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
+        public int? ScheduleId { get; set; }
         public IEnumerable<EmployeeDTO> Employees { get; set; }
         public IEnumerable<CheckInDTO> CheckIns { get; set; }
     }

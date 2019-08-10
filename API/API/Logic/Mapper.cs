@@ -1,15 +1,12 @@
-﻿using System;
-using API.Controllers;
-using Data.Models;
+﻿using Data.Models;
 using DataTransferObjects.Employee;
-using DataTransferObjects.EmployeeTitles;
 using DataTransferObjects.Schedule;
 using DataTransferObjects.Shift;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using DataTransferObjects.General;
 using DataTransferObjects.Friendship;
+using System;
 
 namespace API.Logic
 {
@@ -22,10 +19,8 @@ namespace API.Logic
 
         public static EmployeeDTO Map(Employee employee)
         {
-            var url = HttpContext.Current.Request.Url.AbsoluteUri;
-
-            var routeBase = url.Substring(0, url.IndexOf("/api/", StringComparison.Ordinal));
-
+            var semesterStart = GetSemesterStart(DateTime.UtcNow);
+            var semesterEnd = GetSemesterEnd(DateTime.UtcNow);
             return new EmployeeDTO
             {
                 Id = employee.Id,
@@ -33,12 +28,12 @@ namespace API.Logic
                 LastName = employee.LastName,
                 Email = employee.Email,
                 Active = employee.Active,
-                EmployeeTitle = employee.EmployeeTitle?.Title,
-                EmployeeTitleId = employee.EmployeeTitle?.Id,
-                PhotoRef = $"{routeBase}/{PhotosController.RoutePrefix}/{employee.Photo?.Id}/{employee.Organization.Id}",
-                CheckInCount = employee.CheckIns?.Count,
-                Roles = employee.Roles.Select(r => r.Name).ToArray(),
-                WantShifts = employee.WantShifts
+                EmployeeTitle = employee.EmployeeTitle,
+                PhotoRef = employee.PhotoUrl,
+                CheckInCount = employee.CheckIns.Count(x => x.Time > semesterStart && x.Time < semesterEnd),
+                Roles = employee.Roles.Select(r => r.Name).ToArray(), // new string[0],
+                WantShifts = employee.WantShifts,
+                PodioId = employee.PodioId
             };
         }
 
@@ -100,22 +95,12 @@ namespace API.Logic
 
         public static ShiftDTO Map(Shift shift)
         {
-            return new ShiftDTO { Id = shift.Id, Start = shift.Start, End = shift.End, CheckIns = Map(shift.CheckIns), Employees = Map(shift.Employees) };
+            return new ShiftDTO { Id = shift.Id, Start = shift.Start, End = shift.End, CheckIns = Map(shift.CheckIns), Employees = Map(shift.Employees), ScheduleId = shift.Schedule?.Id };
         }
 
         public static IEnumerable<ShiftDTO> Map(IEnumerable<Shift> shifts)
         {
             return shifts.Select(Map);
-        }
-
-        public static EmployeeTitleDTO Map(EmployeeTitle employeeTitle)
-        {
-            return new EmployeeTitleDTO { Id = employeeTitle.Id, Title = employeeTitle.Title };
-        }
-
-        public static IEnumerable<EmployeeTitleDTO> Map(IEnumerable<EmployeeTitle> employeeTitles)
-        {
-            return employeeTitles.Select(Map);
         }
 
         public static PreferenceDTO Map(Preference preference)
@@ -130,7 +115,7 @@ namespace API.Logic
 
         public static EmployeeDTOSimple MapSimple(Employee employee)
         {
-            return new EmployeeDTOSimple { Id = employee.Id, FirstName = employee.FirstName, LastName = employee.LastName };
+            return new EmployeeDTOSimple { Id = employee.Id, FirstName = employee.FirstName.Trim(), LastName = employee.LastName.Trim() };
         }
 
         public static IEnumerable<EmployeeDTOSimple> MapSimple(IEnumerable<Employee> employees)
@@ -160,7 +145,7 @@ namespace API.Logic
                 if(lockedTo.Count > 0) continue;
 
                 var prefs =
-                    employee.Preferences.Where(p => p.ScheduledShift.Schedule.Id == schedule.Id)
+                    employee.Preferences.Where(p => p.ScheduledShift.Schedule.Id == schedule.Id && p.Priority > 0)
                         .Select(
                             p =>
                                 new FindOptimalSchedulePreferencesDTO.FindOptimalSchedulePreference
@@ -194,6 +179,34 @@ namespace API.Logic
                 findOptimalScheduleShiftDto.MinOnShift--;
             }
             return dto;
+        }
+
+        private static DateTime GetSemesterStart(DateTime currentTime)
+        {
+            if (currentTime.Month < 7)
+            {
+                var jan1 = new DateTime(currentTime.Year, 1, 1);
+                var dayOffset = DayOfWeek.Monday - jan1.DayOfWeek;
+                var startDate = 29 - dayOffset;
+
+                return new DateTime(currentTime.Year, 1, startDate);
+            }
+            else
+            {
+                return new DateTime(currentTime.Year, 7, 1);
+            }
+        }
+
+        private static DateTime GetSemesterEnd(DateTime currentTime)
+        {
+            if (currentTime.Month < 7)
+            {
+                return new DateTime(currentTime.Year, 6, 30);
+            }
+            else
+            {
+                return new DateTime(currentTime.Year, 12, 23);
+            }
         }
     }
 }

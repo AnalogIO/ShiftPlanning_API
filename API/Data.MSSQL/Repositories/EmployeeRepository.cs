@@ -59,13 +59,15 @@ namespace Data.MSSQL.Repositories
         public IEnumerable<Employee> ReadFromOrganization(int organizationId)
         {
             return _context.Employees
-                .Where(e => e.Organization.Id == organizationId).OrderBy(x => x.Id);
+                .Where(e => e.Organization.Id == organizationId).OrderBy(x => x.Id)
+                .Include(x => x.Roles);
         }
 
         public IEnumerable<Employee> ReadFromOrganization(string shortKey)
         {
             return _context.Employees
-                .Where(e => e.Organization.ShortKey == shortKey);
+                .Where(e => e.Organization.ShortKey == shortKey)
+                .Include(x => x.Roles);
         }
 
         public Employee Read(int id, int organizationId)
@@ -89,7 +91,7 @@ namespace Data.MSSQL.Repositories
             dbEmployee.Email = employee.Email;
             dbEmployee.FirstName = employee.FirstName;
             dbEmployee.LastName = employee.LastName;
-            dbEmployee.EmployeeTitle = _context.EmployeeTitles.Single(et => et.Id == employee.EmployeeTitle.Id);
+            dbEmployee.EmployeeTitle = employee.EmployeeTitle;
 
             return _context.SaveChanges();
         }
@@ -132,6 +134,15 @@ namespace Data.MSSQL.Repositories
         public void Dispose()
         {
             _context.Dispose();
+        }
+
+        public int UpdateMany(IEnumerable<Employee> employees)
+        {
+            foreach(var employee in employees)
+            {
+                _context.Entry(employee).State = EntityState.Modified;
+            }
+            return _context.SaveChanges();
         }
     }
 }

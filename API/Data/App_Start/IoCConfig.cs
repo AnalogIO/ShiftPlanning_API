@@ -9,7 +9,6 @@ namespace Data
         {
             container
                 .RegisterType<IEmployeeService, EmployeeService>(new PerResolveLifetimeManager())
-                .RegisterType<IEmployeeTitleService, EmployeeTitleService>(new PerResolveLifetimeManager())
                 .RegisterType<IPhotoService, PhotoService>(new PerResolveLifetimeManager())
                 .RegisterType<IScheduleService, ScheduleService>(new PerResolveLifetimeManager())
                 .RegisterType<IShiftService, ShiftService>(new PerResolveLifetimeManager())

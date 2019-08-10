@@ -91,6 +91,9 @@
     <Reference Include="PasswordGenerator, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PasswordGenerator.1.1.2\lib\net45\PasswordGenerator.dll</HintPath>
     </Reference>
+    <Reference Include="Podio.NET, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Podio.1.5.9\lib\net40\Podio.NET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -103,9 +106,7 @@
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=4.0.40306.1554, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.4.0.4.403061554\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
-    <Reference Include="System.Management" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -136,16 +137,15 @@
     <Compile Include="Repositories\IEmployeeRepository.cs" />
     <Compile Include="Repositories\IEmployeeTitleRepository.cs" />
     <Compile Include="Repositories\IOrganizationRepository.cs" />
+    <Compile Include="Repositories\ICheckInRepository.cs" />
     <Compile Include="Repositories\IPhotoRepository.cs" />
     <Compile Include="Repositories\IScheduleRepository.cs" />
     <Compile Include="Repositories\IShiftRepository.cs" />
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\EmployeeService.cs" />
-    <Compile Include="Services\EmployeeTitleService.cs" />
     <Compile Include="Services\FriendshipService.cs" />
     <Compile Include="Services\IEmployeeService.cs" />
     <Compile Include="Services\IEmailService.cs" />
-    <Compile Include="Services\IEmployeeTitleService.cs" />
     <Compile Include="Services\IFriendshipService.cs" />
     <Compile Include="Services\IPhotoService.cs" />
     <Compile Include="Services\IScheduleService.cs" />

@@ -141,8 +141,10 @@
       <HintPath>..\packages\NLog.4.4.11\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.ComponentModel" />
-    <Reference Include="System.Configuration.Install" />
+    <Reference Include="Podio.NET, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Podio.1.5.9\lib\net40\Podio.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
       <Private>True</Private>
@@ -276,7 +278,6 @@
     <Compile Include="Authorization\IAuthManager.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
-    <Compile Include="Controllers\EmployeeTitleController.cs" />
     <Compile Include="Controllers\PhotosController.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\ShiftController.cs" />
@@ -292,9 +293,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="connections.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="appSettings.config" />
@@ -325,6 +323,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Connected Services\Application Insights\ConnectedService.json" />
+    <Content Include="connections.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>

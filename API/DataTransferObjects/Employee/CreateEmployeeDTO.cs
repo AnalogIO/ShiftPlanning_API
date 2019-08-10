@@ -23,16 +23,9 @@ namespace DataTransferObjects.Employee
         public string LastName { get; set; }
 
         /// <summary>
-        /// The title id of the employee.
+        /// The title of the employee.
         /// </summary>
         [Required]
-        public int EmployeeTitleId { get; set; }
-
-        /// <summary>
-        /// A base64 encoding of the profile picture.
-        /// 
-        /// May be left empty.
-        /// </summary>
-        public string ProfilePhoto { get; set; }
+        public string EmployeeTitle { get; set; }
     }
 }

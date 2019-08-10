@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Data.Models;
-using DataTransferObjects.EmployeeTitles;
-using System.Net.Mail;
+﻿using Data.Models;
 
 namespace Data.Services
 {

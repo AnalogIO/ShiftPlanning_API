@@ -66,7 +66,7 @@ namespace Data.Services
             foreach(var emp in dbScheduledShift.EmployeeAssignments.Select(e => e.Employee).ToList())
             {
                 emp.EmployeeAssignments =
-                    emp.EmployeeAssignments.Where(ea => ea.ScheduledShift.Id != dbScheduledShift.Id).ToList();
+                    emp.EmployeeAssignments.Where(ea => ea.ScheduledShift != null && ea.ScheduledShift.Id != dbScheduledShift.Id).ToList();
             }
 
             dbScheduledShift.Start = TimeSpan.Parse(scheduledShiftDto.Start);

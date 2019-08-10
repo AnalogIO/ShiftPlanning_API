@@ -7,13 +7,10 @@ using System.Threading.Tasks;
 
 namespace DataTransferObjects.Shift
 {
-    public class UpdateShiftDTO
+    public class PatchShiftDTO
     {
-        [Required]
         public string Start { get; set; }
-        [Required]
         public string End { get; set; }
-        [Required]
         public int[] EmployeeIds { get; set; }
     }
 }

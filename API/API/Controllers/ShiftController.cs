@@ -44,11 +44,28 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Returns all shifts of the specified organization in the 'Authorization' header
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "Manager")]
+        [HttpGet, Route("")]
+        public IHttpActionResult Get(string from, string to)
+        {
+            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
+            if (employee == null) return BadRequest("No manager found with the given name");
+
+            var dtFrom = Convert.ToDateTime(from);
+            var dtTo = Convert.ToDateTime(to);
+
+            return Ok(Mapper.Map(_shiftService.GetByOrganization(employee.Organization.Id, dtFrom, dtTo)));
+        }
+
+        /// <summary>
         /// Returns the shift for the given id in the parameter
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Application")]
         [HttpGet, Route("{id}")]
         public IHttpActionResult Get(int id)
         {
@@ -68,14 +85,14 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Application")]
         [HttpDelete, Route("{id}")]
         public IHttpActionResult Delete(int id)
         {
-            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
-            if (employee == null) return BadRequest("No manager found with the given token");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No manager found with the given token");
 
-            _shiftService.DeleteShift(id, employee.Organization.Id);
+            _shiftService.DeleteShift(id, organization.Id);
             
             return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
         }
@@ -86,16 +103,39 @@ namespace API.Controllers
         /// <param name="id"></param>
         /// <param name="shiftDto"></param>
         /// <returns></returns>
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Application")]
         [HttpPut, Route("{id}")]
         public IHttpActionResult Update(int id, UpdateShiftDTO shiftDto)
         {
-            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
-            if (employee == null) return BadRequest("No manager found with the given token");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No manager found with the given token");
 
-            var shift = _shiftService.UpdateShift(id, employee.Organization.Id, shiftDto);
+            var shift = _shiftService.UpdateShift(id, organization.Id, shiftDto);
 
             if(shift != null)
+            {
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+            }
+
+            return BadRequest("The shift could not be updated!");
+        }
+
+        /// <summary>
+        /// Patches the shift with the id in the parameter with the content in the body
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="shiftDto"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Manager, Application")]
+        [HttpPatch, Route("{id}")]
+        public IHttpActionResult Patch(int id, PatchShiftDTO shiftDto)
+        {
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("No manager found with the given token");
+
+            var shift = _shiftService.PatchShift(id, organization.Id, shiftDto);
+
+            if (shift != null)
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
             }
@@ -108,7 +148,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="shiftDto"></param>
         /// <returns></returns>
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Application")]
         [HttpPost, Route("")]
         public IHttpActionResult Create(CreateShiftDTO shiftDto)
         {
@@ -117,10 +157,10 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var employee = _authManager.GetEmployeeByHeader(Request.Headers);
-            if (employee == null) return BadRequest("No manager found with the given token");
+            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
+            if (organization == null) return BadRequest("Token/apikey is not assigned any organization");
 
-            var shift = _shiftService.CreateShift(employee.Organization, shiftDto);
+            var shift = _shiftService.CreateShift(organization, shiftDto);
             if (shift != null)
             {
                 return Ok(Mapper.Map(shift));
@@ -191,13 +231,14 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Adds the employees from the body to the given shift
+        /// Checks out the employee with the given employee id in the parameters for the given shift id in the parameters
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="employeeId"></param>
         /// <returns></returns>
         [Authorize(Roles = "Application")]
-        [HttpPost, Route("{id}/addEmployees")]
-        public IHttpActionResult AddEmployees(int id, AddEmployeesDTO employees)
+        [HttpPost, Route("{id}/checkout")]
+        public IHttpActionResult CheckOut(int id, int employeeId)
         {
             if (!ModelState.IsValid)
             {
@@ -207,37 +248,9 @@ namespace API.Controllers
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
             if (organization == null) return BadRequest("No institution found with the given name");
 
-            var shift = _shiftService.AddEmployeesToShift(id, organization.Id, employees);
-            if (shift != null)
-            {
-                return Ok(Mapper.Map(shift));
-            }
-            return BadRequest("Could not add the employees");
-        }
+            _shiftService.CheckOutEmployee(id, employeeId, organization.Id);
 
-        /// <summary>
-        /// Creates a shift with the given employees from now (rounded up to nearest 15 minutes) and for the next xx minutes defined in the body
-        /// </summary>
-        /// <param name="shiftDto"></param>
-        /// <returns></returns>
-        //[Authorize(Roles = "Application")] TODO: FIX AUTHENTICATION HEADER
-        [HttpPost, Route("createoutsideschedule")]
-        public IHttpActionResult CreateOutsideSchedule(CreateShiftDTO shiftDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var organization = _authManager.GetOrganizationByHeader(Request.Headers);
-            if (organization == null) return BadRequest("No organization found with the given name");
-
-            var shift = _shiftService.CreateLimitedShift(organization, shiftDto, 300); // Create shift if it doesnt exceed a duration of 5 hours
-            if (shift != null)
-            {
-                return Ok(Mapper.Map(shift));
-            }
-            return BadRequest("Could not create shift!");
+            return Ok(Mapper.Map("Checked out with success!"));
         }
     }
 }

@@ -33,16 +33,16 @@ namespace PublicApi.Controllers
         /// <returns>A collection of employees, if the organization was found. Http 404 otherwise.</returns>
         [HttpGet, Route("{shortKey}")]
         [ResponseType(typeof(IEnumerable<EmployeeDTO>))]
-        public IHttpActionResult Get(string shortKey)
+        public IHttpActionResult Get(string shortKey, bool active = true)
         {
-            var employees = _employeeService.GetEmployees(shortKey)?.ToList();
+            var employees = _employeeService.GetEmployeesByActivity(shortKey, active)?.ToList();
 
             if (employees == null)
             {
                 return NotFound();
             }
 
-            return Ok(_volunteerMapper.Map(employees));
+            return Ok(_volunteerMapper.Map(employees.OrderBy(x => x.FirstName).ThenBy(x => x.LastName)));
         }
 
         /// <summary>
@@ -62,37 +62,6 @@ namespace PublicApi.Controllers
 
             return Ok(_volunteerMapper.Map(employee));
         }
-
-        /// <summary>
-        /// Retrieve the photo for an employee.
-        /// </summary>
-        /// <param name="shortKey">The shortkey of an organization.</param>
-        /// <param name="id">The id of an employee.</param>
-        /// <returns>
-        /// A photo if the shortkey/id match was found. Http 404 otherwise.
-        /// If the employee has no photo registered, an empty response is generated.
-        /// </returns>
-        [HttpGet, Route("{shortKey}/{id}/photo")]
-        public IHttpActionResult GetPhoto(string shortKey, int id)
-        {
-            var employee = _employeeService.GetEmployee(id, shortKey);
-
-            if (employee == null)
-                return NotFound();
-
-            var message = new HttpResponseMessage(HttpStatusCode.OK);
-
-            if (employee.Photo != null)
-            {
-                message.Content = new ByteArrayContent(employee.Photo.Data);
-                message.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(employee.Photo.Type);
-            }
-            else
-            {
-                message.Content = new ByteArrayContent(new byte[0]); // TODO: What should an empty response be?
-            }
-
-            return ResponseMessage(message);
-        }
+        
     }
 }
