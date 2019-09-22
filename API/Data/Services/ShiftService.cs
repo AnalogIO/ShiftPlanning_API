@@ -8,6 +8,7 @@ using System.Data;
 using Data.Exceptions;
 using Microsoft.Practices.ObjectBuilder2;
 using System.Web;
+using System.Data.Entity.Core;
 
 namespace Data.Services
 {

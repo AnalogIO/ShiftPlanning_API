@@ -8,6 +8,7 @@ using Data.Repositories;
 using DataTransferObjects.Employee;
 using DataTransferObjects.Schedule;
 using DataTransferObjects.ScheduledShift;
+using System.Data.Entity.Core;
 
 namespace Data.Services
 {

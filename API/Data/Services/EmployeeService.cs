@@ -12,6 +12,7 @@ using System.IO;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using PodioAPI.Models;
+using System.Data.Entity.Core;
 
 namespace Data.Services
 {

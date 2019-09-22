@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.MSSQL
 {
+    [DbConfigurationType(typeof(MySql.Data.Entity.MySqlEFConfiguration))]
     public class ShiftPlannerDataContext : DbContext, IShiftPlannerDataContext
     {
         public ShiftPlannerDataContext(): base("name=ShiftPlannerDataContext") {
