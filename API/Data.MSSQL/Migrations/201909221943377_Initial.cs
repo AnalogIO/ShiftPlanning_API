@@ -1,9 +1,9 @@
-namespace Data.Npgsql.Migrations
+namespace Data.MSSQL.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class initial : DbMigration
+    public partial class Initial : DbMigration
     {
         public override void Up()
         {
@@ -12,7 +12,7 @@ namespace Data.Npgsql.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Time = c.DateTime(nullable: false),
+                        Time = c.DateTime(nullable: false, precision: 0),
                         Employee_Id = c.Int(),
                         Shift_Id = c.Int(),
                     })
@@ -27,24 +27,21 @@ namespace Data.Npgsql.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Email = c.String(),
-                        Password = c.String(),
-                        Salt = c.String(),
-                        FirstName = c.String(),
-                        LastName = c.String(),
+                        Email = c.String(unicode: false),
+                        Password = c.String(unicode: false),
+                        Salt = c.String(unicode: false),
+                        FirstName = c.String(unicode: false),
+                        LastName = c.String(unicode: false),
+                        EmployeeTitle = c.String(unicode: false),
                         Active = c.Boolean(nullable: false),
                         WantShifts = c.Int(nullable: false),
+                        PhotoUrl = c.String(unicode: false),
+                        PodioId = c.Int(nullable: false),
                         Organization_Id = c.Int(),
-                        EmployeeTitle_Id = c.Int(),
-                        Photo_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Organizations", t => t.Organization_Id)
-                .ForeignKey("dbo.EmployeeTitles", t => t.EmployeeTitle_Id)
-                .ForeignKey("dbo.Photos", t => t.Photo_Id)
-                .Index(t => t.Organization_Id)
-                .Index(t => t.EmployeeTitle_Id)
-                .Index(t => t.Photo_Id);
+                .Index(t => t.Organization_Id);
             
             CreateTable(
                 "dbo.EmployeeAssignments",
@@ -67,8 +64,8 @@ namespace Data.Npgsql.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Day = c.Int(nullable: false),
-                        Start = c.Time(nullable: false, precision: 7),
-                        End = c.Time(nullable: false, precision: 7),
+                        Start = c.Time(nullable: false, precision: 0),
+                        End = c.Time(nullable: false, precision: 0),
                         MaxOnShift = c.Int(nullable: false),
                         MinOnShift = c.Int(nullable: false),
                         Schedule_Id = c.Int(),
@@ -97,7 +94,7 @@ namespace Data.Npgsql.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
+                        Name = c.String(unicode: false),
                         NumberOfWeeks = c.Int(nullable: false),
                         Organization_Id = c.Int(),
                     })
@@ -110,9 +107,9 @@ namespace Data.Npgsql.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                        ShortKey = c.String(),
-                        ApiKey = c.String(),
+                        Name = c.String(unicode: false),
+                        ShortKey = c.String(unicode: false),
+                        ApiKey = c.String(unicode: false),
                         DefaultPhoto_Id = c.Int(),
                         EmailSettings_Id = c.Int(),
                     })
@@ -128,7 +125,7 @@ namespace Data.Npgsql.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Data = c.Binary(),
-                        Type = c.String(),
+                        Type = c.String(unicode: false),
                         Organization_Id = c.Int(),
                         Organization_Id1 = c.Int(),
                     })
@@ -143,9 +140,9 @@ namespace Data.Npgsql.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        EmailHost = c.String(),
-                        EmailUsername = c.String(),
-                        EmailPassword = c.String(),
+                        EmailHost = c.String(unicode: false),
+                        EmailUsername = c.String(unicode: false),
+                        EmailPassword = c.String(unicode: false),
                         Port = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
@@ -155,7 +152,7 @@ namespace Data.Npgsql.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Title = c.String(),
+                        Title = c.String(unicode: false),
                         Organization_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
@@ -167,8 +164,8 @@ namespace Data.Npgsql.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Start = c.DateTime(nullable: false),
-                        End = c.DateTime(nullable: false),
+                        Start = c.DateTime(nullable: false, precision: 0),
+                        End = c.DateTime(nullable: false, precision: 0),
                         Organization_Id = c.Int(),
                         Schedule_Id = c.Int(),
                     })
@@ -195,7 +192,7 @@ namespace Data.Npgsql.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
+                        Name = c.String(unicode: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -204,7 +201,7 @@ namespace Data.Npgsql.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        TokenHash = c.String(),
+                        TokenHash = c.String(unicode: false),
                         Employee_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
@@ -244,9 +241,7 @@ namespace Data.Npgsql.Migrations
             DropForeignKey("dbo.Tokens", "Employee_Id", "dbo.Employees");
             DropForeignKey("dbo.RoleEmployees", "Employee_Id", "dbo.Employees");
             DropForeignKey("dbo.RoleEmployees", "Role_Id", "dbo.Roles");
-            DropForeignKey("dbo.Employees", "Photo_Id", "dbo.Photos");
             DropForeignKey("dbo.Friendships", "Employee_Id", "dbo.Employees");
-            DropForeignKey("dbo.Employees", "EmployeeTitle_Id", "dbo.EmployeeTitles");
             DropForeignKey("dbo.ScheduledShifts", "Schedule_Id", "dbo.Schedules");
             DropForeignKey("dbo.Shifts", "Schedule_Id", "dbo.Schedules");
             DropForeignKey("dbo.Shifts", "Organization_Id", "dbo.Organizations");
@@ -284,8 +279,6 @@ namespace Data.Npgsql.Migrations
             DropIndex("dbo.ScheduledShifts", new[] { "Schedule_Id" });
             DropIndex("dbo.EmployeeAssignments", new[] { "ScheduledShift_Id" });
             DropIndex("dbo.EmployeeAssignments", new[] { "Employee_Id" });
-            DropIndex("dbo.Employees", new[] { "Photo_Id" });
-            DropIndex("dbo.Employees", new[] { "EmployeeTitle_Id" });
             DropIndex("dbo.Employees", new[] { "Organization_Id" });
             DropIndex("dbo.CheckIns", new[] { "Shift_Id" });
             DropIndex("dbo.CheckIns", new[] { "Employee_Id" });

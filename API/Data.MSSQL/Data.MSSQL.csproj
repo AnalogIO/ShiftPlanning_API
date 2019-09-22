@@ -106,21 +106,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\IoCConfig.cs" />
-    <Compile Include="Migrations\201710181356303_initial.cs" />
-    <Compile Include="Migrations\201710181356303_initial.Designer.cs">
-      <DependentUpon>201710181356303_initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201811231659347_removes photo entity.cs" />
-    <Compile Include="Migrations\201811231659347_removes photo entity.Designer.cs">
-      <DependentUpon>201811231659347_removes photo entity.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201811231958112_Adds PodioId to employee entity.cs" />
-    <Compile Include="Migrations\201811231958112_Adds PodioId to employee entity.Designer.cs">
-      <DependentUpon>201811231958112_Adds PodioId to employee entity.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812121831262_removes employeetitles from employee.cs" />
-    <Compile Include="Migrations\201812121831262_removes employeetitles from employee.Designer.cs">
-      <DependentUpon>201812121831262_removes employeetitles from employee.cs</DependentUpon>
+    <Compile Include="Migrations\201909221943377_Initial.cs" />
+    <Compile Include="Migrations\201909221943377_Initial.Designer.cs">
+      <DependentUpon>201909221943377_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -148,17 +136,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201710181356303_initial.resx">
-      <DependentUpon>201710181356303_initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201811231659347_removes photo entity.resx">
-      <DependentUpon>201811231659347_removes photo entity.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201811231958112_Adds PodioId to employee entity.resx">
-      <DependentUpon>201811231958112_Adds PodioId to employee entity.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812121831262_removes employeetitles from employee.resx">
-      <DependentUpon>201812121831262_removes employeetitles from employee.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201909221943377_Initial.resx">
+      <DependentUpon>201909221943377_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
