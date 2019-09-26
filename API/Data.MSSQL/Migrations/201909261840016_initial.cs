@@ -3,7 +3,7 @@ namespace Data.MSSQL.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Initial : DbMigration
+    public partial class initial : DbMigration
     {
         public override void Up()
         {
@@ -80,12 +80,12 @@ namespace Data.MSSQL.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Priority = c.Int(nullable: false),
-                        Employee_Id = c.Int(),
-                        ScheduledShift_Id = c.Int(),
+                        Employee_Id = c.Int(nullable: false),
+                        ScheduledShift_Id = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Employees", t => t.Employee_Id)
-                .ForeignKey("dbo.ScheduledShifts", t => t.ScheduledShift_Id)
+                .ForeignKey("dbo.Employees", t => t.Employee_Id, cascadeDelete: true)
+                .ForeignKey("dbo.ScheduledShifts", t => t.ScheduledShift_Id, cascadeDelete: true)
                 .Index(t => t.Employee_Id)
                 .Index(t => t.ScheduledShift_Id);
             

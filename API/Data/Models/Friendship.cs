@@ -5,6 +5,7 @@ namespace Data.Models
 {
     public class Friendship
     {
+        [Key]
         public int Id { get; set; }
 
         public int Employee_Id { get; set; }
