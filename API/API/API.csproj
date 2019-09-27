@@ -331,7 +331,7 @@
     </None>
     <None Include="Properties\PublishProfiles\analogio-shiftplanning.pubxml" />
     <None Include="Properties\PublishProfiles\analogio.dk.pubxml" />
-    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\ShiftPlanning - privat.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
