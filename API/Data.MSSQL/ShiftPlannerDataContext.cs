@@ -2,15 +2,15 @@
 using Data.Models;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Configuration;
 
 namespace Data.MSSQL
 {
-    [DbConfigurationType(typeof(MySql.Data.Entity.MySqlEFConfiguration))]
     public class ShiftPlannerDataContext : DbContext, IShiftPlannerDataContext
     {
         public ShiftPlannerDataContext(): base("name=ShiftPlannerDataContext") {
-
         }
+
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
@@ -22,5 +22,9 @@ namespace Data.MSSQL
         public DbSet<Preference> Preferences { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.HasDefaultSchema(ConfigurationManager.AppSettings["databaseSchema"]);
+        }
     }
 }
