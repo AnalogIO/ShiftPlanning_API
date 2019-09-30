@@ -295,7 +295,8 @@
     </None>
     <None Include="Properties\PublishProfiles\analog-publicshiftplanning.pubxml" />
     <None Include="Properties\PublishProfiles\analogio-publicshiftplanning.pubxml" />
-    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\analogio.dk publicshiftplanning.pubxml" />
+    <None Include="Properties\PublishProfiles\beta.analogio.dk publicshiftplanning.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

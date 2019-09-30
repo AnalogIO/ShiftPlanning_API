@@ -106,9 +106,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\IoCConfig.cs" />
-    <Compile Include="Migrations\201909291249350_MSSQL initial.cs" />
-    <Compile Include="Migrations\201909291249350_MSSQL initial.designer.cs">
-      <DependentUpon>201909291249350_MSSQL initial.cs</DependentUpon>
+    <Compile Include="Migrations\201909302016129_initial mssql prod.cs" />
+    <Compile Include="Migrations\201909302016129_initial mssql prod.designer.cs">
+      <DependentUpon>201909302016129_initial mssql prod.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -130,14 +130,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Content Include="connections.config">
-      <SubType>Designer</SubType>
-    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201909291249350_MSSQL initial.resx">
-      <DependentUpon>201909291249350_MSSQL initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201909302016129_initial mssql prod.resx">
+      <DependentUpon>201909302016129_initial mssql prod.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

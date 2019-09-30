@@ -7,13 +7,13 @@ namespace Data.MSSQL.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.3.0")]
-    public sealed partial class MSSQLinitial : IMigrationMetadata
+    public sealed partial class initialmssqlprod : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(MSSQLinitial));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(initialmssqlprod));
         
         string IMigrationMetadata.Id
         {
-            get { return "201909291249350_MSSQL initial"; }
+            get { return "201909302016129_initial mssql prod"; }
         }
         
         string IMigrationMetadata.Source

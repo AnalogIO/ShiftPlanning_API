@@ -3,12 +3,12 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class MSSQLinitial : DbMigration
+    public partial class initialmssqlprod : DbMigration
     {
         public override void Up()
         {
             CreateTable(
-                "test.CheckIns",
+                "prod.CheckIns",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -17,13 +17,13 @@
                         Shift_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("test.Employees", t => t.Employee_Id)
-                .ForeignKey("test.Shifts", t => t.Shift_Id)
+                .ForeignKey("prod.Employees", t => t.Employee_Id)
+                .ForeignKey("prod.Shifts", t => t.Shift_Id)
                 .Index(t => t.Employee_Id)
                 .Index(t => t.Shift_Id);
             
             CreateTable(
-                "test.Employees",
+                "prod.Employees",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -40,11 +40,11 @@
                         Organization_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("test.Organizations", t => t.Organization_Id)
+                .ForeignKey("prod.Organizations", t => t.Organization_Id)
                 .Index(t => t.Organization_Id);
             
             CreateTable(
-                "test.EmployeeAssignments",
+                "prod.EmployeeAssignments",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -53,13 +53,13 @@
                         ScheduledShift_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("test.Employees", t => t.Employee_Id)
-                .ForeignKey("test.ScheduledShifts", t => t.ScheduledShift_Id)
+                .ForeignKey("prod.Employees", t => t.Employee_Id)
+                .ForeignKey("prod.ScheduledShifts", t => t.ScheduledShift_Id)
                 .Index(t => t.Employee_Id)
                 .Index(t => t.ScheduledShift_Id);
             
             CreateTable(
-                "test.ScheduledShifts",
+                "prod.ScheduledShifts",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -71,11 +71,11 @@
                         Schedule_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("test.Schedules", t => t.Schedule_Id)
+                .ForeignKey("prod.Schedules", t => t.Schedule_Id)
                 .Index(t => t.Schedule_Id);
             
             CreateTable(
-                "test.Preferences",
+                "prod.Preferences",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -84,13 +84,13 @@
                         ScheduledShift_Id = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("test.Employees", t => t.Employee_Id, cascadeDelete: true)
-                .ForeignKey("test.ScheduledShifts", t => t.ScheduledShift_Id, cascadeDelete: true)
+                .ForeignKey("prod.Employees", t => t.Employee_Id, cascadeDelete: true)
+                .ForeignKey("prod.ScheduledShifts", t => t.ScheduledShift_Id, cascadeDelete: true)
                 .Index(t => t.Employee_Id)
                 .Index(t => t.ScheduledShift_Id);
             
             CreateTable(
-                "test.Schedules",
+                "prod.Schedules",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -99,11 +99,11 @@
                         Organization_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("test.Organizations", t => t.Organization_Id)
+                .ForeignKey("prod.Organizations", t => t.Organization_Id)
                 .Index(t => t.Organization_Id);
             
             CreateTable(
-                "test.Organizations",
+                "prod.Organizations",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -114,13 +114,13 @@
                         EmailSettings_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("test.Photos", t => t.DefaultPhoto_Id)
-                .ForeignKey("test.EmailSettings", t => t.EmailSettings_Id)
+                .ForeignKey("prod.Photos", t => t.DefaultPhoto_Id)
+                .ForeignKey("prod.EmailSettings", t => t.EmailSettings_Id)
                 .Index(t => t.DefaultPhoto_Id)
                 .Index(t => t.EmailSettings_Id);
             
             CreateTable(
-                "test.Photos",
+                "prod.Photos",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -130,13 +130,13 @@
                         Organization_Id1 = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("test.Organizations", t => t.Organization_Id)
-                .ForeignKey("test.Organizations", t => t.Organization_Id1)
+                .ForeignKey("prod.Organizations", t => t.Organization_Id)
+                .ForeignKey("prod.Organizations", t => t.Organization_Id1)
                 .Index(t => t.Organization_Id)
                 .Index(t => t.Organization_Id1);
             
             CreateTable(
-                "test.EmailSettings",
+                "prod.EmailSettings",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -148,7 +148,7 @@
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "test.EmployeeTitles",
+                "prod.EmployeeTitles",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -156,11 +156,11 @@
                         Organization_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("test.Organizations", t => t.Organization_Id)
+                .ForeignKey("prod.Organizations", t => t.Organization_Id)
                 .Index(t => t.Organization_Id);
             
             CreateTable(
-                "test.Shifts",
+                "prod.Shifts",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -170,13 +170,13 @@
                         Schedule_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("test.Organizations", t => t.Organization_Id)
-                .ForeignKey("test.Schedules", t => t.Schedule_Id)
+                .ForeignKey("prod.Organizations", t => t.Organization_Id)
+                .ForeignKey("prod.Schedules", t => t.Schedule_Id)
                 .Index(t => t.Organization_Id)
                 .Index(t => t.Schedule_Id);
             
             CreateTable(
-                "test.Friendships",
+                "prod.Friendships",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -184,11 +184,11 @@
                         Friend_Id = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("test.Employees", t => t.Employee_Id, cascadeDelete: true)
+                .ForeignKey("prod.Employees", t => t.Employee_Id, cascadeDelete: true)
                 .Index(t => t.Employee_Id);
             
             CreateTable(
-                "test.Roles",
+                "prod.Roles",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -197,7 +197,7 @@
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "test.Tokens",
+                "prod.Tokens",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -205,32 +205,32 @@
                         Employee_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("test.Employees", t => t.Employee_Id)
+                .ForeignKey("prod.Employees", t => t.Employee_Id)
                 .Index(t => t.Employee_Id);
             
             CreateTable(
-                "test.ShiftEmployees",
+                "prod.ShiftEmployees",
                 c => new
                     {
                         Shift_Id = c.Int(nullable: false),
                         Employee_Id = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => new { t.Shift_Id, t.Employee_Id })
-                .ForeignKey("test.Shifts", t => t.Shift_Id, cascadeDelete: true)
-                .ForeignKey("test.Employees", t => t.Employee_Id, cascadeDelete: true)
+                .ForeignKey("prod.Shifts", t => t.Shift_Id, cascadeDelete: true)
+                .ForeignKey("prod.Employees", t => t.Employee_Id, cascadeDelete: true)
                 .Index(t => t.Shift_Id)
                 .Index(t => t.Employee_Id);
             
             CreateTable(
-                "test.RoleEmployees",
+                "prod.RoleEmployees",
                 c => new
                     {
                         Role_Id = c.Int(nullable: false),
                         Employee_Id = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => new { t.Role_Id, t.Employee_Id })
-                .ForeignKey("test.Roles", t => t.Role_Id, cascadeDelete: true)
-                .ForeignKey("test.Employees", t => t.Employee_Id, cascadeDelete: true)
+                .ForeignKey("prod.Roles", t => t.Role_Id, cascadeDelete: true)
+                .ForeignKey("prod.Employees", t => t.Employee_Id, cascadeDelete: true)
                 .Index(t => t.Role_Id)
                 .Index(t => t.Employee_Id);
             
@@ -238,66 +238,66 @@
         
         public override void Down()
         {
-            DropForeignKey("test.Tokens", "Employee_Id", "test.Employees");
-            DropForeignKey("test.RoleEmployees", "Employee_Id", "test.Employees");
-            DropForeignKey("test.RoleEmployees", "Role_Id", "test.Roles");
-            DropForeignKey("test.Friendships", "Employee_Id", "test.Employees");
-            DropForeignKey("test.ScheduledShifts", "Schedule_Id", "test.Schedules");
-            DropForeignKey("test.Shifts", "Schedule_Id", "test.Schedules");
-            DropForeignKey("test.Shifts", "Organization_Id", "test.Organizations");
-            DropForeignKey("test.ShiftEmployees", "Employee_Id", "test.Employees");
-            DropForeignKey("test.ShiftEmployees", "Shift_Id", "test.Shifts");
-            DropForeignKey("test.CheckIns", "Shift_Id", "test.Shifts");
-            DropForeignKey("test.Schedules", "Organization_Id", "test.Organizations");
-            DropForeignKey("test.Photos", "Organization_Id1", "test.Organizations");
-            DropForeignKey("test.EmployeeTitles", "Organization_Id", "test.Organizations");
-            DropForeignKey("test.Employees", "Organization_Id", "test.Organizations");
-            DropForeignKey("test.Organizations", "EmailSettings_Id", "test.EmailSettings");
-            DropForeignKey("test.Organizations", "DefaultPhoto_Id", "test.Photos");
-            DropForeignKey("test.Photos", "Organization_Id", "test.Organizations");
-            DropForeignKey("test.Preferences", "ScheduledShift_Id", "test.ScheduledShifts");
-            DropForeignKey("test.Preferences", "Employee_Id", "test.Employees");
-            DropForeignKey("test.EmployeeAssignments", "ScheduledShift_Id", "test.ScheduledShifts");
-            DropForeignKey("test.EmployeeAssignments", "Employee_Id", "test.Employees");
-            DropForeignKey("test.CheckIns", "Employee_Id", "test.Employees");
-            DropIndex("test.RoleEmployees", new[] { "Employee_Id" });
-            DropIndex("test.RoleEmployees", new[] { "Role_Id" });
-            DropIndex("test.ShiftEmployees", new[] { "Employee_Id" });
-            DropIndex("test.ShiftEmployees", new[] { "Shift_Id" });
-            DropIndex("test.Tokens", new[] { "Employee_Id" });
-            DropIndex("test.Friendships", new[] { "Employee_Id" });
-            DropIndex("test.Shifts", new[] { "Schedule_Id" });
-            DropIndex("test.Shifts", new[] { "Organization_Id" });
-            DropIndex("test.EmployeeTitles", new[] { "Organization_Id" });
-            DropIndex("test.Photos", new[] { "Organization_Id1" });
-            DropIndex("test.Photos", new[] { "Organization_Id" });
-            DropIndex("test.Organizations", new[] { "EmailSettings_Id" });
-            DropIndex("test.Organizations", new[] { "DefaultPhoto_Id" });
-            DropIndex("test.Schedules", new[] { "Organization_Id" });
-            DropIndex("test.Preferences", new[] { "ScheduledShift_Id" });
-            DropIndex("test.Preferences", new[] { "Employee_Id" });
-            DropIndex("test.ScheduledShifts", new[] { "Schedule_Id" });
-            DropIndex("test.EmployeeAssignments", new[] { "ScheduledShift_Id" });
-            DropIndex("test.EmployeeAssignments", new[] { "Employee_Id" });
-            DropIndex("test.Employees", new[] { "Organization_Id" });
-            DropIndex("test.CheckIns", new[] { "Shift_Id" });
-            DropIndex("test.CheckIns", new[] { "Employee_Id" });
-            DropTable("test.RoleEmployees");
-            DropTable("test.ShiftEmployees");
-            DropTable("test.Tokens");
-            DropTable("test.Roles");
-            DropTable("test.Friendships");
-            DropTable("test.Shifts");
-            DropTable("test.EmployeeTitles");
-            DropTable("test.EmailSettings");
-            DropTable("test.Photos");
-            DropTable("test.Organizations");
-            DropTable("test.Schedules");
-            DropTable("test.Preferences");
-            DropTable("test.ScheduledShifts");
-            DropTable("test.EmployeeAssignments");
-            DropTable("test.Employees");
-            DropTable("test.CheckIns");
+            DropForeignKey("prod.Tokens", "Employee_Id", "prod.Employees");
+            DropForeignKey("prod.RoleEmployees", "Employee_Id", "prod.Employees");
+            DropForeignKey("prod.RoleEmployees", "Role_Id", "prod.Roles");
+            DropForeignKey("prod.Friendships", "Employee_Id", "prod.Employees");
+            DropForeignKey("prod.ScheduledShifts", "Schedule_Id", "prod.Schedules");
+            DropForeignKey("prod.Shifts", "Schedule_Id", "prod.Schedules");
+            DropForeignKey("prod.Shifts", "Organization_Id", "prod.Organizations");
+            DropForeignKey("prod.ShiftEmployees", "Employee_Id", "prod.Employees");
+            DropForeignKey("prod.ShiftEmployees", "Shift_Id", "prod.Shifts");
+            DropForeignKey("prod.CheckIns", "Shift_Id", "prod.Shifts");
+            DropForeignKey("prod.Schedules", "Organization_Id", "prod.Organizations");
+            DropForeignKey("prod.Photos", "Organization_Id1", "prod.Organizations");
+            DropForeignKey("prod.EmployeeTitles", "Organization_Id", "prod.Organizations");
+            DropForeignKey("prod.Employees", "Organization_Id", "prod.Organizations");
+            DropForeignKey("prod.Organizations", "EmailSettings_Id", "prod.EmailSettings");
+            DropForeignKey("prod.Organizations", "DefaultPhoto_Id", "prod.Photos");
+            DropForeignKey("prod.Photos", "Organization_Id", "prod.Organizations");
+            DropForeignKey("prod.Preferences", "ScheduledShift_Id", "prod.ScheduledShifts");
+            DropForeignKey("prod.Preferences", "Employee_Id", "prod.Employees");
+            DropForeignKey("prod.EmployeeAssignments", "ScheduledShift_Id", "prod.ScheduledShifts");
+            DropForeignKey("prod.EmployeeAssignments", "Employee_Id", "prod.Employees");
+            DropForeignKey("prod.CheckIns", "Employee_Id", "prod.Employees");
+            DropIndex("prod.RoleEmployees", new[] { "Employee_Id" });
+            DropIndex("prod.RoleEmployees", new[] { "Role_Id" });
+            DropIndex("prod.ShiftEmployees", new[] { "Employee_Id" });
+            DropIndex("prod.ShiftEmployees", new[] { "Shift_Id" });
+            DropIndex("prod.Tokens", new[] { "Employee_Id" });
+            DropIndex("prod.Friendships", new[] { "Employee_Id" });
+            DropIndex("prod.Shifts", new[] { "Schedule_Id" });
+            DropIndex("prod.Shifts", new[] { "Organization_Id" });
+            DropIndex("prod.EmployeeTitles", new[] { "Organization_Id" });
+            DropIndex("prod.Photos", new[] { "Organization_Id1" });
+            DropIndex("prod.Photos", new[] { "Organization_Id" });
+            DropIndex("prod.Organizations", new[] { "EmailSettings_Id" });
+            DropIndex("prod.Organizations", new[] { "DefaultPhoto_Id" });
+            DropIndex("prod.Schedules", new[] { "Organization_Id" });
+            DropIndex("prod.Preferences", new[] { "ScheduledShift_Id" });
+            DropIndex("prod.Preferences", new[] { "Employee_Id" });
+            DropIndex("prod.ScheduledShifts", new[] { "Schedule_Id" });
+            DropIndex("prod.EmployeeAssignments", new[] { "ScheduledShift_Id" });
+            DropIndex("prod.EmployeeAssignments", new[] { "Employee_Id" });
+            DropIndex("prod.Employees", new[] { "Organization_Id" });
+            DropIndex("prod.CheckIns", new[] { "Shift_Id" });
+            DropIndex("prod.CheckIns", new[] { "Employee_Id" });
+            DropTable("prod.RoleEmployees");
+            DropTable("prod.ShiftEmployees");
+            DropTable("prod.Tokens");
+            DropTable("prod.Roles");
+            DropTable("prod.Friendships");
+            DropTable("prod.Shifts");
+            DropTable("prod.EmployeeTitles");
+            DropTable("prod.EmailSettings");
+            DropTable("prod.Photos");
+            DropTable("prod.Organizations");
+            DropTable("prod.Schedules");
+            DropTable("prod.Preferences");
+            DropTable("prod.ScheduledShifts");
+            DropTable("prod.EmployeeAssignments");
+            DropTable("prod.Employees");
+            DropTable("prod.CheckIns");
         }
     }
 }
