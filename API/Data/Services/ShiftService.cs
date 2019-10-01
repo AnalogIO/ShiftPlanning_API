@@ -60,12 +60,7 @@ namespace Data.Services
         /// <inheritdoc cref="IShiftService.GetByOrganization(int, DateTime, DateTime)"/>
         public IEnumerable<Shift> GetByOrganization(int id, DateTime from, DateTime to)
         {
-            var result = GetByOrganization(id).AsQueryable().Where(shift => shift.End >= from && shift.Start <= to);
-            if (result == null)
-            {
-                return new List<Shift>();
-            }
-            return result.ToList();
+            return GetByOrganization(id).AsQueryable().Where(shift => shift.End >= from && shift.Start <= to);
         }
 
         /// <inheritdoc cref="IShiftService.GetByOrganization(string, DateTime)"/>
