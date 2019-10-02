@@ -51,7 +51,7 @@ namespace Data.MSSQL.Repositories
         public IEnumerable<Shift> ReadFromOrganization(string organizationShortKey)
         {
             var shifts = _context.Shifts
-                .Where(x => x.Organization.ShortKey == organizationShortKey).ToList();
+                .Where(x => x.Organization.ShortKey == organizationShortKey).OrderBy(s => s.Start);
             return shifts;
         }
 
@@ -64,7 +64,7 @@ namespace Data.MSSQL.Repositories
         {
             return _context.Shifts
                 .Where(x => x.Organization.Id == organizationId)
-                .Include(x => x.Employees.Select(e => e.Roles));
+                .Include(x => x.Employees.Select(e => e.Roles)).OrderBy(s => s.Start);
         }
 
         public int Update(Shift shift)
