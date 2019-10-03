@@ -50,21 +50,23 @@ namespace Data.MSSQL.Repositories
 
         public IEnumerable<Shift> ReadFromOrganization(string organizationShortKey)
         {
-            var shifts = _context.Shifts
-                .Where(x => x.Organization.ShortKey == organizationShortKey).OrderBy(s => s.Start);
-            return shifts;
+            return _context.Shifts
+                .Where(x => x.Organization.ShortKey == organizationShortKey)
+                .OrderBy(s => s.Start);
         }
 
         public Shift Read(int id, int organizationId)
         {
-            return _context.Shifts.FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
+            return _context.Shifts
+                .FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
         }
 
         public IEnumerable<Shift> ReadFromOrganization(int organizationId)
         {
             return _context.Shifts
                 .Where(x => x.Organization.Id == organizationId)
-                .Include(x => x.Employees.Select(e => e.Roles)).OrderBy(s => s.Start);
+                .Include(x => x.Employees.Select(e => e.Roles))
+                .OrderBy(s => s.Start);
         }
 
         public int Update(Shift shift)
