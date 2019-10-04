@@ -1,0 +1,81 @@
+# AnalogIO
+# Shiftplanning API pipeline
+
+# Branches which can trigger the pipeline
+trigger:
+- master
+- feature/*
+- hotfix/*
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  APIsolution: 'API/API.sln'
+  PublicAPIsolution: 'API/PublicAPI.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+stages:
+- stage: build
+  displayName: Build the solutions
+
+  jobs:
+  - job: BuildAPI
+    displayName: Build API
+    steps:
+    - task: NuGetToolInstaller@1
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
+  - job: BuildPublicAPI
+    displayName: Build Public API
+    steps:
+      - task: NuGetToolInstaller@1
+      - task: NuGetCommand@2
+        inputs:
+          restoreSolution: '$(solution)'
+      - task: VSBuild@1
+        inputs:
+          solution: '$(solution)'
+          msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+          platform: '$(buildPlatform)'
+          configuration: '$(buildConfiguration)'
+  
+# - stage: test
+#   displayName: Tests
+#   dependsOn:
+#   - build
+#   condition: succeeded()
+#
+#   jobs:
+#   - job: testrun
+#     displayName: Test run
+#     steps:
+#       - task: VSTest@2
+
+# - stage: deploy
+#   displayName: Deploy to IIS server
+#   dependsOn: 
+#   - build
+#   - test
+#   condition: succeeded()
+
+#   jobs:
+#     - job: deployApi
+#       displayName: Deploy API
+#       steps:
+#         - task: IISWebAppDeploymentOnMachineGroup@0
+#           inputs:
+#             WebSiteName: 'A'
+#             Package: '$(System.DefaultWorkingDirectory)\**\*.zip'
+#             RemoveAdditionalFilesFlag: true
+#             TakeAppOfflineFlag: true
+#             XmlVariableSubstitution: true
