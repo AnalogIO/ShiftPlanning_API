@@ -250,13 +250,7 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
-/API/API/connections.config
-/API/API/appSettings.config
-/API/Data.MSSQL/connections.config
-/API/PublicApi/connections.config
-/API/PublicApi/appSettings.config
-API/Data.MSSQL/connections.config
-ShiftPlanning.WebApi/appsettings.json
-ShiftPlanning.WebApi/appsettings.Development.json
-/ShiftPlanning.WebApi/appsettings.json
-/ShiftPlanning.WebApi/appsettings.Development.json
+
+# Avoid config files
+API/ShiftPlanning.WebApi/appsettings.json
+API/ShiftPlanning.WebApi/appsettings.Development.json
