@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using ShiftPlanning.Model;
 using ShiftPlanning.Model.Models;
 using ShiftPlanning.WebApi.Exceptions;
@@ -41,13 +42,30 @@ namespace ShiftPlanning.WebApi.Repositories
         public Schedule Read(int id, int organizationId)
         {
             return _context.Schedules
-                .SingleOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
+                .Where(x => x.Id == id && x.Organization.Id == organizationId)
+                .Include(x => x.ScheduledShifts)
+                .ThenInclude(shift => shift.EmployeeAssignments)
+                .ThenInclude(assignment => assignment.Employee)
+                .ThenInclude(employee => employee.CheckIns)
+                .Include(x => x.ScheduledShifts)
+                .ThenInclude(shift => shift.EmployeeAssignments)
+                .ThenInclude(assignment => assignment.Employee)
+                .ThenInclude(employee => employee.Role_)
+                .SingleOrDefault();
         }
 
         public IEnumerable<Schedule> ReadFromOrganization(int organizationId)
         {
             return _context.Schedules
                 .Where(x => x.Organization.Id == organizationId)
+                .Include(x => x.ScheduledShifts)
+                .ThenInclude(shift => shift.EmployeeAssignments)
+                .ThenInclude(assignment => assignment.Employee)
+                .ThenInclude(employee => employee.CheckIns)
+                .Include(x => x.ScheduledShifts)
+                .ThenInclude(shift => shift.EmployeeAssignments)
+                .ThenInclude(assignment => assignment.Employee)
+                .ThenInclude(employee => employee.Role_)
                 .ToList();
         }
 

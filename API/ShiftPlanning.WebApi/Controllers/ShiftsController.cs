@@ -108,7 +108,9 @@ namespace ShiftPlanning.WebApi.Controllers
             var dtFrom = Convert.ToDateTime(from);
             var dtTo = Convert.ToDateTime(to);
 
-            return Ok(Mapper.Map(_shiftService.GetByOrganization(employee.Organization.Id, dtFrom, dtTo)));
+            var shifts = _shiftService.GetByOrganization(employee.Organization.Id, dtFrom, dtTo);
+            var response = Mapper.Map(shifts);
+            return Ok(response);
         }
 
         /// <summary>

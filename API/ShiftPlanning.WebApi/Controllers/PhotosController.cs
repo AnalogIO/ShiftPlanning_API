@@ -10,6 +10,18 @@ namespace ShiftPlanning.WebApi.Controllers
     [Route(RoutePrefix)]
     public class PhotosController : ControllerBase
     {
+        public const string RoutePrefix = "api/photos";
+        private readonly IPhotoService _photoService;
+        private readonly IAuthManager _authManager;
+        private readonly IPhotoMapper _photoMapper;
+
+        public PhotosController(IPhotoService photoService, IAuthManager authManager, IPhotoMapper photoMapper)
+        {
+            _authManager = authManager;
+            _photoService = photoService;
+            _photoMapper = photoMapper;
+        }
+        
         [HttpGet, Route("{shortKey}/{id:int}")]
         public IActionResult Get(string shortKey, int id)
         {
@@ -21,21 +33,6 @@ namespace ShiftPlanning.WebApi.Controllers
             return File(content, photo.Type);
         }
 
-        public const string RoutePrefix = "api/photos";
-
-        private readonly IPhotoService _photoService;
-
-        private readonly IAuthManager _authManager;
-
-        private readonly PhotoMapper _photoMapper;
-
-        public PhotosController(IPhotoService photoService, IAuthManager authManager, PhotoMapper photoMapper)
-        {
-            _authManager = authManager;
-            _photoService = photoService;
-            _photoMapper = photoMapper;
-        }
-
         /// <summary>
         /// Retrieves a photo from an organization.
         /// </summary>
@@ -45,7 +42,7 @@ namespace ShiftPlanning.WebApi.Controllers
         /// A response containing the image if found. 
         /// If the provided authorization token is invalid: Http 400 (Bad Request) is returned.
         /// If the photo is not found: Http 404 (Not Found) is returned.</returns>
-        [HttpGet, Route("{photoId}/{organizationId}")]
+        [HttpGet, Route("{photoId:int}/{organizationId:int}")]
         public IActionResult Get(int photoId, int organizationId)
         {
             var photo = _photoService.Read(photoId, organizationId);

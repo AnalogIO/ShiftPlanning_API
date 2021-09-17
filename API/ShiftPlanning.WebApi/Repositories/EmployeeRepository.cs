@@ -73,7 +73,10 @@ namespace ShiftPlanning.WebApi.Repositories
         public Employee Read(int id, int organizationId)
         {
             return _context.Employees
-                .FirstOrDefault(employee => employee.Id == id && employee.Organization.Id == organizationId);
+                .Where(employee => employee.Id == id && employee.Organization.Id == organizationId)
+                .Include(employee => employee.CheckIns)
+                .Include(employee => employee.Role_)
+                .FirstOrDefault();
         }
 
         public Employee Read(int id, string shortKey)
@@ -99,25 +102,32 @@ namespace ShiftPlanning.WebApi.Repositories
         public Employee Read(string token)
         {
             return _context.Employees
+                .Include(e => e.Organization)
+                .Include(e => e.Role_)
+                .Include(e => e.Preferences)
                 .FirstOrDefault(employee => employee.Tokens.Any(t => t.TokenHash == token));
         }
 
         public Employee Login(string email, string password)
         {
-            var employee = _context.Employees.FirstOrDefault(m => m.Email == email);
+            var employee = _context.Employees.Include(e => e.Tokens)
+                .Include(e => e.Organization)
+                .Include(e => e.CheckIns)
+                .Include(e => e.Role_)
+                .FirstOrDefault(m => m.Email == email);
 
             if (employee != null)
             {
                 var hashPassword = HashManager.Hash(password + employee.Salt);
                 if (employee.Password.Equals(hashPassword))
                 {
-                    var token = new Model.Models.Token(_tokenManager.GenerateLoginToken());
+                    var token = new Model.Models.Token(_tokenManager.GenerateLoginToken(employee.Role_));
                     employee.Tokens.Add(token);
                     _context.SaveChanges();
                     return employee;
                 }
             }
-            throw new UnauthorizedAccessException("You entered an incorrect username or password!");
+            throw new UnauthorizedException("You entered an incorrect username or password!");
         }
 
         public void DeleteFriendship(Friendship friendship)

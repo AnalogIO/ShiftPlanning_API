@@ -42,7 +42,8 @@ namespace ShiftPlanning.WebApi.Helpers.Authorization
         {
             headers.TryGetValue("Authorization", out var token);
             if (token.ToString() == null) throw new ObjectNotFoundException("Could not find a manager corresponding to the given 'Authorization' header");
-            return _employeeRepository.Read(token);
+            var tokenHash = token.ToString().Remove(0, 7); //Removes the "Bearer " part of the token in the header
+            return _employeeRepository.Read(tokenHash);
         }
 
         public bool IsManager(IHeaderDictionary headers)

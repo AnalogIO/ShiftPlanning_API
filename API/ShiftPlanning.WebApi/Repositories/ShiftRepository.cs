@@ -57,14 +57,25 @@ namespace ShiftPlanning.WebApi.Repositories
 
         public Shift Read(int id, int organizationId)
         {
-            return _context.Shifts.FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
+            return _context.Shifts.Where(x => x.Id == id && x.Organization.Id == organizationId)
+                .Include(x => x.Employee_).ThenInclude(e => e.Role_)
+                .Include(x => x.Employee_).ThenInclude(e => e.CheckIns)
+                .Include(x => x.Schedule)
+                .Include(x => x.CheckIns)
+                .AsSplitQuery()
+                .FirstOrDefault();
         }
 
         public IEnumerable<Shift> ReadFromOrganization(int organizationId)
         {
             return _context.Shifts
                 .Where(x => x.Organization.Id == organizationId)
-                .Include(x => x.Employee_.Select(e => e.Role_));
+                .Include(x => x.Employee_).ThenInclude(e => e.Role_)
+                .Include(x => x.Employee_).ThenInclude(e => e.CheckIns)
+                .Include(x => x.CheckIns)
+                .Include(x => x.Schedule)
+                .AsSplitQuery()
+                .ToList();
         }
 
         public int Update(Shift shift)

@@ -27,6 +27,7 @@ namespace ShiftPlanning.Model.Models
         public string PhotoUrl { get; set; }
         
         public ICollection<Role> Role_ { get; set; }
+        [ForeignKey("Employee_Id")]
         public ICollection<Token> Tokens { get; set; }
         public int PodioId { get; set; }
     }

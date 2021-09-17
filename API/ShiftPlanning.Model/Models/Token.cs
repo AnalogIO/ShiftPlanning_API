@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShiftPlanning.Model.Models
 {
+     [Table("Tokens")]
     public class Token
     {
         [Key]

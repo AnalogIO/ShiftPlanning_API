@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShiftPlanning.Model.Models
 {
+    [Table("EmployeeAssignments")]
     public class EmployeeAssignment
     {
         [Key]
