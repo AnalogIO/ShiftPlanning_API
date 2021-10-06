@@ -1,0 +1,26 @@
+@page "/ShiftsCheckIn"
+@using ShiftPlanning.Shifty.Repositories
+@using ShiftPlanning.DTOs.Shift
+@inject IShiftRepository _shiftRepository
+<MudText Class="H1">ShiftsCheckIn</MudText>
+@if (shifts == null)
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}
+else
+{
+    @foreach (var shiftDto in shifts)
+    {
+        <MudText>@shiftDto.Start</MudText>
+    }
+}
+
+
+
+@code {
+    private IEnumerable<ShiftDTO> shifts;
+    protected override async Task OnInitializedAsync()
+    {
+        shifts = await _shiftRepository.TodayShifts();
+    }
+}

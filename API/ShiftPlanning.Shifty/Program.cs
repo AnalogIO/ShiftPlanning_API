@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor.Services;
+using ShiftPlanning.Shifty.Repositories;
+using ShiftPlanning.Shifty.Services;
+using ShiftPlanning.Shifty.States;
 
 namespace ShiftPlanning.Shifty
 {
@@ -14,7 +17,11 @@ namespace ShiftPlanning.Shifty
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:5001") }); //builder.HostEnvironment.BaseAddress
+            builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
+            builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddSingleton<LoginState>();
 
             builder.Services.AddMudServices();
 
