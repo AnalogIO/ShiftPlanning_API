@@ -5,7 +5,6 @@ namespace ShiftPlanning.Shifty.Services
 {
     public interface IAuthenticationService
     {
-        bool IsValidLogin();
         Task<bool> LoginUser(EmployeeLoginDTO loginDto);
     }
 }

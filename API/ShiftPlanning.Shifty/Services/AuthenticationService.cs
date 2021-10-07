@@ -1,34 +1,33 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Blazored.LocalStorage;
 using ShiftPlanning.DTOs.Employee;
+using ShiftPlanning.Shifty.Authentication;
 using ShiftPlanning.Shifty.Repositories;
-using ShiftPlanning.Shifty.States;
 
 namespace ShiftPlanning.Shifty.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
+        private readonly ILocalStorageService _localStorage;
         private readonly IAccountRepository _accountRepository;
-        private readonly LoginState _loginState;
+        private readonly CustomAuthStateProvider _authStateProvider;
         
-        public AuthenticationService(IAccountRepository accountRepository, LoginState state)
+        public AuthenticationService(IAccountRepository accountRepository, CustomAuthStateProvider stateProvider, ILocalStorageService storageService)
         {
             _accountRepository = accountRepository;
-            _loginState = state;
-        }
-        
-        public bool IsValidLogin()
-        {
-            return _loginState.UserLogin != null; //TODO improve
+            _authStateProvider = stateProvider;
+            _localStorage = storageService;
         }
 
         public async Task<bool> LoginUser(EmployeeLoginDTO loginDto)
         {
             try
             {
-                _loginState.UserLogin = await _accountRepository.Login(loginDto);
-                return true;
+                var login = await _accountRepository.Login(loginDto);
+                await _localStorage.SetItemAsync("token", login.Token);
+                return _authStateProvider.UpdateAuthState(login.Token);
             }
             catch (HttpRequestException e)
             {

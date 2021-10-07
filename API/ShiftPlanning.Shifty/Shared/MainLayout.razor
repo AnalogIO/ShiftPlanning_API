@@ -1,53 +1,48 @@
 @using ShiftPlanning.Shifty.Pages
-@using ShiftPlanning.Shifty.States
 @inherits LayoutComponentBase
-@inject LoginState _loginState 
 
 <MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-    @if (_state.UserLogin != null)
-    {
-        <MudAppBar Elevation="0">
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/>
-            <MudSpacer/>
-            <MudIconButton Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Inherit" Link="https://mudblazor.com/" Target="_blank"/>
-            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/Garderoben/MudBlazor" Target="_blank"/>
-        </MudAppBar>
-        <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
-            <MudDrawerHeader>
-                <MudText Typo="Typo.h6">Shifty</MudText>
-            </MudDrawerHeader>
-            <NavMenu/>
-        </MudDrawer>
-        <MudMainContent>
-            @Body
-        </MudMainContent>
-    }
-    else
-    {
-        <MudAppBar></MudAppBar>
-        <MudMainContent>
-            <MudPaper Elevation="0" Height="60vh" Class="d-flex justify-center align-center">
-                <MudPaper Width="40vw">
-                    <MudAlert Severity="Severity.Info">Please login</MudAlert>
-                    <Login></Login>
-                </MudPaper>
-            </MudPaper>
-        </MudMainContent>
-    }
+    <AuthorizeView>
+        <Authorized>
+            <MudAppBar Elevation="0">
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/>
+                <MudSpacer/>
+                <MudIconButton Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Inherit" Link="https://mudblazor.com/" Target="_blank"/>
+                <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/Garderoben/MudBlazor" Target="_blank"/>
+            </MudAppBar>
+            <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
+                <MudDrawerHeader>
+                    <MudText Typo="Typo.h6">Shifty</MudText>
+                </MudDrawerHeader>
+                <NavMenu/>
+            </MudDrawer>
+            <MudMainContent>
+                @Body
+            </MudMainContent>
+        </Authorized>
+        <NotAuthorized>
+            <MudAppBar></MudAppBar>
+                <MudMainContent>
+                    <MudPaper Elevation="0" Height="60vh" Class="d-flex justify-center align-center">
+                        <MudPaper Width="40vw">
+                            <MudAlert Severity="Severity.Info">Please login</MudAlert>
+                            <Login></Login>
+                        </MudPaper>
+                    </MudPaper>
+                </MudMainContent>
+        </NotAuthorized>
+    </AuthorizeView>
 </MudLayout>
 
 @code {
     bool _drawerOpen = true;
-    LoginState _state;
     
     protected override void OnInitialized()
     {
-        _state = _loginState;
-        _loginState.OnChange += StateHasChanged;
     }
 
     void DrawerToggle()

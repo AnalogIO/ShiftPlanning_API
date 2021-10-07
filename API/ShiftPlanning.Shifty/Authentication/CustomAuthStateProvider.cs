@@ -1,9 +1,9 @@
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.IdentityModel.Tokens;
 
 namespace ShiftPlanning.Shifty.Authentication
 {
@@ -18,16 +18,32 @@ namespace ShiftPlanning.Shifty.Authentication
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var tokenString = await _localStorage.GetItemAsync<string>("token");
-            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtString = await _localStorage.GetItemAsync<string>("token");
+            var user = ParseJwtString(jwtString);
             
-            if (tokenHandler.CanReadToken(tokenString))
-            {
-                var token = new JwtSecurityTokenHandler().ReadJwtToken(tokenString);
-                var identity = new ClaimsPrincipal(new ClaimsIdentity(token.Claims));
-            }
+            return new AuthenticationState(user);
+        }
 
-            throw new System.NotImplementedException();
+        public bool UpdateAuthState(string jwtString)
+        {
+            var user = ParseJwtString(jwtString);
+            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(user)));
+            return true;
+        }
+
+        private static ClaimsPrincipal ParseJwtString (string jwtString)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            if (!tokenHandler.CanReadToken(jwtString))
+                return new ClaimsPrincipal();
+
+            var token = new JwtSecurityTokenHandler().ReadJwtToken(jwtString);
+            return (DateTime.UtcNow < token.ValidTo) switch
+            {
+                true => new ClaimsPrincipal(new ClaimsIdentity(token.Claims, "bearerToken")), //Needs the string passed as well, otherwise the user is not set to authenticated
+                false => new ClaimsPrincipal()
+            };
         }
     }
 }
