@@ -14,6 +14,7 @@ using NSwag;
 using ShiftPlanning.Common.Configuration;
 using ShiftPlanning.Model;
 using ShiftPlanning.WebApi.Data;
+using ShiftPlanning.WebApi.Exceptions;
 using ShiftPlanning.WebApi.Helpers.Authorization;
 using ShiftPlanning.WebApi.Helpers.Mappers;
 using ShiftPlanning.WebApi.Repositories;
@@ -101,6 +102,10 @@ namespace ShiftPlanning.WebApi
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
 
+            //Error handling so the end user never sees the exceptions on the server
+            services.AddControllers(options => 
+                options.Filters.Add(new HttpResponseExceptionFilter()));
+
             // Setup Authentication
             var identitySettings = Configuration.GetSection("IdentitySettings").Get<IdentitySettings>();
             services.AddAuthentication(options =>
@@ -116,7 +121,7 @@ namespace ShiftPlanning.WebApi
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(identitySettings.TokenKey)),
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero //the default for this setting is 5 minutes
+                    ClockSkew = TimeSpan.Zero //the default for this setting is 5 
                 };
                 options.Events = new JwtBearerEvents
                 {

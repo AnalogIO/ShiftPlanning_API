@@ -12,18 +12,19 @@ namespace ShiftPlanning.WebApi.Exceptions
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            var contextResult = context.Exception switch
+            if (context.Exception == null) return;
+            Func<ObjectResult> contextResult = context.Exception switch
             {
-                ApiException exception => new ObjectResult(exception.Message)
+                ApiException exception => () => new ObjectResult(exception.Message)
                 {
                     StatusCode = exception.StatusCode,
                 },
-                Exception exception => new ObjectResult(exception.Message)
+                Exception => () => new ObjectResult("An unknown error occured, try again later. If the error persists, contact support")
                 {
                     StatusCode = 500,
                 }
             };
-            context.Result = contextResult;
+            context.Result = contextResult.Invoke();
             context.ExceptionHandled = true;
         }
 

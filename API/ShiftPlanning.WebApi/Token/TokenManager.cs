@@ -60,7 +60,7 @@ namespace ShiftPlanning.WebApi.Token
             var securityToken = TokenHandler.CreateToken(new SecurityTokenDescriptor
             {
                 IssuedAt = DateTime.Now,
-                Expires = DateTime.Now.AddHours(_identitySettings.TokenAgeHour),
+                Expires = DateTime.UtcNow.AddHours(_identitySettings.TokenAgeHour),
                 Subject = new ClaimsIdentity(identityClaims),
                 Issuer = "AnalogIO",
                 Audience = AppliesToAddress,
