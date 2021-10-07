@@ -1,5 +1,7 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
@@ -9,10 +11,12 @@ namespace ShiftPlanning.Shifty.Authentication
 {
     public class CustomAuthStateProvider : AuthenticationStateProvider
     {
+        private readonly HttpClient _httpClient;
         private readonly ILocalStorageService _localStorage;
 
-        public CustomAuthStateProvider(ILocalStorageService storageService)
+        public CustomAuthStateProvider(HttpClient httpClient, ILocalStorageService storageService)
         {
+            _httpClient = httpClient;
             _localStorage = storageService;
         }
 
@@ -20,7 +24,7 @@ namespace ShiftPlanning.Shifty.Authentication
         {
             var jwtString = await _localStorage.GetItemAsync<string>("token");
             var user = ParseJwtString(jwtString);
-            
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", jwtString);
             return new AuthenticationState(user);
         }
 
