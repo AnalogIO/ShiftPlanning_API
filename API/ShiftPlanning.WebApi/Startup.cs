@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using NSwag;
 using ShiftPlanning.Common.Configuration;
@@ -103,8 +104,12 @@ namespace ShiftPlanning.WebApi
                 });
 
             //Error handling so the end user never sees the exceptions on the server
-            services.AddControllers(options => 
-                options.Filters.Add(new HttpResponseExceptionFilter()));
+            //services.AddControllers(options => 
+              //  options.Filters.Add(new HttpResponseExceptionFilter()));
+
+            services.AddCors(options => options.AddDefaultPolicy(builder =>
+                builder.WithOrigins("https://localhost:8001").AllowAnyMethod()
+                    .WithHeaders(HeaderNames.ContentType, HeaderNames.Authorization)));
 
             // Setup Authentication
             var identitySettings = Configuration.GetSection("IdentitySettings").Get<IdentitySettings>();
@@ -165,6 +170,8 @@ namespace ShiftPlanning.WebApi
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {

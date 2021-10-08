@@ -7,8 +7,8 @@ namespace ShiftPlanning.Shifty.Repositories
 {
     public interface IShiftRepository
     {
-        bool CheckOut(int shiftId, int employeeId);
-        bool CheckIn(int shiftId, int employeeId);
+        Task<bool> CheckOut(int shiftId, int employeeId);
+        Task<bool> CheckIn(int shiftId, int employeeId);
         Task<IEnumerable<ShiftDTO>> TodayShifts();
     }
 }

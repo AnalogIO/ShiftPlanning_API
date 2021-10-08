@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -16,14 +17,21 @@ namespace ShiftPlanning.Shifty.Repositories
             _client = client;
         }
         
-        public bool CheckOut(int shiftId, int employeeId)
+        public Task<bool> CheckOut(int shiftId, int employeeId)
         {
             throw new System.NotImplementedException();
         }
 
-        public bool CheckIn(int shiftId, int employeeId)
+        public async Task<bool> CheckIn(int shiftId, int employeeId)
         {
-            throw new System.NotImplementedException();
+            Console.WriteLine(employeeId);
+            
+            var values = new Dictionary<string, string>();
+            values.Add("employeeId", employeeId.ToString());
+            var content = new FormUrlEncodedContent(values);
+            
+            var response = await _client.PostAsync(ControllerUri + "/" + + shiftId + "/checkin?employeeId=" + employeeId, new StringContent(""));
+            return await response.Content.ReadFromJsonAsync<CheckInDTO>() != null;
         }
 
         public Task<IEnumerable<ShiftDTO>> TodayShifts()

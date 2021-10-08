@@ -2,25 +2,30 @@
 @using ShiftPlanning.Shifty.Repositories
 @using ShiftPlanning.DTOs.Shift
 @inject IShiftRepository _shiftRepository
-<MudText Class="H1">ShiftsCheckIn</MudText>
-@if (shifts == null)
-{
-    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
-}
-else
-{
-    @foreach (var shiftDto in shifts)
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
+    <MudText Class="H1">ShiftsCheckIn</MudText>
+    @if (_shifts == null)
     {
-        <MudText>@shiftDto.Start</MudText>
+        <MudProgressCircular Color="Color.Default" Indeterminate="true" Size="Size.Large"/>
     }
-}
-
+    else
+    {
+        <MudExpansionPanels>
+            @foreach (var shiftDto in _shifts)
+                {
+                    <CheckInPanel Shift="shiftDto"></CheckInPanel>
+                }
+        </MudExpansionPanels>
+    }
+</MudContainer>
 
 
 @code {
-    private IEnumerable<ShiftDTO> shifts;
+    private IEnumerable<ShiftDTO> _shifts;
+
     protected override async Task OnInitializedAsync()
     {
-        shifts = await _shiftRepository.TodayShifts();
+        _shifts = await _shiftRepository.TodayShifts();
     }
+
 }
