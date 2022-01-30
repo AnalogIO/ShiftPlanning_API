@@ -1,0 +1,37 @@
+@page "/ShiftsCheckIn"
+@using ShiftPlanning.Shifty.Repositories
+@using ShiftPlanning.DTOs.Shift
+@inject IShiftRepository _shiftRepository
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
+    <MudText Typo="Typo.h3" GutterBottom="true">Shift Check-in</MudText>
+    <MudText Class="mb-8">Check-in on a scheduled shift. Only shifts planned for today can be checked in</MudText>
+    
+    @if (_shifts == null)
+    {
+        <MudProgressCircular Color="Color.Default" Indeterminate="true" Size="Size.Large"/>
+    }
+    else if (_shifts.Any())
+    {
+        <MudExpansionPanels>
+            @foreach (var shiftDto in _shifts)
+            {
+                <CheckInPanel Shift="shiftDto"></CheckInPanel>
+            }
+        </MudExpansionPanels>
+    }
+    else
+    {
+        <MudText Class="mb-8">No shifts are planned for today</MudText>
+    }
+</MudContainer>
+
+
+@code {
+    private IEnumerable<ShiftDTO> _shifts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _shifts = await _shiftRepository.TodayShifts();
+    }
+
+}

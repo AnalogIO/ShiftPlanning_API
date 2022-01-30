@@ -1,0 +1,64 @@
+@using ShiftPlanning.DTOs.Shift
+@using ShiftPlanning.Shifty.Repositories
+
+@inject IShiftRepository _shiftRepository
+
+<MudExpansionPanel Text="@Shift.Start.ToShortTimeString()">
+    @foreach (var employee in Shift.Employees)
+    {
+        <MudContainer>
+            <MudText>@employee.FirstName @employee.LastName</MudText>
+            <MudButton Color="Color.Primary" 
+                       Variant="@(_employeesCheckedIn[employee.Id] == CheckInStatus.CheckedIn ? Variant.Filled : Variant.Outlined)" 
+                       Disabled="@(_employeesCheckedIn[employee.Id] == CheckInStatus.CheckingIn)" 
+                       OnClick="@(async () => await CheckIn(employee.Id))">
+                @switch (_employeesCheckedIn[employee.Id])
+                {
+                    case CheckInStatus.NotCheckedIn:
+                        <MudText Class="ms-2">Check in</MudText>
+                        break;
+                    case CheckInStatus.CheckingIn:
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                        <MudText Class="ms-2">Checking in</MudText>
+                        break;
+                    case CheckInStatus.CheckedIn:
+                        <MudText Class="ms-2">Check out</MudText>
+                        break;
+                }
+            </MudButton>
+        </MudContainer>
+        <MudDivider></MudDivider>
+    }
+</MudExpansionPanel>
+
+@code {
+    [Parameter] public ShiftDTO Shift { get; set; }
+    
+    private Dictionary<int, CheckInStatus> _employeesCheckedIn;
+    private enum CheckInStatus
+    {
+        NotCheckedIn,
+        CheckingIn,
+        CheckedIn
+    }
+
+    protected override void OnInitialized()
+    {
+        _employeesCheckedIn = new Dictionary<int, CheckInStatus>();
+        
+        foreach (var employee in Shift.Employees)
+        {
+            _employeesCheckedIn.Add(employee.Id, Shift.CheckIns.Any(c => c.Employee.Id == employee.Id) ? CheckInStatus.CheckedIn : CheckInStatus.NotCheckedIn);
+        }
+    }
+
+    async Task CheckIn(int employeeId)
+    {
+        if (_employeesCheckedIn[employeeId] == CheckInStatus.NotCheckedIn)
+        {
+            _employeesCheckedIn[employeeId] = CheckInStatus.CheckingIn;
+            await _shiftRepository.CheckIn(Shift.Id, employeeId);
+            _employeesCheckedIn[employeeId] = CheckInStatus.CheckedIn;
+        }
+    }
+}
