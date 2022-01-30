@@ -181,20 +181,19 @@ namespace ShiftPlanning.WebApi.Helpers.Mappers
             return dto;
         }
 
+        /// <summary>
+        /// Get the start of date of the semester.
+        /// When <paramref name="currentTime"/> is in July (Month 7) or greater, the semester start is July 1st or when earlier than July, the semester start is the date of the last Monday of January.
+        /// </summary>
         private static DateTime GetSemesterStart(DateTime currentTime)
         {
-            if (currentTime.Month < 7)
-            {
-                var jan1 = new DateTime(currentTime.Year, 1, 1);
-                var dayOffset = DayOfWeek.Monday - jan1.DayOfWeek;
-                var startDate = 29 - dayOffset;
+            // Autumn semester: Get first day of July.
+            if (currentTime.Month >= 7) return new DateTime(currentTime.Year, 7, 1);
 
-                return new DateTime(currentTime.Year, 1, startDate);
-            }
-            else
-            {
-                return new DateTime(currentTime.Year, 7, 1);
-            }
+            // Spring semester: Get last Monday of January.
+            var lastDayOfJan = new DateTime(currentTime.Year, 1, 31);
+            int correctedLastDayOfWeek = (int)(lastDayOfJan.DayOfWeek + 6) % 7; // Mon=0, Tue=1, ..., Sun=6
+            return lastDayOfJan.AddDays(-correctedLastDayOfWeek);
         }
 
         private static DateTime GetSemesterEnd(DateTime currentTime)
