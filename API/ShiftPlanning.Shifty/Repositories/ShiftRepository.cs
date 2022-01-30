@@ -10,7 +10,7 @@ namespace ShiftPlanning.Shifty.Repositories
     public class ShiftRepository : IShiftRepository
     {
         private readonly HttpClient _client;
-        private const string ControllerUri = "/api/shifts";
+        private const string ControllerUri = "api/shifts";
 
         public ShiftRepository(HttpClient client)
         {

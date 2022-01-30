@@ -10,7 +10,7 @@ namespace ShiftPlanning.Shifty.Repositories
     public class AccountRepository : IAccountRepository
     {
         private readonly HttpClient _client;
-        private const string ControllerUri = "/api/account";
+        private const string ControllerUri = "api/account";
 
         public AccountRepository(HttpClient client)
         {
