@@ -107,8 +107,7 @@ namespace ShiftPlanning.WebApi
                 });
 
             //Error handling so the end user never sees the exceptions on the server
-            //services.AddControllers(options => 
-              //  options.Filters.Add(new HttpResponseExceptionFilter()));
+            services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()));
 
             services.AddCors(options => options.AddDefaultPolicy(builder =>
                 builder.WithOrigins("https://localhost:8001", "https://localhost:44326", "https://shifty.analogio.dk/app").AllowAnyMethod().AllowAnyHeader()
