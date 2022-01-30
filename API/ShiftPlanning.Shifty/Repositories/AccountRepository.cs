@@ -1,9 +1,10 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using MudBlazor.Extensions;
 using ShiftPlanning.DTOs.Employee;
+using ShiftPlanning.Shifty.Exceptions;
 
 namespace ShiftPlanning.Shifty.Repositories
 {
@@ -20,7 +21,21 @@ namespace ShiftPlanning.Shifty.Repositories
         public async Task<EmployeeLoginResponse> Login(EmployeeLoginDTO loginDto)
         {
             var response = await _client.PostAsJsonAsync(ControllerUri + "/login", loginDto);
-            return await response.Content.ReadFromJsonAsync<EmployeeLoginResponse>();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<EmployeeLoginResponse>();
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException();
+            }
+            else
+            {
+                await Console.Error.WriteLineAsync($"Error calling API. Response {response.StatusCode} {await response.Content.ReadAsStringAsync()}");
+                throw new ApiException();
+            }
+            
         }
     }
 }

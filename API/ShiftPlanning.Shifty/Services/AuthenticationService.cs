@@ -1,9 +1,8 @@
-using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using ShiftPlanning.DTOs.Employee;
 using ShiftPlanning.Shifty.Authentication;
+using ShiftPlanning.Shifty.Exceptions;
 using ShiftPlanning.Shifty.Repositories;
 
 namespace ShiftPlanning.Shifty.Services
@@ -29,9 +28,8 @@ namespace ShiftPlanning.Shifty.Services
                 await _localStorage.SetItemAsync("token", login.Token);
                 return _authStateProvider.UpdateAuthState(login.Token);
             }
-            catch (HttpRequestException e)
+            catch (UnauthorizedException)
             {
-                Console.WriteLine(e);
                 return false;
             }
         }
