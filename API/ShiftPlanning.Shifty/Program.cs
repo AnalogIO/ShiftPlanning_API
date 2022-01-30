@@ -21,7 +21,7 @@ namespace ShiftPlanning.Shifty
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddAuthorizationCore();
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:5001") }); //builder.HostEnvironment.BaseAddress
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://shifty.analogio.dk/shiftplanning/") }); //builder.HostEnvironment.BaseAddress
             builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<CustomAuthStateProvider>();

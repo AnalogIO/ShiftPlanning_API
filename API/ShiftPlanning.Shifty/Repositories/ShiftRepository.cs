@@ -17,21 +17,20 @@ namespace ShiftPlanning.Shifty.Repositories
             _client = client;
         }
         
-        public Task<bool> CheckOut(int shiftId, int employeeId)
+        public async Task<bool> CheckOut(int shiftId, int employeeId)
         {
-            throw new System.NotImplementedException();
+            Console.WriteLine(employeeId);
+            
+            var response = await _client.PostAsync(ControllerUri + "/" + + shiftId + "/checkout?employeeId=" + employeeId, new StringContent(""));
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> CheckIn(int shiftId, int employeeId)
         {
             Console.WriteLine(employeeId);
             
-            var values = new Dictionary<string, string>();
-            values.Add("employeeId", employeeId.ToString());
-            var content = new FormUrlEncodedContent(values);
-            
             var response = await _client.PostAsync(ControllerUri + "/" + + shiftId + "/checkin?employeeId=" + employeeId, new StringContent(""));
-            return await response.Content.ReadFromJsonAsync<CheckInDTO>() != null;
+            return response.IsSuccessStatusCode;
         }
 
         public Task<IEnumerable<ShiftDTO>> TodayShifts()
