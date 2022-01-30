@@ -24,6 +24,7 @@
       <PackageReference Include="NSwag.AspNetCore" Version="13.13.2" />
       <PackageReference Include="PasswordGenerator" Version="2.0.5" />
       <PackageReference Include="Podio" Version="1.5.9" />
+      <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.2" />
     </ItemGroup>
 

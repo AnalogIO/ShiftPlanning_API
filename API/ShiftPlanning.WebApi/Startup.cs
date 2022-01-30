@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
@@ -71,7 +72,9 @@ namespace ShiftPlanning.WebApi
             services.AddScoped<IVolunteerMapper, EmployeeMapper>();
             
             services.AddSingleton<WeatherForecastService>();
-            
+
+            services.AddLogging();
+
             // Setup Swagger
             services.AddSwaggerDocument(config =>
             {
@@ -148,8 +151,10 @@ namespace ShiftPlanning.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddFile("logs/log.txt");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
