@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using ShiftPlanning.DTOs.Shift;
+using System.Linq;
 
 namespace ShiftPlanning.Shifty.Repositories
 {
@@ -33,9 +34,13 @@ namespace ShiftPlanning.Shifty.Repositories
             return response.IsSuccessStatusCode;
         }
 
-        public Task<IEnumerable<ShiftDTO>> TodayShifts()
+        public async Task<IEnumerable<ShiftDTO>> TodayShifts()
         {
-            return _client.GetFromJsonAsync<IEnumerable<ShiftDTO>>(ControllerUri + "/today");
+            var shifts = await _client.GetFromJsonAsync<IEnumerable<ShiftDTO>>(ControllerUri + "/today");
+
+            if (shifts == null) return Enumerable.Empty<ShiftDTO>();
+            
+            return shifts.OrderBy(s => s.Start);
         }
     }
 }
