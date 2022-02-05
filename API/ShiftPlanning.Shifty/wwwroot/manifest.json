@@ -1,6 +1,6 @@
 {
-    "name": "ComponentsWebAssembly-CSharp",
-    "short_name": "ComponentsWebAssembly-CSharp",
+    "name": "Shifty",
+    "short_name": "Shifty",
     "start_url": "./",
     "display": "standalone",
     "background_color": "#ffffff",
