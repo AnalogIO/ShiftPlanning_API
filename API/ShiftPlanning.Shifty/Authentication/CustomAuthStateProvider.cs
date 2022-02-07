@@ -24,7 +24,6 @@ namespace ShiftPlanning.Shifty.Authentication
         {
             var jwtString = await _localStorage.GetItemAsync<string>("token");
             var user = ParseJwtString(jwtString);
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", jwtString);
             return new AuthenticationState(user);
         }
 

@@ -18,19 +18,30 @@ namespace ShiftPlanning.Shifty
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
-            builder.Services.AddBlazoredLocalStorage();
-            builder.Services.AddAuthorizationCore();
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://shifty.analogio.dk/shiftplanning/") }); //builder.HostEnvironment.BaseAddress
-            builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
-            builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-            builder.Services.AddScoped<CustomAuthStateProvider>();
-            builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetService<CustomAuthStateProvider>());
-            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
-
-            builder.Services.AddMudServices();
+            ConfigureServices(builder.Services);
 
             await builder.Build().RunAsync();
+        }
+
+        public static void ConfigureServices(IServiceCollection services)
+        {
+            services.AddMudServices();
+            services.AddBlazoredLocalStorage();
+            services.AddAuthorizationCore();
+
+            
+            services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
+                .CreateClient("ShiftPlanning"));
+            services.AddScoped<IShiftRepository, ShiftRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<CustomAuthStateProvider>();
+            services.AddScoped<AuthenticationStateProvider>(s => s.GetService<CustomAuthStateProvider>());
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<RequestAuthenticationHandler>();
+            services.AddHttpClient("ShiftPlanning",
+                    client => client.BaseAddress = new Uri("https://shifty.analogio.dk/shiftplanning/"))
+                .AddHttpMessageHandler<RequestAuthenticationHandler>();
         }
     }
 }
