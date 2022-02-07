@@ -15,7 +15,6 @@ using Newtonsoft.Json;
 using NSwag;
 using ShiftPlanning.Common.Configuration;
 using ShiftPlanning.Model;
-using ShiftPlanning.WebApi.Data;
 using ShiftPlanning.WebApi.Exceptions;
 using ShiftPlanning.WebApi.Helpers.Authorization;
 using ShiftPlanning.WebApi.Helpers.Mappers;
@@ -71,8 +70,6 @@ namespace ShiftPlanning.WebApi
             services.AddScoped<IOpeningHoursMapper, OpeningHoursMapper>();
             services.AddScoped<IVolunteerMapper, EmployeeMapper>();
             
-            services.AddSingleton<WeatherForecastService>();
-
             services.AddLogging();
 
             // Setup Swagger
