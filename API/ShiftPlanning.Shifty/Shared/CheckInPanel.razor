@@ -4,7 +4,7 @@
 
 @inject IShiftRepository _shiftRepository
 
-<MudExpansionPanel Text="@(ExpansionPanelTitle())">
+<MudExpansionPanel Text="@(ExpansionPanelTitle())" IsInitiallyExpanded="@IsExpanded">
     <MudGrid Spacing="2" Justify="Justify.Center" VerticalAlign="GridLayoutVerticalAlign.Center">
         @if (ShiftHasEnded)
         {
@@ -100,6 +100,7 @@
         return title;
     }
 
+    private bool IsExpanded => Shift.Start < DateTime.Now && DateTime.Now < Shift.End; 
     private bool ShiftHasEnded => Shift.End < DateTime.Now;
 
     private bool IsEmployeeCheckedIn(EmployeeDTO employee) => _employeesCheckedIn[employee.Id] == CheckInStatus.CheckedIn;

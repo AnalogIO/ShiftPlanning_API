@@ -1,7 +1,8 @@
 @using ShiftPlanning.Shifty.Pages
+@using MudBlazor.Utilities
 @inherits LayoutComponentBase
 
-<MudThemeProvider />
+<MudThemeProvider Theme="_theme"/>
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -38,7 +39,18 @@
 
 @code {
     bool _drawerOpen = true;
-    
+
+    readonly MudTheme _theme = new MudTheme()
+    {
+        Palette = new Palette()
+        {
+            Primary = new MudColor("#775440"),
+            Secondary = new MudColor("#893c24"),
+            AppbarBackground = new MudColor("#38251a"),
+            Background = new MudColor("#e9e9e9")
+        }
+    };
+
     protected override void OnInitialized()
     {
     }
