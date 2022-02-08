@@ -37,7 +37,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: API/
-          file: Shifty.Dockerfile
+          file: API/Shifty.Dockerfile
           platforms: linux/amd64
           push: true
           tags: 
