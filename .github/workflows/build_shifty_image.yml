@@ -22,6 +22,11 @@ jobs:
       - name: Print branch name
         run: |
           echo ${{ steps.vars.outputs.branchName }}
+      - name: Current dir
+        id: dir
+        run: |
+          pwd
+          ls -a
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1 
         with:
