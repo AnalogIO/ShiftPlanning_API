@@ -3,8 +3,6 @@ name: Build and push Docker container
 on:
   push:
     branches: [ feature/dotnet5Migration, master, feature/TTA777/CD ]
-    paths: 
-      - "API/ShiftPlanning.Shifty/**"
 
 jobs:
   docker:
