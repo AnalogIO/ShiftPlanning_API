@@ -26,7 +26,7 @@
         <NotAuthorized>
             <MudAppBar></MudAppBar>
                 <MudMainContent>
-                    <MudPaper Elevation="0" Height="60vh" Class="d-flex justify-center align-center">
+                    <MudPaper Elevation="0" Height="60vh" Class="d-flex justify-center align-center" Style=@($"background:{_theme.Palette.Background}")>
                         <MudPaper Width="40vw">
                             <MudAlert Severity="Severity.Info">Please login</MudAlert>
                             <Login></Login>
@@ -47,7 +47,7 @@
             Primary = new MudColor("#775440"),
             Secondary = new MudColor("#893c24"),
             AppbarBackground = new MudColor("#38251a"),
-            Background = new MudColor("#e9e9e9")
+            Background = new MudColor("#e9e9e9"),
         }
     };
 
