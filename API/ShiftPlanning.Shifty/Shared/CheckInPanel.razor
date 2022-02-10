@@ -26,7 +26,7 @@
                            OnClick="@(async () => await CheckIn(employee.Id))">
                     <MudText Class="ms-2">Check in</MudText>
                 </MudButton>
-                <MudButton Color="Color.Secondary"
+                <MudButton Color="Color.Error"
                            Variant="Variant.Filled"
                            Disabled="@(ShiftHasEnded || !IsEmployeeCheckedIn(employee))"
                            OnClick="@(async () => await CheckOut(employee.Id))">
