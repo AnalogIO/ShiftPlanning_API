@@ -1,6 +1,7 @@
 @using ShiftPlanning.DTOs.Shift
 @using ShiftPlanning.Shifty.Repositories
 @using ShiftPlanning.DTOs.Employee
+@using MudBlazor.Extensions
 
 @inject IShiftRepository _shiftRepository
 
@@ -20,30 +21,19 @@
                 <MudDivider></MudDivider>
             </MudItem>
             <MudItem xs="5">
-                <MudButton Color="Color.Primary"
-                           Variant="Variant.Filled"
-                           Disabled="@(ShiftHasEnded || IsEmployeeCheckedIn(employee))"
-                           OnClick="@(async () => await CheckIn(employee.Id))">
-                    <MudText Class="ms-2">Check in</MudText>
-                </MudButton>
-                <MudButton Color="Color.Error"
-                           Variant="Variant.Filled"
-                           Disabled="@(ShiftHasEnded || !IsEmployeeCheckedIn(employee))"
-                           OnClick="@(async () => await CheckOut(employee.Id))">
-                    <MudText Class="ms-2">Check out</MudText>
-                </MudButton>
-
-                @if (_employeesCheckedIn[employee.Id] == CheckInStatus.Updating)
-                {
-                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                }
+                <MudSwitch 
+                    Checked="IsEmployeeCheckedIn(employee)" 
+                    CheckedChanged="@((bool e) => IsEmployeeCheckedIn(employee) ? CheckOut(employee.Id) : CheckIn(employee.Id))" 
+                    Color="Color.Primary"
+                    Label="@(IsEmployeeCheckedIn(employee) ? "Checked in" : "Checked out")"
+                    Disabled="@(ShiftHasEnded)"
+                    DisableRipple="@(ShiftHasEnded)"/>
             </MudItem>
         }
     </MudGrid>
 </MudExpansionPanel>
 
 @code {
-
     [Parameter]
     public ShiftDTO Shift { get; set; }
 
