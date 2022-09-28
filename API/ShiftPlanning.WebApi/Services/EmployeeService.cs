@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using PodioAPI;
 using PodioAPI.Models;
 using ShiftPlanning.Common.Configuration;
@@ -21,7 +23,8 @@ namespace ShiftPlanning.WebApi.Services
         private readonly FtpSettings _ftpSettings;
         private readonly PodioSettings _podioSettings;
 
-        public EmployeeService(IOrganizationRepository organizationRepository, IEmployeeRepository employeeRepository, IScheduleRepository scheduleRepository, FtpSettings ftpSettings, PodioSettings podioSettings)
+        public EmployeeService(IOrganizationRepository organizationRepository, IEmployeeRepository employeeRepository,
+            IScheduleRepository scheduleRepository, FtpSettings ftpSettings, PodioSettings podioSettings)
         {
             _organizationRepository = organizationRepository;
             _employeeRepository = employeeRepository;
@@ -90,8 +93,10 @@ namespace ShiftPlanning.WebApi.Services
             newEmployee.Password = saltedPw;
 
             var createdEmployee = _employeeRepository.Create(newEmployee);
-            if (createdEmployee == null) throw new BadRequestException("Please check your input again - the employee could not be created!");
-            emailService.SendNewAccountEmail($"{createdEmployee.FirstName} {createdEmployee.LastName}", createdEmployee.Email, pw, employee.Organization);
+            if (createdEmployee == null)
+                throw new BadRequestException("Please check your input again - the employee could not be created!");
+            emailService.SendNewAccountEmail($"{createdEmployee.FirstName} {createdEmployee.LastName}",
+                createdEmployee.Email, pw, employee.Organization);
             return createdEmployee;
         }
 
@@ -102,7 +107,7 @@ namespace ShiftPlanning.WebApi.Services
 
             var role = _employeeRepository.GetRoles().FirstOrDefault(r => r.Name == "Employee");
 
-            if(!employee.Role_.Contains(role))
+            if (!employee.Role_.Contains(role))
             {
                 employee.Role_.Add(role);
             }
@@ -119,17 +124,21 @@ namespace ShiftPlanning.WebApi.Services
             employee.Password = saltedPw;
 
             _employeeRepository.Update(employee);
-            emailService.SendNewPasswordEmail($"{employee.FirstName} {employee.LastName}", employee.Email, pw, employee.Organization);
+            emailService.SendNewPasswordEmail($"{employee.FirstName} {employee.LastName}", employee.Email, pw,
+                employee.Organization);
         }
 
         public Employee UpdateEmployee(UpdateEmployeeDTO employeeDto, Employee updateEmployee, Photo photo)
         {
             //var updateEmployee = _employeeRepository.Read(employeeId, employee.Organization.Id);
-            if (updateEmployee == null) throw new ObjectNotFoundException("Could not find an employee corresponding to the given id");
-            
-            if(!string.IsNullOrWhiteSpace(employeeDto.OldPassword) && !string.IsNullOrWhiteSpace(employeeDto.NewPassword))
+            if (updateEmployee == null)
+                throw new ObjectNotFoundException("Could not find an employee corresponding to the given id");
+
+            if (!string.IsNullOrWhiteSpace(employeeDto.OldPassword) &&
+                !string.IsNullOrWhiteSpace(employeeDto.NewPassword))
             {
-                if (employeeDto.NewPassword.Length < 8) throw new BadRequestException("Please specify a password with a minimum length of 8 characters");
+                if (employeeDto.NewPassword.Length < 8)
+                    throw new BadRequestException("Please specify a password with a minimum length of 8 characters");
                 if (Login(updateEmployee.Email, employeeDto.OldPassword) != null)
                 {
                     var salt = HashManager.GenerateSalt();
@@ -151,13 +160,15 @@ namespace ShiftPlanning.WebApi.Services
 
         public IEnumerable<Employee> CreateManyEmployees(CreateEmployeeDTO[] employeeDtos, Employee employee)
         {
-            return _employeeRepository.CreateMany(employeeDtos.Select(employeeDto => new Employee {
+            return _employeeRepository.CreateMany(employeeDtos.Select(employeeDto => new Employee
+            {
                 Email = employeeDto.Email,
                 FirstName = employeeDto.FirstName,
                 LastName = employeeDto.LastName,
                 Organization = employee.Organization,
                 Active = true,
-                EmployeeTitle = employee.EmployeeTitle }));
+                EmployeeTitle = employee.EmployeeTitle
+            }));
         }
 
         public void DeleteEmployee(int employeeId, Employee employee)
@@ -172,7 +183,8 @@ namespace ShiftPlanning.WebApi.Services
 
         public Friendship CreateFriendship(Employee employee, int friendId)
         {
-            if(employee.Friendships.Any(f => f.Friend_Id == friendId)) throw new BadRequestException("A friendship already exist!");
+            if (employee.Friendships.Any(f => f.Friend_Id == friendId))
+                throw new BadRequestException("A friendship already exist!");
 
             var friend = _employeeRepository.Read(friendId, employee.Organization.Id);
             if (friend == null) throw new ObjectNotFoundException("The given id of the friend does not exist!");
@@ -210,11 +222,12 @@ namespace ShiftPlanning.WebApi.Services
             newEmployee.Role_.Add(role);
 
             var createdEmployee = _employeeRepository.Create(newEmployee);
-            if (createdEmployee == null) throw new BadRequestException("Please check your input again - the employee could not be created!");
+            if (createdEmployee == null)
+                throw new BadRequestException("Please check your input again - the employee could not be created!");
             return createdEmployee;
         }
 
-        public int SyncEmployees(string shortKey)
+        public async Task<int> SyncEmployees(string shortKey)
         {
             var clientId = _podioSettings.PodioClientId;
             var clientSecret = _podioSettings.PodioClientSecret;
@@ -232,14 +245,15 @@ namespace ShiftPlanning.WebApi.Services
 
             var podio = new Podio(clientId, clientSecret);
 
-            podio.AuthenticateWithApp(appId, appToken);
+            await podio.AuthenticateWithApp(appId, appToken);
 
             var matchedEmployees = new List<Employee>();
 
-            var filteredItems = podio.ItemService.FilterItems(appId: 3999665, sortBy: "last_edit_on", sortDesc: true, limit: 500);
+            var filteredItems =
+                await podio.ItemService.FilterItems(appId: 3999665, sortBy: "last_edit_on", sortDesc: true, limit: 500);
             var employees = _employeeRepository.ReadFromOrganization(shortKey);
 
-            foreach(var item in filteredItems.Items)
+            foreach (var item in filteredItems.Items)
             {
                 var index = item.Title.IndexOf(' ');
                 if (index == -1) continue;
@@ -249,7 +263,7 @@ namespace ShiftPlanning.WebApi.Services
                 var email = "";
 
                 var emailItem = item.Fields.FirstOrDefault(x => x.FieldId.Equals(emailFieldId));
-                if(emailItem != null)
+                if (emailItem != null)
                 {
                     email = (string)emailItem.Values.First["value"];
                 }
@@ -265,26 +279,26 @@ namespace ShiftPlanning.WebApi.Services
 
                 var titles = new List<string>();
                 var titleItem = item.Fields.FirstOrDefault(x => x.FieldId.Equals(30905027));
-                if(titleItem != null)
+                if (titleItem != null)
                 {
                     var id = titleItem.Values.Select(x => (int)x["value"]["id"]).ToList();
 
-                    if(id.Any(x => x.Equals(12)))
+                    if (id.Any(x => x.Equals(12)))
                     {
                         titles.Add("Penguin");
                     }
 
-                    if(id.Any(x => x.Equals(15)))
+                    if (id.Any(x => x.Equals(15)))
                     {
                         titles.Add("Board member");
                     }
 
-                    if(id.Any(x => x.Equals(17)))
+                    if (id.Any(x => x.Equals(17)))
                     {
                         titles.Add("Kitchen Manager");
                     }
 
-                    if(id.Any(x => x.Equals(18)))
+                    if (id.Any(x => x.Equals(18)))
                     {
                         titles.Add("Storage Manager");
                     }
@@ -303,13 +317,15 @@ namespace ShiftPlanning.WebApi.Services
                     {
                         titles.Add("Barista");
                     }
-
                 }
 
                 var employeeTitle = string.Join(", ", titles);
 
-                var employee = employees.FirstOrDefault(x => (x.FirstName.ToLower().Equals(firstName.ToLower()) && x.LastName.ToLower().Equals(lastName.ToLower())) || x.PodioId == item.ItemId || x.Email.ToLower().Equals(email.ToLower()));
-                if(employee == null)
+                var employee = employees.FirstOrDefault(x =>
+                    (x.FirstName.ToLower().Equals(firstName.ToLower()) &&
+                     x.LastName.ToLower().Equals(lastName.ToLower())) || x.PodioId == item.ItemId ||
+                    x.Email.ToLower().Equals(email.ToLower()));
+                if (employee == null)
                 {
                     // ADVANCED SEARCH FOR EXISTING EMPLOYEES
                     /*
@@ -337,14 +353,16 @@ namespace ShiftPlanning.WebApi.Services
 
 
                     //create employee if they do not exist in database
-                    var newEmployeeDto = new CreateEmployeeDTO { Email = email, FirstName = firstName, LastName = lastName, EmployeeTitle = employeeTitle };
+                    var newEmployeeDto = new CreateEmployeeDTO
+                        { Email = email, FirstName = firstName, LastName = lastName, EmployeeTitle = employeeTitle };
                     var analogOrganization = _organizationRepository.ReadByShortKey(shortKey);
                     employee = CreateEmployeeFromPodio(newEmployeeDto, analogOrganization);
                 }
 
                 if (employee != null)
                 {
-                    if (string.IsNullOrEmpty(employee.PhotoUrl)) {
+                    if (string.IsNullOrEmpty(employee.PhotoUrl))
+                    {
                         var pItem = item.Fields.FirstOrDefault(x => x.FieldId.Equals(imageFieldId));
                         if (pItem != null)
                         {
@@ -352,8 +370,8 @@ namespace ShiftPlanning.WebApi.Services
                             var photoName = GetFieldStringValue(pItem, "name");
                             var fileId = GetFieldIntValue(pItem, "file_id");
 
-                            var file = podio.FileService.GetFile(fileId);
-                            var fileResponse = podio.FileService.DownloadFile(file);
+                            var file = await podio.FileService.GetFile(fileId);
+                            var fileResponse = await podio.FileService.DownloadFile(file);
                             var photoMemoryStream = new MemoryStream(fileResponse.FileContents);
 
                             var fileName = $"{item.ItemId}{photoName.Substring(photoName.LastIndexOf('.'))}";
@@ -362,6 +380,7 @@ namespace ShiftPlanning.WebApi.Services
                             employee.PhotoUrl = $"http://img.cafeanalog.dk/baristas/{fileName}";
                         }
                     }
+
                     employee.PodioId = item.ItemId;
                     employee.Active = active;
                     employee.EmployeeTitle = employeeTitle;
@@ -382,7 +401,8 @@ namespace ShiftPlanning.WebApi.Services
             return (int)item.Values.First["value"][fieldKey];
         }
 
-        private static string FtpUpload(MemoryStream memStream, string to_uri, string user_name, string password, string fileName)
+        private static string FtpUpload(MemoryStream memStream, string to_uri, string user_name, string password,
+            string fileName)
         {
             var request = (FtpWebRequest)WebRequest.Create(to_uri + fileName);
             request.Method = WebRequestMethods.Ftp.UploadFile;
@@ -395,8 +415,8 @@ namespace ShiftPlanning.WebApi.Services
             {
                 reqStream.Write(buffer, 0, buffer.Length);
             }
+
             return string.Empty;
         }
-
     }
 }

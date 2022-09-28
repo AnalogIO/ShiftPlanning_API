@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ShiftPlanning.DTOs.Employee;
 using ShiftPlanning.Model.Models;
 
@@ -22,6 +23,6 @@ namespace ShiftPlanning.WebApi.Services
         Friendship CreateFriendship(Employee employee, int friendId);
         void DeleteFriendship(Employee employee, int friendId);
         void ResetPassword(int id, int organizationId);
-        int SyncEmployees(string shortKey);
+        Task<int> SyncEmployees(string shortKey);
     }
 }
