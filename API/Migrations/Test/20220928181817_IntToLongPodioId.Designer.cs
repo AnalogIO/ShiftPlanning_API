@@ -7,20 +7,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShiftPlanning.Model;
 
+#nullable disable
+
 namespace ShiftPlanning.Model.Migrations
 {
     [DbContext(typeof(ShiftPlannerDataContext))]
-    [Migration("20210914142508_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20220928181817_IntToLongPodioId")]
+    partial class IntToLongPodioId
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("prod")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.9")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasDefaultSchema("test")
+                .HasAnnotation("ProductVersion", "6.0.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("EmployeeRole", b =>
                 {
@@ -34,7 +37,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Role_Id");
 
-                    b.ToTable("RoleEmployees");
+                    b.ToTable("RoleEmployees", "test");
                 });
 
             modelBuilder.Entity("EmployeeShift", b =>
@@ -49,15 +52,16 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Shift_Id");
 
-                    b.ToTable("ShiftEmployees");
+                    b.ToTable("ShiftEmployees", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.CheckIn", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("Employee_Id")
                         .HasColumnType("int");
@@ -74,15 +78,16 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Shift_Id");
 
-                    b.ToTable("CheckIns");
+                    b.ToTable("CheckIns", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.EmailSettings", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("EmailHost")
                         .HasColumnType("nvarchar(max)");
@@ -98,15 +103,16 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EmailSettings");
+                    b.ToTable("EmailSettings", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
@@ -132,8 +138,8 @@ namespace ShiftPlanning.Model.Migrations
                     b.Property<string>("PhotoUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PodioId")
-                        .HasColumnType("int");
+                    b.Property<long>("PodioId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Salt")
                         .HasColumnType("nvarchar(max)");
@@ -145,15 +151,16 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Organization_Id");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.EmployeeAssignment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("Employee_Id")
                         .HasColumnType("int");
@@ -170,15 +177,16 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("ScheduledShift_Id");
 
-                    b.ToTable("EmployeeAssignment");
+                    b.ToTable("EmployeeAssignments", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.EmployeeTitle", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("Organization_Id")
                         .HasColumnType("int");
@@ -190,15 +198,16 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Organization_Id");
 
-                    b.ToTable("EmployeeTitle");
+                    b.ToTable("EmployeeTitle", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Friendship", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("Employee_Id")
                         .HasColumnType("int");
@@ -210,15 +219,16 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Employee_Id");
 
-                    b.ToTable("Friendships");
+                    b.ToTable("Friendships", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Organization", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ApiKey")
                         .HasColumnType("nvarchar(max)");
@@ -236,20 +246,21 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("EmailSettings_Id");
 
-                    b.ToTable("Organizations");
+                    b.ToTable("Organizations", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Photo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<byte[]>("Data")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int?>("OrganizationId")
+                    b.Property<int?>("Organization_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Type")
@@ -257,17 +268,18 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrganizationId");
+                    b.HasIndex("Organization_Id");
 
-                    b.ToTable("Photos");
+                    b.ToTable("Photos", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Preference", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("Employee_Id")
                         .HasColumnType("int");
@@ -284,30 +296,32 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("ScheduledShift_Id");
 
-                    b.ToTable("Preferences");
+                    b.ToTable("Preferences", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Schedule", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -322,15 +336,16 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Organization_Id");
 
-                    b.ToTable("Schedules");
+                    b.ToTable("Schedules", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.ScheduledShift", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("Day")
                         .HasColumnType("int");
@@ -354,15 +369,16 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Schedule_Id");
 
-                    b.ToTable("ScheduledShifts");
+                    b.ToTable("ScheduledShifts", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Shift", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("End")
                         .HasColumnType("datetime2");
@@ -382,17 +398,18 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Schedule_Id");
 
-                    b.ToTable("Shifts");
+                    b.ToTable("Shifts", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Token", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
-                    b.Property<int?>("EmployeeId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("Employee_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("TokenHash")
@@ -400,9 +417,9 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("Employee_Id");
 
-                    b.ToTable("Token");
+                    b.ToTable("Tokens", "test");
                 });
 
             modelBuilder.Entity("EmployeeRole", b =>
@@ -507,7 +524,7 @@ namespace ShiftPlanning.Model.Migrations
                 {
                     b.HasOne("ShiftPlanning.Model.Models.Organization", "Organization")
                         .WithMany("Photos")
-                        .HasForeignKey("OrganizationId");
+                        .HasForeignKey("Organization_Id");
 
                     b.Navigation("Organization");
                 });
@@ -568,7 +585,7 @@ namespace ShiftPlanning.Model.Migrations
                 {
                     b.HasOne("ShiftPlanning.Model.Models.Employee", null)
                         .WithMany("Tokens")
-                        .HasForeignKey("EmployeeId");
+                        .HasForeignKey("Employee_Id");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Employee", b =>
@@ -586,9 +603,9 @@ namespace ShiftPlanning.Model.Migrations
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Organization", b =>
                 {
-                    b.Navigation("Employees");
-
                     b.Navigation("EmployeeTitles");
+
+                    b.Navigation("Employees");
 
                     b.Navigation("Photos");
 

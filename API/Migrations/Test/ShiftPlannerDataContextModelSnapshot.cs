@@ -17,7 +17,7 @@ namespace ShiftPlanning.Model.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("prod")
+                .HasDefaultSchema("test")
                 .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -35,7 +35,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Role_Id");
 
-                    b.ToTable("RoleEmployees", "prod");
+                    b.ToTable("RoleEmployees", "test");
                 });
 
             modelBuilder.Entity("EmployeeShift", b =>
@@ -50,7 +50,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Shift_Id");
 
-                    b.ToTable("ShiftEmployees", "prod");
+                    b.ToTable("ShiftEmployees", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.CheckIn", b =>
@@ -76,7 +76,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Shift_Id");
 
-                    b.ToTable("CheckIns", "prod");
+                    b.ToTable("CheckIns", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.EmailSettings", b =>
@@ -101,7 +101,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EmailSettings", "prod");
+                    b.ToTable("EmailSettings", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Employee", b =>
@@ -149,7 +149,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Organization_Id");
 
-                    b.ToTable("Employees", "prod");
+                    b.ToTable("Employees", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.EmployeeAssignment", b =>
@@ -175,7 +175,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("ScheduledShift_Id");
 
-                    b.ToTable("EmployeeAssignments", "prod");
+                    b.ToTable("EmployeeAssignments", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.EmployeeTitle", b =>
@@ -196,7 +196,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Organization_Id");
 
-                    b.ToTable("EmployeeTitle", "prod");
+                    b.ToTable("EmployeeTitle", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Friendship", b =>
@@ -217,7 +217,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Employee_Id");
 
-                    b.ToTable("Friendships", "prod");
+                    b.ToTable("Friendships", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Organization", b =>
@@ -244,7 +244,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("EmailSettings_Id");
 
-                    b.ToTable("Organizations", "prod");
+                    b.ToTable("Organizations", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Photo", b =>
@@ -268,7 +268,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Organization_Id");
 
-                    b.ToTable("Photos", "prod");
+                    b.ToTable("Photos", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Preference", b =>
@@ -294,7 +294,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("ScheduledShift_Id");
 
-                    b.ToTable("Preferences", "prod");
+                    b.ToTable("Preferences", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Role", b =>
@@ -310,7 +310,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", "prod");
+                    b.ToTable("Roles", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Schedule", b =>
@@ -334,7 +334,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Organization_Id");
 
-                    b.ToTable("Schedules", "prod");
+                    b.ToTable("Schedules", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.ScheduledShift", b =>
@@ -367,7 +367,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Schedule_Id");
 
-                    b.ToTable("ScheduledShifts", "prod");
+                    b.ToTable("ScheduledShifts", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Shift", b =>
@@ -396,7 +396,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Schedule_Id");
 
-                    b.ToTable("Shifts", "prod");
+                    b.ToTable("Shifts", "test");
                 });
 
             modelBuilder.Entity("ShiftPlanning.Model.Models.Token", b =>
@@ -417,7 +417,7 @@ namespace ShiftPlanning.Model.Migrations
 
                     b.HasIndex("Employee_Id");
 
-                    b.ToTable("Tokens", "prod");
+                    b.ToTable("Tokens", "test");
                 });
 
             modelBuilder.Entity("EmployeeRole", b =>

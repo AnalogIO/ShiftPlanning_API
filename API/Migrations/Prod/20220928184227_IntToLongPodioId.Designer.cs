@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShiftPlanning.Model;
 
@@ -11,9 +12,10 @@ using ShiftPlanning.Model;
 namespace ShiftPlanning.Model.Migrations
 {
     [DbContext(typeof(ShiftPlannerDataContext))]
-    partial class ShiftPlannerDataContextModelSnapshot : ModelSnapshot
+    [Migration("20220928184227_IntToLongPodioId")]
+    partial class IntToLongPodioId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

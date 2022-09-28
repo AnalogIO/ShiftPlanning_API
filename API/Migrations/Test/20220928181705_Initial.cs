@@ -1,18 +1,20 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace ShiftPlanning.Model.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "prod");
+                name: "test");
 
             migrationBuilder.CreateTable(
                 name: "EmailSettings",
-                schema: "prod",
+                schema: "test",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -29,7 +31,7 @@ namespace ShiftPlanning.Model.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Roles",
-                schema: "prod",
+                schema: "test",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -43,7 +45,7 @@ namespace ShiftPlanning.Model.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Organizations",
-                schema: "prod",
+                schema: "test",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -59,15 +61,14 @@ namespace ShiftPlanning.Model.Migrations
                     table.ForeignKey(
                         name: "FK_Organizations_EmailSettings_EmailSettings_Id",
                         column: x => x.EmailSettings_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "EmailSettings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Employees",
-                schema: "prod",
+                schema: "test",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -90,15 +91,14 @@ namespace ShiftPlanning.Model.Migrations
                     table.ForeignKey(
                         name: "FK_Employees_Organizations_Organization_Id",
                         column: x => x.Organization_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "Organizations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "EmployeeTitle",
-                schema: "prod",
+                schema: "test",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -112,38 +112,36 @@ namespace ShiftPlanning.Model.Migrations
                     table.ForeignKey(
                         name: "FK_EmployeeTitle_Organizations_Organization_Id",
                         column: x => x.Organization_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "Organizations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Photos",
-                schema: "prod",
+                schema: "test",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Data = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OrganizationId = table.Column<int>(type: "int", nullable: true)
+                    Organization_Id = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Photos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Photos_Organizations_OrganizationId",
-                        column: x => x.OrganizationId,
-                        principalSchema: "prod",
+                        name: "FK_Photos_Organizations_Organization_Id",
+                        column: x => x.Organization_Id,
+                        principalSchema: "test",
                         principalTable: "Organizations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Schedules",
-                schema: "prod",
+                schema: "test",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -158,15 +156,14 @@ namespace ShiftPlanning.Model.Migrations
                     table.ForeignKey(
                         name: "FK_Schedules_Organizations_Organization_Id",
                         column: x => x.Organization_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "Organizations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Friendships",
-                schema: "prod",
+                schema: "test",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -180,7 +177,7 @@ namespace ShiftPlanning.Model.Migrations
                     table.ForeignKey(
                         name: "FK_Friendships_Employees_Employee_Id",
                         column: x => x.Employee_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -188,7 +185,7 @@ namespace ShiftPlanning.Model.Migrations
 
             migrationBuilder.CreateTable(
                 name: "RoleEmployees",
-                schema: "prod",
+                schema: "test",
                 columns: table => new
                 {
                     Employee_Id = table.Column<int>(type: "int", nullable: false),
@@ -200,44 +197,43 @@ namespace ShiftPlanning.Model.Migrations
                     table.ForeignKey(
                         name: "FK_RoleEmployees_Employees_Employee_Id",
                         column: x => x.Employee_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RoleEmployees_Roles_Role_Id",
                         column: x => x.Role_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Token",
-                schema: "prod",
+                name: "Tokens",
+                schema: "test",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TokenHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EmployeeId = table.Column<int>(type: "int", nullable: true)
+                    Employee_Id = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Token", x => x.Id);
+                    table.PrimaryKey("PK_Tokens", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Token_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalSchema: "prod",
+                        name: "FK_Tokens_Employees_Employee_Id",
+                        column: x => x.Employee_Id,
+                        principalSchema: "test",
                         principalTable: "Employees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "ScheduledShifts",
-                schema: "prod",
+                schema: "test",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -255,15 +251,14 @@ namespace ShiftPlanning.Model.Migrations
                     table.ForeignKey(
                         name: "FK_ScheduledShifts_Schedules_Schedule_Id",
                         column: x => x.Schedule_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "Schedules",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Shifts",
-                schema: "prod",
+                schema: "test",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -279,22 +274,20 @@ namespace ShiftPlanning.Model.Migrations
                     table.ForeignKey(
                         name: "FK_Shifts_Organizations_Organization_Id",
                         column: x => x.Organization_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "Organizations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Shifts_Schedules_Schedule_Id",
                         column: x => x.Schedule_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "Schedules",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmployeeAssignment",
-                schema: "prod",
+                name: "EmployeeAssignments",
+                schema: "test",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -305,26 +298,24 @@ namespace ShiftPlanning.Model.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmployeeAssignment", x => x.Id);
+                    table.PrimaryKey("PK_EmployeeAssignments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EmployeeAssignment_Employees_Employee_Id",
+                        name: "FK_EmployeeAssignments_Employees_Employee_Id",
                         column: x => x.Employee_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "Employees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_EmployeeAssignment_ScheduledShifts_ScheduledShift_Id",
+                        name: "FK_EmployeeAssignments_ScheduledShifts_ScheduledShift_Id",
                         column: x => x.ScheduledShift_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "ScheduledShifts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Preferences",
-                schema: "prod",
+                schema: "test",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -339,14 +330,14 @@ namespace ShiftPlanning.Model.Migrations
                     table.ForeignKey(
                         name: "FK_Preferences_Employees_Employee_Id",
                         column: x => x.Employee_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Preferences_ScheduledShifts_ScheduledShift_Id",
                         column: x => x.ScheduledShift_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "ScheduledShifts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -354,7 +345,7 @@ namespace ShiftPlanning.Model.Migrations
 
             migrationBuilder.CreateTable(
                 name: "CheckIns",
-                schema: "prod",
+                schema: "test",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -369,22 +360,20 @@ namespace ShiftPlanning.Model.Migrations
                     table.ForeignKey(
                         name: "FK_CheckIns_Employees_Employee_Id",
                         column: x => x.Employee_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "Employees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_CheckIns_Shifts_Shift_Id",
                         column: x => x.Shift_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "Shifts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "ShiftEmployees",
-                schema: "prod",
+                schema: "test",
                 columns: table => new
                 {
                     Employee_Id = table.Column<int>(type: "int", nullable: false),
@@ -396,14 +385,14 @@ namespace ShiftPlanning.Model.Migrations
                     table.ForeignKey(
                         name: "FK_ShiftEmployees_Employees_Employee_Id",
                         column: x => x.Employee_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ShiftEmployees_Shifts_Shift_Id",
                         column: x => x.Shift_Id,
-                        principalSchema: "prod",
+                        principalSchema: "test",
                         principalTable: "Shifts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -411,178 +400,178 @@ namespace ShiftPlanning.Model.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_CheckIns_Employee_Id",
-                schema: "prod",
+                schema: "test",
                 table: "CheckIns",
                 column: "Employee_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CheckIns_Shift_Id",
-                schema: "prod",
+                schema: "test",
                 table: "CheckIns",
                 column: "Shift_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeeAssignment_Employee_Id",
-                schema: "prod",
-                table: "EmployeeAssignment",
+                name: "IX_EmployeeAssignments_Employee_Id",
+                schema: "test",
+                table: "EmployeeAssignments",
                 column: "Employee_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeeAssignment_ScheduledShift_Id",
-                schema: "prod",
-                table: "EmployeeAssignment",
+                name: "IX_EmployeeAssignments_ScheduledShift_Id",
+                schema: "test",
+                table: "EmployeeAssignments",
                 column: "ScheduledShift_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_Organization_Id",
-                schema: "prod",
+                schema: "test",
                 table: "Employees",
                 column: "Organization_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployeeTitle_Organization_Id",
-                schema: "prod",
+                schema: "test",
                 table: "EmployeeTitle",
                 column: "Organization_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Friendships_Employee_Id",
-                schema: "prod",
+                schema: "test",
                 table: "Friendships",
                 column: "Employee_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Organizations_EmailSettings_Id",
-                schema: "prod",
+                schema: "test",
                 table: "Organizations",
                 column: "EmailSettings_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Photos_OrganizationId",
-                schema: "prod",
+                name: "IX_Photos_Organization_Id",
+                schema: "test",
                 table: "Photos",
-                column: "OrganizationId");
+                column: "Organization_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Preferences_Employee_Id",
-                schema: "prod",
+                schema: "test",
                 table: "Preferences",
                 column: "Employee_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Preferences_ScheduledShift_Id",
-                schema: "prod",
+                schema: "test",
                 table: "Preferences",
                 column: "ScheduledShift_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleEmployees_Role_Id",
-                schema: "prod",
+                schema: "test",
                 table: "RoleEmployees",
                 column: "Role_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ScheduledShifts_Schedule_Id",
-                schema: "prod",
+                schema: "test",
                 table: "ScheduledShifts",
                 column: "Schedule_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Schedules_Organization_Id",
-                schema: "prod",
+                schema: "test",
                 table: "Schedules",
                 column: "Organization_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShiftEmployees_Shift_Id",
-                schema: "prod",
+                schema: "test",
                 table: "ShiftEmployees",
                 column: "Shift_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Shifts_Organization_Id",
-                schema: "prod",
+                schema: "test",
                 table: "Shifts",
                 column: "Organization_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Shifts_Schedule_Id",
-                schema: "prod",
+                schema: "test",
                 table: "Shifts",
                 column: "Schedule_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Token_EmployeeId",
-                schema: "prod",
-                table: "Token",
-                column: "EmployeeId");
+                name: "IX_Tokens_Employee_Id",
+                schema: "test",
+                table: "Tokens",
+                column: "Employee_Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "CheckIns",
-                schema: "prod");
+                schema: "test");
 
             migrationBuilder.DropTable(
-                name: "EmployeeAssignment",
-                schema: "prod");
+                name: "EmployeeAssignments",
+                schema: "test");
 
             migrationBuilder.DropTable(
                 name: "EmployeeTitle",
-                schema: "prod");
+                schema: "test");
 
             migrationBuilder.DropTable(
                 name: "Friendships",
-                schema: "prod");
+                schema: "test");
 
             migrationBuilder.DropTable(
                 name: "Photos",
-                schema: "prod");
+                schema: "test");
 
             migrationBuilder.DropTable(
                 name: "Preferences",
-                schema: "prod");
+                schema: "test");
 
             migrationBuilder.DropTable(
                 name: "RoleEmployees",
-                schema: "prod");
+                schema: "test");
 
             migrationBuilder.DropTable(
                 name: "ShiftEmployees",
-                schema: "prod");
+                schema: "test");
 
             migrationBuilder.DropTable(
-                name: "Token",
-                schema: "prod");
+                name: "Tokens",
+                schema: "test");
 
             migrationBuilder.DropTable(
                 name: "ScheduledShifts",
-                schema: "prod");
+                schema: "test");
 
             migrationBuilder.DropTable(
                 name: "Roles",
-                schema: "prod");
+                schema: "test");
 
             migrationBuilder.DropTable(
                 name: "Shifts",
-                schema: "prod");
+                schema: "test");
 
             migrationBuilder.DropTable(
                 name: "Employees",
-                schema: "prod");
+                schema: "test");
 
             migrationBuilder.DropTable(
                 name: "Schedules",
-                schema: "prod");
+                schema: "test");
 
             migrationBuilder.DropTable(
                 name: "Organizations",
-                schema: "prod");
+                schema: "test");
 
             migrationBuilder.DropTable(
                 name: "EmailSettings",
-                schema: "prod");
+                schema: "test");
         }
     }
 }
