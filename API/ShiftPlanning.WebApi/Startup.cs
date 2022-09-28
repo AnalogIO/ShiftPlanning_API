@@ -107,7 +107,7 @@ namespace ShiftPlanning.WebApi
             services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()));
 
             services.AddCors(options => options.AddDefaultPolicy(builder =>
-                builder.WithOrigins("https://localhost:8001", "https://localhost:44326", "https://shifty.analogio.dk/app").AllowAnyMethod().AllowAnyHeader()
+                builder.WithOrigins("https://localhost:8001", "https://localhost:44326", "https://shifty.analogio.dk/app", "https://shiftplanning.cafeanalog.dk").AllowAnyMethod().AllowAnyHeader()
                     .WithHeaders(HeaderNames.ContentType, HeaderNames.Authorization)));
 
             // Setup Authentication

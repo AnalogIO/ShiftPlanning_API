@@ -22,10 +22,14 @@
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
       <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.15.1" />
+      <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
       <PackageReference Include="NSwag.AspNetCore" Version="13.15.7" />
       <PackageReference Include="PasswordGenerator" Version="2.1.0" />
       <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.1" />
+      <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
+      <PackageReference Include="System.IO.FileSystem.Primitives" Version="4.3.0" />
+      <PackageReference Include="System.Net.Primitives" Version="4.3.0" />
       <PackageReference Include="Tvermose.Podio.Async" Version="2.0.6" />
     </ItemGroup>
 
