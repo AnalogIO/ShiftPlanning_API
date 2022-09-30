@@ -70,8 +70,6 @@ namespace ShiftPlanning.WebApi
             services.AddScoped<IOpeningHoursMapper, OpeningHoursMapper>();
             services.AddScoped<IVolunteerMapper, EmployeeMapper>();
             
-            services.AddLogging();
-
             // Setup Swagger
             services.AddSwaggerDocument(config =>
             {
