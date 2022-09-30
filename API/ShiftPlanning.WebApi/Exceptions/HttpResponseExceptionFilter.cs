@@ -28,7 +28,7 @@ namespace ShiftPlanning.WebApi.Exceptions
                 },
                 Exception exception => () =>
                 {
-                    Log.Error($"An unknown exception occured");
+                    Log.Error("An unknown exception occured");
                     Log.Error(exception.Message);
                     Log.Error(exception.StackTrace);
                     return new ObjectResult(

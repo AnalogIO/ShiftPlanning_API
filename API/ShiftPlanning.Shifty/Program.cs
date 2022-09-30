@@ -40,7 +40,7 @@ namespace ShiftPlanning.Shifty
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<RequestAuthenticationHandler>();
             services.AddHttpClient("ShiftPlanning",
-                    client => client.BaseAddress = new Uri("https://shifty.analogio.dk/shiftplanning/"))
+                    client => client.BaseAddress = new Uri("https://analogio.dk/shiftplanning/"))
                 .AddHttpMessageHandler<RequestAuthenticationHandler>();
         }
     }

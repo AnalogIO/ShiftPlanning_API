@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using NSwag;
+using Serilog;
 using ShiftPlanning.Common.Configuration;
 using ShiftPlanning.Model;
 using ShiftPlanning.WebApi.Exceptions;
@@ -159,6 +160,8 @@ namespace ShiftPlanning.WebApi
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseSerilogRequestLogging();
 
             app.UseOpenApi();
             app.UseSwaggerUi3();
