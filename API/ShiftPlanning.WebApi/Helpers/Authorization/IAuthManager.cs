@@ -11,6 +11,5 @@ namespace ShiftPlanning.WebApi.Helpers.Authorization
         Employee GetEmployeeByHeader(IHeaderDictionary headers);
         bool ValidateOrganizationApiKey(string apiKey);
         IEnumerable<Role> GetRoles(string token);
-        bool IsManager(IHeaderDictionary headers);
     }
 }

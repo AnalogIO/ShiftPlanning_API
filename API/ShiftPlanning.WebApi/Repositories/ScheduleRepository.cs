@@ -43,6 +43,7 @@ namespace ShiftPlanning.WebApi.Repositories
         {
             return _context.Schedules
                 .Where(x => x.Id == id && x.Organization.Id == organizationId)
+                .Include(x => x.Shifts)
                 .Include(x => x.ScheduledShifts)
                 .ThenInclude(shift => shift.EmployeeAssignments)
                 .ThenInclude(assignment => assignment.Employee)
@@ -82,7 +83,9 @@ namespace ShiftPlanning.WebApi.Repositories
 
         public void DeleteScheduledShift(int scheduleId, int scheduledShiftId, int organizationId)
         {
-            var schedule = _context.Schedules.SingleOrDefault(x => x.Id == scheduleId && x.Organization.Id == organizationId);
+            var schedule = _context.Schedules
+                .Include(x => x.ScheduledShifts)
+                .SingleOrDefault(x => x.Id == scheduleId && x.Organization.Id == organizationId);
             if (schedule == null) throw new ObjectNotFoundException("Could not find a schedule corresponding to the given id");
 
             var scheduledShift = schedule.ScheduledShifts.SingleOrDefault(x => x.Id == scheduledShiftId);

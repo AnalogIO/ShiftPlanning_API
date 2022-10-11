@@ -176,7 +176,8 @@ namespace ShiftPlanning.WebApi.Controllers
 
             var employees = _employeeService.GetEmployees(organization.Id);
             if (employees == null) return NotFound();
-            if(_authManager.IsManager(Request.Headers))
+            //get claims of the Role type
+            if(User.IsInRole("Manager"))
             {
                 return Ok(Mapper.Map(employees.OrderBy(e => e.FirstName).ThenBy(e => e.LastName)));
             }

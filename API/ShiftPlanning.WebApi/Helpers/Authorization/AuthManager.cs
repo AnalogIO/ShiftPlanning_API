@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Primitives;
 using ShiftPlanning.Model.Models;
 using ShiftPlanning.WebApi.Exceptions;
 using ShiftPlanning.WebApi.Repositories;
@@ -44,16 +41,6 @@ namespace ShiftPlanning.WebApi.Helpers.Authorization
             if (token.ToString() == null) throw new ObjectNotFoundException("Could not find a manager corresponding to the given 'Authorization' header");
             var tokenHash = token.ToString().Remove(0, 7); //Removes the "Bearer " part of the token in the header
             return _employeeRepository.Read(tokenHash);
-        }
-
-        public bool IsManager(IHeaderDictionary headers)
-        {
-            headers.TryGetValue("Authorization", out var token);
-            if (token.ToString() == null) throw new ObjectNotFoundException("Could not find a manager corresponding to the given 'Authorization' header");
-            var employee = _employeeRepository.Read(token);
-            if (employee == null) return false;
-            if (employee.Role_.Any(r => r.Name == "Manager")) return true;
-            return false;
         }
 
         public IEnumerable<Role> GetRoles(string token)

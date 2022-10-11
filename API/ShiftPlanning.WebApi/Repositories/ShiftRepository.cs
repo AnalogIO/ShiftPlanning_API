@@ -37,7 +37,7 @@ namespace ShiftPlanning.WebApi.Repositories
 
         public void Delete(int id, int organizationId)
         {
-            var shift = _context.Shifts.FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
+            var shift = _context.Shifts.Include(x => x.CheckIns).FirstOrDefault(x => x.Id == id && x.Organization.Id == organizationId);
             if (shift == null) throw new ObjectNotFoundException("Could not find a shift corresponding to the given id");
 
             if(shift.CheckIns.Any()) throw new ForbiddenException("You cannot delete a shift that contains checked in employees");

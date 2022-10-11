@@ -60,7 +60,8 @@ namespace ShiftPlanning.WebApi.Repositories
         {
             return _context.Employees
                 .Where(e => e.Organization.Id == organizationId).OrderBy(x => x.Id)
-                .Include(x => x.Role_);
+                .Include(x => x.Role_)
+                .Include(x => x.CheckIns);
         }
 
         public IEnumerable<Employee> ReadFromOrganization(string shortKey)
