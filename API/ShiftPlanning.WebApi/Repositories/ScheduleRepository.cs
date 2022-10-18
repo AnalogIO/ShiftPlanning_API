@@ -44,6 +44,7 @@ namespace ShiftPlanning.WebApi.Repositories
             return _context.Schedules
                 .Where(x => x.Id == id && x.Organization.Id == organizationId)
                 .Include(x => x.Shifts)
+                .ThenInclude(shift => shift.CheckIns)
                 .Include(x => x.ScheduledShifts)
                 .ThenInclude(shift => shift.EmployeeAssignments)
                 .ThenInclude(assignment => assignment.Employee)
