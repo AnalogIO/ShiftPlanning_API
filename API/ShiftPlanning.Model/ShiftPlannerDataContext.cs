@@ -7,8 +7,9 @@ namespace ShiftPlanning.Model
     public class ShiftPlannerDataContext : DbContext, IShiftPlannerDataContext
     {
         private readonly DatabaseSettings _databaseSettings;
-        
-        public ShiftPlannerDataContext(DbContextOptions<ShiftPlannerDataContext> options, DatabaseSettings databaseSettings): base(options)
+
+        public ShiftPlannerDataContext(DbContextOptions<ShiftPlannerDataContext> options,
+            DatabaseSettings databaseSettings) : base(options)
         {
             _databaseSettings = databaseSettings;
         }
@@ -23,6 +24,13 @@ namespace ShiftPlanning.Model
         public DbSet<Role> Roles { get; set; }
         public DbSet<Preference> Preferences { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(
+                o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
+            );
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using ShiftPlanning.Model.Models;
 using ShiftPlanning.WebApi.Helpers.Authorization;
 using ShiftPlanning.WebApi.Helpers.Mappers;
 using ShiftPlanning.WebApi.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace ShiftPlanning.WebApi.Controllers
 {
@@ -30,7 +32,7 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </summary>
         /// <param name="authManager"></param>
         /// <param name="friendshipService"></param>
-        /// <param name="ëmployeeService"></param>
+        /// <param name="employeeService"></param>
         public AccountController(IAuthManager authManager, IFriendshipService friendshipService, IEmployeeService employeeService, IPhotoMapper photoMapper, IdentitySettings identitySettings)
         {
             _authManager = authManager;
@@ -42,6 +44,8 @@ namespace ShiftPlanning.WebApi.Controllers
 
         [Authorize(Roles = "Employee")]
         [HttpPost, Route("friendships")]
+        [ProducesResponseType(typeof(FriendshipDTO), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult CreateFriendship([FromBody] CreateFriendshipDTO dto)
         {
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
@@ -54,6 +58,7 @@ namespace ShiftPlanning.WebApi.Controllers
 
         [Authorize(Roles = "Employee")]
         [HttpDelete, Route("friendships/{friendshipId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult DeleteFriendship(int friendshipId)
         {
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
@@ -65,6 +70,7 @@ namespace ShiftPlanning.WebApi.Controllers
 
         [Authorize(Roles = "Employee")]
         [HttpGet, Route("friendships")]
+        [ProducesResponseType(typeof(IEnumerable<FriendshipDTO>), StatusCodes.Status200OK)]
         public IActionResult GetFriendships()
         {
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
@@ -85,6 +91,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Employee")]
         [HttpPut, Route("")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult Update([FromBody] UpdateEmployeeDTO dto)
         {
             if (!ModelState.IsValid)
@@ -127,6 +135,9 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [AllowAnonymous]
         [HttpPost, Route("login")]
+        [ProducesResponseType(typeof(EmployeeLoginResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         public IActionResult Login(EmployeeLoginDTO loginDto)
         {
             if (!ModelState.IsValid)

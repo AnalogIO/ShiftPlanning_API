@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShiftPlanning.DTOs.Employee;
+using ShiftPlanning.DTOs.General;
 using ShiftPlanning.Model.Models;
 using ShiftPlanning.WebApi.Exceptions;
 using ShiftPlanning.WebApi.Helpers.Authorization;
@@ -39,6 +42,7 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <returns>A collection of employees, if the organization was found. Http 404 otherwise.</returns>
         [HttpGet, Route("{shortKey}")]
         [ProducesResponseType(typeof(IEnumerable<EmployeeDTO>), 200)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Get(string shortKey, bool active = true)
         {
             var employees = _employeeService.GetEmployeesByActivity(shortKey, active)?.ToList();
@@ -58,7 +62,9 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <param name="id">The id of the employee.</param>
         /// <returns>A representation of the employee, if a shortKey/id match was found.</returns>
         [HttpGet, Route("{shortKey}/{id}")]
-        [ProducesResponseType(typeof(EmployeeDTO),200)]
+        [ProducesResponseType(typeof(EmployeeDTO),StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public IActionResult Get(string shortKey, int id)
         {
             var employee = _employeeService.GetEmployee(id, shortKey);
@@ -80,7 +86,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Manager")]
         [HttpPost, Route("")]
-        [ProducesResponseType(typeof(EmployeeDTO), 201)]
+        [ProducesResponseType(typeof(EmployeeDTO), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Create(CreateEmployeeDTO employeeDto)
         {
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
@@ -115,7 +122,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Manager")]
         [HttpPost, Route("createmany")]
-        [ProducesResponseType(typeof(IEnumerable<EmployeeDTO>), 201)]
+        [ProducesResponseType(typeof(IEnumerable<EmployeeDTO>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult CreateMany(CreateEmployeeDTO[] employeeDtos)
         {
             if (!ModelState.IsValid)
@@ -144,6 +152,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Manager")]
         [HttpPost, Route("{id}/resetpassword")]
+        [ProducesResponseType(typeof(GeneralMessage), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult ResetPassword(int id)
         {
             if (!ModelState.IsValid)
@@ -169,6 +179,9 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Manager, Employee, Application")]
         [HttpGet, Route("")]
+        [ProducesResponseType(typeof(IEnumerable<EmployeeDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Get()
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
@@ -198,7 +211,9 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Manager")]
         [HttpGet, Route("{id:int}")]
-        [ProducesResponseType(typeof(EmployeeDTO), 200)]
+        [ProducesResponseType(typeof(EmployeeDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Get(int id)
         {
             if (!ModelState.IsValid)
@@ -230,6 +245,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Employee")]
         [HttpPut, Route("")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult Put(UpdateEmployeeDTO employeeDto)
         {
             if (!ModelState.IsValid)
@@ -275,6 +292,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Manager")]
         [HttpPut, Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult UpdateEmployee(int id, UpdateEmployeeDTO employeeDto)
         {
             if (!ModelState.IsValid)
@@ -319,6 +338,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <returns>Returns 'No Content' (204) if the employee gets deleted.</returns>
         [Authorize(Roles = "Manager")]
         [HttpDelete, Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int id)
         {
             if (!ModelState.IsValid)
@@ -335,14 +356,16 @@ namespace ShiftPlanning.WebApi.Controllers
 
         [AllowAnonymous]
         [HttpGet, Route("podiosync")]
-        public IActionResult PodioSync(string shortKey = "analog")
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> PodioSync(string shortKey = "analog")
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var updatedCount = _employeeService.SyncEmployees(shortKey);
+            var updatedCount = await _employeeService.SyncEmployees(shortKey);
             return Ok(new { SyncCount = updatedCount });
         }
 

@@ -13,6 +13,8 @@ using ShiftPlanning.Model.Models;
 using ShiftPlanning.WebApi.Helpers.Authorization;
 using ShiftPlanning.WebApi.Helpers.Mappers;
 using ShiftPlanning.WebApi.Services;
+using Microsoft.AspNetCore.Http;
+using ShiftPlanning.DTOs.Shift;
 
 namespace ShiftPlanning.WebApi.Controllers
 {
@@ -32,6 +34,7 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </summary>
         /// <param name="authManager"></param>
         /// <param name="scheduleService"></param>
+        /// <param name="employeeService"></param>
         public ScheduleController(IAuthManager authManager, IScheduleService scheduleService, IEmployeeService employeeService)
         {
             _authManager = authManager;
@@ -49,6 +52,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Manager, Employee")]
         [HttpGet, Route("")]
+        [ProducesResponseType(typeof(IEnumerable<ScheduleDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get()
         {
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
@@ -70,6 +75,10 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Manager, Employee")]
         [HttpGet, Route("{id}")]
+        [ProducesResponseType(typeof(ScheduleDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ScheduleDTOSimple), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Get(int id)
         {
             if (!ModelState.IsValid)
@@ -110,6 +119,9 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Employee")]
         [HttpGet, Route("{id}/preferences")]
+        [ProducesResponseType(typeof(IEnumerable<PreferenceDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetPreferences(int id)
         {
             if (!ModelState.IsValid)
@@ -141,6 +153,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Manager")]
         [HttpPost, Route("")]
+        [ProducesResponseType(typeof(ScheduleDTO), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult Register(CreateScheduleDTO scheduleDto)
         {
             if (!ModelState.IsValid)
@@ -168,6 +182,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <returns>Returns 'No Content' (204) if the schedule gets deleted.</returns>
         [Authorize(Roles = "Manager")]
         [HttpDelete, Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int id)
         {
             if (!ModelState.IsValid)
@@ -192,7 +208,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Employee")]
         [HttpPut, Route("{id}/preferences")]
-        [ProducesResponseType(typeof(IEnumerable<PreferenceDTO>), 204)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult SetPreferences(int id, IEnumerable<PreferenceDTO> preferencesDtos)
         {
             if (!ModelState.IsValid)
@@ -221,6 +238,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Manager")]
         [HttpPut, Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult UpdateSchedule(int id, UpdateScheduleDTO scheduleDto)
         {
             if (!ModelState.IsValid)
@@ -251,6 +270,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Manager")]
         [HttpPost, Route("{id}")]
+        [ProducesResponseType(typeof(ScheduledShiftDTO), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult CreateScheduledShift(int id, CreateScheduledShiftDTO scheduledShiftDto)
         {
             if (!ModelState.IsValid)
@@ -280,6 +301,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Manager")]
         [HttpPut, Route("{scheduleId}/{scheduledShiftId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult UpdateScheduledShift(int scheduleId, int scheduledShiftId, UpdateScheduledShiftDTO scheduledShiftDto)
         {
             if (!ModelState.IsValid)
@@ -310,6 +333,7 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Manager")]
         [HttpDelete, Route("{scheduleId}/{scheduledShiftId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult DeleteScheduledShift(int scheduleId, int scheduledShiftId)
         {
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
@@ -329,6 +353,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Manager")]
         [HttpPost, Route("{id}/createmultiple")]
+        [ProducesResponseType(typeof(IEnumerable<ScheduledShiftDTO>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult CreateMultipleScheduledShift(int id, IEnumerable<CreateScheduledShiftDTO> scheduledShiftsDto)
         {
             if (!ModelState.IsValid)
@@ -359,6 +385,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// </returns>
         [Authorize(Roles = "Manager")]
         [HttpPost, Route("{id}/rollout")]
+        [ProducesResponseType(typeof(IEnumerable<ShiftDTO>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult RolloutSchedule(int id, RolloutScheduleDTO rolloutDto)
         {
             if (!ModelState.IsValid)

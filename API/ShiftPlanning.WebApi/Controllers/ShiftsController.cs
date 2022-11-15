@@ -8,6 +8,8 @@ using ShiftPlanning.DTOs.Shift;
 using ShiftPlanning.WebApi.Helpers.Authorization;
 using ShiftPlanning.WebApi.Helpers.Mappers;
 using ShiftPlanning.WebApi.Services;
+using Microsoft.AspNetCore.Http;
+using ShiftPlanning.DTOs.General;
 
 namespace ShiftPlanning.WebApi.Controllers
 {
@@ -41,7 +43,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <param name="shortKey">ShortKey of the institution to fetch opening hours for.</param>
         /// <returns>A collection of OpeningHoursDTO. NotFound if organizationRepository was not found.</returns>
         [HttpGet, Route("{shortKey}")]
-        [ProducesResponseType(typeof(IEnumerable<OpeningHoursDTO>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<OpeningHoursDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Get(string shortKey)
         {
             //var monday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
@@ -62,7 +65,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <param name="shortKey">ShortKey of the organization to fetch today's shifts for.</param>
         /// <returns>A collection of OpeningHoursDTO. NotFound if organizationRepository was not found.</returns>
         [HttpGet, Route("today/{shortKey}")]
-        [ProducesResponseType(typeof(IEnumerable<OpeningHoursDTO>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<OpeningHoursDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetToday(string shortKey)
         {
             //var monday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
@@ -82,7 +86,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <param name="interval">The number of minutes an interval should span.</param>
         /// <returns>A collection of IntervalOpeningHoursDTO. NotFound if organizationRepository was not found.</returns>
         [HttpGet, Route("~/api/openinghours/{shortKey}")]
-        [ProducesResponseType(typeof(IntervalOpeningHoursDTO), 200)]
+        [ProducesResponseType(typeof(IntervalOpeningHoursDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetIntervals(string shortKey, int interval = 30)
         {
             //var monday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
@@ -100,6 +105,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <returns></returns>
         [Authorize(Roles = "Manager")]
         [HttpGet, Route("")]
+        [ProducesResponseType(typeof(IEnumerable<ShiftDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get(string from, string to)
         {
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
@@ -120,6 +127,9 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <returns></returns>
         [Authorize(Roles = "Manager, Application")]
         [HttpGet, Route("{id:int}")]
+        [ProducesResponseType(typeof(ShiftDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Get(int id)
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
@@ -140,6 +150,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <returns></returns>
         [Authorize(Roles = "Manager, Application")]
         [HttpDelete, Route("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int id)
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
@@ -158,6 +170,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <returns></returns>
         [Authorize(Roles = "Manager, Application")]
         [HttpPut, Route("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Update(int id, UpdateShiftDTO shiftDto)
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
@@ -181,6 +195,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <returns></returns>
         [Authorize(Roles = "Manager, Application")]
         [HttpPatch, Route("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Patch(int id, PatchShiftDTO shiftDto)
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
@@ -203,6 +219,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <returns></returns>
         [Authorize(Roles = "Manager, Application")]
         [HttpPost, Route("")]
+        [ProducesResponseType(typeof(ShiftDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult Create(CreateShiftDTO shiftDto)
         {
             if (!ModelState.IsValid)
@@ -227,6 +245,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <returns></returns>
         [Authorize(Roles = "Application")]
         [HttpGet, Route("today")]
+        [ProducesResponseType(typeof(IEnumerable<ShiftDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Today()
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
@@ -247,6 +267,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <returns></returns>
         [Authorize(Roles = "Application")]
         [HttpGet, Route("ongoing")]
+        [ProducesResponseType(typeof(IEnumerable<ShiftDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult OnGoing()
         {
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
@@ -265,6 +287,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <returns></returns>
         [Authorize(Roles = "Application")]
         [HttpPost, Route("{id}/checkin")]
+        [ProducesResponseType(typeof(CheckInDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult CheckIn(int id, int employeeId)
         {
             if (!ModelState.IsValid)
@@ -291,6 +315,8 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <returns></returns>
         [Authorize(Roles = "Application")]
         [HttpPost, Route("{id}/checkout")]
+        [ProducesResponseType(typeof(GeneralMessage), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public IActionResult CheckOut(int id, int employeeId)
         {
             if (!ModelState.IsValid)

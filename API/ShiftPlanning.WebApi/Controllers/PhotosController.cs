@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShiftPlanning.WebApi.Helpers.Authorization;
 using ShiftPlanning.WebApi.Helpers.Mappers;
 using ShiftPlanning.WebApi.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace ShiftPlanning.WebApi.Controllers
 {
@@ -54,6 +55,7 @@ namespace ShiftPlanning.WebApi.Controllers
         }
 
         [HttpPost, Route("/")]
+        [ProducesResponseType(typeof(byte[]), StatusCodes.Status201Created)]
         public IActionResult Post([FromBody] string base64EncodedPhoto)
         {
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);

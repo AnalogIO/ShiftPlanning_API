@@ -5,6 +5,10 @@
         <LangVersion>10</LangVersion>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
+    </PropertyGroup>
+
     <ItemGroup>
       <ProjectReference Include="..\ShiftPlanning.DTOs\ShiftPlanning.DTOs.csproj" />
       <ProjectReference Include="..\ShiftPlanning.Model\ShiftPlanning.Model.csproj" />
