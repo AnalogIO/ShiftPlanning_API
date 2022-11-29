@@ -92,14 +92,10 @@ namespace ShiftPlanning.WebApi.Controllers
         [Authorize(Roles = "Employee")]
         [HttpPut, Route("")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
         public IActionResult Update([FromBody] UpdateEmployeeDTO dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
             if (employee == null) return BadRequest("Provided token is invalid!");
 
@@ -136,15 +132,9 @@ namespace ShiftPlanning.WebApi.Controllers
         [AllowAnonymous]
         [HttpPost, Route("login")]
         [ProducesResponseType(typeof(EmployeeLoginResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         public IActionResult Login(EmployeeLoginDTO loginDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var employee = _employeeService.Login(loginDto.Username.Trim(), loginDto.Password);
             if (employee != null)
             {

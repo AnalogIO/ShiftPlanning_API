@@ -220,14 +220,10 @@ namespace ShiftPlanning.WebApi.Controllers
         [Authorize(Roles = "Manager, Application")]
         [HttpPost, Route("")]
         [ProducesResponseType(typeof(ShiftDTO), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
         public IActionResult Create(CreateShiftDTO shiftDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
             if (organization == null) return BadRequest("Token/apikey is not assigned any organization");
 
@@ -288,14 +284,10 @@ namespace ShiftPlanning.WebApi.Controllers
         [Authorize(Roles = "Application")]
         [HttpPost, Route("{id}/checkin")]
         [ProducesResponseType(typeof(CheckInDTO), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
         public IActionResult CheckIn(int id, int employeeId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
             if (organization == null) return BadRequest("No institution found with the given name");
 
@@ -316,14 +308,10 @@ namespace ShiftPlanning.WebApi.Controllers
         [Authorize(Roles = "Application")]
         [HttpPost, Route("{id}/checkout")]
         [ProducesResponseType(typeof(GeneralMessage), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
         public IActionResult CheckOut(int id, int employeeId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var organization = _authManager.GetOrganizationByHeader(Request.Headers);
             if (organization == null) return BadRequest("No institution found with the given name");
 

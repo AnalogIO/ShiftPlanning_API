@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,6 +39,7 @@ namespace ShiftPlanning.WebApi.Controllers
         /// Retrive all employees for a given organization.
         /// </summary>
         /// <param name="shortKey">The shortkey of the organization.</param>
+        /// <param name="active">Whether the employees are active. Default is true</param>
         /// <returns>A collection of employees, if the organization was found. Http 404 otherwise.</returns>
         [HttpGet, Route("{shortKey}")]
         [ProducesResponseType(typeof(IEnumerable<EmployeeDTO>), 200)]
@@ -61,7 +62,7 @@ namespace ShiftPlanning.WebApi.Controllers
         /// <param name="shortKey">The shortkey of an organization.</param>
         /// <param name="id">The id of the employee.</param>
         /// <returns>A representation of the employee, if a shortKey/id match was found.</returns>
-        [HttpGet, Route("{shortKey}/{id}")]
+        [HttpGet, Route("{shortKey}/{id:int}")]
         [ProducesResponseType(typeof(EmployeeDTO),StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
@@ -93,11 +94,6 @@ namespace ShiftPlanning.WebApi.Controllers
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
             if (employee == null) return BadRequest("Provided token is invalid!");
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             if (!IsCreateEmployeeDtoAlright(employeeDto))
             {
                 return BadRequest("An employee must contain an email, a first name, a last name and an employee title.");
@@ -123,14 +119,10 @@ namespace ShiftPlanning.WebApi.Controllers
         [Authorize(Roles = "Manager")]
         [HttpPost, Route("createmany")]
         [ProducesResponseType(typeof(IEnumerable<EmployeeDTO>), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
         public IActionResult CreateMany(CreateEmployeeDTO[] employeeDtos)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
             if (employee == null) return BadRequest("Provided token is invalid!");
 
@@ -153,14 +145,10 @@ namespace ShiftPlanning.WebApi.Controllers
         [Authorize(Roles = "Manager")]
         [HttpPost, Route("{id}/resetpassword")]
         [ProducesResponseType(typeof(GeneralMessage), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
         public IActionResult ResetPassword(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
             if (employee == null) return BadRequest("Provided token is invalid!");
 
@@ -212,15 +200,11 @@ namespace ShiftPlanning.WebApi.Controllers
         [Authorize(Roles = "Manager")]
         [HttpGet, Route("{id:int}")]
         [ProducesResponseType(typeof(EmployeeDTO), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
         public IActionResult Get(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
             if (employee == null) return BadRequest("Provided token is invalid!");
 
@@ -246,14 +230,10 @@ namespace ShiftPlanning.WebApi.Controllers
         [Authorize(Roles = "Employee")]
         [HttpPut, Route("")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
         public IActionResult Put(UpdateEmployeeDTO employeeDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
             if (employee == null) return BadRequest("Provided token is invalid!");
 
@@ -293,14 +273,10 @@ namespace ShiftPlanning.WebApi.Controllers
         [Authorize(Roles = "Manager")]
         [HttpPut, Route("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
         public IActionResult UpdateEmployee(int id, UpdateEmployeeDTO employeeDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
             if (employee == null) return BadRequest("Provided token is invalid!");
 
@@ -339,14 +315,10 @@ namespace ShiftPlanning.WebApi.Controllers
         [Authorize(Roles = "Manager")]
         [HttpDelete, Route("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
         public IActionResult Delete(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var employee = _authManager.GetEmployeeByHeader(Request.Headers);
             if (employee == null) return BadRequest("Provided token is invalid!");
 
@@ -357,14 +329,8 @@ namespace ShiftPlanning.WebApi.Controllers
         [AllowAnonymous]
         [HttpGet, Route("podiosync")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PodioSync(string shortKey = "analog")
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var updatedCount = await _employeeService.SyncEmployees(shortKey);
             return Ok(new { SyncCount = updatedCount });
         }
