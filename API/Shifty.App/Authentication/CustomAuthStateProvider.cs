@@ -1,22 +1,18 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace ShiftPlanning.Shifty.Authentication
+namespace Shifty.App.Authentication
 {
     public class CustomAuthStateProvider : AuthenticationStateProvider
     {
-        private readonly HttpClient _httpClient;
         private readonly ILocalStorageService _localStorage;
 
-        public CustomAuthStateProvider(HttpClient httpClient, ILocalStorageService storageService)
+        public CustomAuthStateProvider(ILocalStorageService storageService)
         {
-            _httpClient = httpClient;
             _localStorage = storageService;
         }
 

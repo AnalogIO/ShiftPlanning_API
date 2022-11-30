@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor.Services;
-using ShiftPlanning.Shifty.Authentication;
-using ShiftPlanning.Shifty.Repositories;
-using ShiftPlanning.Shifty.Services;
+using Shifty.Api.Generated.ShiftPlanningV1;
+using Shifty.App.Authentication;
+using Shifty.App.Repositories;
+using Shifty.App.Services;
 
-namespace ShiftPlanning.Shifty
+namespace Shifty.App
 {
     public class Program
     {
@@ -26,22 +27,29 @@ namespace ShiftPlanning.Shifty
 
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddMudServices();
+            services.AddMudServices(config =>
+            {
+                config.SnackbarConfiguration.RequireInteraction = true;
+            });
             services.AddBlazoredLocalStorage();
             services.AddAuthorizationCore();
 
             
             services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
                 .CreateClient("ShiftPlanning"));
+            services.AddHttpClient("ShiftPlanning",
+                    client => client.BaseAddress = new Uri("https://localhost:8001"))
+                .AddHttpMessageHandler<RequestAuthenticationHandler>();
+            services.AddScoped(provider => 
+                new ShiftPlanningV1(provider.GetService<IHttpClientFactory>().CreateClient("ShiftPlanning")));
             services.AddScoped<IShiftRepository, ShiftRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<CustomAuthStateProvider>();
             services.AddScoped<AuthenticationStateProvider>(s => s.GetService<CustomAuthStateProvider>());
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<RequestAuthenticationHandler>();
-            services.AddHttpClient("ShiftPlanning",
-                    client => client.BaseAddress = new Uri("https://analogio.dk/shiftplanning/"))
-                .AddHttpMessageHandler<RequestAuthenticationHandler>();
+            
         }
     }
 }

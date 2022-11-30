@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using ShiftPlanning.DTOs.Employee;
+using Shifty.Api.Generated.ShiftPlanningV1;
 
-namespace ShiftPlanning.Shifty.Services
+namespace Shifty.App.Services
 {
     public interface IAuthenticationService
     {

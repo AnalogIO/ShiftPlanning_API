@@ -1,11 +1,10 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
 
-namespace ShiftPlanning.Shifty.Authentication
+namespace Shifty.App.Authentication
 {
     public class RequestAuthenticationHandler : DelegatingHandler 
     {

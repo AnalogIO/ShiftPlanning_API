@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
-using ShiftPlanning.DTOs.Employee;
-using ShiftPlanning.Shifty.Authentication;
-using ShiftPlanning.Shifty.Exceptions;
-using ShiftPlanning.Shifty.Repositories;
+using LanguageExt.UnsafeValueAccess;
+using Shifty.Api.Generated.ShiftPlanningV1;
+using Shifty.App.Authentication;
+using Shifty.App.Repositories;
 
-namespace ShiftPlanning.Shifty.Services
+namespace Shifty.App.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
@@ -22,16 +22,13 @@ namespace ShiftPlanning.Shifty.Services
 
         public async Task<bool> LoginUser(EmployeeLoginDTO loginDto)
         {
-            try
-            {
-                var login = await _accountRepository.Login(loginDto);
-                await _localStorage.SetItemAsync("token", login.Token);
-                return _authStateProvider.UpdateAuthState(login.Token);
-            }
-            catch (UnauthorizedException)
-            {
-                return false;
-            }
+            var either = await _accountRepository.Login(loginDto);
+
+            if (either.IsLeft) return false;
+
+            var jwtString = either.ValueUnsafe().Token;
+            await _localStorage.SetItemAsync("token", jwtString);
+            return _authStateProvider.UpdateAuthState(jwtString);
         }
     }
 }
