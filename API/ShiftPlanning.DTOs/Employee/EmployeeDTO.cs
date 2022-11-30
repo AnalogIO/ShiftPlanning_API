@@ -1,4 +1,6 @@
-﻿namespace ShiftPlanning.DTOs.Employee
+using Newtonsoft.Json;
+
+namespace ShiftPlanning.DTOs.Employee
 {
     public class EmployeeDTO
     {
@@ -8,6 +10,7 @@
         public string Email { get; set; }
         public bool Active { get; set; }
         public string EmployeeTitle { get; set; }
+        [JsonProperty(Required = Required.AllowNull)]
         public string? PhotoRef { get; set; }
         public int? CheckInCount { get; set; }
         public int WantShifts { get; set; }

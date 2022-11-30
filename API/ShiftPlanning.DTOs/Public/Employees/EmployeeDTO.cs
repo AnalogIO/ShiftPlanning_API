@@ -1,4 +1,6 @@
-﻿namespace ShiftPlanning.DTOs.Public.Employees
+using Newtonsoft.Json;
+
+namespace ShiftPlanning.DTOs.Public.Employees
 {
     /// <summary>
     /// Contains public information about the volunteers in an organization.
@@ -23,6 +25,7 @@
         /// <summary>
         /// A photo of the volunteer.
         /// </summary>
-        public string PhotoRef { get; set; }
+        [JsonProperty(Required = Required.AllowNull)]
+        public string? PhotoRef { get; set; }
     }
 }

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
+using NJsonSchema;
 using NSwag;
 using Serilog;
 using ShiftPlanning.Common.Configuration;
@@ -72,10 +73,11 @@ namespace ShiftPlanning.WebApi
             services.AddScoped<IVolunteerMapper, EmployeeMapper>();
             
             // Setup Swagger
-            services.AddSwaggerDocument(config =>
+            services.AddOpenApiDocument(config =>
             {
                 config.PostProcess = document =>
                 {
+                    document.SchemaType = SchemaType.OpenApi3;
                     document.Info.Version = "v1";
                     document.Info.Title = "Cafe Analog ShiftPlanning API";
                     document.Info.Description = "ASP.NET Core web API for the coffee bar Cafe Analog";
@@ -92,6 +94,7 @@ namespace ShiftPlanning.WebApi
                         Url = "https://github.com/AnalogIO/analog-core/blob/master/LICENSE"
                     };
                 };
+                config.DefaultReferenceTypeNullHandling = NJsonSchema.Generation.ReferenceTypeNullHandling.NotNull;
             });
             
             // Setup Json Serializing
