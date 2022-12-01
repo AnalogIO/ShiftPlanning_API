@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -74,8 +74,7 @@ namespace ShiftPlanning.WebApi.Repositories
                 .Include(x => x.Employee_).ThenInclude(e => e.CheckIns)
                 .Include(x => x.CheckIns)
                 .Include(x => x.Schedule)
-                .AsSplitQuery()
-                .ToList();
+                .AsSplitQuery();
         }
 
         public int Update(Shift shift)
